@@ -1,9 +1,8 @@
 FROM ubuntu:14.10
 MAINTAINER Wichert Akkerman <wichert@wiggy.net>
-ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update
-RUN apt-get install --no-install-recommends -y curl python-virtualenv python-lxml python-pillow python-psycopg2 git
+RUN env DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y curl python-virtualenv python-lxml python-pillow python-psycopg2 git
 
 WORKDIR /tmp
 RUN curl -L https://github.com/nijel/weblate/archive/weblate-2.1.tar.gz | tar xfz -
