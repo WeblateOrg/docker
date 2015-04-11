@@ -11,6 +11,7 @@ WORKDIR /app
 RUN python -m virtualenv --system-site-packages .
 ADD requirements.txt /tmp/requirements.txt
 RUN bin/pip install -r /tmp/requirements.txt
+RUN rm /tmp/requirements.txt
 
 WORKDIR /tmp
 
