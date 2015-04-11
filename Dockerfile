@@ -5,7 +5,7 @@ MAINTAINER Wichert Akkerman <wichert@wiggy.net>
 RUN useradd --shell /bin/sh --user-group weblate
 
 RUN apt-get update
-RUN env DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y curl python-virtualenv python-lxml python-pillow python-psycopg2 git
+RUN env DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y ssh curl python-virtualenv python-lxml python-pillow python-psycopg2 git
 
 WORKDIR /app
 RUN python -m virtualenv --system-site-packages .
