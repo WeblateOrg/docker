@@ -25,4 +25,4 @@ USER weblate
 
 EXPOSE 8000
 ENTRYPOINT ["/app/bin/django-admin"]
-CMD ["runserver"]
+CMD ["runserver", "0.0.0.0:8000"]
