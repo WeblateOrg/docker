@@ -1,20 +1,18 @@
 FROM ubuntu:14.10
 MAINTAINER Wichert Akkerman <wichert@wiggy.net>
 
+# Add user early to get a consistent userid
+RUN useradd --shell /bin/sh --user-group weblate
+
 RUN apt-get update
 RUN env DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y curl python-virtualenv python-lxml python-pillow python-psycopg2 git
-
-WORKDIR /tmp
-RUN curl -L https://github.com/nijel/weblate/archive/weblate-2.1.tar.gz | tar xfz -
 
 WORKDIR /app
 RUN python -m virtualenv --system-site-packages .
 ADD requirements.txt /tmp/requirements.txt
 RUN bin/pip install -r /tmp/requirements.txt
-RUN bin/pip install /tmp/weblate-weblate-2.1
 
 WORKDIR /tmp
-RUN useradd --shell /bin/sh --user-group weblate
 
 RUN install -d -o weblate -g weblate -m 755 /app/data
 RUN install -d -o root -g root -m 755 /app/etc
