@@ -17,7 +17,7 @@ WORKDIR /tmp
 
 RUN install -d -o weblate -g weblate -m 755 /app/data
 RUN install -d -o root -g root -m 755 /app/etc
-RUN mv /app/lib/python2.7/site-packages/weblate/settings.py /app/etc
+RUN cp /app/lib/python2.7/site-packages/weblate/settings_example.py /app/etc/settings.py
 RUN ln -s /app/etc/settings.py /app/lib/python2.7/site-packages/weblate/settings.py
 ENV DJANGO_SETTINGS_MODULE weblate.settings
 
