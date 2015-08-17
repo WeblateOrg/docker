@@ -1,6 +1,10 @@
 #!/bin/sh
 # Wait for database to get available
 
+env
+
+waitforservices
+
 MYSQL_LOOPS="10"
 
 #wait for mysql

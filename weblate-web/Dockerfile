@@ -14,6 +14,10 @@ RUN bin/pip install -r /tmp/requirements.txt
 RUN rm /tmp/requirements.txt
 
 ADD wait-mysql /app/bin/
+RUN curl --location --silent --show-error --fail \
+        https://github.com/Barzahlen/waitforservices/releases/download/v0.1/waitforservices \
+        > /usr/local/bin/waitforservices && \
+    chmod +x /usr/local/bin/waitforservices
 
 WORKDIR /tmp
 
