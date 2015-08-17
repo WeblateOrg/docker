@@ -1,5 +1,5 @@
-FROM ubuntu:14.10
-MAINTAINER Wichert Akkerman <wichert@wiggy.net>
+FROM ubuntu:15.04
+MAINTAINER Michal Čihař <michal@cihar.com>
 
 # Add user early to get a consistent userid
 RUN useradd --shell /bin/sh --user-group weblate
