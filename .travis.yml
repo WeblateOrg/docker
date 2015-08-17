@@ -8,10 +8,8 @@ env:
 
 install:
   # Install https://github.com/moul/travis-docker toolchain
+  - curl -sLo - http://j.mp/install-travis-docker | sed 's/COMPOSE_VERSION=1.2.0/COMPOSE_VERSION=1.4.0/' 
   - curl -sLo - http://j.mp/install-travis-docker | sed 's/COMPOSE_VERSION=1.2.0/COMPOSE_VERSION=1.4.0/' | sh -xe
 
 script:
-  - ./run docker info
   - ./run docker-compose build
-  - ./run docker-compose run
-  - ./run docker info
