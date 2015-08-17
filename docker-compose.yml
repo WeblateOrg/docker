@@ -4,9 +4,6 @@ weblate-web:
     - weblate-db
   ports:
     - "8000:8000"
-  volumes:
-    - /app/etc
-    - /app/data
 weblate-db:
   image: mariadb:10.0
   ports:
@@ -16,5 +13,3 @@ weblate-db:
     - MYSQL_USER=weblate
     - MYSQL_PASSWORD=weblate
     - MYSQL_DATABASE=weblatedb
-  volumes_from:
-    - /var/lib/mysql
