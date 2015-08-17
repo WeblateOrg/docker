@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright © 2012 - 2014 Michal Čihař <michal@cihar.com>
+# Copyright © 2012 - 2015 Michal Čihař <michal@cihar.com>
 #
 # This file is part of Weblate <http://weblate.org/>
 #
@@ -18,11 +18,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import django
+import os
+from logging.handlers import SysLogHandler
+
 #
 # Safety check for running with too old Django version
 #
 
-import django
 if django.VERSION < (1, 4, 0):
     raise Exception(
         'Weblate needs Django 1.4 or newer, you are using %s!' %
@@ -33,9 +36,6 @@ if django.VERSION < (1, 4, 0):
 # Django settings for Weblate project.
 #
 
-import os
-from logging.handlers import SysLogHandler
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -44,12 +44,6 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-
-
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-# Data directory
-DATA_DIR = '/app/data'
 
 DATABASES = {
     'default': {
@@ -68,6 +62,11 @@ DATABASES = {
     }
 }
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Data directory
+DATA_DIR = '/app/data'
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -84,6 +83,7 @@ LANGUAGE_CODE = 'en-us'
 LANGUAGES = (
     ('az', u'Azərbaycan'),
     ('be', u'Беларуская'),
+    ('be@latin', u'Biełaruskaja'),
     ('br', u'Brezhoneg'),
     ('ca', u'Català'),
     ('cs', u'Čeština'),
@@ -94,6 +94,7 @@ LANGUAGES = (
     ('es', u'Español'),
     ('fi', u'Suomi'),
     ('fr', u'Français'),
+    ('fy', u'Frysk'),
     ('gl', u'Galego'),
     ('he', u'עברית'),
     ('hu', u'Magyar'),
@@ -111,8 +112,8 @@ LANGUAGES = (
     ('sv', u'Svenska'),
     ('tr', u'Türkçe'),
     ('uk', u'Українська'),
-    ('zh_CN', u'简体字'),
-    ('zh_TW', u'正體字'),
+    ('zh_Hans', u'简体字'),
+    ('zh_Hant', u'正體字'),
 )
 
 SITE_ID = 1
@@ -176,10 +177,14 @@ TEMPLATE_LOADERS = (
     )),
 )
 
+# GitHub username for sending pull requests.
+# Please see the documentation for more details.
+GITHUB_USERNAME = None
+
 # Authentication configuration
 AUTHENTICATION_BACKENDS = (
-    'social.backends.google.GoogleOpenId',
     'social.backends.email.EmailAuth',
+    # 'social.backends.google.GoogleOAuth2',
     # 'social.backends.github.GithubOAuth2',
     # 'social.backends.bitbucket.BitbucketOAuth',
     # 'social.backends.suse.OpenSUSEOpenId',
@@ -201,6 +206,9 @@ SOCIAL_AUTH_BITBUCKET_VERIFIED_EMAILS_ONLY = True
 SOCIAL_AUTH_FACEBOOK_KEY = ''
 SOCIAL_AUTH_FACEBOOK_SECRET = ''
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'public_profile']
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''
 
 # Social auth settings
 SOCIAL_AUTH_PIPELINE = (
@@ -229,6 +237,8 @@ SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = \
 SOCIAL_AUTH_EMAIL_VALIDATION_URL = '%s/accounts/email-sent/' % URL_PREFIX
 SOCIAL_AUTH_LOGIN_ERROR_URL = '%s/accounts/login/' % URL_PREFIX
 SOCIAL_AUTH_EMAIL_FORM_URL = '%s/accounts/email/' % URL_PREFIX
+SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = \
+    '%s/accounts/profile/#auth' % URL_PREFIX
 SOCIAL_AUTH_PROTECTED_USER_FIELDS = ('email',)
 
 # Middleware
@@ -273,12 +283,6 @@ INSTALLED_APPS = (
     'weblate',
 )
 
-# South setup for Django < 1.7
-if django.VERSION < (1, 7, 0):
-    INSTALLED_APPS += (
-        'south',
-    )
-
 LOCALE_PATHS = (os.path.join(BASE_DIR, '..', 'locale'), )
 
 
@@ -311,7 +315,7 @@ else:
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
+# See http://docs.djangoproject.com/en/1.8/topics/logging for
 # more details on how to customize your logging configuration.
 LOGGING = {
     'version': 1,
@@ -378,12 +382,14 @@ LOGGING = {
     }
 }
 
+# Logging of management commands to console
+if (os.environ.get('DJANGO_IS_MANAGEMENT_COMMAND', False) and
+        'console' not in LOGGING['loggers']['weblate']['handlers']):
+    LOGGING['loggers']['weblate']['handlers'].append('console')
+
+# Remove syslog setup if it's not present
 if not os.path.exists('/dev/log'):
     del LOGGING['handlers']['syslog']
-
-# Logging of management commands to console
-if os.environ.get('DJANGO_IS_MANAGEMENT_COMMAND', False):
-    LOGGING['loggers']['weblate']['handlers'].append('console')
 
 # Machine translation API keys
 
@@ -411,9 +417,6 @@ MT_TMSERVER = None
 
 # Title of site to use
 SITE_TITLE = 'Weblate'
-
-# Whether to offer hosting
-OFFER_HOSTING = False
 
 # URL of login
 LOGIN_URL = '%s/accounts/login/' % URL_PREFIX
@@ -491,6 +494,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 # )
 
 # List of scripts to use in custom processing
+# POST_UPDATE_SCRIPTS = (
+# )
 # PRE_COMMIT_SCRIPTS = (
 # )
 
@@ -502,7 +507,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 #     'weblate.trans.machine.google.GoogleWebTranslation',
 #     'weblate.trans.machine.microsoft.MicrosoftTranslation',
 #     'weblate.trans.machine.mymemory.MyMemoryTranslation',
-#     'weblate.trans.machine.opentran.OpenTranTranslation',
 #     'weblate.trans.machine.tmserver.AmagamaTranslation',
 #     'weblate.trans.machine.tmserver.TMServerTranslation',
 #     'weblate.trans.machine.weblatetm.WeblateSimilarTranslation',
@@ -516,7 +520,7 @@ SERVER_EMAIL = 'noreply@weblate.org'
 # the site managers. Used for registration emails.
 DEFAULT_FROM_EMAIL = 'noreply@weblate.org'
 
-# List of URLs your site is supposed to serve, required since Django 1.5
+# List of URLs your site is supposed to serve
 ALLOWED_HOSTS = []
 
 # Example configuration to use memcached for caching
