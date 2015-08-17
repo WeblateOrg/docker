@@ -56,15 +56,15 @@ DATABASES = {
         # Use 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'ENGINE': 'django.db.backends.mysql',
         # Database name or path to database file if using sqlite3.
-        'NAME': 'weblatedb',
+        'NAME': os.environ['MYSQL_NAME'],
         # Database user, not used with sqlite3.
-        'USER': 'weblate',
+        'USER': os.environ['MYSQL_USER'],
         # Database password, not used with sqlite3.
-        'PASSWORD': 'weblate',
+        'PASSWORD': os.environ['MYSQL_PASSWORD'],
         # Set to empty string for localhost. Not used with sqlite3.
-        'HOST': 'weblate-db',
+        'HOST': os.environ['MYSQL_HOST'],
         # Set to empty string for default. Not used with sqlite3.
-        'PORT': '3306',
+        'PORT': os.environ['MYSQL_PORT'],
     }
 }
 

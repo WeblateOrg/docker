@@ -20,6 +20,11 @@ RUN install -d -o root -g root -m 755 /app/etc
 RUN cp /app/lib/python2.7/site-packages/weblate/settings_example.py /app/etc/settings.py
 RUN ln -s /app/etc/settings.py /app/lib/python2.7/site-packages/weblate/settings.py
 ENV DJANGO_SETTINGS_MODULE weblate.settings
+ENV MYSQL_HOST "mysql"
+ENV MYSQL_PORT "3306"
+ENV MYSQL_USER "weblate"
+ENV MYSQL_PASSWORD "weblate"
+ENV MYSQL_NAME "weblatedb"
 
 VOLUME ["/app/etc", "/app/data"]
 USER weblate
