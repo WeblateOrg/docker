@@ -64,7 +64,7 @@ DATABASES = {
         # Set to empty string for localhost. Not used with sqlite3.
         'HOST': os.environ['WEBLATE_DB_PORT_3306_TCP_ADDR'],
         # Set to empty string for default. Not used with sqlite3.
-        'PORT': '3306',
+        'PORT': os.environ['WEBLATE_DB_PORT_3306_TCP_PORT'],
     }
 }
 
