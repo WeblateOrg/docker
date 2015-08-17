@@ -13,3 +13,4 @@ install:
 
 script:
   - ./run 'docker-compose build && docker-compose run weblate-web ./manage.py test'
+  - ./run 'docker-compose run weblate-web sh -c "ls -la /app/data ; ls -la /app/data/ssh"'
