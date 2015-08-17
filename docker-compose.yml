@@ -5,7 +5,7 @@ weblate-web:
   ports:
     - "8000:8000"
   volumes:
-    - ./weblate-web:/app/etc
+    - ./weblate-web:/app/etc:ro
 weblate-db:
   image: mariadb:10.0
   ports:
