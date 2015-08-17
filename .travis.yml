@@ -13,4 +13,4 @@ install:
   - curl -sLo - http://j.mp/install-travis-docker | sed 's/COMPOSE_VERSION=1.2.0/COMPOSE_VERSION=1.4.0/' | sh -xe
 
 script:
-  - ./run 'docker-compose build && docker-compose run -u weblate weblate-web test weblate.accounts weblate.trans weblate.lang'
+  - ./run 'docker-compose build && docker-compose run -u weblate weblate-web test --noinput weblate.accounts weblate.trans weblate.lang'
