@@ -51,6 +51,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         # Database name or path to database file if using sqlite3.
         'NAME': os.environ['WEBLATE_DB_ENV_MYSQL_DATABASE'],
+        # Use same database for tests (needed as Docker MySQL can
+        # not currently create second database for us)
+        'TEST_NAME': os.environ['WEBLATE_DB_ENV_MYSQL_DATABASE'],
         # Database user, not used with sqlite3.
         'USER': os.environ['WEBLATE_DB_ENV_MYSQL_USER'],
         # Database password, not used with sqlite3.
