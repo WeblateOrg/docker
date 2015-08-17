@@ -58,7 +58,7 @@ DATABASES = {
         # Database name or path to database file if using sqlite3.
         'NAME': 'weblatedb',
         # Database user, not used with sqlite3.
-        'USER': 'root',
+        'USER': 'weblate',
         # Database password, not used with sqlite3.
         'PASSWORD': 'weblate',
         # Set to empty string for localhost. Not used with sqlite3.
