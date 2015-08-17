@@ -1,8 +1,11 @@
 sudo: true
 
 install:
+  - sudo sh -c "wget -qO- https://get.docker.io/gpg | apt-key add -"
+  - sudo sh -c "echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
+  - sudo apt-get update
+  - sudo apt-get install docker-compose
   - curl -sLo - http://j.mp/install-travis-docker | sh -xe
 
 script:
-  - docker-compose build
-  - ./run 'docker build -t test . && docker run test'
+  - ./run 'docker-compose build'
