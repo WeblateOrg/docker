@@ -13,6 +13,8 @@ ADD requirements.txt /tmp/requirements.txt
 RUN bin/pip install -r /tmp/requirements.txt
 RUN rm /tmp/requirements.txt
 
+ADD wait-mysql /app/bin/
+
 WORKDIR /tmp
 
 RUN install -d -o weblate -g weblate -m 755 /app/data
@@ -25,10 +27,11 @@ ENV MYSQL_PORT "3306"
 ENV MYSQL_USER "weblate"
 ENV MYSQL_PASSWORD "weblate"
 ENV MYSQL_NAME "weblatedb"
+ENV START_CMD "/app/bin/django-admin"
 
 VOLUME ["/app/etc", "/app/data"]
 USER weblate
 
 EXPOSE 8000
-ENTRYPOINT ["/app/bin/django-admin"]
+ENTRYPOINT ["/app/bin/wait-mysql"]
 CMD ["runserver", "0.0.0.0:8000"]
