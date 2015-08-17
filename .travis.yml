@@ -2,6 +2,10 @@ sudo: true
 
 language: python
 
+env:
+  global:
+    - DOCKER_VERSION=xget.docker.com
+
 install:
   - curl -sLo - http://j.mp/install-travis-docker | sed 's/COMPOSE_VERSION=1.2.0/COMPOSE_VERSION=1.4.0/' | sh -xe
 
