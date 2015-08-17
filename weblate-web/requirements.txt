@@ -18,4 +18,3 @@ pydns==2.3.6
 Babel==2.0
 Weblate==2.3
 pyuca==1.1
-Mercurial==3.5
