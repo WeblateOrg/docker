@@ -6,6 +6,7 @@ env:
   global:
     - DOCKER_VERSION=1.7.1
     - SKIP_BRANCH_CHECKING=yes
+    - UML_FIG=0
 
 install:
   # Install https://github.com/moul/travis-docker toolchain
