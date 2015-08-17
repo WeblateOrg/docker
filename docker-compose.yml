@@ -1,0 +1,35 @@
+weblate-web:
+  build: weblate-web
+  links:
+    - weblate-db
+  ports:
+    - "8000:8000"
+  volumes:
+    - weblate-web:/app/etc
+    - weblate-web:/app/data
+  volumes_from:
+    - weblate-logs-volume
+    - weblate-storage-volume
+weblate-logs-volume:
+  image: busybox
+  volumes:
+    - /logs
+weblate-storage-volume:
+  image: busybox
+  volumes:
+    - /storage
+weblate-db:
+  image: mysql:5.6
+  ports:
+    - "3306:3306"
+  environment:
+    - MYSQL_ROOT_PASSWORD=weblate
+    - MYSQL_USER=weblate
+    - MYSQL_PASSWORD=weblate
+    - MYSQL_DATABASE=weblatedb
+  volumes_from:
+    - weblate-db-volume
+weblate-db-volume:
+  image: busybox
+  volumes:
+    - /var/lib/mysql
