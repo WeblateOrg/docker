@@ -1,4 +1,4 @@
-FROM ubuntu:15.04
+FROM debian:jessie
 MAINTAINER Michal Čihař <michal@cihar.com>
 
 # Add user early to get a consistent userid
