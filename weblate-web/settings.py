@@ -40,7 +40,6 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-        ('Wichert Akkerman', 'wichert@curvetips.com'),
     # ('Your Name', 'your_email@example.com'),
 )
 
