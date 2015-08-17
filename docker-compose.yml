@@ -5,19 +5,8 @@ weblate-web:
   ports:
     - "8000:8000"
   volumes:
-    - weblate-web:/app/etc
-    - weblate-web:/app/data
-  volumes_from:
-    - weblate-logs-volume
-    - weblate-storage-volume
-weblate-logs-volume:
-  image: busybox
-  volumes:
-    - /logs
-weblate-storage-volume:
-  image: busybox
-  volumes:
-    - /storage
+    - ./weblate-web/etc:/app/etc
+    - ./weblate-web/data:/app/data
 weblate-db:
   image: mariadb:10.0
   ports:
@@ -28,8 +17,4 @@ weblate-db:
     - MYSQL_PASSWORD=weblate
     - MYSQL_DATABASE=weblatedb
   volumes_from:
-    - weblate-db-volume
-weblate-db-volume:
-  image: busybox
-  volumes:
-    - /var/lib/mysql
+    - ./weblate-web/db:/var/lib/mysql
