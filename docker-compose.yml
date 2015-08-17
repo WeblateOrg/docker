@@ -19,7 +19,7 @@ weblate-storage-volume:
   volumes:
     - /storage
 weblate-db:
-  image: mysql:5.6
+  image: mariadb:10.0
   ports:
     - "3306:3306"
   environment:
