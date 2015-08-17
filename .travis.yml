@@ -12,5 +12,4 @@ install:
   - curl -sLo - http://j.mp/install-travis-docker | sed 's/COMPOSE_VERSION=1.2.0/COMPOSE_VERSION=1.4.0/' | sh -xe
 
 script:
-  - ./run 'docker-compose build && docker-compose run weblate-web ./manage.py test'
-  - ./run 'docker-compose run weblate-web sh -c "ls -la /app/data ; ls -la /app/data/ssh"'
+  - ./run 'docker-compose build && docker-compose run -u weblate weblate-web /app/bin/django-admin test'
