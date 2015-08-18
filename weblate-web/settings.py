@@ -40,6 +40,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
+    ('Weblate Admin', 'noreply@weblate.org'),
     # ('Your Name', 'your_email@example.com'),
 )
 
