@@ -8,7 +8,7 @@ weblate-web:
     - ./weblate-web:/app/etc:ro
 weblate-db:
   # You can change used database here:
-  image: mariadb:10.0
+  image: postgres:9.4
   environment:
     - MYSQL_ROOT_PASSWORD=weblate
     - MYSQL_USER=weblate
