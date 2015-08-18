@@ -7,9 +7,12 @@ weblate-web:
   volumes:
     - ./weblate-web:/app/etc:ro
 weblate-db:
-  image: mariadb:10.0
+#  image: mariadb:10.0
+  image: postgres:9.4
   environment:
     - MYSQL_ROOT_PASSWORD=weblate
     - MYSQL_USER=weblate
     - MYSQL_PASSWORD=weblate
     - MYSQL_DATABASE=weblatedb
+    - POSTGRES_PASSWORD=weblate
+    - POSTGRES_USER=weblate
