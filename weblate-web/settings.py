@@ -55,7 +55,7 @@ if 'WEBLATE_DB_PORT_3306_TCP_ADDR' in os.environ:
         'NAME': os.environ['WEBLATE_DB_ENV_MYSQL_DATABASE'],
         # Use same database for tests (needed as Docker MySQL can
         # not currently create second database for us)
-        'TEST_NAME': os.environ['WEBLATE_DB_ENV_MYSQL_DATABASE'],
+        'TEST': {'NAME': os.environ['WEBLATE_DB_ENV_MYSQL_DATABASE']},
         # Database user, not used with sqlite3.
         'USER': os.environ['WEBLATE_DB_ENV_MYSQL_USER'],
         # Database password, not used with sqlite3.
@@ -77,7 +77,7 @@ elif 'WEBLATE_DB_PORT_5432_TCP_ADDR' in os.environ:
         'NAME': os.environ['WEBLATE_DB_ENV_POSTGRES_USER'],
         # Use same database for tests (needed as Docker MySQL can
         # not currently create second database for us)
-        'TEST_NAME': os.environ['WEBLATE_DB_ENV_POSTGRES_USER'],
+        'TEST': {'NAME': os.environ['WEBLATE_DB_ENV_POSTGRES_USER']},
         # Database user, not used with sqlite3.
         'USER': os.environ['WEBLATE_DB_ENV_POSTGRES_USER'],
         # Database password, not used with sqlite3.
