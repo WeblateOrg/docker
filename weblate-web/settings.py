@@ -47,7 +47,7 @@ MANAGERS = ADMINS
 
 DATABASES = {}
 
-if 'WEBLATE_DB_ENV_MYSQL_DATABASE' in os.environ:
+if 'WEBLATE_DB_PORT_3306_TCP_ADDR' in os.environ:
     DATABASES['default'] = {
         # Use 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'ENGINE': 'django.db.backends.mysql',
@@ -69,7 +69,7 @@ if 'WEBLATE_DB_ENV_MYSQL_DATABASE' in os.environ:
            'charset': 'utf8mb4',
         },
     }
-elif 'WEBLATE_DB_ENV_POSTGRES_USER' in os.environ:
+elif 'WEBLATE_DB_PORT_5432_TCP_ADDR' in os.environ:
     DATABASES['default'] = {
         # Use 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
