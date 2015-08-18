@@ -85,7 +85,7 @@ elif 'WEBLATE_DB_PORT_5432_TCP_ADDR' in os.environ:
         # Set to empty string for localhost. Not used with sqlite3.
         'HOST': os.environ['WEBLATE_DB_PORT_5432_TCP_ADDR'],
         # Set to empty string for default. Not used with sqlite3.
-        'PORT': os.environ['WEBLATE_DB__PORT_5432_TCP_PORT'],
+        'PORT': os.environ['WEBLATE_DB_PORT_5432_TCP_PORT'],
     }
 else:
     DATABASES['default'] = {
