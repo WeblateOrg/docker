@@ -64,6 +64,10 @@ if 'WEBLATE_DB_ENV_MYSQL_DATABASE' in os.environ:
         'HOST': os.environ['WEBLATE_DB_PORT_3306_TCP_ADDR'],
         # Set to empty string for default. Not used with sqlite3.
         'PORT': os.environ['WEBLATE_DB_PORT_3306_TCP_PORT'],
+        'OPTIONS': {
+           'init_command': 'SET storage_engine=INNODB',
+           'charset': 'utf8mb4',
+        },
     }
 elif 'WEBLATE_DB_ENV_POSTGRES_USER' in os.environ:
     DATABASES['default'] = {
