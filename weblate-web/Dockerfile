@@ -5,7 +5,7 @@ MAINTAINER Michal Čihař <michal@cihar.com>
 RUN useradd --shell /bin/sh --user-group weblate
 
 RUN apt-get update
-RUN env DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y ssh curl python-virtualenv python-lxml python-pillow python-psycopg2 python-mysqldb git mercurial
+RUN env DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y ssh curl python-virtualenv python-lxml python-pillow python-psycopg2 python-mysqldb git mercurial gettext
 
 WORKDIR /app
 RUN python -m virtualenv --system-site-packages .
