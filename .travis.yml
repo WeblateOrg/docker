@@ -13,6 +13,11 @@ env:
     - DB=postgres:9.4
     - DB=busybox
 
+matrix:
+  allow_failures:
+    # MariaDB dies for some reason when deleting database
+    - env: DB=mariadb:10.0
+
 install:
   # Install https://github.com/moul/travis-docker toolchain
   - curl -sLo - http://j.mp/install-travis-docker | sed 's/COMPOSE_VERSION=1.2.0/COMPOSE_VERSION=1.4.0/' | sh -xe
