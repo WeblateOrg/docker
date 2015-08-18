@@ -66,7 +66,7 @@ if 'WEBLATE_DB_PORT_3306_TCP_ADDR' in os.environ:
         'PORT': os.environ['WEBLATE_DB_PORT_3306_TCP_PORT'],
         'OPTIONS': {
            'init_command': 'SET storage_engine=INNODB',
-           'charset': 'utf8mb4',
+           'charset': 'utf8',
         },
     }
 elif 'WEBLATE_DB_PORT_5432_TCP_ADDR' in os.environ:
