@@ -20,6 +20,7 @@ matrix:
 
 install:
   # Install https://github.com/moul/travis-docker toolchain
+  # We need newer docker-compose for using dash in names
   - curl -sLo - http://j.mp/install-travis-docker | sed 's/COMPOSE_VERSION=1.2.0/COMPOSE_VERSION=1.4.0/' | sh -xe
 
 script:
