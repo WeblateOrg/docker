@@ -7,6 +7,7 @@ weblate-web:
   volumes:
     - ./weblate-web:/app/etc:ro
 weblate-db:
+  # You can change used database here:
   image: mariadb:10.0
   environment:
     - MYSQL_ROOT_PASSWORD=weblate
