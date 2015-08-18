@@ -18,5 +18,5 @@ install:
   - curl -sLo - http://j.mp/install-travis-docker | sed 's/COMPOSE_VERSION=1.2.0/COMPOSE_VERSION=1.4.0/' | sh -xe
 
 script:
-  - sed -i "s/mariadb:10.0/$DB/"
+  - sed -i "s/mariadb:10.0/$DB/" docker-compose.yml
   - ./run 'docker-compose build && docker-compose run -u weblate weblate-web test --noinput weblate.accounts weblate.trans.tests.test_views  weblate.lang'
