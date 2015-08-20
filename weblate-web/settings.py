@@ -93,7 +93,7 @@ else:
         # Use 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'ENGINE': 'django.db.backends.sqlite3',
         # Database name or path to database file if using sqlite3.
-        'NAME': 'weblate.db',
+        'NAME': '/app/data/weblate.db',
         # Database user, not used with sqlite3.
         'USER': 'weblate',
         # Database password, not used with sqlite3.
