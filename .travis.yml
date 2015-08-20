@@ -26,4 +26,6 @@ script:
   - sed -i "s/postgres:9.4/$DB/" docker-compose.yml
   - if [ "$DB" = busybox ] ; then sed -i '/^  links:/,+1 d' docker-compose.yml ; fi
   - docker-compose build
-  - docker-compose run -u weblate weblate-web test -v 2 --keepdb --noinput weblate.accounts weblate.trans.tests.test_views weblate.lang
+  - docker-compose up
+  - docker-compose run weblate-web migrate
+  - docker-compose run weblate-web test -v 2 --keepdb --noinput weblate.accounts weblate.trans.tests.test_views weblate.lang
