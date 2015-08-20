@@ -22,7 +22,7 @@ before_install:
   - sudo service apparmor stop
   - sudo update-rc.d -f apparmor remove
   - sudo service apparmor teardown
-  - sudo systemctl restart docker
+  - sudo service restart docker
   - curl -L https://github.com/docker/compose/releases/download/1.4.0/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
