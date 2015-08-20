@@ -1,14 +1,14 @@
 weblate:
   build: weblate
   links:
-    - weblate-db
+    - database
   ports:
     - "8000:8000"
   volumes:
     - ./weblate:/app/etc:ro
   env_file:
     - ./weblate/environment
-weblate-db:
+database:
   # You can change used database here:
   image: postgres:9.4
   volumes:
