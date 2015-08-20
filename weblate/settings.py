@@ -48,45 +48,45 @@ MANAGERS = ADMINS
 
 DATABASES = {}
 
-if 'WEBLATE_DB_PORT_3306_TCP_ADDR' in os.environ:
+if 'DATABASE_PORT_3306_TCP_ADDR' in os.environ:
     DATABASES['default'] = {
         # Use 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'ENGINE': 'django.db.backends.mysql',
         # Database name or path to database file if using sqlite3.
-        'NAME': os.environ['WEBLATE_DB_ENV_MYSQL_DATABASE'],
+        'NAME': os.environ['DATABASE_ENV_MYSQL_DATABASE'],
         # Use same database for tests (needed as Docker MySQL can
         # not currently create second database for us)
-        'TEST': {'NAME': os.environ['WEBLATE_DB_ENV_MYSQL_DATABASE']},
+        'TEST': {'NAME': os.environ['DATABASE_ENV_MYSQL_DATABASE']},
         # Database user, not used with sqlite3.
-        'USER': os.environ['WEBLATE_DB_ENV_MYSQL_USER'],
+        'USER': os.environ['DATABASE_ENV_MYSQL_USER'],
         # Database password, not used with sqlite3.
-        'PASSWORD': os.environ['WEBLATE_DB_ENV_MYSQL_PASSWORD'],
+        'PASSWORD': os.environ['DATABASE_ENV_MYSQL_PASSWORD'],
         # Set to empty string for localhost. Not used with sqlite3.
-        'HOST': os.environ['WEBLATE_DB_PORT_3306_TCP_ADDR'],
+        'HOST': os.environ['DATABASE_PORT_3306_TCP_ADDR'],
         # Set to empty string for default. Not used with sqlite3.
-        'PORT': os.environ['WEBLATE_DB_PORT_3306_TCP_PORT'],
+        'PORT': os.environ['DATABASE_PORT_3306_TCP_PORT'],
         'OPTIONS': {
            'init_command': 'SET storage_engine=INNODB',
            'charset': 'utf8',
         },
     }
-elif 'WEBLATE_DB_PORT_5432_TCP_ADDR' in os.environ:
+elif 'DATABASE_PORT_5432_TCP_ADDR' in os.environ:
     DATABASES['default'] = {
         # Use 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         # Database name or path to database file if using sqlite3.
-        'NAME': os.environ['WEBLATE_DB_ENV_POSTGRES_USER'],
+        'NAME': os.environ['DATABASE_ENV_POSTGRES_USER'],
         # Use same database for tests (needed as Docker MySQL can
         # not currently create second database for us)
-        'TEST': {'NAME': os.environ['WEBLATE_DB_ENV_POSTGRES_USER']},
+        'TEST': {'NAME': os.environ['DATABASE_ENV_POSTGRES_USER']},
         # Database user, not used with sqlite3.
-        'USER': os.environ['WEBLATE_DB_ENV_POSTGRES_USER'],
+        'USER': os.environ['DATABASE_ENV_POSTGRES_USER'],
         # Database password, not used with sqlite3.
-        'PASSWORD': os.environ['WEBLATE_DB_ENV_POSTGRES_PASSWORD'],
+        'PASSWORD': os.environ['DATABASE_ENV_POSTGRES_PASSWORD'],
         # Set to empty string for localhost. Not used with sqlite3.
-        'HOST': os.environ['WEBLATE_DB_PORT_5432_TCP_ADDR'],
+        'HOST': os.environ['DATABASE_PORT_5432_TCP_ADDR'],
         # Set to empty string for default. Not used with sqlite3.
-        'PORT': os.environ['WEBLATE_DB_PORT_5432_TCP_PORT'],
+        'PORT': os.environ['DATABASE_PORT_5432_TCP_PORT'],
     }
 else:
     DATABASES['default'] = {
