@@ -20,11 +20,6 @@ matrix:
     - env: DB=postgres:9.4
 
 before_install:
-  # Apparmor seems to cause problems with postgres docker image
-  - sudo service apparmor stop
-  - sudo update-rc.d -f apparmor remove
-  - sudo service apparmor teardown
-  - sudo service docker restart
   - curl -L https://github.com/docker/compose/releases/download/1.4.0/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
