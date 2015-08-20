@@ -36,4 +36,4 @@ script:
   - docker-compose up
   - docker-compose run weblate-web migrate
   - docker-compose run weblate-web createadmin
-  - docker-compose run weblate-web test -v 2 --keepdb --noinput weblate.accounts weblate.trans.tests.test_views weblate.lang
+  - docker-compose run weblate-web test -v 2 --noinput weblate.accounts weblate.trans.tests.test_views weblate.lang
