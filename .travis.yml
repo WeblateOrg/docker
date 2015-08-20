@@ -27,7 +27,7 @@ before_install:
  
 script:
   - sed -i "s/postgres:9.4/$DB/" docker-compose.yml
-  - if [ "$DB" = busybox ] ; then sed -i '/^  links:/,+1 d' docker-compose.yml ; fi
+  - if [ "$DB" = busybox ] ; then sed -i '/^    - database$/ d' docker-compose.yml ; fi
   - docker-compose build
   - docker-compose up
   - docker-compose run weblate migrate
