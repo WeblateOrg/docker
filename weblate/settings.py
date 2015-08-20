@@ -556,11 +556,11 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 # )
 
 # E-mail address that error messages come from.
-SERVER_EMAIL = 'noreply@weblate.org'
+SERVER_EMAIL = os.environ['WEBLATE_EMAIL']
 
 # Default email address to use for various automated correspondence from
 # the site managers. Used for registration emails.
-DEFAULT_FROM_EMAIL = 'noreply@weblate.org'
+DEFAULT_FROM_EMAIL = os.environ['WEBLATE_EMAIL']
 
 # List of URLs your site is supposed to serve
 ALLOWED_HOSTS = []
