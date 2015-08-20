@@ -1,17 +1,17 @@
-weblate-web:
-  build: weblate-web
+weblate:
+  build: weblate
   links:
     - weblate-db
   ports:
     - "8000:8000"
   volumes:
-    - ./weblate-web:/app/etc:ro
+    - ./weblate:/app/etc:ro
   env_file:
-    - ./weblate-web/environment
+    - ./weblate/environment
 weblate-db:
   # You can change used database here:
   image: postgres:9.4
   volumes:
-    - ./weblate-web/mysql-charset.conf:/etc/mysql/conf.d/charset.cnf
+    - ./weblate/mysql-charset.conf:/etc/mysql/conf.d/charset.cnf
   env_file:
-    - ./weblate-web/environment
+    - ./weblate/environment
