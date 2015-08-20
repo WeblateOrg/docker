@@ -570,16 +570,16 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
+    'avatar': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(DATA_DIR, 'avatar-cache'),
+        'TIMEOUT': 604800,
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000,
+        },
+    }
 }
-#     'avatar': {
-#         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-#         'LOCATION': os.path.join(BASE_DIR, 'avatar-cache'),
-#         'TIMEOUT': 604800,
-#         'OPTIONS': {
-#             'MAX_ENTRIES': 1000,
-#         },
-#     }
-# }
+
 if 'CACHE_PORT_11211_TCP_ADDR' in os.environ:
     CACHES['default'] = {
          'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
