@@ -1,0 +1,10 @@
+
+# MySQL setup
+MYSQL_ROOT_PASSWORD=weblate
+MYSQL_USER=weblate
+MYSQL_PASSWORD=weblate
+MYSQL_DATABASE=weblatedb
+
+# PostgreSQL setup
+POSTGRES_PASSWORD=weblate
+POSTGRES_USER=weblate
