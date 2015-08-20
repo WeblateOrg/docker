@@ -40,7 +40,7 @@ DEBUG = os.environ.get('WEBLATE_DEBUG', '1') == '1'
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('Weblate Admin', 'noreply@weblate.org'),
+    (os.environ['WEBLATE_ADMIN_NAME'], os.environ['WEBLATE_ADMIN_EMAIL']),
     # ('Your Name', 'your_email@example.com'),
 )
 

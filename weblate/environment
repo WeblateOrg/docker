@@ -1,5 +1,7 @@
 # Weblate setup
 WEBLATE_DEBUG=1
+WEBLATE_ADMIN_NAME='Weblate Admin'
+WEBLATE_ADMIN_EMAIL='noreply@weblate.org'
 
 # MySQL setup
 MYSQL_ROOT_PASSWORD=weblate
