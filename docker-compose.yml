@@ -2,6 +2,7 @@ weblate:
   build: weblate
   links:
     - database
+    - cache
   ports:
     - "8000:8000"
   volumes:
@@ -15,3 +16,5 @@ database:
     - ./weblate/mysql-charset.conf:/etc/mysql/conf.d/charset.cnf
   env_file:
     - ./weblate/environment
+cache:
+    image: memcached:1.4

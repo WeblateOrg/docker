@@ -566,11 +566,11 @@ DEFAULT_FROM_EMAIL = 'noreply@weblate.org'
 ALLOWED_HOSTS = []
 
 # Example configuration to use memcached for caching
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-#         'LOCATION': '127.0.0.1:11211',
-#     },
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
 #     'avatar': {
 #         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
 #         'LOCATION': os.path.join(BASE_DIR, 'avatar-cache'),
@@ -580,6 +580,14 @@ ALLOWED_HOSTS = []
 #         },
 #     }
 # }
+if 'CACHE_PORT_11211_TCP_ADDR' in os.environ:
+    CACHES['default'] = {
+         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+         'LOCATION': '{0}:{1}'.format(
+            os.environ['CACHE_PORT_11211_TCP_ADDR'],
+            os.environ['CACHE_PORT_11211_TCP_PORT'],
+        )
+    }
 
 # Example for restricting access to logged in users
 # LOGIN_REQUIRED_URLS = (
