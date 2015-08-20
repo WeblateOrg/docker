@@ -15,9 +15,13 @@ env:
 matrix:
   allow_failures:
     # MariaDB dies for some reason when deleting database
-    - env: DB=mariadb:10.0
+    - env: DB=postgres:9.4
 
 before_install:
+  # Apparmor seems to cause problems with postgres docker image
+  - sudo service apparmor stop
+  - sudo update-rc.d -f apparmor remove
+  - sudo service apparmor teardown
   - curl -L https://github.com/docker/compose/releases/download/1.4.0/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
