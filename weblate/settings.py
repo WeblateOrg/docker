@@ -36,7 +36,7 @@ if django.VERSION < (1, 4, 0):
 # Django settings for Weblate project.
 #
 
-DEBUG = True
+DEBUG = os.environ.get('WEBLATE_DEBUG', '1') == '1'
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (

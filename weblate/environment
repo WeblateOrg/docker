@@ -1,3 +1,5 @@
+# Weblate setup
+WEBLATE_DEBUG=1
 
 # MySQL setup
 MYSQL_ROOT_PASSWORD=weblate
