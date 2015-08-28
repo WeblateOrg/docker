@@ -30,6 +30,7 @@ script:
   - if [ "$DB" = busybox ] ; then sed -i '/^    - database$/ d' docker-compose.yml ; fi
   - docker-compose build
   - docker-compose up
-  - docker-compose run weblate migrate
+  - docker-compose run weblate migrate --noinput
+  - docker-compose run weblate collectstatc --noinput
   - docker-compose run weblate createadmin
   - docker-compose run weblate test -v 2 --noinput weblate.accounts weblate.trans.tests.test_views weblate.lang
