@@ -19,3 +19,4 @@ Babel==2.0
 Weblate==2.3
 pyuca==1.1
 python-memcached==1.57
+django_compressor==1.5.0
