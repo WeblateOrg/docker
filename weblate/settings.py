@@ -147,15 +147,16 @@ LANGUAGES = (
     ('nl', u'Nederlands'),
     ('pl', u'Polski'),
     ('pt', u'Português'),
-    ('pt_BR', u'Português brasileiro'),
+    ('pt-BR', u'Português brasileiro'),
     ('ru', u'Русский'),
     ('sk', u'Slovenčina'),
     ('sl', u'Slovenščina'),
+    ('sr', u'Српски'),
     ('sv', u'Svenska'),
     ('tr', u'Türkçe'),
     ('uk', u'Українська'),
-    ('zh_Hans', u'简体字'),
-    ('zh_Hant', u'正體字'),
+    ('zh-Hans', u'简体字'),
+    ('zh-Hant', u'正體字'),
 )
 
 SITE_ID = 1
@@ -187,7 +188,7 @@ MEDIA_URL = '%s/media/' % URL_PREFIX
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = os.path.join(DATA_DIR, 'static')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -205,6 +206,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -282,6 +284,7 @@ SOCIAL_AUTH_EMAIL_FORM_URL = '%s/accounts/email/' % URL_PREFIX
 SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = \
     '%s/accounts/profile/#auth' % URL_PREFIX
 SOCIAL_AUTH_PROTECTED_USER_FIELDS = ('email',)
+SOCIAL_AUTH_SLUGIFY_USERNAMES = True
 
 # Middleware
 MIDDLEWARE_CLASSES = (
@@ -318,6 +321,7 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     'social.apps.django_app.default',
     'crispy_forms',
+    'compressor',
     'weblate.trans',
     'weblate.lang',
     'weblate.accounts',
@@ -332,7 +336,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
     'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
     'django.core.context_processors.request',
     'django.core.context_processors.csrf',
     'django.contrib.messages.context_processors.messages',
@@ -357,7 +360,7 @@ else:
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/1.8/topics/logging for
+# See http://docs.djangoproject.com/en/stable/topics/logging for
 # more details on how to customize your logging configuration.
 LOGGING = {
     'version': 1,
@@ -458,7 +461,7 @@ MT_GOOGLE_KEY = None
 MT_TMSERVER = None
 
 # Title of site to use
-SITE_TITLE = 'Weblate'
+SITE_TITLE = u'Weblate'
 
 # URL of login
 LOGIN_URL = '%s/accounts/login/' % URL_PREFIX
@@ -476,7 +479,7 @@ ANONYMOUS_USER_NAME = 'anonymous'
 EMAIL_SEND_HTML = False
 
 # Subject of emails includes site title
-EMAIL_SUBJECT_PREFIX = '[%s] ' % SITE_TITLE
+EMAIL_SUBJECT_PREFIX = u'[{0}] '.format(SITE_TITLE)
 
 # Enable remote hooks
 ENABLE_HOOKS = True
@@ -517,6 +520,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 #     'weblate.trans.checks.format.PythonBraceFormatCheck',
 #     'weblate.trans.checks.format.PHPFormatCheck',
 #     'weblate.trans.checks.format.CFormatCheck',
+#     'weblate.trans.checks.format.JavascriptFormatCheck',
 #     'weblate.trans.checks.consistency.PluralsCheck',
 #     'weblate.trans.checks.consistency.ConsistencyCheck',
 #     'weblate.trans.checks.chars.NewlineCountingCheck',
