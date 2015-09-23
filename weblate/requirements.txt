@@ -10,7 +10,7 @@ python-openid==2.2.5
 python-social-auth==0.2.12
 requests==2.7.0
 requests-oauthlib==0.5.0
-six==1.7.0
+six==1.8.0
 translate-toolkit==1.13.0
 wsgiref==0.1.2
 pyLibravatar==1.7
@@ -20,3 +20,5 @@ Weblate==2.4
 pyuca==1.1
 python-memcached==1.57
 django_compressor==1.5.0
+Pillow==2.9.0
+lxml==3.4.4
