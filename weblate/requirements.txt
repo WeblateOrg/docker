@@ -16,7 +16,7 @@ wsgiref==0.1.2
 pyLibravatar==1.7
 pydns==2.3.6
 Babel==2.0
-Weblate==2.3
+Weblate==2.4
 pyuca==1.1
 python-memcached==1.57
 django_compressor==1.5.0
