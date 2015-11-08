@@ -1,8 +1,8 @@
 # Weblate setup
 WEBLATE_DEBUG=1
-WEBLATE_ADMIN_NAME='Weblate Admin'
-WEBLATE_ADMIN_EMAIL='noreply@weblate.org'
-WEBLATE_EMAIL='noreply@weblate.org'
+WEBLATE_ADMIN_NAME=Weblate Admin
+WEBLATE_ADMIN_EMAIL=noreply@weblate.org
+WEBLATE_EMAIL=noreply@weblate.org
 
 # MySQL setup
 MYSQL_ROOT_PASSWORD=weblate
@@ -15,6 +15,8 @@ POSTGRES_PASSWORD=weblate
 POSTGRES_USER=weblate
 
 # Mail server, the server has to listen on port 587 and understand TLS
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST=smtp.gmail.com
+# Do NOT use quotes here
+EMAIL_HOST_USER=
+# Do NOT use quotes here
+EMAIL_HOST_PASSWORD=
