@@ -12,8 +12,6 @@ weblate:
 database:
   # You can change used database here:
   image: postgres:9.4
-  volumes:
-    - ./weblate/mysql-charset.conf:/etc/mysql/conf.d/charset.cnf
   env_file:
     - ./weblate/environment
 cache:
