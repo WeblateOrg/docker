@@ -13,6 +13,7 @@ ADD requirements.txt /tmp/requirements.txt
 RUN bin/pip install -r /tmp/requirements.txt
 RUN rm /tmp/requirements.txt
 
+ADD settings.py /app/etc/
 ADD wait-mysql /app/bin/
 RUN chmod +x /app/bin/wait-mysql
 RUN curl --location --silent --show-error --fail \
@@ -23,9 +24,7 @@ RUN curl --location --silent --show-error --fail \
 WORKDIR /tmp
 
 RUN install -d -o weblate -g weblate -m 755 /app/data
-RUN install -d -o root -g root -m 755 /app/etc
-RUN cp /app/lib/python2.7/site-packages/weblate/settings_example.py /app/etc/settings.py
-RUN ln -s /app/etc/settings.py /app/lib/python2.7/site-packages/weblate/settings.py
+RUN ln -s /app/etc/settings.py /app/local/lib/python2.7/site-packages/weblate/settings.py
 ENV DJANGO_SETTINGS_MODULE weblate.settings
 ENV START_CMD "/app/bin/django-admin"
 
