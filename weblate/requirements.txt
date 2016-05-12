@@ -9,6 +9,8 @@ pyuca==1.1
 python-memcached==1.57
 django_compressor==1.6
 djangorestframework>=3.3,<3.4
+httpretty==0.8.14
+Babel==2.3.4
 # Following are installed using apt:
 # Pillow
 # lxml
