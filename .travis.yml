@@ -32,4 +32,4 @@ script:
   - docker-compose run weblate migrate --noinput
   - docker-compose run weblate collectstatic --noinput
   - docker-compose run weblate createadmin
-  - docker-compose run weblate test -v 2 --noinput weblate.accounts weblate.trans.tests.test_views weblate.lang
+  - docker-compose run weblate test -v 2 --noinput weblate.accounts weblate.trans weblate.lang
