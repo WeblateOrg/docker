@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:jessie-backports
 MAINTAINER Michal Čihař <michal@cihar.com>
 
 # Add user early to get a consistent userid
