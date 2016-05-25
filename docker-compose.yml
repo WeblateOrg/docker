@@ -6,6 +6,7 @@ weblate:
   ports:
     - "8000:8000"
   volumes:
+    - /app/data
     - ./weblate:/app/etc:ro
   env_file:
     - ./weblate/environment
