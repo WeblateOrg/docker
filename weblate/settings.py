@@ -116,7 +116,7 @@ DATA_DIR = '/app/data'
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'Europe/Prague'
+TIME_ZONE = os.environ.get('WEBLATE_TIME_ZONE', None)
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -213,7 +213,7 @@ STATICFILES_FINDERS = (
 
 # Make this unique, and don't share it with anybody.
 # You can generate it using examples/generate-secret-key
-SECRET_KEY = 'jm8fqjlg+5!#xu%e-oh#7!$aa7!6avf7ud*_v=chdrb9qdco6('
+SECRET_KEY = os.environ.get('WEBLATE_SECRET_KEY', 'jm8fqjlg+5!#xu%e-oh#7!$aa7!6avf7ud*_v=chdrb9qdco6(')
 
 TEMPLATES = [
     {
@@ -469,13 +469,13 @@ MT_MYMEMORY_USER = None
 MT_MYMEMORY_KEY = None
 
 # Google API key for Google Translate API
-MT_GOOGLE_KEY = None
+MT_GOOGLE_KEY = os.environ.get('WEBLATE_MT_GOOGLE_KEY', None)
 
 # tmserver URL
 MT_TMSERVER = None
 
 # Title of site to use
-SITE_TITLE = 'Weblate'
+SITE_TITLE = os.environ.get('WEBLATE_SITE_TITLE', 'Weblate')
 
 # Whether site uses https
 ENABLE_HTTPS = False
@@ -493,7 +493,7 @@ LOGIN_REDIRECT_URL = '%s/' % URL_PREFIX
 ANONYMOUS_USER_NAME = 'anonymous'
 
 # Sending HTML in mails
-EMAIL_SEND_HTML = False
+EMAIL_SEND_HTML = True
 
 # Subject of emails includes site title
 EMAIL_SUBJECT_PREFIX = '[{0}] '.format(SITE_TITLE)
@@ -577,14 +577,14 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 # )
 
 # E-mail address that error messages come from.
-SERVER_EMAIL = os.environ['WEBLATE_EMAIL']
+SERVER_EMAIL = os.environ['WEBLATE_SERVER_EMAIL']
 
 # Default email address to use for various automated correspondence from
 # the site managers. Used for registration emails.
-DEFAULT_FROM_EMAIL = os.environ['WEBLATE_EMAIL']
+DEFAULT_FROM_EMAIL = os.environ['WEBLATE_DEFAULT_FROM_EMAIL']
 
 # List of URLs your site is supposed to serve
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('WEBLATE_ALLOWED_HOSTS', '*').split(',')
 
 # Example configuration to use memcached for caching
 CACHES = {

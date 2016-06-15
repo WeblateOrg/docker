@@ -1,8 +1,17 @@
 # Weblate setup
 WEBLATE_DEBUG=1
+WEBLATE_SITE_TITLE=Weblate
 WEBLATE_ADMIN_NAME=Weblate Admin
 WEBLATE_ADMIN_EMAIL=noreply@weblate.org
-WEBLATE_EMAIL=noreply@weblate.org
+WEBLATE_SERVER_EMAIL=noreply@weblate.org
+WEBLATE_DEFAULT_FROM_EMAIL=noreply@weblate.org
+WEBLATE_ALLOWED_HOSTS=*
+WEBLATE_SECRET_KEY=jm8fqjlg+5!#xu%e-oh#7!$aa7!6avf7ud*_v=chdrb9qdco6(
+
+# Extra
+#WEBLATE_TIME_ZONE=
+#WEBLATE_MT_GOOGLE_KEY=
+
 
 # PostgreSQL setup
 POSTGRES_PASSWORD=weblate
