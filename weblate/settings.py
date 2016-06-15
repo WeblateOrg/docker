@@ -46,6 +46,8 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+REGISTRATION_OPEN = os.environ.get('WEBLATE_REGISTRATION_OPEN', '1') == '1'
+
 DATABASES = {}
 
 if 'DATABASE_PORT_3306_TCP_ADDR' in os.environ:
