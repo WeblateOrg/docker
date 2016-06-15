@@ -18,8 +18,8 @@ POSTGRES_PASSWORD=weblate
 POSTGRES_USER=weblate
 
 # Mail server, the server has to listen on port 587 and understand TLS
-EMAIL_HOST=smtp.gmail.com
+WEBLATE_EMAIL_HOST=smtp.gmail.com
 # Do NOT use quotes here
-EMAIL_HOST_USER=
+WEBLATE_EMAIL_USER=
 # Do NOT use quotes here
-EMAIL_HOST_PASSWORD=
+WEBLATE_EMAIL_PASSWORD=
