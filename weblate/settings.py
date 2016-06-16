@@ -428,6 +428,21 @@ if not HAVE_SYSLOG:
 
 # Machine translation API keys
 
+# List of machine translations
+# MACHINE_TRANSLATION_SERVICES = (
+#     'weblate.trans.machine.apertium.ApertiumTranslation',
+#     'weblate.trans.machine.glosbe.GlosbeTranslation',
+#     'weblate.trans.machine.google.GoogleTranslation',
+#     'weblate.trans.machine.microsoft.MicrosoftTranslation',
+#     'weblate.trans.machine.mymemory.MyMemoryTranslation',
+#     'weblate.trans.machine.tmserver.AmagamaTranslation',
+#     'weblate.trans.machine.tmserver.TMServerTranslation',
+#     'weblate.trans.machine.weblatetm.WeblateSimilarTranslation',
+#     'weblate.trans.machine.weblatetm.WeblateTranslation',
+# )
+
+MACHINE_TRANSLATION_SERVICES = ()
+
 # Apertium Web Service, register at http://api.apertium.org/register.jsp
 MT_APERTIUM_KEY = None
 
@@ -446,6 +461,9 @@ MT_MYMEMORY_KEY = None
 
 # Google API key for Google Translate API
 MT_GOOGLE_KEY = os.environ.get('WEBLATE_MT_GOOGLE_KEY', None)
+
+if 'WEBLATE_MT_GOOGLE_KEY' in os.environ:
+    MACHINE_TRANSLATION_SERVICES += ('weblate.trans.machine.google.GoogleTranslation',)
 
 # tmserver URL
 MT_TMSERVER = None
@@ -537,19 +555,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 # POST_UPDATE_SCRIPTS = (
 # )
 # PRE_COMMIT_SCRIPTS = (
-# )
-
-# List of machine translations
-# MACHINE_TRANSLATION_SERVICES = (
-#     'weblate.trans.machine.apertium.ApertiumTranslation',
-#     'weblate.trans.machine.glosbe.GlosbeTranslation',
-#     'weblate.trans.machine.google.GoogleTranslation',
-#     'weblate.trans.machine.microsoft.MicrosoftTranslation',
-#     'weblate.trans.machine.mymemory.MyMemoryTranslation',
-#     'weblate.trans.machine.tmserver.AmagamaTranslation',
-#     'weblate.trans.machine.tmserver.TMServerTranslation',
-#     'weblate.trans.machine.weblatetm.WeblateSimilarTranslation',
-#     'weblate.trans.machine.weblatetm.WeblateTranslation',
 # )
 
 # E-mail address that error messages come from.
