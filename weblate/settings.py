@@ -472,7 +472,7 @@ MT_TMSERVER = None
 SITE_TITLE = os.environ.get('WEBLATE_SITE_TITLE', 'Weblate')
 
 # Whether site uses https
-ENABLE_HTTPS = False
+ENABLE_HTTPS = os.environ.get('WEBLATE_ENABLE_HTTPS', '1') == '1'
 
 # URL of login
 LOGIN_URL = '%s/accounts/login/' % URL_PREFIX
