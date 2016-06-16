@@ -1,5 +1,5 @@
 # Weblate setup
-WEBLATE_DEBUG=1
+WEBLATE_DEBUG=0
 WEBLATE_SITE_TITLE=Weblate
 WEBLATE_ADMIN_NAME=Weblate Admin
 WEBLATE_ADMIN_EMAIL=noreply@weblate.org
