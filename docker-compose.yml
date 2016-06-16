@@ -21,7 +21,10 @@ services:
     image: postgres:9.4
     env_file:
       - ./weblate/environment
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
   cache:
       image: memcached:1.4
 volumes:
   weblate-data: {}
+  postgres-data: {}
