@@ -505,7 +505,7 @@ NEARBY_MESSAGES = 5
 LAZY_COMMITS = True
 
 # Offload indexing
-OFFLOAD_INDEXING = False
+OFFLOAD_INDEXING = os.environ.get('WEBLATE_OFFLOAD_INDEXING', '0') == '1'
 
 # Translation locking
 AUTO_LOCK = True
