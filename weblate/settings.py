@@ -586,6 +586,8 @@ CACHES = {
     }
 }
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+
 # REST framework settings for API
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
