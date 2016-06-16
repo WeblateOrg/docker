@@ -9,6 +9,7 @@ services:
       - weblate-data:/app/data
     env_file:
       - ./weblate/environment
+    restart: always
   web:
     build: nginx
     links:
@@ -17,14 +18,17 @@ services:
       - "8000:80"
     volumes_from:
       - weblate:ro
+    restart: always
   database:
     image: postgres:9.4
     env_file:
       - ./weblate/environment
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    restart: always
   cache:
-      image: memcached:1.4
+    image: memcached:1.4
+    restart: always
 volumes:
   weblate-data: {}
   postgres-data: {}
