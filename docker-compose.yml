@@ -1,18 +1,27 @@
-weblate:
-  build: weblate
-  links:
-    - database
-    - cache
-  ports:
-    - "8000:8000"
-  volumes:
-    - /app/data
-    - ./weblate:/app/etc:ro
-  env_file:
-    - ./weblate/environment
-database:
-  image: postgres:9.4
-  env_file:
-    - ./weblate/environment
-cache:
-    image: memcached:1.4
+version: '2'
+services:
+  weblate:
+    build: weblate
+    links:
+      - database
+      - cache
+    volumes:
+      - weblate-data:/app/data
+    env_file:
+      - ./weblate/environment
+  web:
+    build: nginx
+    links:
+      - weblate
+    ports:
+      - "8000:80"
+    volumes_from:
+      - weblate:ro
+  database:
+    image: postgres:9.4
+    env_file:
+      - ./weblate/environment
+  cache:
+      image: memcached:1.4
+volumes:
+  weblate-data: {}

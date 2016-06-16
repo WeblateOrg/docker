@@ -25,6 +25,7 @@ WEBLATE_REGISTRATION_OPEN=1
 # PostgreSQL setup
 POSTGRES_PASSWORD=weblate
 POSTGRES_USER=weblate
+POSTGRES_DATABASE=weblate
 
 # Mail server, the server has to listen on port 587 and understand TLS
 WEBLATE_EMAIL_HOST=smtp.gmail.com

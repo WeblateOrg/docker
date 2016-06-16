@@ -48,63 +48,25 @@ MANAGERS = ADMINS
 
 REGISTRATION_OPEN = os.environ.get('WEBLATE_REGISTRATION_OPEN', '1') == '1'
 
-DATABASES = {}
-
-if 'DATABASE_PORT_3306_TCP_ADDR' in os.environ:
-    DATABASES['default'] = {
-        # Use 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'ENGINE': 'django.db.backends.mysql',
-        # Database name or path to database file if using sqlite3.
-        'NAME': os.environ['DATABASE_ENV_MYSQL_DATABASE'],
-        # Use same database for tests (needed as Docker MySQL can
-        # not currently create second database for us)
-        'TEST': {'NAME': os.environ['DATABASE_ENV_MYSQL_DATABASE']},
-        # Database user, not used with sqlite3.
-        'USER': os.environ['DATABASE_ENV_MYSQL_USER'],
-        # Database password, not used with sqlite3.
-        'PASSWORD': os.environ['DATABASE_ENV_MYSQL_PASSWORD'],
-        # Set to empty string for localhost. Not used with sqlite3.
-        'HOST': os.environ['DATABASE_PORT_3306_TCP_ADDR'],
-        # Set to empty string for default. Not used with sqlite3.
-        'PORT': os.environ['DATABASE_PORT_3306_TCP_PORT'],
-        'OPTIONS': {
-           'init_command': 'SET storage_engine=INNODB',
-           'charset': 'utf8',
-        },
-    }
-elif 'DATABASE_PORT_5432_TCP_ADDR' in os.environ:
-    DATABASES['default'] = {
+DATABASES = {
+    'default': {
         # Use 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         # Database name or path to database file if using sqlite3.
-        'NAME': os.environ['DATABASE_ENV_POSTGRES_USER'],
+        'NAME': os.environ['POSTGRES_DATABASE'],
         # Use same database for tests (needed as Docker MySQL can
         # not currently create second database for us)
-        'TEST': {'NAME': os.environ['DATABASE_ENV_POSTGRES_USER']},
+        'TEST': {'NAME': os.environ['POSTGRES_DATABASE']},
         # Database user, not used with sqlite3.
-        'USER': os.environ['DATABASE_ENV_POSTGRES_USER'],
+        'USER': os.environ['POSTGRES_USER'],
         # Database password, not used with sqlite3.
-        'PASSWORD': os.environ['DATABASE_ENV_POSTGRES_PASSWORD'],
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
         # Set to empty string for localhost. Not used with sqlite3.
-        'HOST': os.environ['DATABASE_PORT_5432_TCP_ADDR'],
-        # Set to empty string for default. Not used with sqlite3.
-        'PORT': os.environ['DATABASE_PORT_5432_TCP_PORT'],
-    }
-else:
-    DATABASES['default'] = {
-        # Use 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'ENGINE': 'django.db.backends.sqlite3',
-        # Database name or path to database file if using sqlite3.
-        'NAME': '/app/data/weblate.db',
-        # Database user, not used with sqlite3.
-        'USER': 'weblate',
-        # Database password, not used with sqlite3.
-        'PASSWORD': 'weblate',
-        # Set to empty string for localhost. Not used with sqlite3.
-        'HOST': '127.0.0.1',
+        'HOST': 'database',
         # Set to empty string for default. Not used with sqlite3.
         'PORT': '',
     }
+}
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -181,7 +143,7 @@ URL_PREFIX = ''
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -603,7 +565,11 @@ ALLOWED_HOSTS = os.environ.get('WEBLATE_ALLOWED_HOSTS', '*').split(',')
 # Example configuration to use memcached for caching
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+         'LOCATION': '{0}:{1}'.format(
+            'cache',
+            '11211',
+        )
     },
     'avatar': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
@@ -614,16 +580,6 @@ CACHES = {
         },
     }
 }
-
-if 'CACHE_PORT_11211_TCP_ADDR' in os.environ:
-    CACHES['default'] = {
-         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-         'LOCATION': '{0}:{1}'.format(
-            os.environ['CACHE_PORT_11211_TCP_ADDR'],
-            os.environ['CACHE_PORT_11211_TCP_PORT'],
-        )
-    }
-
 
 # REST framework settings for API
 REST_FRAMEWORK = {
