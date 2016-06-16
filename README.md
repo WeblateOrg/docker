@@ -28,9 +28,9 @@ https://docs.weblate.org/en/latest/admin/deployments.html#docker
     
 3. Setup the environment
 
-    docker-compose run weblate migrate
-    docker-compose run weblate collectstatic
-    docker-compose run weblate createadmin
+    docker-compose run --rm weblate migrate
+    docker-compose run --rm weblate collectstatic
+    docker-compose run --rm weblate createadmin
     
 4. Start up
 
