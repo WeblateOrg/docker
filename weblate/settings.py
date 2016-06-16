@@ -318,6 +318,7 @@ INSTALLED_APPS = (
     'weblate.trans',
     'weblate.lang',
     'weblate.accounts',
+    'libravatar',
     # Needed for javascript localization
     'weblate',
 )
