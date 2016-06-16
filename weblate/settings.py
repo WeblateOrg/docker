@@ -615,19 +615,20 @@ REST_FRAMEWORK = {
     'VIEW_DESCRIPTION_FUNCTION': 'weblate.api.views.get_view_description',
 }
 
-# Example for restricting access to logged in users
-# LOGIN_REQUIRED_URLS = (
-#     r'/(.*)$',
-# )
+if os.environ.get('WEBLATE_REQUIRE_LOGIN', '0') == '1':
+    #Example for restricting access to logged in users
+    LOGIN_REQUIRED_URLS = (
+        r'/(.*)$',
+    )
 
-# In such case you will want to include some of the exceptions
-# LOGIN_REQUIRED_URLS_EXCEPTIONS = (
-#    r'/accounts/(.*)$', # Required for login
-#    r'/static/(.*)$',   # Required for development mode
-#    r'/widgets/(.*)$',  # Allowing public access to widgets
-#    r'/data/(.*)$',     # Allowing public access to data exports
-#    r'/hooks/(.*)$',    # Allowing public access to notification hooks
-# )
+    # In such case you will want to include some of the exceptions
+    LOGIN_REQUIRED_URLS_EXCEPTIONS = (
+       r'/accounts/(.*)$', # Required for login
+       r'/static/(.*)$',   # Required for development mode
+       r'/widgets/(.*)$',  # Allowing public access to widgets
+       r'/data/(.*)$',     # Allowing public access to data exports
+       r'/hooks/(.*)$',    # Allowing public access to notification hooks
+    )
 
 # Force sane test runner
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
