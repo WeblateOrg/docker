@@ -1,6 +1,6 @@
 # weblate-docker
 
-[![Build Status](https://travis-ci.org/nijel/weblate-docker.svg?branch=master)](https://travis-ci.org/nijel/weblate-docker)
+[![Build Status](https://travis-ci.org/WeblateOrg/docker.svg?branch=master)](https://travis-ci.org/WeblateOrg/docker)
 
 Docker container for Weblate
 
