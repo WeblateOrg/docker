@@ -4,7 +4,7 @@ django-crispy-forms==1.6.0
 python-social-auth==0.2.19
 translate-toolkit>=2.0.0b1,<2.1
 pyLibravatar==1.7
-Weblate==2.6
+Weblate==2.7
 pyuca==1.1
 python-memcached==1.57
 django_compressor==1.6
