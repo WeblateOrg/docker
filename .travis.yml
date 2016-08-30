@@ -12,4 +12,4 @@ script:
   - docker-compose run --rm weblate migrate --noinput
   - docker-compose run --rm weblate collectstatic --noinput
   - docker-compose run --rm weblate createadmin
-  - docker-compose run weblate test -v 2 --noinput weblate.accounts weblate.trans weblate.lang
+  - docker-compose run weblate test -v 2 --noinput weblate.accounts weblate.trans weblate.lang weblate.api
