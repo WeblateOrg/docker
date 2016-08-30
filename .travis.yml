@@ -9,9 +9,9 @@ python:
  
 script:
   - docker-compose build
-  - docker-compose start database
-  - docker-compose start cache
-  - docker-compose start web
+  - docker-compose up database
+  - docker-compose up cache
+  - docker-compose up web
   - docker-compose run --rm weblate migrate --noinput
   - docker-compose run --rm weblate collectstatic --noinput
   - docker-compose run --rm weblate createadmin
