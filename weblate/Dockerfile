@@ -5,7 +5,7 @@ MAINTAINER Michal Čihař <michal@cihar.com>
 RUN useradd --shell /bin/sh --user-group weblate
 
 RUN env DEBIAN_FRONTEND=noninteractive apt-get update \
-  && apt-get install --no-install-recommends -y ssh curl python-virtualenv python-lxml python-pillow python-psycopg2 python-mysqldb gettext \
+  && apt-get install --no-install-recommends -y ssh curl python-virtualenv python-lxml python-pillow python-psycopg2 gettext postgresql-client \
   && apt-get -y install -t jessie-backports mercurial git \
   && apt-get -y upgrade \
   && apt-get clean
