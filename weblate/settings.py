@@ -19,6 +19,7 @@
 #
 
 from __future__ import unicode_literals
+import platform
 import os
 from logging.handlers import SysLogHandler
 import django
@@ -318,7 +319,6 @@ INSTALLED_APPS = (
     'weblate.trans',
     'weblate.lang',
     'weblate.accounts',
-    'libravatar',
     # Needed for javascript localization
     'weblate',
 )
@@ -337,11 +337,13 @@ DEFAULT_EXCEPTION_REPORTER_FILTER = \
 #   after configuring it below
 
 # Detect if we can connect to syslog
-try:
-    SysLogHandler(address='/dev/log', facility=SysLogHandler.LOG_LOCAL2)
-    HAVE_SYSLOG = True
-except IOError:
-    HAVE_SYSLOG = False
+HAVE_SYSLOG = False
+if platform.system() != 'Windows':
+    try:
+        SysLogHandler(address='/dev/log', facility=SysLogHandler.LOG_LOCAL2)
+        HAVE_SYSLOG = True
+    except IOError:
+        HAVE_SYSLOG = False
 
 if DEBUG or not HAVE_SYSLOG:
     DEFAULT_LOG = 'console'
@@ -517,33 +519,34 @@ LOCK_TIME = 15 * 60
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 # List of quality checks
-CHECK_LIST = (
-    'weblate.trans.checks.same.SameCheck',
-    'weblate.trans.checks.chars.BeginNewlineCheck',
-    'weblate.trans.checks.chars.EndNewlineCheck',
-    'weblate.trans.checks.chars.BeginSpaceCheck',
-    'weblate.trans.checks.chars.EndSpaceCheck',
-    'weblate.trans.checks.chars.EndStopCheck',
-    'weblate.trans.checks.chars.EndColonCheck',
-    'weblate.trans.checks.chars.EndQuestionCheck',
-    'weblate.trans.checks.chars.EndExclamationCheck',
-    'weblate.trans.checks.chars.EndEllipsisCheck',
-    'weblate.trans.checks.chars.MaxLengthCheck',
-    'weblate.trans.checks.format.PythonFormatCheck',
-    'weblate.trans.checks.format.PythonBraceFormatCheck',
-    'weblate.trans.checks.format.PHPFormatCheck',
-    'weblate.trans.checks.format.CFormatCheck',
-    'weblate.trans.checks.format.JavascriptFormatCheck',
-    'weblate.trans.checks.consistency.PluralsCheck',
-    'weblate.trans.checks.consistency.ConsistencyCheck',
-    'weblate.trans.checks.chars.NewlineCountingCheck',
-    'weblate.trans.checks.markup.BBCodeCheck',
-    'weblate.trans.checks.chars.ZeroWidthSpaceCheck',
-    'weblate.trans.checks.markup.XMLTagsCheck',
-    'weblate.trans.checks.source.OptionalPluralCheck',
-    'weblate.trans.checks.source.EllipsisCheck',
-    'weblate.trans.checks.source.MultipleFailingCheck',
-)
+# CHECK_LIST = (
+#     'weblate.trans.checks.same.SameCheck',
+#     'weblate.trans.checks.chars.BeginNewlineCheck',
+#     'weblate.trans.checks.chars.EndNewlineCheck',
+#     'weblate.trans.checks.chars.BeginSpaceCheck',
+#     'weblate.trans.checks.chars.EndSpaceCheck',
+#     'weblate.trans.checks.chars.EndStopCheck',
+#     'weblate.trans.checks.chars.EndColonCheck',
+#     'weblate.trans.checks.chars.EndQuestionCheck',
+#     'weblate.trans.checks.chars.EndExclamationCheck',
+#     'weblate.trans.checks.chars.EndEllipsisCheck',
+#     'weblate.trans.checks.chars.MaxLengthCheck',
+#     'weblate.trans.checks.format.PythonFormatCheck',
+#     'weblate.trans.checks.format.PythonBraceFormatCheck',
+#     'weblate.trans.checks.format.PHPFormatCheck',
+#     'weblate.trans.checks.format.CFormatCheck',
+#     'weblate.trans.checks.format.JavascriptFormatCheck',
+#     'weblate.trans.checks.consistency.PluralsCheck',
+#     'weblate.trans.checks.consistency.ConsistencyCheck',
+#     'weblate.trans.checks.chars.NewlineCountingCheck',
+#     'weblate.trans.checks.markup.BBCodeCheck',
+#     'weblate.trans.checks.chars.ZeroWidthSpaceCheck',
+#     'weblate.trans.checks.markup.XMLValidityCheck',
+#     'weblate.trans.checks.markup.XMLTagsCheck',
+#     'weblate.trans.checks.source.OptionalPluralCheck',
+#     'weblate.trans.checks.source.EllipsisCheck',
+#     'weblate.trans.checks.source.MultipleFailingCheck',
+# )
 
 # List of automatic fixups
 # AUTOFIX_LIST = (
@@ -628,6 +631,7 @@ if os.environ.get('WEBLATE_REQUIRE_LOGIN', '0') == '1':
        r'/widgets/(.*)$',  # Allowing public access to widgets
        r'/data/(.*)$',     # Allowing public access to data exports
        r'/hooks/(.*)$',    # Allowing public access to notification hooks
+       r'/api/(.*)$',      # Allowing access to API
     )
 
 # Force sane test runner
