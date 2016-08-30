@@ -10,6 +10,9 @@ services:
     env_file:
       - ./weblate/environment
     restart: always
+    depends_on:
+      - database
+      - cache
   web:
     build: nginx
     links:
@@ -19,6 +22,8 @@ services:
     volumes_from:
       - weblate:ro
     restart: always
+    depends_on:
+      - weblate
   database:
     image: postgres:9.4
     env_file:
