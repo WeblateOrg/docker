@@ -10,11 +10,6 @@ RUN env DEBIAN_FRONTEND=noninteractive apt-get update \
   && apt-get -y upgrade \
   && apt-get clean
 
-RUN curl --location --silent --show-error --fail \
-    https://github.com/Barzahlen/waitforservices/releases/download/v0.1/waitforservices \
-    > /usr/local/bin/waitforservices \
-  && chmod +x /usr/local/bin/waitforservices
-
 WORKDIR /app
 RUN python -m virtualenv --system-site-packages .
 ADD requirements.txt /tmp/requirements.txt

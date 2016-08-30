@@ -1,7 +1,13 @@
 #!/bin/sh
+set -e
 
 # Wait for database to get available
-waitforservices
+until psql -h "$POSTGRES_DATABASE" -U "postgres" -c '\l'; do
+  >&2 echo "Postgres is unavailable - sleeping"
+  sleep 1
+done
+
+>&2 echo "Postgres is up"
 
 #start the daemon
 exec $START_CMD "$@"
