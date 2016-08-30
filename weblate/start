@@ -5,7 +5,7 @@ set -x
 export PGPASSWORD="$POSTGRES_PASSWORD"
 
 # Wait for database to get available
-until psql -h "database" -U "$POSTGRES_USER" -c '\l'; do
+until psql -h "database" -U "$POSTGRES_USER" -c 'SELECT 1'; do
   >&2 echo "Postgres is unavailable - sleeping"
   sleep 1
 done
