@@ -2,7 +2,7 @@
 set -e
 
 # Wait for database to get available
-until psql -h "$POSTGRES_DATABASE" -U "postgres" -c '\l'; do
+until psql -h "database" -U "postgres" -c '\l'; do
   >&2 echo "Postgres is unavailable - sleeping"
   sleep 1
 done
