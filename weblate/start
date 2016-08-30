@@ -1,11 +1,15 @@
 #!/bin/sh
 set -e
 
+export PGPASSWD="$POSTGRES_PASSWORD"
+
 # Wait for database to get available
-until psql -h "database" -U "postgres" -c '\l'; do
+until psql -h "database" -U "$POSTGRES_USER" -c '\l'; do
   >&2 echo "Postgres is unavailable - sleeping"
   sleep 1
 done
+
+unset PGPASSWD
 
 >&2 echo "Postgres is up"
 
