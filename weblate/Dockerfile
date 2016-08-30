@@ -4,8 +4,16 @@ MAINTAINER Michal Čihař <michal@cihar.com>
 # Add user early to get a consistent userid
 RUN useradd --shell /bin/sh --user-group weblate
 
-RUN apt-get update
-RUN env DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y ssh curl python-virtualenv python-lxml python-pillow python-psycopg2 python-mysqldb gettext && apt-get -y install -t jessie-backports mercurial git && apt-get -y upgrade && apt-get clean
+RUN env DEBIAN_FRONTEND=noninteractive apt-get update \
+  && apt-get install --no-install-recommends -y ssh curl python-virtualenv python-lxml python-pillow python-psycopg2 python-mysqldb gettext \
+  && apt-get -y install -t jessie-backports mercurial git \
+  && apt-get -y upgrade \
+  && apt-get clean
+
+RUN curl --location --silent --show-error --fail \
+    https://github.com/Barzahlen/waitforservices/releases/download/v0.1/waitforservices \
+    > /usr/local/bin/waitforservices \
+  && chmod +x /usr/local/bin/waitforservices
 
 WORKDIR /app
 RUN python -m virtualenv --system-site-packages .
@@ -14,12 +22,8 @@ RUN bin/pip install -r /tmp/requirements.txt
 RUN rm /tmp/requirements.txt
 
 ADD settings.py /app/etc/
-ADD wait-mysql /app/bin/
-RUN chmod +x /app/bin/wait-mysql
-RUN curl --location --silent --show-error --fail \
-        https://github.com/Barzahlen/waitforservices/releases/download/v0.1/waitforservices \
-        > /usr/local/bin/waitforservices && \
-    chmod +x /usr/local/bin/waitforservices
+ADD start /app/bin/
+RUN chmod +x /app/bin/start
 
 WORKDIR /tmp
 
@@ -32,5 +36,5 @@ VOLUME ["/app/etc", "/app/data"]
 USER weblate
 
 EXPOSE 8000
-ENTRYPOINT ["/app/bin/wait-mysql"]
+ENTRYPOINT ["/app/bin/start"]
 CMD ["runserver", "0.0.0.0:8000"]

@@ -11,6 +11,7 @@ django_compressor==1.6
 djangorestframework>=3.3,<3.4
 httpretty==0.8.14
 Babel==2.3.4
+PyDNS==2.3.6
 # Following are installed using apt:
 # Pillow
 # lxml

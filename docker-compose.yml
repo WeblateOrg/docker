@@ -1,21 +1,34 @@
-weblate:
-  build: weblate
-  links:
-    - database
-    - cache
-  ports:
-    - "8000:8000"
-  volumes:
-    - /app/data
-    - ./weblate:/app/etc:ro
-  env_file:
-    - ./weblate/environment
-database:
-  # You can change used database here:
-  image: postgres:9.4
-  volumes:
-    - ./weblate/mysql-charset.conf:/etc/mysql/conf.d/charset.cnf
-  env_file:
-    - ./weblate/environment
-cache:
+version: '2'
+services:
+  weblate:
+    build: weblate
+    links:
+      - database
+      - cache
+    volumes:
+      - weblate-data:/app/data
+    env_file:
+      - ./weblate/environment
+    restart: always
+  web:
+    build: nginx
+    links:
+      - weblate
+    ports:
+      - "8000:80"
+    volumes_from:
+      - weblate:ro
+    restart: always
+  database:
+    image: postgres:9.4
+    env_file:
+      - ./weblate/environment
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: always
+  cache:
     image: memcached:1.4
+    restart: always
+volumes:
+  weblate-data: {}
+  postgres-data: {}

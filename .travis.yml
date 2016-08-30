@@ -6,30 +6,10 @@ services:
 language: python
 python:
   - "2.7"
-
-env:
-  matrix:
-    - DB=mysql:5.6
-    - DB=mariadb:10.0
-    - DB=postgres:9.4
-    - DB=busybox
-
-matrix:
-  allow_failures:
-    # PostgreSQL docker has some bug
-    - env: DB=postgres:9.4
-    - env: DB=busybox
-
-before_install:
-  - curl -L https://github.com/docker/compose/releases/download/1.4.0/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
  
 script:
-  - sed -i "s/postgres:9.4/$DB/" docker-compose.yml
-  - if [ "$DB" = busybox ] ; then sed -i '/^    - database$/ d' docker-compose.yml ; fi
   - docker-compose build
-  - docker-compose run weblate migrate --noinput
-  - docker-compose run weblate collectstatic --noinput
-  - docker-compose run weblate createadmin
+  - docker-compose run --rm weblate migrate --noinput
+  - docker-compose run --rm weblate collectstatic --noinput
+  - docker-compose run --rm weblate createadmin
   - docker-compose run weblate test -v 2 --noinput weblate.accounts weblate.trans weblate.lang

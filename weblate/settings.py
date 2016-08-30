@@ -46,63 +46,27 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASES = {}
+REGISTRATION_OPEN = os.environ.get('WEBLATE_REGISTRATION_OPEN', '1') == '1'
 
-if 'DATABASE_PORT_3306_TCP_ADDR' in os.environ:
-    DATABASES['default'] = {
-        # Use 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'ENGINE': 'django.db.backends.mysql',
-        # Database name or path to database file if using sqlite3.
-        'NAME': os.environ['DATABASE_ENV_MYSQL_DATABASE'],
-        # Use same database for tests (needed as Docker MySQL can
-        # not currently create second database for us)
-        'TEST': {'NAME': os.environ['DATABASE_ENV_MYSQL_DATABASE']},
-        # Database user, not used with sqlite3.
-        'USER': os.environ['DATABASE_ENV_MYSQL_USER'],
-        # Database password, not used with sqlite3.
-        'PASSWORD': os.environ['DATABASE_ENV_MYSQL_PASSWORD'],
-        # Set to empty string for localhost. Not used with sqlite3.
-        'HOST': os.environ['DATABASE_PORT_3306_TCP_ADDR'],
-        # Set to empty string for default. Not used with sqlite3.
-        'PORT': os.environ['DATABASE_PORT_3306_TCP_PORT'],
-        'OPTIONS': {
-           'init_command': 'SET storage_engine=INNODB',
-           'charset': 'utf8',
-        },
-    }
-elif 'DATABASE_PORT_5432_TCP_ADDR' in os.environ:
-    DATABASES['default'] = {
+DATABASES = {
+    'default': {
         # Use 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         # Database name or path to database file if using sqlite3.
-        'NAME': os.environ['DATABASE_ENV_POSTGRES_USER'],
+        'NAME': os.environ['POSTGRES_DATABASE'],
         # Use same database for tests (needed as Docker MySQL can
         # not currently create second database for us)
-        'TEST': {'NAME': os.environ['DATABASE_ENV_POSTGRES_USER']},
+        'TEST': {'NAME': os.environ['POSTGRES_DATABASE']},
         # Database user, not used with sqlite3.
-        'USER': os.environ['DATABASE_ENV_POSTGRES_USER'],
+        'USER': os.environ['POSTGRES_USER'],
         # Database password, not used with sqlite3.
-        'PASSWORD': os.environ['DATABASE_ENV_POSTGRES_PASSWORD'],
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
         # Set to empty string for localhost. Not used with sqlite3.
-        'HOST': os.environ['DATABASE_PORT_5432_TCP_ADDR'],
-        # Set to empty string for default. Not used with sqlite3.
-        'PORT': os.environ['DATABASE_PORT_5432_TCP_PORT'],
-    }
-else:
-    DATABASES['default'] = {
-        # Use 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'ENGINE': 'django.db.backends.sqlite3',
-        # Database name or path to database file if using sqlite3.
-        'NAME': '/app/data/weblate.db',
-        # Database user, not used with sqlite3.
-        'USER': 'weblate',
-        # Database password, not used with sqlite3.
-        'PASSWORD': 'weblate',
-        # Set to empty string for localhost. Not used with sqlite3.
-        'HOST': '127.0.0.1',
+        'HOST': 'database',
         # Set to empty string for default. Not used with sqlite3.
         'PORT': '',
     }
+}
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -116,7 +80,7 @@ DATA_DIR = '/app/data'
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'Europe/Prague'
+TIME_ZONE = os.environ.get('WEBLATE_TIME_ZONE', None)
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -179,7 +143,7 @@ URL_PREFIX = ''
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -213,7 +177,7 @@ STATICFILES_FINDERS = (
 
 # Make this unique, and don't share it with anybody.
 # You can generate it using examples/generate-secret-key
-SECRET_KEY = 'jm8fqjlg+5!#xu%e-oh#7!$aa7!6avf7ud*_v=chdrb9qdco6('
+SECRET_KEY = os.environ.get('WEBLATE_SECRET_KEY', 'jm8fqjlg+5!#xu%e-oh#7!$aa7!6avf7ud*_v=chdrb9qdco6(')
 
 TEMPLATES = [
     {
@@ -259,21 +223,33 @@ AUTHENTICATION_BACKENDS = (
     'weblate.accounts.auth.WeblateUserBackend',
 )
 
+if 'WEBLATE_SOCIAL_AUTH_GITHUB_KEY' in os.environ:
+    AUTHENTICATION_BACKENDS += ('social.backends.github.GithubOAuth2',)
+
 # Social auth backends setup
-SOCIAL_AUTH_GITHUB_KEY = ''
-SOCIAL_AUTH_GITHUB_SECRET = ''
+SOCIAL_AUTH_GITHUB_KEY = os.environ.get('WEBLATE_SOCIAL_AUTH_GITHUB_KEY', '')
+SOCIAL_AUTH_GITHUB_SECRET = os.environ.get('WEBLATE_SOCIAL_AUTH_GITHUB_SECRET', '')
 SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
 
-SOCIAL_AUTH_BITBUCKET_KEY = ''
-SOCIAL_AUTH_BITBUCKET_SECRET = ''
+if 'WEBLATE_SOCIAL_AUTH_BITBUCKET_KEY' in os.environ:
+    AUTHENTICATION_BACKENDS += ('social.backends.bitbucket.BitbucketOAuth',)
+
+SOCIAL_AUTH_BITBUCKET_KEY = os.environ.get('WEBLATE_SOCIAL_AUTH_BITBUCKET_KEY', '')
+SOCIAL_AUTH_BITBUCKET_SECRET = os.environ.get('WEBLATE_SOCIAL_AUTH_BITBUCKET_SECRET', '')
 SOCIAL_AUTH_BITBUCKET_VERIFIED_EMAILS_ONLY = True
 
-SOCIAL_AUTH_FACEBOOK_KEY = ''
-SOCIAL_AUTH_FACEBOOK_SECRET = ''
+if 'WEBLATE_SOCIAL_AUTH_FACEBOOK_KEY' in os.environ:
+    AUTHENTICATION_BACKENDS += ('social.backends.facebook.FacebookOAuth2',)
+
+SOCIAL_AUTH_FACEBOOK_KEY = os.environ.get('WEBLATE_SOCIAL_AUTH_FACEBOOK_KEY', '')
+SOCIAL_AUTH_FACEBOOK_SECRET = os.environ.get('WEBLATE_SOCIAL_AUTH_FACEBOOK_SECRET', '')
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'public_profile']
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''
+if 'WEBLATE_SOCIAL_AUTH_GOOGLE_OAUTH2_KEY' in os.environ:
+    AUTHENTICATION_BACKENDS += ('social.backends.google.GoogleOAuth2',)
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('WEBLATE_SOCIAL_AUTH_GOOGLE_OAUTH2_KEY', '')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get('WEBLATE_SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET', '')
 
 # Social auth settings
 SOCIAL_AUTH_PIPELINE = (
@@ -342,6 +318,7 @@ INSTALLED_APPS = (
     'weblate.trans',
     'weblate.lang',
     'weblate.accounts',
+    'libravatar',
     # Needed for javascript localization
     'weblate',
 )
@@ -452,6 +429,21 @@ if not HAVE_SYSLOG:
 
 # Machine translation API keys
 
+# List of machine translations
+# MACHINE_TRANSLATION_SERVICES = (
+#     'weblate.trans.machine.apertium.ApertiumTranslation',
+#     'weblate.trans.machine.glosbe.GlosbeTranslation',
+#     'weblate.trans.machine.google.GoogleTranslation',
+#     'weblate.trans.machine.microsoft.MicrosoftTranslation',
+#     'weblate.trans.machine.mymemory.MyMemoryTranslation',
+#     'weblate.trans.machine.tmserver.AmagamaTranslation',
+#     'weblate.trans.machine.tmserver.TMServerTranslation',
+#     'weblate.trans.machine.weblatetm.WeblateSimilarTranslation',
+#     'weblate.trans.machine.weblatetm.WeblateTranslation',
+# )
+
+MACHINE_TRANSLATION_SERVICES = ()
+
 # Apertium Web Service, register at http://api.apertium.org/register.jsp
 MT_APERTIUM_KEY = None
 
@@ -469,16 +461,19 @@ MT_MYMEMORY_USER = None
 MT_MYMEMORY_KEY = None
 
 # Google API key for Google Translate API
-MT_GOOGLE_KEY = None
+MT_GOOGLE_KEY = os.environ.get('WEBLATE_MT_GOOGLE_KEY', None)
+
+if 'WEBLATE_MT_GOOGLE_KEY' in os.environ:
+    MACHINE_TRANSLATION_SERVICES += ('weblate.trans.machine.google.GoogleTranslation',)
 
 # tmserver URL
 MT_TMSERVER = None
 
 # Title of site to use
-SITE_TITLE = 'Weblate'
+SITE_TITLE = os.environ.get('WEBLATE_SITE_TITLE', 'Weblate')
 
 # Whether site uses https
-ENABLE_HTTPS = False
+ENABLE_HTTPS = os.environ.get('WEBLATE_ENABLE_HTTPS', '0') == '1'
 
 # URL of login
 LOGIN_URL = '%s/accounts/login/' % URL_PREFIX
@@ -493,7 +488,7 @@ LOGIN_REDIRECT_URL = '%s/' % URL_PREFIX
 ANONYMOUS_USER_NAME = 'anonymous'
 
 # Sending HTML in mails
-EMAIL_SEND_HTML = False
+EMAIL_SEND_HTML = True
 
 # Subject of emails includes site title
 EMAIL_SUBJECT_PREFIX = '[{0}] '.format(SITE_TITLE)
@@ -511,7 +506,7 @@ NEARBY_MESSAGES = 5
 LAZY_COMMITS = True
 
 # Offload indexing
-OFFLOAD_INDEXING = False
+OFFLOAD_INDEXING = os.environ.get('WEBLATE_OFFLOAD_INDEXING', '0') == '1'
 
 # Translation locking
 AUTO_LOCK = True
@@ -522,33 +517,33 @@ LOCK_TIME = 15 * 60
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 # List of quality checks
-# CHECK_LIST = (
-#     'weblate.trans.checks.same.SameCheck',
-#     'weblate.trans.checks.chars.BeginNewlineCheck',
-#     'weblate.trans.checks.chars.EndNewlineCheck',
-#     'weblate.trans.checks.chars.BeginSpaceCheck',
-#     'weblate.trans.checks.chars.EndSpaceCheck',
-#     'weblate.trans.checks.chars.EndStopCheck',
-#     'weblate.trans.checks.chars.EndColonCheck',
-#     'weblate.trans.checks.chars.EndQuestionCheck',
-#     'weblate.trans.checks.chars.EndExclamationCheck',
-#     'weblate.trans.checks.chars.EndEllipsisCheck',
-#     'weblate.trans.checks.chars.MaxLengthCheck',
-#     'weblate.trans.checks.format.PythonFormatCheck',
-#     'weblate.trans.checks.format.PythonBraceFormatCheck',
-#     'weblate.trans.checks.format.PHPFormatCheck',
-#     'weblate.trans.checks.format.CFormatCheck',
-#     'weblate.trans.checks.format.JavascriptFormatCheck',
-#     'weblate.trans.checks.consistency.PluralsCheck',
-#     'weblate.trans.checks.consistency.ConsistencyCheck',
-#     'weblate.trans.checks.chars.NewlineCountingCheck',
-#     'weblate.trans.checks.markup.BBCodeCheck',
-#     'weblate.trans.checks.chars.ZeroWidthSpaceCheck',
-#     'weblate.trans.checks.markup.XMLTagsCheck',
-#     'weblate.trans.checks.source.OptionalPluralCheck',
-#     'weblate.trans.checks.source.EllipsisCheck',
-#     'weblate.trans.checks.source.MultipleFailingCheck',
-# )
+CHECK_LIST = (
+    'weblate.trans.checks.same.SameCheck',
+    'weblate.trans.checks.chars.BeginNewlineCheck',
+    'weblate.trans.checks.chars.EndNewlineCheck',
+    'weblate.trans.checks.chars.BeginSpaceCheck',
+    'weblate.trans.checks.chars.EndSpaceCheck',
+    'weblate.trans.checks.chars.EndStopCheck',
+    'weblate.trans.checks.chars.EndColonCheck',
+    'weblate.trans.checks.chars.EndQuestionCheck',
+    'weblate.trans.checks.chars.EndExclamationCheck',
+    'weblate.trans.checks.chars.EndEllipsisCheck',
+    'weblate.trans.checks.chars.MaxLengthCheck',
+    'weblate.trans.checks.format.PythonFormatCheck',
+    'weblate.trans.checks.format.PythonBraceFormatCheck',
+    'weblate.trans.checks.format.PHPFormatCheck',
+    'weblate.trans.checks.format.CFormatCheck',
+    'weblate.trans.checks.format.JavascriptFormatCheck',
+    'weblate.trans.checks.consistency.PluralsCheck',
+    'weblate.trans.checks.consistency.ConsistencyCheck',
+    'weblate.trans.checks.chars.NewlineCountingCheck',
+    'weblate.trans.checks.markup.BBCodeCheck',
+    'weblate.trans.checks.chars.ZeroWidthSpaceCheck',
+    'weblate.trans.checks.markup.XMLTagsCheck',
+    'weblate.trans.checks.source.OptionalPluralCheck',
+    'weblate.trans.checks.source.EllipsisCheck',
+    'weblate.trans.checks.source.MultipleFailingCheck',
+)
 
 # List of automatic fixups
 # AUTOFIX_LIST = (
@@ -563,33 +558,24 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 # PRE_COMMIT_SCRIPTS = (
 # )
 
-# List of machine translations
-# MACHINE_TRANSLATION_SERVICES = (
-#     'weblate.trans.machine.apertium.ApertiumTranslation',
-#     'weblate.trans.machine.glosbe.GlosbeTranslation',
-#     'weblate.trans.machine.google.GoogleTranslation',
-#     'weblate.trans.machine.microsoft.MicrosoftTranslation',
-#     'weblate.trans.machine.mymemory.MyMemoryTranslation',
-#     'weblate.trans.machine.tmserver.AmagamaTranslation',
-#     'weblate.trans.machine.tmserver.TMServerTranslation',
-#     'weblate.trans.machine.weblatetm.WeblateSimilarTranslation',
-#     'weblate.trans.machine.weblatetm.WeblateTranslation',
-# )
-
 # E-mail address that error messages come from.
-SERVER_EMAIL = os.environ['WEBLATE_EMAIL']
+SERVER_EMAIL = os.environ['WEBLATE_SERVER_EMAIL']
 
 # Default email address to use for various automated correspondence from
 # the site managers. Used for registration emails.
-DEFAULT_FROM_EMAIL = os.environ['WEBLATE_EMAIL']
+DEFAULT_FROM_EMAIL = os.environ['WEBLATE_DEFAULT_FROM_EMAIL']
 
 # List of URLs your site is supposed to serve
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('WEBLATE_ALLOWED_HOSTS', '*').split(',')
 
 # Example configuration to use memcached for caching
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+         'LOCATION': '{0}:{1}'.format(
+            'cache',
+            '11211',
+        )
     },
     'avatar': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
@@ -601,15 +587,7 @@ CACHES = {
     }
 }
 
-if 'CACHE_PORT_11211_TCP_ADDR' in os.environ:
-    CACHES['default'] = {
-         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-         'LOCATION': '{0}:{1}'.format(
-            os.environ['CACHE_PORT_11211_TCP_ADDR'],
-            os.environ['CACHE_PORT_11211_TCP_PORT'],
-        )
-    }
-
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 
 # REST framework settings for API
 REST_FRAMEWORK = {
@@ -637,26 +615,29 @@ REST_FRAMEWORK = {
     'VIEW_DESCRIPTION_FUNCTION': 'weblate.api.views.get_view_description',
 }
 
-# Example for restricting access to logged in users
-# LOGIN_REQUIRED_URLS = (
-#     r'/(.*)$',
-# )
+if os.environ.get('WEBLATE_REQUIRE_LOGIN', '0') == '1':
+    #Example for restricting access to logged in users
+    LOGIN_REQUIRED_URLS = (
+        r'/(.*)$',
+    )
 
-# In such case you will want to include some of the exceptions
-# LOGIN_REQUIRED_URLS_EXCEPTIONS = (
-#    r'/accounts/(.*)$', # Required for login
-#    r'/static/(.*)$',   # Required for development mode
-#    r'/widgets/(.*)$',  # Allowing public access to widgets
-#    r'/data/(.*)$',     # Allowing public access to data exports
-#    r'/hooks/(.*)$',    # Allowing public access to notification hooks
-# )
+    # In such case you will want to include some of the exceptions
+    LOGIN_REQUIRED_URLS_EXCEPTIONS = (
+       r'/accounts/(.*)$', # Required for login
+       r'/static/(.*)$',   # Required for development mode
+       r'/widgets/(.*)$',  # Allowing public access to widgets
+       r'/data/(.*)$',     # Allowing public access to data exports
+       r'/hooks/(.*)$',    # Allowing public access to notification hooks
+    )
 
 # Force sane test runner
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # Email server
 EMAIL_USE_TLS = True
-EMAIL_HOST = os.environ.get('EMAIL_HOST', '')
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_HOST = os.environ.get('WEBLATE_EMAIL_HOST', '')
+EMAIL_HOST_USER = os.environ.get('WEBLATE_EMAIL_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('WEBLATE_EMAIL_PASSWORD', '')
 EMAIL_PORT = 587
+
+GOOGLE_ANALYTICS_ID = os.environ.get('WEBLATE_GOOGLE_ANALYTICS_ID', '')
