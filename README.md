@@ -25,17 +25,17 @@ See [weblate/environment]() for a full list of environment vars
 
 2. Build the instances
 
-    docker-compose build
+        docker-compose build
     
 3. Setup the environment
 
-    docker-compose run --rm weblate migrate
-    docker-compose run --rm weblate collectstatic
-    docker-compose run --rm weblate createadmin
+        docker-compose run --rm weblate migrate
+        docker-compose run --rm weblate collectstatic
+        docker-compose run --rm weblate createadmin
     
 4. Start up
 
-    docker-compose up
+        docker-compose up
 
 ## Maintenance tasks
 
