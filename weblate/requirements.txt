@@ -6,6 +6,7 @@ translate-toolkit>=2.0.0b4,<2.1
 pyLibravatar==1.7
 Weblate==2.7
 pyuca==1.1
+python-dateutil==2.5.3
 python-memcached==1.58
 django_compressor==2.1
 djangorestframework>=3.4,<3.5
