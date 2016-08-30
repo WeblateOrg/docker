@@ -9,6 +9,7 @@ pyuca==1.1
 python-memcached==1.58
 django_compressor==2.1
 djangorestframework>=3.4,<3.5
+defusedxml==0.4.1
 httpretty==0.8.14
 Babel==2.3.4
 PyDNS==2.3.6
