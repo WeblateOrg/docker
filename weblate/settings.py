@@ -432,7 +432,7 @@ if not HAVE_SYSLOG:
 # Machine translation API keys
 
 # List of machine translations
-# MACHINE_TRANSLATION_SERVICES = (
+MACHINE_TRANSLATION_SERVICES = (
 #     'weblate.trans.machine.apertium.ApertiumTranslation',
 #     'weblate.trans.machine.glosbe.GlosbeTranslation',
 #     'weblate.trans.machine.google.GoogleTranslation',
@@ -440,11 +440,9 @@ if not HAVE_SYSLOG:
 #     'weblate.trans.machine.mymemory.MyMemoryTranslation',
 #     'weblate.trans.machine.tmserver.AmagamaTranslation',
 #     'weblate.trans.machine.tmserver.TMServerTranslation',
-#     'weblate.trans.machine.weblatetm.WeblateSimilarTranslation',
-#     'weblate.trans.machine.weblatetm.WeblateTranslation',
-# )
-
-MACHINE_TRANSLATION_SERVICES = ()
+    'weblate.trans.machine.weblatetm.WeblateSimilarTranslation',
+    'weblate.trans.machine.weblatetm.WeblateTranslation',
+)
 
 # Apertium Web Service, register at http://api.apertium.org/register.jsp
 MT_APERTIUM_KEY = None
