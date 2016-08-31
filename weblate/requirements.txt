@@ -1,12 +1,10 @@
-# Update to 1.10 with Weblate 2.8:
-Django>=1.9,<1.10
+Django>=1.10,<1.11
 Whoosh>=2.7,<2.8
 django-crispy-forms==1.6.0
-# Upgrade to 0.2.21 with Weblate 2.8:
-python-social-auth==0.2.19
+python-social-auth==0.2.21
 translate-toolkit>=2.0.0b4,<2.1
 pyLibravatar==1.7
-Weblate==2.7
+Weblate==2.8
 pyuca==1.1
 python-dateutil==2.5.3
 python-memcached==1.58
