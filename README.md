@@ -2,6 +2,10 @@
 
 [![Build Status](https://travis-ci.org/WeblateOrg/docker.svg?branch=master)](https://travis-ci.org/WeblateOrg/docker)
 
+[![Docker Layers](https://images.microbadger.com/badges/image/nijel/weblate.svg)](http://microbadger.com/images/nijel/weblate "Get your own image badge on microbadger.com")
+
+[![Docker Badge](https://images.microbadger.com/badges/version/nijel/weblate.svg)](http://microbadger.com/images/nijel/weblate "Get your own version badge on microbadger.com")
+
 Docker container for Weblate
 
 Documentation is available in Weblate documentation:
