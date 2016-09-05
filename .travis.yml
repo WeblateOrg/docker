@@ -12,6 +12,6 @@ script:
   - docker-compose run --rm weblate migrate --noinput
   - docker-compose run --rm weblate collectstatic --noinput
   - docker-compose run --rm weblate createadmin
-  - docker-compose run -e TRAVIS=1 --rm weblate test --noinput weblate.accounts weblate.trans weblate.lang weblate.api
+  - docker-compose run -e WEBLATE_LOGLEVEL=CRITICAL --rm weblate test --noinput weblate.accounts weblate.trans weblate.lang weblate.api
   - docker-compose start
   - docker-compose stop
