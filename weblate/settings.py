@@ -422,6 +422,7 @@ LOGGING = {
 
 # Logging of management commands to console
 if (os.environ.get('DJANGO_IS_MANAGEMENT_COMMAND', False) and
+        'TRAVIS' not in os.environ and
         'console' not in LOGGING['loggers']['weblate']['handlers']):
     LOGGING['loggers']['weblate']['handlers'].append('console')
 
