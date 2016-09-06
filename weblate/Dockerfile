@@ -18,7 +18,7 @@ RUN rm /tmp/requirements.txt
 
 ADD settings.py /app/etc/
 ADD start /app/bin/
-RUN chmod +x /app/bin/start
+RUN chmod a+rx /app/bin/start
 
 WORKDIR /tmp
 
