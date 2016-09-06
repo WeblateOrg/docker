@@ -38,7 +38,7 @@ See [weblate/environment]() for a full list of environment vars
 3. Setup the environment
 
         docker-compose run --rm weblate migrate
-        docker-compose run --rm weblate collectstatic
+        docker-compose run --rm weblate collectstatic --noinput
         docker-compose run --rm weblate createadmin
     
 4. Start up
