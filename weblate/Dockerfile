@@ -17,6 +17,7 @@ RUN bin/pip install -r /tmp/requirements.txt
 RUN rm /tmp/requirements.txt
 
 ADD settings.py /app/etc/
+RUN chmod a+r /app/etc/settings.py
 ADD start /app/bin/
 RUN chmod a+rx /app/bin/start
 
