@@ -17,15 +17,19 @@ https://docs.weblate.org/en/latest/admin/deployments.html#docker
 1. Create a `docker-compose.override.yml` file with your settings.
 See [weblate/environment]() for a full list of environment vars
 
-		weblate:
-		  ports:
-		    - "80:8000"
-		  environment:
-		    - WEBLATE_EMAIL_HOST=email.com
-		    - WEBLATE_EMAIL_HOST_USER=user
-		    - WEBLATE_EMAIL_HOST_PASSWORD=pass
-		    - WEBLATE_SECRET_KEY=something more secret
-		    - WEBLATE_ALLOWED_HOSTS=your hosts
+```yml
+version: '2'
+services:
+  weblate:
+    ports:
+      - "80:8000"  
+    environment:  
+      - WEBLATE_EMAIL_HOST=email.com
+      - WEBLATE_EMAIL_HOST_USER=user
+      - WEBLATE_EMAIL_HOST_PASSWORD=pass
+      - WEBLATE_SECRET_KEY=something more secret
+      - WEBLATE_ALLOWED_HOSTS=your hosts
+```
 
 2. Build the instances
 
