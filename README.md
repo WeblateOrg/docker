@@ -8,14 +8,15 @@
 
 Docker container for Weblate
 
-Documentation is available in Weblate documentation:
+## Documentation
+
+Detailed documentation is available in Weblate documentation:
 
 https://docs.weblate.org/en/latest/admin/deployments.html#docker
 
 ## Getting started
 
 1. Create a `docker-compose.override.yml` file with your settings.
-See [weblate/environment]() for a full list of environment vars
 
     ```yml
     version: '2'
@@ -34,16 +35,19 @@ See [weblate/environment]() for a full list of environment vars
 2. Build the instances
 
         docker-compose build
-    
+
 3. Setup the environment
 
         docker-compose run --rm weblate migrate
         docker-compose run --rm weblate collectstatic --noinput
+        # Note the admin password from this setp.
         docker-compose run --rm weblate createadmin
-    
+
 4. Start up
 
         docker-compose up
+
+5. For more detailed instructions visit https://docs.weblate.org/en/latest/admin/deployments.html#docker
 
 ## Maintenance tasks
 
@@ -52,4 +56,3 @@ There are some cron jobs to run. You should set `WEBLATE_OFFLOAD_INDEXING=1` whe
     */5 * * * * cd /usr/share/weblate/; docker-compose run --rm weblate update_index
     @daily cd /usr/share/weblate/; docker-compose run --rm weblate cleanuptrans
     @hourly cd /usr/share/weblate-docker/; docker-compose run --rm weblate commit_pending --all --age=96
-    
