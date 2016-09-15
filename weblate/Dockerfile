@@ -16,6 +16,9 @@ RUN env DEBIAN_FRONTEND=noninteractive apt-get update \
   && apt-get -y purge python-pip \
   && apt-get clean
 
+# Examples
+RUN curl https://dl.cihar.com/weblate/Weblate-2.8.tar.xz | tar xJf - --strip-components=1 -C /app Weblate-2.8/examples
+
 # Settings
 ADD settings.py /app/etc/
 RUN chmod a+r /app/etc/settings.py
