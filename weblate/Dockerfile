@@ -25,7 +25,7 @@ ADD start /app/bin/
 RUN chmod a+rx /app/bin/start
 
 RUN install -d -o weblate -g weblate -m 755 /app/data
-RUN ln -s /app/etc/settings.py /usr/local/lib/python2.7/site-packages/weblate/settings.py
+RUN ln -s /app/etc/settings.py /usr/local/lib/python2.7/dist-packages/weblate/settings.py
 ENV DJANGO_SETTINGS_MODULE weblate.settings
 ENV START_CMD "/app/bin/django-admin"
 
