@@ -15,3 +15,5 @@ script:
   - docker-compose run -e WEBLATE_LOGLEVEL=CRITICAL --rm weblate test --noinput weblate.accounts weblate.trans weblate.lang weblate.api
   - docker-compose start
   - docker-compose stop
+  - docker-compose start
+  - docker-compose stop

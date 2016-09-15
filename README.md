@@ -30,22 +30,18 @@ https://docs.weblate.org/en/latest/admin/deployments.html#docker
           - WEBLATE_EMAIL_HOST_PASSWORD=pass
           - WEBLATE_SECRET_KEY=something more secret
           - WEBLATE_ALLOWED_HOSTS=your hosts
+          - WEBLATE_ADMIN_PASSWORD=password for admin user
     ```
 
 2. Build the instances
 
         docker-compose build
 
-3. Setup the environment
-
-        # Note the admin password from this setp.
-        docker-compose run --rm weblate createadmin
-
-4. Start up
+3. Start up
 
         docker-compose up
 
-5. For more detailed instructions visit https://docs.weblate.org/en/latest/admin/deployments.html#docker
+4. For more detailed instructions visit https://docs.weblate.org/en/latest/admin/deployments.html#docker
 
 ## Maintenance tasks
 

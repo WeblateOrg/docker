@@ -17,6 +17,11 @@ unset PGPASSWD
 if [ "x$1" = "xrunserver" ] ; then
     $START_CMD migrate
     $START_CMD collectstatic --noinput
+    if [ -n "$WEBLATE_ADMIN_PASSWORD" ] ; then
+        # This will fail on consequent runs
+        $START_CMD createadmin --password="$WEBLATE_ADMIN_PASSWORD" || true
+        # Add following once upgraded to Weblate 2.9:
+        # --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME"
 fi
 
 #start the daemon
