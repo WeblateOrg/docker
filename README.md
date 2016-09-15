@@ -28,7 +28,6 @@ https://docs.weblate.org/en/latest/admin/deployments.html#docker
           - WEBLATE_EMAIL_HOST=email.com
           - WEBLATE_EMAIL_HOST_USER=user
           - WEBLATE_EMAIL_HOST_PASSWORD=pass
-          - WEBLATE_SECRET_KEY=something more secret
           - WEBLATE_ALLOWED_HOSTS=your hosts
           - WEBLATE_ADMIN_PASSWORD=password for admin user
     ```
