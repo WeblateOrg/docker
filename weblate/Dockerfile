@@ -17,7 +17,7 @@ RUN env DEBIAN_FRONTEND=noninteractive apt-get update \
   && apt-get clean
 
 # Examples
-RUN curl https://dl.cihar.com/weblate/Weblate-2.8.tar.xz | tar xJf - --strip-components=1 -C /app Weblate-2.8/examples
+RUN curl https://dl.cihar.com/weblate/Weblate-2.8.tar.gz | tar xzf - --strip-components=1 -C /app Weblate-2.8/examples
 
 # Settings
 ADD settings.py /app/etc/
