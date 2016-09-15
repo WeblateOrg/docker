@@ -38,8 +38,6 @@ https://docs.weblate.org/en/latest/admin/deployments.html#docker
 
 3. Setup the environment
 
-        docker-compose run --rm weblate migrate
-        docker-compose run --rm weblate collectstatic --noinput
         # Note the admin password from this setp.
         docker-compose run --rm weblate createadmin
 

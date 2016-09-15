@@ -13,5 +13,11 @@ unset PGPASSWD
 
 >&2 echo "Postgres is up"
 
+# Migrate database to current version and collect static files
+if [ "x$1" = "xrunserver" ] ; then
+    $START_CMD migrate
+    $START_CMD collectstatic --noinput
+fi
+
 #start the daemon
 exec $START_CMD "$@"
