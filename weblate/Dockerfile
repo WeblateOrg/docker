@@ -13,7 +13,7 @@ RUN env DEBIAN_FRONTEND=noninteractive apt-get update \
   && apt-get -y upgrade \
   && pip install -r /tmp/requirements.txt \
   && rm /tmp/requirements.txt \
-  && apt-get purge python-pip \
+  && apt-get -y purge python-pip \
   && apt-get clean
 
 # Settings
