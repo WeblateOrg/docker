@@ -10,9 +10,8 @@ RUN env DEBIAN_FRONTEND=noninteractive apt-get update \
   && apt-get clean
 
 WORKDIR /app
-RUN python -m virtualenv --system-site-packages .
 ADD requirements.txt /tmp/requirements.txt
-RUN bin/pip install -r /tmp/requirements.txt
+RUN pip install -r /tmp/requirements.txt
 RUN rm /tmp/requirements.txt
 
 ADD settings.py /app/etc/
