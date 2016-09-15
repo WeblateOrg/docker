@@ -6,8 +6,6 @@ translate-toolkit>=2.0.0b4,<2.1
 pyLibravatar==1.7
 Weblate==2.8
 pyuca==1.1
-python-dateutil==2.5.3
-python-memcached==1.58
 djangorestframework>=3.4,<3.5
 defusedxml==0.4.1
 httpretty==0.8.14
@@ -17,3 +15,5 @@ PyDNS==2.3.6
 # Pillow
 # lxml
 # django_compressor
+# python-dateutil
+# python-memcached
