@@ -9,7 +9,7 @@ ADD requirements.txt /tmp/requirements.txt
 # Install dependencies
 RUN env DEBIAN_FRONTEND=noninteractive apt-get update \
   && apt-get install --no-install-recommends -y ssh curl python-pip python-lxml python-pillow python-psycopg2 python-memcache python-dateutil python-rcssmin python-rjsmin gettext postgresql-client \
-  && apt-get install --no-install-recommends -y -t jessie-backports mercurial git git-svn \
+  && apt-get install --no-install-recommends -y -t jessie-backports mercurial git git-svn subversion \
   && apt-get -y upgrade \
   && pip install -r /tmp/requirements.txt \
   && rm /tmp/requirements.txt \
