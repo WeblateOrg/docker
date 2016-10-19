@@ -15,7 +15,7 @@ unset PGPASSWD
 
 # Generate secret
 if [ ! -f /app/data/secret ] ; then
-    cat /dev/urandom | tr -dc 'a-zA-Z0-9~!@#$%^&*_()+}{?></";.,[]=-' | fold -w 50 | head -n 1 > /app/data/secret
+    tr -dc 'a-zA-Z0-9~!@#$%^&*_()+}{?></";.,[]=-' < /dev/urandom | fold -w 50 | head -n 1 > /app/data/secret
 fi
 
 # Migrate database to current version and collect static files
