@@ -7,7 +7,7 @@ pyLibravatar==1.7
 Weblate==2.8
 pyuca==1.1
 django_compressor==2.1
-djangorestframework>=3.4,<3.5
+djangorestframework>=3.5,<3.6
 defusedxml==0.4.1
 httpretty==0.8.14
 Babel==2.3.4
