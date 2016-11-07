@@ -5,7 +5,7 @@ python-social-auth==0.2.21
 translate-toolkit>=2.0.0b4,<2.1
 pyLibravatar==1.7
 Weblate==2.8
-pyuca==1.1
+pyuca==1.1.2
 django_compressor==2.1
 djangorestframework>=3.5,<3.6
 defusedxml==0.4.1
