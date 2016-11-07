@@ -6,6 +6,8 @@
 
 [![Docker Badge](https://images.microbadger.com/badges/version/nijel/weblate.svg)](https://microbadger.com/images/nijel/weblate "Get your own version badge on microbadger.com")
 
+[![Requirements Status](https://requires.io/github/WeblateOrg/docker/requirements.svg?branch=master)](https://requires.io/github/WeblateOrg/docker/requirements/?branch=master)
+
 Docker container for Weblate
 
 ## Documentation
