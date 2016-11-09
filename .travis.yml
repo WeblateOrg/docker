@@ -3,10 +3,6 @@ sudo: required
 services:
   - docker
 
-language: python
-python:
-  - "2.7"
- 
 script:
   - docker-compose build
   - docker-compose run --rm weblate migrate --noinput
