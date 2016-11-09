@@ -18,7 +18,7 @@ services:
     links:
       - weblate
     ports:
-      - "8000:80"
+      - "80:80"
     volumes_from:
       - weblate:ro
     restart: always
