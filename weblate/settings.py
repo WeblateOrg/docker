@@ -36,8 +36,6 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-REGISTRATION_OPEN = os.environ.get('WEBLATE_REGISTRATION_OPEN', '1') == '1'
-
 DATABASES = {
     'default': {
         # Use 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -259,6 +257,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.load_extra_data',
     'weblate.accounts.pipeline.user_full_name',
     'weblate.accounts.pipeline.store_email',
+    'weblate.accounts.pipeline.password_reset',
 )
 
 # Custom authentication strategy
@@ -308,6 +307,11 @@ INSTALLED_APPS = (
     'weblate.trans',
     'weblate.lang',
     'weblate.accounts',
+    'weblate.utils',
+
+    # Optional: Git exporter
+    'weblate.gitexport',
+
     # Needed for javascript localization
     'weblate',
 )
@@ -413,14 +417,13 @@ LOGGING = {
 if not HAVE_SYSLOG:
     del LOGGING['handlers']['syslog']
 
-# Machine translation API keys
-
 # List of machine translations
 MACHINE_TRANSLATION_SERVICES = (
 #     'weblate.trans.machine.apertium.ApertiumTranslation',
+#     'weblate.trans.machine.apertium.ApertiumAPYTranslation',
 #     'weblate.trans.machine.glosbe.GlosbeTranslation',
 #     'weblate.trans.machine.google.GoogleTranslation',
-#     'weblate.trans.machine.microsoft.MicrosoftTranslation',
+#     'weblate.trans.machine.microsoft.MicrosoftCognitiveTranslation',
 #     'weblate.trans.machine.mymemory.MyMemoryTranslation',
 #     'weblate.trans.machine.tmserver.AmagamaTranslation',
 #     'weblate.trans.machine.tmserver.TMServerTranslation',
@@ -428,13 +431,22 @@ MACHINE_TRANSLATION_SERVICES = (
     'weblate.trans.machine.weblatetm.WeblateTranslation',
 )
 
+# Machine translation API keys
+
 # Apertium Web Service, register at http://api.apertium.org/register.jsp
 MT_APERTIUM_KEY = None
+
+# URL of the Apertium APy server
+MT_APERTIUM_APY = None
 
 # Microsoft Translator service, register at
 # https://datamarket.azure.com/developer/applications/
 MT_MICROSOFT_ID = None
 MT_MICROSOFT_SECRET = None
+
+# Microsoft Cognitive Services Translator API, register at
+# https://portal.azure.com/
+MT_MICROSOFT_COGNITIVE_KEY = None
 
 # MyMemory identification email, see
 # http://mymemory.translated.net/doc/spec.php
@@ -519,6 +531,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 #     'weblate.trans.checks.format.CFormatCheck',
 #     'weblate.trans.checks.format.JavascriptFormatCheck',
 #     'weblate.trans.checks.consistency.PluralsCheck',
+#     'weblate.trans.checks.consistency.SamePluralsCheck',
 #     'weblate.trans.checks.consistency.ConsistencyCheck',
 #     'weblate.trans.checks.chars.NewlineCountingCheck',
 #     'weblate.trans.checks.markup.BBCodeCheck',
@@ -535,6 +548,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 #     'weblate.trans.autofixes.whitespace.SameBookendingWhitespace',
 #     'weblate.trans.autofixes.chars.ReplaceTrailingDotsWithEllipsis',
 #     'weblate.trans.autofixes.chars.RemoveZeroSpace',
+#     'weblate.trans.autofixes.chars.RemoveControlChars',
 # )
 
 # List of scripts to use in custom processing
@@ -615,6 +629,9 @@ if os.environ.get('WEBLATE_REQUIRE_LOGIN', '0') == '1':
        r'/hooks/(.*)$',    # Allowing public access to notification hooks
        r'/api/(.*)$',      # Allowing access to API
     )
+
+# Allow registration
+REGISTRATION_OPEN = os.environ.get('WEBLATE_REGISTRATION_OPEN', '1') == '1'
 
 # Force sane test runner
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'

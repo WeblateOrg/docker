@@ -3,9 +3,9 @@ Whoosh>=2.7,<2.8
 django-crispy-forms==1.6.1
 python-social-auth==0.2.21
 translate-toolkit>=2.0.0b7,<2.1
-PyYAML==3.11
+PyYAML==3.12
 pyLibravatar==1.7
-Weblate==2.9
+Weblate==2.10
 pyuca==1.1.2
 django_compressor==2.1
 djangorestframework>=3.5,<3.6
