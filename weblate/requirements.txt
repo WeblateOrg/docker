@@ -3,7 +3,7 @@ Whoosh>=2.7,<2.8
 django-crispy-forms==1.6.1
 social-auth-core==1.1.0
 social-auth-app-django=1.0.1
-translate-toolkit>=2.0.0b7,<2.1
+translate-toolkit>=2.0.0,<2.1
 PyYAML==3.12
 pyLibravatar==1.7
 Weblate==2.11
