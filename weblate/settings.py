@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright © 2012 - 2016 Michal Čihař <michal@cihar.com>
+# Copyright © 2012 - 2017 Michal Čihař <michal@cihar.com>
 #
 # This file is part of Weblate <https://weblate.org/>
 #
@@ -78,6 +78,7 @@ LANGUAGES = (
     ('az', 'Azərbaycan'),
     ('be', 'Беларуская'),
     ('be@latin', 'Biełaruskaja'),
+    ('bg', 'Български'),
     ('br', 'Brezhoneg'),
     ('ca', 'Català'),
     ('cs', 'Čeština'),
@@ -201,18 +202,18 @@ GITHUB_USERNAME = None
 # Authentication configuration
 AUTHENTICATION_BACKENDS = (
     'weblate.accounts.auth.EmailAuth',
-    # 'social.backends.google.GoogleOAuth2',
-    # 'social.backends.github.GithubOAuth2',
-    # 'social.backends.bitbucket.BitbucketOAuth',
-    # 'social.backends.suse.OpenSUSEOpenId',
-    # 'social.backends.ubuntu.UbuntuOpenId',
-    # 'social.backends.fedora.FedoraOpenId',
-    # 'social.backends.facebook.FacebookOAuth2',
+    # 'social_core.backends.google.GoogleOAuth2',
+    # 'social_core.backends.github.GithubOAuth2',
+    # 'social_core.backends.bitbucket.BitbucketOAuth',
+    # 'social_core.backends.suse.OpenSUSEOpenId',
+    # 'social_core.backends.ubuntu.UbuntuOpenId',
+    # 'social_core.backends.fedora.FedoraOpenId',
+    # 'social_core.backends.facebook.FacebookOAuth2',
     'weblate.accounts.auth.WeblateUserBackend',
 )
 
 if 'WEBLATE_SOCIAL_AUTH_GITHUB_KEY' in os.environ:
-    AUTHENTICATION_BACKENDS += ('social.backends.github.GithubOAuth2',)
+    AUTHENTICATION_BACKENDS += ('social_core.backends.github.GithubOAuth2',)
 
 # Social auth backends setup
 SOCIAL_AUTH_GITHUB_KEY = os.environ.get('WEBLATE_SOCIAL_AUTH_GITHUB_KEY', '')
@@ -220,41 +221,41 @@ SOCIAL_AUTH_GITHUB_SECRET = os.environ.get('WEBLATE_SOCIAL_AUTH_GITHUB_SECRET', 
 SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
 
 if 'WEBLATE_SOCIAL_AUTH_BITBUCKET_KEY' in os.environ:
-    AUTHENTICATION_BACKENDS += ('social.backends.bitbucket.BitbucketOAuth',)
+    AUTHENTICATION_BACKENDS += ('social_core.backends.bitbucket.BitbucketOAuth',)
 
 SOCIAL_AUTH_BITBUCKET_KEY = os.environ.get('WEBLATE_SOCIAL_AUTH_BITBUCKET_KEY', '')
 SOCIAL_AUTH_BITBUCKET_SECRET = os.environ.get('WEBLATE_SOCIAL_AUTH_BITBUCKET_SECRET', '')
 SOCIAL_AUTH_BITBUCKET_VERIFIED_EMAILS_ONLY = True
 
 if 'WEBLATE_SOCIAL_AUTH_FACEBOOK_KEY' in os.environ:
-    AUTHENTICATION_BACKENDS += ('social.backends.facebook.FacebookOAuth2',)
+    AUTHENTICATION_BACKENDS += ('social_core.backends.facebook.FacebookOAuth2',)
 
 SOCIAL_AUTH_FACEBOOK_KEY = os.environ.get('WEBLATE_SOCIAL_AUTH_FACEBOOK_KEY', '')
 SOCIAL_AUTH_FACEBOOK_SECRET = os.environ.get('WEBLATE_SOCIAL_AUTH_FACEBOOK_SECRET', '')
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'public_profile']
 
 if 'WEBLATE_SOCIAL_AUTH_GOOGLE_OAUTH2_KEY' in os.environ:
-    AUTHENTICATION_BACKENDS += ('social.backends.google.GoogleOAuth2',)
+    AUTHENTICATION_BACKENDS += ('social_core.backends.google.GoogleOAuth2',)
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('WEBLATE_SOCIAL_AUTH_GOOGLE_OAUTH2_KEY', '')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get('WEBLATE_SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET', '')
 
 # Social auth settings
 SOCIAL_AUTH_PIPELINE = (
-    'social.pipeline.social_auth.social_details',
-    'social.pipeline.social_auth.social_uid',
-    'social.pipeline.social_auth.auth_allowed',
-    'social.pipeline.social_auth.associate_by_email',
-    'social.pipeline.social_auth.social_user',
-    'social.pipeline.user.get_username',
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
     'weblate.accounts.pipeline.require_email',
-    'social.pipeline.mail.mail_validation',
-    'social.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.mail.mail_validation',
+    'social_core.pipeline.social_auth.associate_by_email',
     'weblate.accounts.pipeline.verify_open',
     'weblate.accounts.pipeline.verify_username',
-    'social.pipeline.user.create_user',
-    'social.pipeline.social_auth.associate_user',
-    'social.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
     'weblate.accounts.pipeline.user_full_name',
     'weblate.accounts.pipeline.store_email',
     'weblate.accounts.pipeline.password_reset',
@@ -272,18 +273,18 @@ SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = \
     '%s/accounts/profile/#auth' % URL_PREFIX
 SOCIAL_AUTH_PROTECTED_USER_FIELDS = ('email',)
 SOCIAL_AUTH_SLUGIFY_USERNAMES = True
+SOCIAL_AUTH_SLUGIFY_FUNCTION = 'weblate.accounts.pipeline.slugify_username'
 
 # Middleware
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'weblate.accounts.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
     'weblate.accounts.middleware.RequireLoginMiddleware',
 )
 
@@ -299,7 +300,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.sitemaps',
-    'social.apps.django_app.default',
+    'social_django',
     'crispy_forms',
     'compressor',
     'rest_framework',
@@ -409,7 +410,12 @@ LOGGING = {
         'weblate': {
             'handlers': [DEFAULT_LOG],
             'level': os.environ.get('WEBLATE_LOGLEVEL', 'DEBUG'),
-        }
+        },
+        # Logging VCS operations
+        #'weblate-vcs': {
+        #    'handlers': [DEFAULT_LOG],
+        #    'level': 'DEBUG',
+        #},
     }
 }
 
@@ -419,7 +425,6 @@ if not HAVE_SYSLOG:
 
 # List of machine translations
 MACHINE_TRANSLATION_SERVICES = (
-#     'weblate.trans.machine.apertium.ApertiumTranslation',
 #     'weblate.trans.machine.apertium.ApertiumAPYTranslation',
 #     'weblate.trans.machine.glosbe.GlosbeTranslation',
 #     'weblate.trans.machine.google.GoogleTranslation',

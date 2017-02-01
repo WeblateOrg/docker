@@ -1,11 +1,12 @@
 Django>=1.10,<1.11
 Whoosh>=2.7,<2.8
 django-crispy-forms==1.6.1
-python-social-auth==0.2.21
+socia-auth-core==1.1.0
+socia-auth-app-django=1.0.1
 translate-toolkit>=2.0.0b7,<2.1
 PyYAML==3.12
 pyLibravatar==1.7
-Weblate==2.10.1
+Weblate==2.11
 pyuca==1.1.2
 django_compressor==2.1
 djangorestframework>=3.5,<3.6
