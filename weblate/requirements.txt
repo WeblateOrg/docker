@@ -8,7 +8,7 @@ PyYAML==3.12
 pyLibravatar==1.7
 Weblate==2.11
 pyuca==1.1.2
-django_compressor==2.1
+django_compressor==2.1.1
 djangorestframework>=3.5,<3.6
 defusedxml==0.4.1
 httpretty==0.8.14
