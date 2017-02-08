@@ -22,6 +22,11 @@ RUN env DEBIAN_FRONTEND=noninteractive apt-get update \
   && apt-get -y purge python-pip \
   && apt-get clean
 
+# Hub
+RUN curl -L https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd64-2.2.9.tgz | tar xzv --wildcards hub-linux*/bin/hub && \
+  cp hub-linux-amd64-2.2.9/bin/hub /usr/bin && \
+  rm -rf hub-linux-amd64-2.2.9/bin/hub
+
 # Examples
 RUN curl https://dl.cihar.com/weblate/Weblate-2.11.tar.gz | tar xzf - --strip-components=1 --no-same-owner -C /app Weblate-2.11/examples
 
