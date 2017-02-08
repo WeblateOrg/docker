@@ -1,5 +1,7 @@
 FROM debian:jessie-backports
 MAINTAINER Michal Čihař <michal@cihar.com>
+ENV VERSION 2.11
+LABEL version=$VERSION
 
 # Add user early to get a consistent userid
 RUN useradd --shell /bin/sh --user-group weblate \
@@ -28,7 +30,7 @@ RUN curl -L https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd
   rm -rf hub-linux-amd64-2.2.9/bin/hub
 
 # Examples
-RUN curl https://dl.cihar.com/weblate/Weblate-2.11.tar.gz | tar xzf - --strip-components=1 --no-same-owner -C /app Weblate-2.11/examples
+RUN curl https://dl.cihar.com/weblate/Weblate-$VERSION.tar.gz | tar xzf - --strip-components=1 --no-same-owner -C /app Weblate-$VERSION/examples
 
 # Settings
 ADD settings.py /app/etc/
