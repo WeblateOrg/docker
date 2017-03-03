@@ -16,11 +16,11 @@ ADD requirements.txt /tmp/requirements.txt
 
 # Install dependencies
 RUN env DEBIAN_FRONTEND=noninteractive apt-get update \
-  && apt-get install --no-install-recommends -y ssh curl python-pip python-lxml python-yaml python-pillow python-psycopg2 python-memcache python-dateutil python-rcssmin python-rjsmin gettext postgresql-client mercurial git git-svn subversion python-dev \
+  && apt-get install --no-install-recommends -y ssh curl python-pip python-lxml python-yaml python-pillow python-psycopg2 python-memcache python-dateutil python-rcssmin python-rjsmin gettext postgresql-client mercurial git git-svn subversion python-dev libleptonica-dev libtesseract-dev tesseract-ocr \
   && apt-get -y upgrade \
   && pip install -r /tmp/requirements.txt \
   && rm /tmp/requirements.txt \
-  && apt-get -y purge python-pip python-dev \
+  && apt-get -y purge python-pip python-dev libleptonica-dev libtesseract-dev \
   && apt-get autoremove \
   && apt-get clean
 
