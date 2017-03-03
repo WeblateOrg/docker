@@ -12,7 +12,7 @@ script:
   - docker-compose run --rm weblate migrate --noinput
   - docker-compose run --rm weblate collectstatic --noinput
   - docker-compose run --rm weblate createadmin
-  - docker-compose run -e WEBLATE_LOGLEVEL=CRITICAL -e DJANGO_SETTINGS_MODULE=weblate.settings_example --rm weblate test --noinput weblate.accounts weblate.trans weblate.lang weblate.api weblate.gitexport weblate.screenshots weblate.utils
+  - docker-compose run -e WEBLATE_LOGLEVEL=CRITICAL --rm weblate test --noinput weblate.accounts weblate.trans weblate.lang weblate.api weblate.gitexport weblate.screenshots weblate.utils
   - docker-compose start
   - docker-compose stop
   - docker-compose start
