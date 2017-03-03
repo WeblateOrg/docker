@@ -137,7 +137,7 @@ MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = '%s/media/' % URL_PREFIX
+MEDIA_URL = '{0}/media/'.format(URL_PREFIX)
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -147,7 +147,7 @@ STATIC_ROOT = os.path.join(DATA_DIR, 'static')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '%s/static/' % URL_PREFIX
+STATIC_URL = '{0}/static/'.format(URL_PREFIX)
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -307,13 +307,14 @@ INSTALLED_APPS = (
     'rest_framework.authtoken',
     'weblate.trans',
     'weblate.lang',
+    'weblate.screenshots',
     'weblate.accounts',
     'weblate.utils',
 
     # Optional: Git exporter
     'weblate.gitexport',
 
-    # Needed for javascript localization
+    # This application has to be placed last!
     'weblate',
 )
 
@@ -432,14 +433,12 @@ MACHINE_TRANSLATION_SERVICES = (
 #     'weblate.trans.machine.mymemory.MyMemoryTranslation',
 #     'weblate.trans.machine.tmserver.AmagamaTranslation',
 #     'weblate.trans.machine.tmserver.TMServerTranslation',
+#     'weblate.trans.machine.yandex.YandexTranslation',
     'weblate.trans.machine.weblatetm.WeblateSimilarTranslation',
     'weblate.trans.machine.weblatetm.WeblateTranslation',
 )
 
 # Machine translation API keys
-
-# Apertium Web Service, register at http://api.apertium.org/register.jsp
-MT_APERTIUM_KEY = None
 
 # URL of the Apertium APy server
 MT_APERTIUM_APY = None
@@ -617,6 +616,7 @@ REST_FRAMEWORK = {
     ),
     'PAGE_SIZE': 20,
     'VIEW_DESCRIPTION_FUNCTION': 'weblate.api.views.get_view_description',
+    'UNAUTHENTICATED_USER': 'weblate.accounts.models.get_anonymous',
 }
 
 if os.environ.get('WEBLATE_REQUIRE_LOGIN', '0') == '1':
