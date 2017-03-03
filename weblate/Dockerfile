@@ -42,7 +42,7 @@ RUN chmod a+rx /app/bin/start
 
 RUN ln -s /app/etc/settings.py /usr/local/lib/python2.7/dist-packages/weblate/settings.py
 ENV DJANGO_SETTINGS_MODULE weblate.settings
-ENV START_CMD "/usr/local/bin/django-admin"
+ENV START_CMD "/usr/local/bin/weblate"
 
 VOLUME ["/app/etc", "/app/data"]
 USER weblate
