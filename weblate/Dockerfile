@@ -21,7 +21,7 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
   && pip install -r /tmp/requirements.txt \
   && rm /tmp/requirements.txt \
   && apt-get -y purge python-pip python-dev libleptonica-dev libtesseract-dev cython gcc g++ python-setuptools python-wheel python-pip \
-  && apt-get autoremove \
+  && apt-get -y autoremove \
   && apt-get clean
 
 # Hub
