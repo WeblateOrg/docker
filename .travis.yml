@@ -5,8 +5,10 @@ language: python
 services:
   - docker
 
-script:
+before_script:
   - docker-compose build
+
+script:
   - docker-compose run --rm weblate migrate --noinput
   - docker-compose run --rm weblate collectstatic --noinput
   - docker-compose run --rm weblate createadmin
