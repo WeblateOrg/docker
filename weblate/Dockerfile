@@ -18,7 +18,7 @@ ADD requirements.txt /tmp/requirements.txt
 RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
   && apt-get -y upgrade \
   && apt-get install --no-install-recommends -y openssh-client curl python-pip python-lxml python-yaml python-pillow python-setuptools python-wheel python-psycopg2 python-memcache python-dateutil python-rcssmin python-rjsmin gettext postgresql-client mercurial git git-svn subversion python-dev libleptonica-dev libtesseract-dev cython gcc g++ tesseract-ocr \
-  && pip install -r /tmp/requirements.txt \
+  && pip install Weblate==$VERSION -r /tmp/requirements.txt \
   && rm /tmp/requirements.txt \
   && apt-get -y purge python-pip python-dev libleptonica-dev libtesseract-dev cython gcc g++ python-setuptools python-wheel python-pip \
   && apt-get -y autoremove \

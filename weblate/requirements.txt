@@ -1,4 +1,4 @@
-Weblate==2.12
+Weblate
 Django>=1.10,<1.11
 siphashc3==3
 Whoosh>=2.7,<2.8
