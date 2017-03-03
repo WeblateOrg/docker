@@ -14,10 +14,10 @@ pyuca==1.1.2
 pyLibravatar==1.7
 PyDNS==2.3.6
 Babel==2.3.4
-PyYAML==3.12
 tesserocr==2.1.3
 # Following are installed using apt:
 # Pillow
 # lxml
 # python-dateutil
 # python-memcached
+# PyYAML
