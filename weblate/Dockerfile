@@ -21,6 +21,7 @@ RUN env DEBIAN_FRONTEND=noninteractive apt-get update \
   && pip install -r /tmp/requirements.txt \
   && rm /tmp/requirements.txt \
   && apt-get -y purge python-pip \
+  && apt-get autoremove \
   && apt-get clean
 
 # Hub
