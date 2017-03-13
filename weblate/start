@@ -9,7 +9,7 @@ until psql -h "database" -U "$POSTGRES_USER" -c 'SELECT 1' > /dev/null 2>&1 ; do
   sleep 1
 done
 
-unset PGPASSWD
+unset PGPASSWORD
 
 >&2 echo "Postgres is up"
 
