@@ -8,7 +8,7 @@ services:
     volumes:
       - weblate-data:/app/data
     env_file:
-      - ./weblate/environment
+      - ./environment
     restart: always
     depends_on:
       - database
@@ -27,7 +27,7 @@ services:
   database:
     image: postgres:9.6
     env_file:
-      - ./weblate/environment
+      - ./environment
     volumes:
       - postgres-data:/var/lib/postgresql/data
     restart: always
