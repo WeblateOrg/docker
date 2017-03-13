@@ -6,9 +6,11 @@ services:
   - docker
 
 before_script:
-  - docker-compose build
+  - git clone --depth 1 https://github.com/WeblateOrg/docker.git
 
 script:
+  - docker build -t weblate/weblate:latest .
+  - cd docker
   - docker-compose run --rm weblate migrate --noinput
   - docker-compose run --rm weblate collectstatic --noinput
   - docker-compose run --rm weblate createadmin
