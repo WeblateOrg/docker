@@ -266,11 +266,14 @@ SOCIAL_AUTH_STRATEGY = 'weblate.accounts.strategy.WeblateStrategy'
 
 SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = \
     'weblate.accounts.pipeline.send_validation'
-SOCIAL_AUTH_EMAIL_VALIDATION_URL = '%s/accounts/email-sent/' % URL_PREFIX
-SOCIAL_AUTH_LOGIN_ERROR_URL = '%s/accounts/login/' % URL_PREFIX
-SOCIAL_AUTH_EMAIL_FORM_URL = '%s/accounts/email/' % URL_PREFIX
+SOCIAL_AUTH_EMAIL_VALIDATION_URL = \
+    '{0}/accounts/email-sent/'.format(URL_PREFIX)
+SOCIAL_AUTH_LOGIN_ERROR_URL = \
+    '{0}/accounts/login/'.format(URL_PREFIX)
+SOCIAL_AUTH_EMAIL_FORM_URL = \
+    '{0}/accounts/email/'.format(URL_PREFIX)
 SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = \
-    '%s/accounts/profile/#auth' % URL_PREFIX
+    '{0}/accounts/profile/#auth'.format(URL_PREFIX)
 SOCIAL_AUTH_PROTECTED_USER_FIELDS = ('email',)
 SOCIAL_AUTH_SLUGIFY_USERNAMES = True
 SOCIAL_AUTH_SLUGIFY_FUNCTION = 'weblate.accounts.pipeline.slugify_username'
@@ -413,10 +416,10 @@ LOGGING = {
             'level': os.environ.get('WEBLATE_LOGLEVEL', 'DEBUG'),
         },
         # Logging VCS operations
-        #'weblate-vcs': {
+        # 'weblate-vcs': {
         #    'handlers': [DEFAULT_LOG],
         #    'level': 'DEBUG',
-        #},
+        # },
     }
 }
 
@@ -465,6 +468,9 @@ MT_GOOGLE_KEY = os.environ.get('WEBLATE_MT_GOOGLE_KEY', None)
 
 if 'WEBLATE_MT_GOOGLE_KEY' in os.environ:
     MACHINE_TRANSLATION_SERVICES += ('weblate.trans.machine.google.GoogleTranslation',)
+
+# API key for Yandex Translate API
+MT_YANDEX_KEY = None
 
 # tmserver URL
 MT_TMSERVER = None
