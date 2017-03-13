@@ -25,9 +25,7 @@ if [ "x$1" = "xrunserver" ] ; then
     $START_CMD collectstatic --noinput
     if [ -n "$WEBLATE_ADMIN_PASSWORD" ] ; then
         # This will fail on consequent runs
-        $START_CMD createadmin --password="$WEBLATE_ADMIN_PASSWORD" || true
-        # Add following once upgraded to Weblate 2.9:
-        # --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME"
+        $START_CMD createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
     fi
 fi
 
