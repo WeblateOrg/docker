@@ -2,11 +2,8 @@
 
 [![Build Status](https://travis-ci.org/WeblateOrg/docker.svg?branch=master)](https://travis-ci.org/WeblateOrg/docker)
 [![Build Status](https://travis-ci.org/WeblateOrg/docker.svg?branch=docker)](https://travis-ci.org/WeblateOrg/docker)
-
 [![Docker Layers](https://images.microbadger.com/badges/image/weblate/weblate.svg)](https://microbadger.com/images/weblate/weblate "Get your own image badge on microbadger.com")
-
 [![Docker Badge](https://images.microbadger.com/badges/version/weblate/weblate.svg)](https://microbadger.com/images/weblate/weblate "Get your own version badge on microbadger.com")
-
 [![Requirements Status](https://requires.io/github/WeblateOrg/docker/requirements.svg?branch=master)](https://requires.io/github/WeblateOrg/docker/requirements/?branch=master)
 
 Docker container for Weblate
