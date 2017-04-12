@@ -310,6 +310,7 @@ INSTALLED_APPS = (
     'rest_framework.authtoken',
     'weblate.trans',
     'weblate.lang',
+    'weblate.permissions',
     'weblate.screenshots',
     'weblate.accounts',
     'weblate.utils',
@@ -482,13 +483,13 @@ SITE_TITLE = os.environ.get('WEBLATE_SITE_TITLE', 'Weblate')
 ENABLE_HTTPS = os.environ.get('WEBLATE_ENABLE_HTTPS', '0') == '1'
 
 # URL of login
-LOGIN_URL = '%s/accounts/login/' % URL_PREFIX
+LOGIN_URL = '{0}/accounts/login/'.format(URL_PREFIX)
 
 # URL of logout
-LOGOUT_URL = '%s/accounts/logout/' % URL_PREFIX
+LOGOUT_URL = '{0}/accounts/logout/'.format(URL_PREFIX)
 
 # Default location for login
-LOGIN_REDIRECT_URL = '%s/' % URL_PREFIX
+LOGIN_REDIRECT_URL = '{0}/'.format(URL_PREFIX)
 
 # Anonymous user name
 ANONYMOUS_USER_NAME = 'anonymous'
@@ -543,6 +544,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 #     'weblate.trans.checks.consistency.PluralsCheck',
 #     'weblate.trans.checks.consistency.SamePluralsCheck',
 #     'weblate.trans.checks.consistency.ConsistencyCheck',
+#     'weblate.trans.checks.consistency.TranslatedCheck',
 #     'weblate.trans.checks.chars.NewlineCountingCheck',
 #     'weblate.trans.checks.markup.BBCodeCheck',
 #     'weblate.trans.checks.chars.ZeroWidthSpaceCheck',
