@@ -44,7 +44,6 @@ RUN ln -s /app/etc/settings.py /usr/local/lib/python2.7/dist-packages/weblate/se
 ENV DJANGO_SETTINGS_MODULE weblate.settings
 ENV START_CMD "/usr/local/bin/weblate"
 
-VOLUME ["/app/etc", "/app/data"]
 USER weblate
 
 EXPOSE 8000
