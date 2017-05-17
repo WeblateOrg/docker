@@ -22,7 +22,7 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && rm /tmp/requirements.txt \
   && rm -rf /root/.cache \
-  && apt-get -y purge python-pip python-dev libleptonica-dev libtesseract-dev cython gcc g++ python-setuptools python-wheel \
+  && apt-get -y purge python-dev libleptonica-dev libtesseract-dev cython gcc g++ \
   && apt-get -y autoremove \
   && apt-get clean
 
