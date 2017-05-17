@@ -19,6 +19,7 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
   && apt-get -y upgrade \
   && apt-get install --no-install-recommends -y openssh-client curl python-pip python-lxml python-yaml python-pillow python-setuptools python-wheel python-psycopg2 python-memcache python-dateutil python-rcssmin python-rjsmin gettext postgresql-client mercurial git git-svn subversion python-dev libleptonica-dev libtesseract-dev cython gcc g++ tesseract-ocr \
   && pip install Weblate==$VERSION -r /tmp/requirements.txt \
+  && ln -s /usr/local/share/weblate/examples/ /app/ \
   && rm /tmp/requirements.txt \
   && rm -rf /root/.cache \
   && apt-get -y purge python-pip python-dev libleptonica-dev libtesseract-dev cython gcc g++ python-setuptools python-wheel \
@@ -29,9 +30,6 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
 RUN curl -L https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd64-2.2.9.tgz | tar xzv --wildcards hub-linux*/bin/hub && \
   cp hub-linux-amd64-2.2.9/bin/hub /usr/bin && \
   rm -rf hub-linux-amd64-2.2.9/bin/hub
-
-# Examples
-RUN curl https://dl.cihar.com/weblate/Weblate-$VERSION.tar.gz | tar xzf - --strip-components=1 --no-same-owner -C /app Weblate-$VERSION/examples
 
 # Settings
 ADD settings.py /app/etc/
