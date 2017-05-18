@@ -50,9 +50,9 @@ DATABASES = {
         # Database password, not used with sqlite3.
         'PASSWORD': os.environ['POSTGRES_PASSWORD'],
         # Set to empty string for localhost. Not used with sqlite3.
-        'HOST': 'database',
+        'HOST': os.environ['POSTGRES_HOST'],
         # Set to empty string for default. Not used with sqlite3.
-        'PORT': '',
+        'PORT': os.environ['POSTGRES_PORT'],
     }
 }
 
