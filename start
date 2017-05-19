@@ -3,6 +3,13 @@ set -e
 
 export PGPASSWORD="$POSTGRES_PASSWORD"
 
+if [ -z "$POSTGRES_HOST" ] ; then
+    export POSTGRES_HOST=database
+fi
+if [ -z "$POSTGRES_PORT" ] ; then
+    export POSTGRES_PORT=
+fi
+
 # Wait for database to get available
 until psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -U "$POSTGRES_USER" -c 'SELECT 1' > /dev/null 2>&1 ; do
   >&2 echo "Postgres is unavailable - sleeping"
