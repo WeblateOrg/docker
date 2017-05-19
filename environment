@@ -35,7 +35,7 @@ POSTGRES_PASSWORD=weblate
 POSTGRES_USER=weblate
 POSTGRES_DATABASE=weblate
 POSTGRES_HOST=database
-#POSTGRES_PORT=
+POSTGRES_PORT=
 
 # Mail server, the server has to listen on port 587 and understand TLS
 WEBLATE_EMAIL_HOST=smtp.gmail.com
