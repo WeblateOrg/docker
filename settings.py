@@ -23,6 +23,13 @@ import platform
 import os
 from logging.handlers import SysLogHandler
 
+
+def get_env_list(name):
+    """Helper to get list from environment."""
+    if os.environ.get(name):
+        return os.environ[name].split(',')
+    return []
+
 #
 # Django settings for Weblate project.
 #
@@ -627,10 +634,11 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 # )
 
 # List of scripts to use in custom processing
-# POST_UPDATE_SCRIPTS = (
-# )
-# PRE_COMMIT_SCRIPTS = (
-# )
+POST_UPDATE_SCRIPTS = get_env_list('WEBLATE_POST_UPDATE_SCRIPTS')
+PRE_COMMIT_SCRIPTS = get_env_list('WEBLATE_PRE_COMMIT_SCRIPTS')
+POST_COMMIT_SCRIPTS = get_env_list('WEBLATE_POST_COMMIT_SCRIPTS')
+POST_PUSH_SCRIPTS = get_env_list('WEBLATE_POST_PUSH_SCRIPTS')
+POST_ADD_SCRIPTS = get_env_list('WEBLATE_POST_ADD_SCRIPTS')
 
 # E-mail address that error messages come from.
 SERVER_EMAIL = os.environ['WEBLATE_SERVER_EMAIL']
