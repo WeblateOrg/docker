@@ -240,6 +240,16 @@ if 'WEBLATE_SOCIAL_AUTH_GOOGLE_OAUTH2_KEY' in os.environ:
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('WEBLATE_SOCIAL_AUTH_GOOGLE_OAUTH2_KEY', '')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get('WEBLATE_SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET', '')
 
+if 'WEBLATE_SOCIAL_AUTH_GITLAB_KEY' in os.environ:
+    AUTHENTICATION_BACKENDS += ('social_core.backends.gitlab.GitLabOAuth2',)
+
+if 'WEBLATE_SOCIAL_AUTH_GITLAB_API_URL' in os.environ:
+    SOCIAL_AUTH_GITLAB_API_URL = os.environ.get('WEBLATE_SOCIAL_AUTH_GITLAB_API_URL')
+
+SOCIAL_AUTH_GITLAB_KEY = os.environ.get('WEBLATE_SOCIAL_AUTH_GITLAB_KEY', '')
+SOCIAL_AUTH_GITLAB_SECRET = os.environ.get('WEBLATE_SOCIAL_AUTH_GITLAB_SECRET', '')
+SOCIAL_AUTH_GITLAB_SCOPE = ['api']
+
 # Social auth settings
 SOCIAL_AUTH_PIPELINE = (
     'weblate.accounts.pipeline.verify_open',
@@ -492,7 +502,10 @@ MT_MICROSOFT_SECRET = None
 
 # Microsoft Cognitive Services Translator API, register at
 # https://portal.azure.com/
-MT_MICROSOFT_COGNITIVE_KEY = None
+MT_MICROSOFT_COGNITIVE_KEY = os.environ.get('WEBLATE_MT_MICROSOFT_COGNITIVE_KEY', None)
+
+if 'WEBLATE_MT_MICROSOFT_COGNITIVE_KEY' in os.environ:
+    MACHINE_TRANSLATION_SERVICES += ('weblate.trans.machine.microsoft.MicrosoftCognitiveTranslation',)
 
 # MyMemory identification email, see
 # http://mymemory.translated.net/doc/spec.php
