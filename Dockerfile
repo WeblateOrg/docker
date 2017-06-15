@@ -29,7 +29,7 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
 # Hub
 RUN curl -L https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd64-2.2.9.tgz | tar xzv --wildcards hub-linux*/bin/hub && \
   cp hub-linux-amd64-2.2.9/bin/hub /usr/bin && \
-  rm -rf hub-linux-amd64-2.2.9/bin/hub
+  rm -rf hub-linux-amd64-2.2.9
 
 # Settings
 ADD settings.py /app/etc/
