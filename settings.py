@@ -721,7 +721,7 @@ REGISTRATION_OPEN = os.environ.get('WEBLATE_REGISTRATION_OPEN', '1') == '1'
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # Email server
-EMAIL_USE_TLS = True
+EMAIL_USE_TLS = os.environ.get('WEBLATE_EMAIL_USE_TLS', '1') == '1'
 EMAIL_HOST = os.environ.get('WEBLATE_EMAIL_HOST', '')
 EMAIL_HOST_USER = os.environ.get('WEBLATE_EMAIL_USER', '')
 EMAIL_HOST_PASSWORD = os.environ.get('WEBLATE_EMAIL_PASSWORD', '')
