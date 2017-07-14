@@ -658,8 +658,8 @@ ALLOWED_HOSTS = os.environ.get('WEBLATE_ALLOWED_HOSTS', '*').split(',')
 # Example configuration to use memcached for caching
 CACHES = {
     'default': {
-         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-         'LOCATION': '{0}:{1}'.format(
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '{0}:{1}'.format(
             'cache',
             '11211',
         )
@@ -704,19 +704,19 @@ REST_FRAMEWORK = {
 }
 
 if os.environ.get('WEBLATE_REQUIRE_LOGIN', '0') == '1':
-    #Example for restricting access to logged in users
+    # Example for restricting access to logged in users
     LOGIN_REQUIRED_URLS = (
         r'/(.*)$',
     )
 
     # In such case you will want to include some of the exceptions
     LOGIN_REQUIRED_URLS_EXCEPTIONS = (
-       r'/accounts/(.*)$', # Required for login
-       r'/static/(.*)$',   # Required for development mode
-       r'/widgets/(.*)$',  # Allowing public access to widgets
-       r'/data/(.*)$',     # Allowing public access to data exports
-       r'/hooks/(.*)$',    # Allowing public access to notification hooks
-       r'/api/(.*)$',      # Allowing access to API
+       r'/accounts/(.*)$',  # Required for login
+       r'/static/(.*)$',    # Required for development mode
+       r'/widgets/(.*)$',   # Allowing public access to widgets
+       r'/data/(.*)$',      # Allowing public access to data exports
+       r'/hooks/(.*)$',     # Allowing public access to notification hooks
+       r'/api/(.*)$',       # Allowing access to API
     )
 
 # Allow registration
