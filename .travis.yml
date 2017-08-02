@@ -23,6 +23,7 @@ script:
   - echo "Checking '$CONTAINER', IP address '$IP'"
   - curl --fail --silent "http://$IP/about/" | grep 'Powered by.*Weblate'
   - curl --fail --silent --output /dev/null "http://$IP/static/weblate-128.png"
+  - docker-compose logs
   - docker-compose down
 
   - docker-compose run --rm weblate createadmin
