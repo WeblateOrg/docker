@@ -15,7 +15,7 @@ script:
 #  - docker-compose run -e WEBLATE_LOGLEVEL=CRITICAL --rm weblate test --noinput weblate.accounts weblate.trans weblate.lang weblate.api weblate.gitexport weblate.screenshots weblate.utils
   - docker-compose start
   - docker-compose stop
-  - docker-compose start
+  - docker-compose up -d
   - while ! docker-compose ps | grep -q  web ; do sleep 1 ; docker-compose ps ; docker-compose logs ; done
   - docker-compose ps
   - CONTAINER=`docker-compose ps | grep web | sed 's/[[:space:]].*//'`
@@ -24,4 +24,4 @@ script:
   - echo "IP address $IP"
   - curl http://$IP/about/ | grep 'Powered by.*Weblate'
   - curl -O /dev/null curl http://$IP/static/weblate-128.png
-  - docker-compose stop
+  - docker-compose down
