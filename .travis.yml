@@ -9,12 +9,6 @@ before_script:
   - docker-compose build
 
 script:
-  - docker-compose run --rm weblate migrate --noinput
-  - docker-compose run --rm weblate collectstatic --noinput
-  - docker-compose run --rm weblate createadmin
-#  - docker-compose run -e WEBLATE_LOGLEVEL=CRITICAL --rm weblate test --noinput weblate.accounts weblate.trans weblate.lang weblate.api weblate.gitexport weblate.screenshots weblate.utils
-  - docker-compose start
-  - docker-compose stop
   - docker-compose up -d
   - while ! docker-compose ps | grep -q  web ; do sleep 1 ; docker-compose ps ; docker-compose logs ; done
   - docker-compose ps
@@ -25,3 +19,5 @@ script:
   - curl http://$IP/about/ | grep 'Powered by.*Weblate'
   - curl -O /dev/null curl http://$IP/static/weblate-128.png
   - docker-compose down
+#  - docker-compose run -e WEBLATE_LOGLEVEL=CRITICAL --rm weblate test --noinput weblate.accounts weblate.trans weblate.lang weblate.api weblate.gitexport weblate.screenshots weblate.utils
+  - docker-compose run --rm weblate createadmin
