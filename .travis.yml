@@ -19,7 +19,7 @@ script:
   - docker-compose up -d
   - sleep 10
   - docker-compose ps
-  - CONTAINER=`docker-compose ps | grep web | sed 's/[[:space:]].*//'`
+  - CONTAINER=`docker-compose ps | grep _web_ | sed 's/[[:space:]].*//'`
   - echo "Checking $CONTAINER"
   - IP=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $CONTAINER`
   - echo "IP address $IP"
