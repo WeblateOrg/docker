@@ -92,6 +92,7 @@ LANGUAGES = (
     ('da', 'Dansk'),
     ('de', 'Deutsch'),
     ('en', 'English'),
+    ('en-gb', 'English (United Kingdom)'),
     ('el', 'Ελληνικά'),
     ('es', 'Español'),
     ('fi', 'Suomi'),
@@ -208,7 +209,7 @@ GITHUB_USERNAME = os.environ.get('WEBLATE_GITHUB_USERNAME', None)
 
 # Authentication configuration
 AUTHENTICATION_BACKENDS = (
-    'weblate.accounts.auth.EmailAuth',
+    'social_core.backends.email.EmailAuth',
     # 'social_core.backends.google.GoogleOAuth2',
     # 'social_core.backends.github.GithubOAuth2',
     # 'social_core.backends.bitbucket.BitbucketOAuth',
@@ -268,6 +269,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.user.get_username',
     'weblate.accounts.pipeline.require_email',
     'social_core.pipeline.mail.mail_validation',
+    'weblate.accounts.pipeline.revoke_mail_code',
     'weblate.accounts.pipeline.ensure_valid',
     'weblate.accounts.pipeline.reauthenticate',
     'social_core.pipeline.social_auth.associate_by_email',
@@ -294,6 +296,9 @@ SOCIAL_AUTH_DISCONNECT_PIPELINE = (
 
 # Custom authentication strategy
 SOCIAL_AUTH_STRATEGY = 'weblate.accounts.strategy.WeblateStrategy'
+
+# Raise exceptions so that we can handle them later
+SOCIAL_AUTH_RAISE_EXCEPTIONS = True
 
 SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = \
     'weblate.accounts.pipeline.send_validation'
@@ -476,6 +481,11 @@ LOGGING = {
         #    'handlers': [DEFAULT_LOG],
         #    'level': 'DEBUG',
         # },
+        # Python Social Auth logging
+        # 'social': {
+        #     'handlers': [DEFAULT_LOG],
+        #     'level': 'DEBUG',
+        # },
     }
 }
 
@@ -549,7 +559,11 @@ SOCIAL_AUTH_REDIRECT_IS_HTTPS = ENABLE_HTTPS
 # https://docs.djangoproject.com/en/1.11/ref/settings/#csrf-cookie-httponly
 CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = ENABLE_HTTPS
+# Store CSRF token in session (since Django 1.11)
+CSRF_USE_SESSIONS = True
 SESSION_COOKIE_SECURE = ENABLE_HTTPS
+# Session cookie age (in seconds)
+SESSION_COOKIE_AGE = 1209600
 
 # URL of login
 LOGIN_URL = '{0}/accounts/login/'.format(URL_PREFIX)
@@ -615,6 +629,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 #     'weblate.trans.checks.format.PythonBraceFormatCheck',
 #     'weblate.trans.checks.format.PHPFormatCheck',
 #     'weblate.trans.checks.format.CFormatCheck',
+#     'weblate.trans.checks.format.PerlFormatCheck',
 #     'weblate.trans.checks.format.JavascriptFormatCheck',
 #     'weblate.trans.checks.consistency.PluralsCheck',
 #     'weblate.trans.checks.consistency.SamePluralsCheck',
