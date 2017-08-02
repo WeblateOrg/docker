@@ -16,4 +16,8 @@ script:
   - docker-compose start
   - docker-compose stop
   - docker-compose start
+  - CONTAINER=`docker-compose ps | grep nginx | sed 's/[[:space:]].*//'`
+  - IP=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $CONTAINER`
+  - curl http://$IP/about/ | grep 'Powered by.*Weblate'
+  - curl -O /dev/null curl http://$IP/static/weblate-128.png
   - docker-compose stop
