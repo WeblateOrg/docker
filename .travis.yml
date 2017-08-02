@@ -19,11 +19,11 @@ script:
   - sleep 10
   - docker-compose ps
   - CONTAINER=`docker-compose ps | grep _web_ | sed 's/[[:space:]].*//'`
-  - echo "Checking $CONTAINER"
+  - echo "Checking '$CONTAINER'"
   - IP=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $CONTAINER`
-  - echo "IP address $IP"
-  - curl "http://$IP/about/" | grep 'Powered by.*Weblate'
-  - curl -O /dev/null "http://$IP/static/weblate-128.png"
+  - echo "IP address '$IP'"
+  - curl --fail --silent "http://$IP/about/" | grep 'Powered by.*Weblate'
+  - curl --fail --silent --output /dev/null "http://$IP/static/weblate-128.png"
   - docker-compose down
 
   - docker-compose run --rm weblate createadmin
