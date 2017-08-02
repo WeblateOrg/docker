@@ -11,11 +11,10 @@ services:
   - docker
 
 before_script:
+  - sed -i "s/^WEBLATE_DEBUG=.*/WEBLATE_DEBUG=$DEBUG/" environment
   - docker-compose build
 
 script:
-  - sed -i "s/^WEBLATE_DEBUG=.*/WEBLATE_DEBUG=$DEBUG/" environment
-
   - docker-compose up -d
   - sleep 10
   - docker-compose ps
