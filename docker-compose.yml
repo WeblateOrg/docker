@@ -9,21 +9,32 @@ services:
       - weblate-data:/app/data
     env_file:
       - ./environment
+    ports:
+      - "8000:8000"
     restart: always
     depends_on:
       - database
       - cache
   web:
-    build: nginx
-    links:
-      - weblate
+    image: jwilder/nginx-proxy
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./certs:/etc/nginx/certs:ro
+      - /etc/nginx/vhost.d
+      - /usr/share/nginx/html
     ports:
       - "80:80"
-    volumes_from:
-      - weblate:ro
+      - "443:443"
     restart: always
     depends_on:
       - weblate
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./certs:/etc/nginx/certs:rw
+    volumes_from:
+      - web
   database:
     image: postgres:9.6
     env_file:
