@@ -2,8 +2,8 @@ sudo: required
 
 language: python
 
-matrix:
-  env:
+env:
+  matrix:
     - DEBUG=1
     - DEBUG=0
 
