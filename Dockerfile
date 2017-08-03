@@ -17,6 +17,7 @@ ADD requirements.txt /tmp/requirements.txt
 RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
   && apt-get -y upgrade \
   && apt-get install --no-install-recommends -y \
+    sudo \
     uwsgi \
     uwsgi-plugin-python \
     nginx \
