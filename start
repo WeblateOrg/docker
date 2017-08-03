@@ -40,7 +40,7 @@ if [ "x$1" = "xrunserver" ] ; then
     mkdir -p `dirname $LOGFILE`
     touch $LOGFILE
     #  Execute supervisor
-    exec supervisord -n
+    exec supervisord --nodaemon --loglevel=debug
 fi
 
 # Start the management command
