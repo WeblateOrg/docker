@@ -63,7 +63,8 @@ RUN curl -L https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd
 
 # Settings
 ADD settings.py /app/etc/
-RUN chmod a+r /app/etc/settings.py
+RUN chmod a+r /app/etc/settings.py && \
+  ln -s /app/etc/settings.py /usr/local/lib/python2.7/dist-packages/weblate/settings.py
 
 # Configuration for nginx, uwsgi and supervisor
 COPY weblate.nginx.conf /etc/nginx/sites-available/default
@@ -74,7 +75,6 @@ COPY supervisor.conf /etc/supervisor/conf.d/
 ADD start /app/bin/
 RUN chmod a+rx /app/bin/start
 
-RUN ln -s /app/etc/settings.py /usr/local/lib/python2.7/dist-packages/weblate/settings.py
 ENV DJANGO_SETTINGS_MODULE weblate.settings
 
 EXPOSE 80
