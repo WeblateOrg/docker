@@ -2,6 +2,7 @@
 set -e
 
 export PGPASSWORD="$POSTGRES_PASSWORD"
+export WEBLATE_CMD="/usr/local/bin/weblate"
 
 if [ -z "$POSTGRES_HOST" ] ; then
     export POSTGRES_HOST=database
@@ -28,11 +29,11 @@ fi
 
 # Migrate database to current version and collect static files
 if [ "x$1" = "xrunserver" ] ; then
-    $START_CMD migrate
-    $START_CMD collectstatic --noinput
+    $WEBLATE_CMD migrate
+    $WEBLATE_CMD collectstatic --noinput
     if [ -n "$WEBLATE_ADMIN_PASSWORD" ] ; then
         # This will fail on consequent runs
-        $START_CMD createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
+        $WEBLATE_CMD createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
     fi
     # Create supervisor log dirs and files
     mkdir -p $( dirname $(cat /etc/supervisord.conf  | grep logfile= | grep "\.log" | sed s/.*logfile=// ) )
@@ -42,4 +43,4 @@ if [ "x$1" = "xrunserver" ] ; then
 fi
 
 # Start the management command
-exec $START_CMD "$@"
+exec $WEBLATE_CMD "$@"
