@@ -3,11 +3,11 @@ set -e
 
 export PGPASSWORD="$POSTGRES_PASSWORD"
 
+export WEBLATE_CMD="/usr/local/bin/weblate"
+
 run_weblate() {
     sudo -u weblate -E $WEBLATE_CMD "$@"
 }
-
-export WEBLATE_CMD="/usr/local/bin/weblate"
 
 if [ -z "$POSTGRES_HOST" ] ; then
     export POSTGRES_HOST=database
