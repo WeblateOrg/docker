@@ -79,6 +79,6 @@ ENV START_CMD "/usr/local/bin/weblate"
 
 USER weblate
 
-EXPOSE 8000
+EXPOSE 80
 ENTRYPOINT ["/app/bin/start"]
-CMD ["runserver", "0.0.0.0:8000"]
+CMD ["runserver"]
