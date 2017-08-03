@@ -34,6 +34,7 @@ if [ "x$1" = "xrunserver" ] ; then
         # This will fail on consequent runs
         $START_CMD createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
     fi
+    exec supervisor -n
 fi
 
 #start the daemon

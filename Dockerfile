@@ -18,6 +18,9 @@ ADD requirements.txt /tmp/requirements.txt
 RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
   && apt-get -y upgrade \
   && apt-get install --no-install-recommends -y \
+    uwsgi-plugin-python \
+    nginx \
+    supervisor \
     openssh-client \
     curl \
     python-pip \
@@ -60,6 +63,11 @@ RUN curl -L https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd
 # Settings
 ADD settings.py /app/etc/
 RUN chmod a+r /app/etc/settings.py
+
+# Configuration for nginx, uwsgi and supervisor
+COPY weblate.nginx.conf /etc/nginx/sites-available/default
+COPY weblate.uwsgi.ini /etc/uwsgi/apps-enabled/weblate.ini
+COPY supervisor.conf /etc/supervisor/conf.d/
 
 # Entrypoint
 ADD start /app/bin/
