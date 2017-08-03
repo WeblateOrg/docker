@@ -39,6 +39,9 @@ if [ "x$1" = "xrunserver" ] ; then
     LOGFILE=/var/log/supervisor/supervisord.log
     mkdir -p `dirname $LOGFILE`
     touch $LOGFILE
+    # uswgi dir
+    mkdir -p /run/uwsgi/app/weblate
+    chown weblate:weblate /run/uwsgi/app/weblate
     #  Execute supervisor
     exec supervisord --nodaemon --loglevel=debug
 fi
