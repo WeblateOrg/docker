@@ -11,11 +11,4 @@ before_script:
 script:
   - docker build -t weblate/weblate:latest . || travis_terminate 1
   - cd docker
-  - docker-compose run --rm weblate migrate --noinput
-  - docker-compose run --rm weblate collectstatic --noinput
-  - docker-compose run --rm weblate createadmin
-  - docker-compose run -e WEBLATE_LOGLEVEL=CRITICAL --rm weblate test --noinput weblate.accounts weblate.trans weblate.lang weblate.api weblate.gitexport weblate.screenshots weblate.utils weblate.permissions
-  - docker-compose start
-  - docker-compose stop
-  - docker-compose start
-  - docker-compose stop
+  - ./test.sh
