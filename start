@@ -2,6 +2,11 @@
 set -e
 
 export PGPASSWORD="$POSTGRES_PASSWORD"
+
+run_weblate() {
+    sudo -u weblate DJANGO_SETTINGS_MODULE="$DJANGO_SETTINGS_MODULE" $WEBLATE_CMD "$@"
+}
+
 export WEBLATE_CMD="/usr/local/bin/weblate"
 
 if [ -z "$POSTGRES_HOST" ] ; then
@@ -29,11 +34,11 @@ fi
 
 # Migrate database to current version and collect static files
 if [ "x$1" = "xrunserver" ] ; then
-    sudo -u weblate $WEBLATE_CMD migrate
-    sudo -u weblate $WEBLATE_CMD collectstatic --noinput
+    run_weblate migrate
+    run_weblate collectstatic --noinput
     if [ -n "$WEBLATE_ADMIN_PASSWORD" ] ; then
         # This will fail on consequent runs
-        sudo -u weblate $WEBLATE_CMD createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
+        run_weblate createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
     fi
     # Create supervisor log dirs and files
     LOGFILE=/var/log/supervisor/supervisord.log
@@ -47,4 +52,4 @@ if [ "x$1" = "xrunserver" ] ; then
 fi
 
 # Start the management command
-exec sudo -u weblate $WEBLATE_CMD "$@"
+run_weblate "$@"
