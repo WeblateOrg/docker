@@ -13,17 +13,6 @@ services:
     depends_on:
       - database
       - cache
-  web:
-    build: nginx
-    links:
-      - weblate
-    ports:
-      - "80:80"
-    volumes_from:
-      - weblate:ro
-    restart: always
-    depends_on:
-      - weblate
   database:
     image: postgres:9.6
     env_file:

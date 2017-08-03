@@ -7,7 +7,7 @@ set -e
 
 echo "Starting up containers..."
 docker-compose up -d
-CONTAINER=`docker-compose ps | grep _web_ | sed 's/[[:space:]].*//'`
+CONTAINER=`docker-compose ps | grep _weblate_ | sed 's/[[:space:]].*//'`
 IP=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $CONTAINER`
 echo "Checking '$CONTAINER', IP address '$IP'"
 TIMEOUT=0; while ! curl --fail --silent --output /dev/null "http://$IP/" ; do sleep 1 ; TIMEOUT=$(($TIMEOUT + 1)); if [ $TIMEOUT -gt 120 ] ; then break ;fi ; done
