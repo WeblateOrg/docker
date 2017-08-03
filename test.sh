@@ -23,7 +23,7 @@ echo "Shutting down containers..."
 docker-compose down
 
 echo "Runing testsuite..."
-docker-compose run -e WEBLATE_LOGLEVEL=CRITICAL --rm weblate test --noinput weblate.accounts weblate.trans weblate.lang weblate.api weblate.gitexport weblate.screenshots weblate.utils || exit 1
+docker-compose run -e WEBLATE_LOGLEVEL=CRITICAL weblate test --noinput weblate.accounts weblate.trans weblate.lang weblate.api weblate.gitexport weblate.screenshots weblate.utils || exit 1
 
 echo "Creating admin..."
-docker-compose run --rm weblate createadmin || exit 1
+docker-compose run weblate createadmin || exit 1
