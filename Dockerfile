@@ -8,9 +8,8 @@ RUN useradd --shell /bin/sh --user-group weblate \
   && mkdir -p /home/weblate/.ssh \
   && touch /home/weblate/.ssh/authorized_keys \
   && chown -R weblate:weblate /home/weblate \
-  && chmod 700 /home/weblate/.ssh
-
-RUN install -d -o weblate -g weblate -m 755 /app/data
+  && chmod 700 /home/weblate/.ssh \
+  && install -d -o weblate -g weblate -m 755 /app/data
 
 ADD requirements.txt /tmp/requirements.txt
 
@@ -75,8 +74,6 @@ RUN chmod a+rx /app/bin/start
 
 RUN ln -s /app/etc/settings.py /usr/local/lib/python2.7/dist-packages/weblate/settings.py
 ENV DJANGO_SETTINGS_MODULE weblate.settings
-
-USER weblate
 
 EXPOSE 80
 ENTRYPOINT ["/app/bin/start"]

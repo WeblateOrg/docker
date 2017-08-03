@@ -36,14 +36,12 @@ if [ "x$1" = "xrunserver" ] ; then
         $WEBLATE_CMD createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
     fi
     # Create supervisor log dirs and files
-    id 
     LOGFILE=/var/log/supervisor/supervisord.log
     mkdir -p `dirname $LOGFILE`
-    ls -lad `dirname $LOGFILE`
     touch $LOGFILE
     #  Execute supervisor
     exec supervisord -n
 fi
 
 # Start the management command
-exec $WEBLATE_CMD "$@"
+exec su - weblate $WEBLATE_CMD "$@"
