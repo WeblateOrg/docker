@@ -18,3 +18,6 @@ docker-compose down
 
 echo "Runing testsuite..."
 docker-compose run -e WEBLATE_LOGLEVEL=CRITICAL --rm weblate test --noinput weblate.accounts weblate.trans weblate.lang weblate.api weblate.gitexport weblate.screenshots weblate.utils
+
+echo "Creating admin..."
+docker-compose run --rm weblate createadmin
