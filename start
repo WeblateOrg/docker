@@ -36,8 +36,8 @@ if [ "x$1" = "xrunserver" ] ; then
         $WEBLATE_CMD createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
     fi
     # Create supervisor log dirs and files
-    mkdir -p $( dirname $(cat /etc/supervisord.conf  | grep logfile= | grep "\.log" | sed s/.*logfile=// ) )
-    touch $( cat /etc/supervisord.conf  | grep logfile= | grep "\.log" | sed s/.*logfile=// )
+    mkdir -p $( dirname $(cat /etc/supervisor/supervisord.conf  | grep logfile= | grep "\.log" | sed s/.*logfile=// ) )
+    touch $( cat /etc/supervisor/supervisord.conf  | grep logfile= | grep "\.log" | sed s/.*logfile=// )
     #  Execute supervisor
     exec supervisord -n
 fi
