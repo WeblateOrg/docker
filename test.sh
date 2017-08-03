@@ -14,6 +14,9 @@ RET=$?
 curl --fail --output /dev/null "http://$IP/static/weblate-128.png"
 if [ $? -ne 0 -o $RET -ne 0 ] ; then
     docker-compose logs
+    docker run $CONTAINER tail /var/log/syslog
+    docker run $CONTAINER tail /var/log/nginx/error.log
+    docker run $CONTAINER tail /var/log/uwsgi/app/weblate.log
     exit 1
 fi
 echo "Shutting down containers..."
