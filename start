@@ -29,11 +29,11 @@ fi
 
 # Migrate database to current version and collect static files
 if [ "x$1" = "xrunserver" ] ; then
-    $WEBLATE_CMD migrate
-    $WEBLATE_CMD collectstatic --noinput
+    exec su - weblate $WEBLATE_CMD migrate
+    exec su - weblate $WEBLATE_CMD collectstatic --noinput
     if [ -n "$WEBLATE_ADMIN_PASSWORD" ] ; then
         # This will fail on consequent runs
-        $WEBLATE_CMD createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
+        exec su - weblate $WEBLATE_CMD createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
     fi
     # Create supervisor log dirs and files
     LOGFILE=/var/log/supervisor/supervisord.log
