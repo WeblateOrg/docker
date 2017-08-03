@@ -29,11 +29,11 @@ fi
 
 # Migrate database to current version and collect static files
 if [ "x$1" = "xrunserver" ] ; then
-    su - weblate /usr/bin/python $WEBLATE_CMD migrate
-    su - weblate /usr/bin/python $WEBLATE_CMD collectstatic --noinput
+    sudo -u weblate $WEBLATE_CMD migrate
+    sudo -u weblate $WEBLATE_CMD collectstatic --noinput
     if [ -n "$WEBLATE_ADMIN_PASSWORD" ] ; then
         # This will fail on consequent runs
-        su - weblate /usr/bin/python $WEBLATE_CMD createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
+        sudo -u weblate $WEBLATE_CMD createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
     fi
     # Create supervisor log dirs and files
     LOGFILE=/var/log/supervisor/supervisord.log
@@ -47,4 +47,4 @@ if [ "x$1" = "xrunserver" ] ; then
 fi
 
 # Start the management command
-exec su - weblate /usr/bin/python $WEBLATE_CMD "$@"
+exec sudo -u weblate $WEBLATE_CMD "$@"
