@@ -9,7 +9,7 @@ before_script:
   - git clone --depth 1 https://github.com/WeblateOrg/docker.git
 
 script:
-  - docker build -t weblate/weblate:latest .
+  - docker build -t weblate/weblate:latest . || travis_terminate 1
   - cd docker
   - docker-compose run --rm weblate migrate --noinput
   - docker-compose run --rm weblate collectstatic --noinput
