@@ -1,12 +1,19 @@
 #!/bin/sh
 
-# Simple test that Weblate is serving it's files
-# Execute in docker-compose.yml directory
+# Test script for Weblate docker container
+#
+# - test that Weblate is serving it's files
+# - test creating admin user
+# - runs tessuite
+#
+# Execute in docker-compose.yml directory, it will create containers and
+# test them.
 
 echo "Starting up containers..."
 docker-compose up -d || exit 1
 CONTAINER=`docker-compose ps | grep _weblate_ | sed 's/[[:space:]].*//'`
 IP=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $CONTAINER`
+
 echo "Checking '$CONTAINER', IP address '$IP'"
 TIMEOUT=0; while ! curl --fail --silent --output /dev/null "http://$IP/" ; do sleep 1 ; TIMEOUT=$(($TIMEOUT + 1)); if [ $TIMEOUT -gt 120 ] ; then break ;fi ; done
 curl --verbose --fail "http://$IP/about/" | grep 'Powered by.*Weblate'
