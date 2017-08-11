@@ -260,12 +260,12 @@ SOCIAL_AUTH_GITLAB_SCOPE = ['api']
 
 # Social auth settings
 SOCIAL_AUTH_PIPELINE = (
-    'weblate.accounts.pipeline.verify_open',
     'social_core.pipeline.social_auth.social_details',
     'social_core.pipeline.social_auth.social_uid',
     'social_core.pipeline.social_auth.auth_allowed',
     'social_core.pipeline.social_auth.social_user',
     'weblate.accounts.pipeline.store_params',
+    'weblate.accounts.pipeline.verify_open',
     'social_core.pipeline.user.get_username',
     'weblate.accounts.pipeline.require_email',
     'social_core.pipeline.mail.mail_validation',
@@ -353,6 +353,9 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'weblate.urls'
 
 INSTALLED_APPS = (
+    # Has to be first to override Django admin templates:
+    'weblate.wladmin',
+
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
