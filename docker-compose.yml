@@ -5,6 +5,8 @@ services:
     links:
       - database
       - cache
+    ports:
+      - 80:80
     volumes:
       - weblate-data:/app/data
     env_file:
