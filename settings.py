@@ -30,6 +30,17 @@ def get_env_list(name):
         return os.environ[name].split(',')
     return []
 
+def get_env_map(name, default={}):
+    """
+    Helper to get mapping from environment.
+
+    parses 'first_name:name,email:mail'
+    into {'email': 'mail', 'first_name': 'name'}
+    """
+    if os.environ.get(name):
+        return dict(e.split(':') for e in os.environ[name].split(','))
+    return {}
+
 #
 # Django settings for Weblate project.
 #
@@ -257,6 +268,14 @@ if 'WEBLATE_SOCIAL_AUTH_GITLAB_API_URL' in os.environ:
 SOCIAL_AUTH_GITLAB_KEY = os.environ.get('WEBLATE_SOCIAL_AUTH_GITLAB_KEY', '')
 SOCIAL_AUTH_GITLAB_SECRET = os.environ.get('WEBLATE_SOCIAL_AUTH_GITLAB_SECRET', '')
 SOCIAL_AUTH_GITLAB_SCOPE = ['api']
+
+# https://docs.weblate.org/en/latest/admin/auth.html#ldap-authentication
+if 'WEBLATE_AUTH_LDAP_SERVER_URI' in os.environ:
+    AUTH_LDAP_SERVER_URI = os.environ.get('WEBLATE_AUTH_LDAP_SERVER_URI')
+    AUTH_LDAP_USER_DN_TEMPLATE = os.environ.get('WEBLATE_AUTH_LDAP_USER_DN_TEMPLATE', 'cn=%(user)s,o=Example')
+    AUTHENTICATION_BACKENDS += ('django_auth_ldap.backend.LDAPBackend',)
+    AUTHENTICATION_BACKENDS += ('weblate.accounts.auth.WeblateUserBackend',)
+    AUTH_LDAP_USER_ATTR_MAP = get_env_map('WEBLATE_AUTH_LDAP_USER_ATTR_MAP', { 'first_name': 'name', 'email': 'mail' })
 
 # Social auth settings
 SOCIAL_AUTH_PIPELINE = (
