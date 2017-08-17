@@ -273,8 +273,7 @@ SOCIAL_AUTH_GITLAB_SCOPE = ['api']
 if 'WEBLATE_AUTH_LDAP_SERVER_URI' in os.environ:
     AUTH_LDAP_SERVER_URI = os.environ.get('WEBLATE_AUTH_LDAP_SERVER_URI')
     AUTH_LDAP_USER_DN_TEMPLATE = os.environ.get('WEBLATE_AUTH_LDAP_USER_DN_TEMPLATE', 'cn=%(user)s,o=Example')
-    AUTHENTICATION_BACKENDS += ('django_auth_ldap.backend.LDAPBackend',)
-    AUTHENTICATION_BACKENDS += ('weblate.accounts.auth.WeblateUserBackend',)
+    AUTHENTICATION_BACKENDS = ('django_auth_ldap.backend.LDAPBackend', 'weblate.accounts.auth.WeblateUserBackend')
     AUTH_LDAP_USER_ATTR_MAP = get_env_map('WEBLATE_AUTH_LDAP_USER_ATTR_MAP', { 'first_name': 'name', 'email': 'mail' })
 
 # Social auth settings
