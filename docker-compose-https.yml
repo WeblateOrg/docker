@@ -33,6 +33,8 @@ services:
     links:
       - weblate
     restart: always
+    environment:
+      STAGE: production
 volumes:
   weblate-data: {}
   postgres-data: {}
