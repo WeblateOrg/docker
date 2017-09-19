@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-export PGPASSWORD="$POSTGRES_PASSWORD"
+export PGPASSWORD=$(echo $POSTGRES_PASSWORD)
 
 export WEBLATE_CMD="/usr/local/bin/weblate"
 
