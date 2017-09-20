@@ -42,6 +42,10 @@ POSTGRES_DATABASE=weblate
 POSTGRES_HOST=database
 POSTGRES_PORT=
 
+# Memcached setup
+MEMCACHED_HOST=cache
+MEMCACHED_PORT=11211
+
 # Mail server, the server has to listen on port 587 and understand TLS
 WEBLATE_EMAIL_HOST=smtp.gmail.com
 # Do NOT use quotes here
