@@ -696,8 +696,8 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
         'LOCATION': '{0}:{1}'.format(
-            'cache',
-            '11211',
+            os.environ.get('MEMCACHED_HOST'),
+            os.environ.get('MEMCACHED_PORT'),
         )
     },
     'avatar': {
