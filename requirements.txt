@@ -1,5 +1,5 @@
 Django>=1.11,<1.12
-siphashc3==3
+siphashc==1.0
 Whoosh>=2.7,<2.8
 translate-toolkit>=2.2,<2.3
 social-auth-core==1.4.0
