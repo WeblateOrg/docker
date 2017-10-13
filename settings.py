@@ -381,9 +381,6 @@ ROOT_URLCONF = 'weblate.urls'
 
 # Django and Weblate apps
 INSTALLED_APPS = (
-    # Has to be first to override Django admin templates:
-    'weblate.wladmin',
-
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -404,12 +401,11 @@ INSTALLED_APPS = (
     'weblate.screenshots',
     'weblate.accounts',
     'weblate.utils',
+    'weblate.wladmin',
+    'weblate',
 
     # Optional: Git exporter
     'weblate.gitexport',
-
-    # This application has to be placed last!
-    'weblate',
 )
 
 # Path to locales
