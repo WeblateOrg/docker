@@ -74,7 +74,7 @@ DATABASES = {
     }
 }
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Data directory
 DATA_DIR = '/app/data'
@@ -82,7 +82,10 @@ DATA_DIR = '/app/data'
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
-# In a Windows environment this must be set to your system time zone.
+# On Unix systems, a value of None will cause Django to use the same
+# timezone as the operating system.
+# If running in a Windows environment this must be set to the same as your
+# system time zone.
 TIME_ZONE = os.environ.get('WEBLATE_TIME_ZONE', 'UTC')
 
 # Language code for this installation. All choices can be found here:
@@ -286,9 +289,8 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.mail.mail_validation',
     'weblate.accounts.pipeline.revoke_mail_code',
     'weblate.accounts.pipeline.ensure_valid',
-    'weblate.accounts.pipeline.remove_account',
-    'social_core.pipeline.social_auth.associate_by_email',
     'weblate.accounts.pipeline.reauthenticate',
+    'social_core.pipeline.social_auth.associate_by_email',
     'weblate.accounts.pipeline.verify_username',
     'social_core.pipeline.user.create_user',
     'social_core.pipeline.social_auth.associate_user',
@@ -350,17 +352,6 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'weblate.accounts.password_validation.CharsPasswordValidator',
     },
-    {
-        'NAME': 'weblate.accounts.password_validation.PastPasswordsValidator',
-    },
-    # Optional password strength validation by django-zxcvbn-password
-    # {
-    #     'NAME': 'zxcvbn_password.ZXCVBNValidator',
-    #     'OPTIONS': {
-    #         'min_score': 3,
-    #         'user_attributes': ('username', 'email', 'first_name')
-    #     }
-    # },
 ]
 
 # Middleware
@@ -379,8 +370,10 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'weblate.urls'
 
-# Django and Weblate apps
 INSTALLED_APPS = (
+    # Has to be first to override Django admin templates:
+    'weblate.wladmin',
+
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -401,15 +394,16 @@ INSTALLED_APPS = (
     'weblate.screenshots',
     'weblate.accounts',
     'weblate.utils',
-    'weblate.wladmin',
-    'weblate',
 
     # Optional: Git exporter
     'weblate.gitexport',
+
+    # This application has to be placed last!
+    'weblate',
 )
 
 # Path to locales
-LOCALE_PATHS = (os.path.join(BASE_DIR, 'weblate', 'locale'), )
+LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'), )
 
 # Custom exception reporter to include some details
 DEFAULT_EXCEPTION_REPORTER_FILTER = \

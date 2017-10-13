@@ -1,6 +1,6 @@
 FROM debian:stretch
 MAINTAINER Michal Čihař <michal@cihar.com>
-ENV VERSION 2.17
+ENV VERSION 2.16
 LABEL version=$VERSION
 
 # Add user early to get a consistent userid
