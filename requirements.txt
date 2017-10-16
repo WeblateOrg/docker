@@ -15,7 +15,7 @@ pyLibravatar==1.7
 PyDNS==2.3.6
 Babel==2.5.1
 tesserocr==2.2.2
-akismet==1.0
+akismet==1.0.1
 # Following are installed using apt:
 # Pillow
 # lxml
