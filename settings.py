@@ -785,3 +785,5 @@ EMAIL_HOST_PASSWORD = os.environ.get(
 EMAIL_PORT = int(os.environ.get('WEBLATE_EMAIL_PORT', '587'))
 
 GOOGLE_ANALYTICS_ID = os.environ.get('WEBLATE_GOOGLE_ANALYTICS_ID', '')
+
+AKISMET_API_KEY = os.environ.get('WEBLATE_AKISMET_API_KEY', None)
