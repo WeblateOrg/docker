@@ -30,7 +30,7 @@ until psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "$POSTGRES_DATABASE" -U "$
         >&2 echo "Please see our docs for more details:"
         >&2 echo "https://docs.weblate.org/en/latest/admin/deployments.html#docker"
         exit 1
-    if
+    fi
 done
 
 unset PGPASSWORD
