@@ -17,9 +17,20 @@ if [ -z "$POSTGRES_PORT" ] ; then
 fi
 
 # Wait for database to get available
+TIMEOUT=0
 until psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "$POSTGRES_DATABASE" -U "$POSTGRES_USER" -c 'SELECT 1' > /dev/null 2>&1 ; do
     >&2 echo "Postgres is unavailable - sleeping"
     sleep 1
+    TIMEOUT=$(($TIMEOUT + 1))
+    if [ $TIMEOUT -gt 60 ] ; then
+        >&2 echo "Postgres not running!"
+        >&2 echo
+        >&2 echo "Postgres is expected to run as separate Docker container."
+        >&2 echo
+        >&2 echo "Please see our docs for more details:"
+        >&2 echo "https://docs.weblate.org/en/latest/admin/deployments.html#docker"
+        exit 1
+    if
 done
 
 unset PGPASSWORD
