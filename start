@@ -18,8 +18,8 @@ fi
 
 # Wait for database to get available
 until psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "$POSTGRES_DATABASE" -U "$POSTGRES_USER" -c 'SELECT 1' > /dev/null 2>&1 ; do
-  >&2 echo "Postgres is unavailable - sleeping"
-  sleep 1
+    >&2 echo "Postgres is unavailable - sleeping"
+    sleep 1
 done
 
 unset PGPASSWORD
