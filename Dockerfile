@@ -43,6 +43,8 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     git-svn \
     subversion \
     python-dev \
+    libxml2-dev \
+    libxmlsec1-dev \
     libleptonica-dev \
     libtesseract-dev \
     cython \
@@ -53,7 +55,7 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && rm /tmp/requirements.txt \
   && rm -rf /root/.cache \
-  && apt-get -y purge python-dev libleptonica-dev libtesseract-dev cython gcc g++ \
+  && apt-get -y purge python-dev libleptonica-dev libtesseract-dev libxml2-dev libxmlsec1-dev cython gcc g++ \
   && apt-get -y autoremove \
   && apt-get clean
 
