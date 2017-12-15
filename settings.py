@@ -71,6 +71,8 @@ DATABASES = {
         'HOST': os.environ['POSTGRES_HOST'],
         # Set to empty string for default. Not used with sqlite3.
         'PORT': os.environ['POSTGRES_PORT'],
+        # Wrap each view in a transaction on this database
+        'ATOMIC_REQUESTS': True,
     }
 }
 
@@ -190,6 +192,9 @@ except IOError:
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+        ],
         'OPTIONS': {
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
@@ -364,7 +369,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Middleware
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -375,7 +381,7 @@ MIDDLEWARE_CLASSES = (
     'social_django.middleware.SocialAuthExceptionMiddleware',
     'weblate.accounts.middleware.RequireLoginMiddleware',
     'weblate.middleware.SecurityMiddleware',
-)
+]
 
 ROOT_URLCONF = 'weblate.urls'
 
@@ -425,7 +431,10 @@ DEFAULT_EXCEPTION_REPORTER_FILTER = \
 HAVE_SYSLOG = False
 if platform.system() != 'Windows':
     try:
-        SysLogHandler(address='/dev/log', facility=SysLogHandler.LOG_LOCAL2)
+        handler = SysLogHandler(
+            address='/dev/log', facility=SysLogHandler.LOG_LOCAL2
+        )
+        handler.close()
         HAVE_SYSLOG = True
     except IOError:
         HAVE_SYSLOG = False
@@ -629,11 +638,6 @@ LAZY_COMMITS = True
 
 # Offload indexing
 OFFLOAD_INDEXING = os.environ.get('WEBLATE_OFFLOAD_INDEXING', '0') == '1'
-
-# Translation locking
-AUTO_LOCK = True
-AUTO_LOCK_TIME = 60
-LOCK_TIME = 15 * 60
 
 # Use simple language codes for default language/country combinations
 SIMPLIFY_LANGUAGES = os.environ.get('WEBLATE_SIMPLIFY_LANGUAGES', '1') == '1'
