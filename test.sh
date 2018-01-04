@@ -15,7 +15,14 @@ CONTAINER=`docker-compose ps | grep _weblate_ | sed 's/[[:space:]].*//'`
 IP=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $CONTAINER`
 
 echo "Checking '$CONTAINER', IP address '$IP'"
-TIMEOUT=0; while ! curl --fail --silent --output /dev/null "http://$IP/" ; do sleep 1 ; TIMEOUT=$(($TIMEOUT + 1)); if [ $TIMEOUT -gt 120 ] ; then break ;fi ; done
+TIMEOUT=0
+while ! curl --fail --silent --output /dev/null "http://$IP/" ; do
+    sleep 1
+    TIMEOUT=$(($TIMEOUT + 1))
+    if [ $TIMEOUT -gt 120 ] ; then
+        break
+    fi
+done
 curl --verbose --fail "http://$IP/about/" | grep 'Powered by.*Weblate'
 RET=$?
 curl --verbose --fail --output /dev/null "http://$IP/static/weblate-128.png"
