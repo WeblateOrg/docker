@@ -39,7 +39,7 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     python-dateutil \
     python-rcssmin \
     python-rjsmin \
-    python-django-auth-ldap \
+    python-pyldap \
     gettext \
     postgresql-client \
     mercurial \
