@@ -4,7 +4,7 @@
 #
 # - test that Weblate is serving it's files
 # - test creating admin user
-# - runs tessuite
+# - runs testsuite
 #
 # Execute in docker-compose.yml directory, it will create containers and
 # test them.
