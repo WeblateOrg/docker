@@ -33,6 +33,7 @@ if [ $? -ne 0 -o $RET -ne 0 ] ; then
     docker exec $CONTAINER tail /var/log/uwsgi/app/weblate.log
     exit 1
 fi
+    docker-compose logs
 
 echo "Creating admin..."
 docker-compose run --rm weblate createadmin || exit 1
