@@ -11,6 +11,10 @@ RUN useradd --shell /bin/sh --user-group weblate \
   && chmod 700 /home/weblate/.ssh \
   && install -d -o weblate -g weblate -m 755 /app/data
 
+# Configure utf-8 locales
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+
 ADD requirements.txt /tmp/requirements.txt
 
 # Install dependencies
