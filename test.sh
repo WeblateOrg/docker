@@ -19,7 +19,7 @@ TIMEOUT=0
 while ! curl --fail --silent --output /dev/null "http://$IP/" ; do
     sleep 1
     TIMEOUT=$(($TIMEOUT + 1))
-    if [ $TIMEOUT -gt 120 ] ; then
+    if [ $TIMEOUT -gt 60 ] ; then
         break
     fi
 done
