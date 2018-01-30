@@ -35,7 +35,6 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     python-setuptools \
     python-wheel \
     python-psycopg2 \
-    python-memcache \
     python-dateutil \
     python-rcssmin \
     python-rjsmin \
