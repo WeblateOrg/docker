@@ -1,0 +1,12 @@
+#!/bin/sh
+# Wrapper to start memcached
+
+mkdir -p /var/run/memcached
+chown -R nobody /var/run/memcached
+
+exec /usr/bin/memcached \
+    -v \
+    -m ${MEMCACHED_MEMORY:-64} \
+    -u nobody \
+    -s /var/run/memcached/memcached.socket \
+    -a 0777

@@ -708,10 +708,7 @@ ALLOWED_HOSTS = os.environ.get('WEBLATE_ALLOWED_HOSTS', '*').split(',')
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '{0}:{1}'.format(
-            os.environ.get('MEMCACHED_HOST', 'cache'),
-            os.environ.get('MEMCACHED_PORT', '11211'),
-        )
+        'LOCATION': 'unix:/var/run/memcached/memcached.socket',
     },
     'avatar': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
