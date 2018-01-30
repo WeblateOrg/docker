@@ -24,6 +24,7 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     sudo \
     uwsgi \
     uwsgi-plugin-python \
+    netcat-openbsd \
     nginx \
     supervisor \
     openssh-client \

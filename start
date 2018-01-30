@@ -9,6 +9,26 @@ run_weblate() {
     sudo -u weblate -E $WEBLATE_CMD "$@"
 }
 
+fail_dep() {
+    >&2 echo "$1 not running!"
+    >&2 echo
+    >&2 echo "$1 is expected to run as separate Docker container."
+    >&2 echo
+    >&2 echo "Please see our docs for more details:"
+    >&2 echo "https://docs.weblate.org/en/latest/admin/deployments.html#docker"
+    exit 1
+}
+
+# Wait for memcached
+util echo "stats" | nc ${MEMCACHED_HOST:-127.0.0.1} ${MEMCACHED_PORT:-11211} ; do
+    >&2 echo "Postgres is unavailable - sleeping"
+    sleep 1
+    TIMEOUT=$(($TIMEOUT + 1))
+    if [ $TIMEOUT -gt 60 ] ; then
+        fail_dep memcached
+    fi
+done
+
 if [ -z "$POSTGRES_HOST" ] ; then
     export POSTGRES_HOST=database
 fi
@@ -23,13 +43,7 @@ until psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "$POSTGRES_DATABASE" -U "$
     sleep 1
     TIMEOUT=$(($TIMEOUT + 1))
     if [ $TIMEOUT -gt 60 ] ; then
-        >&2 echo "Postgres not running!"
-        >&2 echo
-        >&2 echo "Postgres is expected to run as separate Docker container."
-        >&2 echo
-        >&2 echo "Please see our docs for more details:"
-        >&2 echo "https://docs.weblate.org/en/latest/admin/deployments.html#docker"
-        exit 1
+        fail_dep PosgreSQL
     fi
 done
 
