@@ -20,8 +20,8 @@ fail_dep() {
 }
 
 # Wait for memcached
-until echo "stats" | nc ${MEMCACHED_HOST:-127.0.0.1} ${MEMCACHED_PORT:-11211} ; do
-    >&2 echo "Postgres is unavailable - sleeping"
+until (echo stats; echo quit) | nc ${MEMCACHED_HOST:-127.0.0.1} ${MEMCACHED_PORT:-11211} > /dev/null 2>&1 ; do
+    >&2 echo "memcached is unavailable - sleeping"
     sleep 1
     TIMEOUT=$(($TIMEOUT + 1))
     if [ $TIMEOUT -gt 60 ] ; then
