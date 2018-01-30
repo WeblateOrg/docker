@@ -25,6 +25,7 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     uwsgi \
     uwsgi-plugin-python \
     nginx \
+    memcached \
     supervisor \
     openssh-client \
     curl \
@@ -78,8 +79,8 @@ COPY weblate.uwsgi.ini /etc/uwsgi/apps-enabled/weblate.ini
 COPY supervisor.conf /etc/supervisor/conf.d/
 
 # Entrypoint
-ADD start /app/bin/
-RUN chmod a+rx /app/bin/start
+ADD start memcached-wrapper /app/bin/
+RUN chmod a+rx /app/bin/start /app/bin/memcached-wrapper
 
 ENV DJANGO_SETTINGS_MODULE weblate.settings
 
