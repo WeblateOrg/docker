@@ -22,12 +22,12 @@ fail_dep() {
 # Wait for memcached
 until (echo stats; echo quit) | nc ${MEMCACHED_HOST:-127.0.0.1} ${MEMCACHED_PORT:-11211} > /dev/null 2>&1 ; do
     >&2 echo "memcached is unavailable - sleeping"
-    sleep 1
     TIMEOUT=$(($TIMEOUT + 1))
     if [ $TIMEOUT -gt 60 ] ; then
         (echo stats; echo quit) | nc ${MEMCACHED_HOST:-127.0.0.1} ${MEMCACHED_PORT:-11211}
         fail_dep memcached
     fi
+    sleep 1
 done
 
 if [ -z "$POSTGRES_HOST" ] ; then
@@ -41,12 +41,12 @@ fi
 TIMEOUT=0
 until psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "$POSTGRES_DATABASE" -U "$POSTGRES_USER" -c 'SELECT 1' > /dev/null 2>&1 ; do
     >&2 echo "Postgres is unavailable - sleeping"
-    sleep 1
     TIMEOUT=$(($TIMEOUT + 1))
     if [ $TIMEOUT -gt 60 ] ; then
         psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "$POSTGRES_DATABASE" -U "$POSTGRES_USER" -c 'SELECT 1'
         fail_dep PosgreSQL
     fi
+    sleep 1
 done
 
 unset PGPASSWORD
