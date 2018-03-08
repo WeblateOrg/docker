@@ -37,11 +37,12 @@ WEBLATE_REGISTRATION_OPEN=1
 #WEBLATE_AUTH_LDAP_USER_ATTR_MAP=first_name:name,email:mail
 
 # PostgreSQL setup
-POSTGRES_PASSWORD=weblate
-POSTGRES_USER=weblate
-POSTGRES_DATABASE=weblate
-POSTGRES_HOST=database
-POSTGRES_PORT=
+DB_ENGINE=django.db.backends.postgresql_psycopg2
+DB_PASSWORD=weblate
+DB_USER=weblate
+DB_DATABASE=weblate
+DB_HOST=database
+DB_PORT=
 
 # Memcached setup
 MEMCACHED_HOST=cache
