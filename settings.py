@@ -57,20 +57,20 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         # Use 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.postgresql_psycopg2'),
         # Database name or path to database file if using sqlite3.
-        'NAME': os.environ['POSTGRES_DATABASE'],
+        'NAME': os.environ.get('DB_NAME', ''),
         # Use same database for tests (needed as Docker MySQL can
         # not currently create second database for us)
-        'TEST': {'NAME': os.environ['POSTGRES_DATABASE']},
+        'TEST': {'NAME': os.environ.get('DB_NAME', ''),},
         # Database user, not used with sqlite3.
-        'USER': os.environ['POSTGRES_USER'],
+        'USER': os.environ.get('DB_USER', ''),
         # Database password, not used with sqlite3.
-        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
+        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
         # Set to empty string for localhost. Not used with sqlite3.
-        'HOST': os.environ['POSTGRES_HOST'],
+        'HOST': os.environ.get('DB_HOST', ''),
         # Set to empty string for default. Not used with sqlite3.
-        'PORT': os.environ['POSTGRES_PORT'],
+        'PORT': os.environ.get('DB_PORT', ''),
         # Wrap each view in a transaction on this database
         'ATOMIC_REQUESTS': True,
     }
@@ -671,7 +671,7 @@ SIMPLIFY_LANGUAGES = os.environ.get('WEBLATE_SIMPLIFY_LANGUAGES', '1') == '1'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 # List of quality checks
-# CHECK_LIST = (
+CHECK_LIST = (
 #     'weblate.trans.checks.same.SameCheck',
 #     'weblate.trans.checks.chars.BeginNewlineCheck',
 #     'weblate.trans.checks.chars.EndNewlineCheck',
@@ -692,17 +692,17 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 #     'weblate.trans.checks.format.JavascriptFormatCheck',
 #     'weblate.trans.checks.consistency.PluralsCheck',
 #     'weblate.trans.checks.consistency.SamePluralsCheck',
-#     'weblate.trans.checks.consistency.ConsistencyCheck',
-#     'weblate.trans.checks.consistency.TranslatedCheck',
+     'weblate.trans.checks.consistency.ConsistencyCheck',
+     'weblate.trans.checks.consistency.TranslatedCheck',
 #     'weblate.trans.checks.chars.NewlineCountingCheck',
 #     'weblate.trans.checks.markup.BBCodeCheck',
-#     'weblate.trans.checks.chars.ZeroWidthSpaceCheck',
-#     'weblate.trans.checks.markup.XMLValidityCheck',
+     'weblate.trans.checks.chars.ZeroWidthSpaceCheck',
+     'weblate.trans.checks.markup.XMLValidityCheck',
 #     'weblate.trans.checks.markup.XMLTagsCheck',
 #     'weblate.trans.checks.source.OptionalPluralCheck',
-#     'weblate.trans.checks.source.EllipsisCheck',
+     'weblate.trans.checks.source.EllipsisCheck',
 #     'weblate.trans.checks.source.MultipleFailingCheck',
-# )
+)
 
 # List of automatic fixups
 # AUTOFIX_LIST = (

@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-export PGPASSWORD="$POSTGRES_PASSWORD"
+export DBPASSWORD="$DB_PASSWORD"
 
 export WEBLATE_CMD="/usr/local/bin/weblate"
 
@@ -30,28 +30,42 @@ until (echo stats; echo quit) | nc ${MEMCACHED_HOST:-127.0.0.1} ${MEMCACHED_PORT
     sleep 1
 done
 
-if [ -z "$POSTGRES_HOST" ] ; then
-    export POSTGRES_HOST=database
+if [ -z "$DB_HOST" ] ; then
+    export DB_HOST=database
 fi
-if [ -z "$POSTGRES_PORT" ] ; then
-    export POSTGRES_PORT=
+if [ -z "$DB_PORT" ] ; then
+    export DB_PORT=
 fi
 
 # Wait for database to get available
-TIMEOUT=0
-until psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "$POSTGRES_DATABASE" -U "$POSTGRES_USER" -c 'SELECT 1' > /dev/null 2>&1 ; do
-    >&2 echo "Postgres is unavailable - sleeping"
-    TIMEOUT=$(($TIMEOUT + 1))
-    if [ $TIMEOUT -gt 60 ] ; then
-        psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "$POSTGRES_DATABASE" -U "$POSTGRES_USER" -c 'SELECT 1'
-        fail_dep PosgreSQL
-    fi
-    sleep 1
-done
 
-unset PGPASSWORD
+if [ "$DB_ENGINE" = "django.db.backends.mysql" ] ; then
+    TIMEOUT=0
+    until mysql -h "$DB_HOST" -P "$DB_PORT" -D "$DB_DATABASE" -u "$DB_USER" -p"$DB_PASSWORD" -e "use ${DB_DATABASE}" > /dev/null 2>&1 ; do
+        >&2 echo "MySQL is unavailable - sleeping"
+        TIMEOUT=$(($TIMEOUT + 1))
+        if [ $TIMEOUT -gt 60 ] ; then
+            mysql -h "$DB_HOST" -P "$DB_PORT" -D "$DB_DATABASE" -u "$DB_USER" -p"$DB_PASSWORD" -e 'use "$DB_DATABASE"'
+            fail_dep MySQL
+        fi
+        sleep 1
+    done
+elif [ "$DB_ENGINE" = "django.db.backends.postgresql_psycopg2" ] ; then
+    TIMEOUT=0
+    until psql -h "$DB_HOST" -p "$DB_PORT" -d "$DB_DATABASE" -U "$DB_USER" -c 'SELECT 1' > /dev/null 2>&1 ; do
+        >&2 echo "Postgres is unavailable - sleeping"
+        TIMEOUT=$(($TIMEOUT + 1))
+        if [ $TIMEOUT -gt 60 ] ; then
+            psql -h "$DB_HOST" -p "$DB_PORT" -d "$DB_DATABASE" -U "$DB_USER" -c 'SELECT 1'
+            fail_dep PosgreSQL
+        fi
+        sleep 1
+    done
+fi
 
->&2 echo "Postgres is up"
+unset DBPASSWORD
+
+>&2 echo "Database is up"
 
 # Generate secret
 if [ ! -f /app/data/secret ] ; then
