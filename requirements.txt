@@ -13,7 +13,6 @@ httpretty==0.8.14
 pyuca==1.2
 pyLibravatar==1.7
 PyDNS==2.3.6
-Babel==2.5.3
 tesserocr==2.2.2
 akismet==1.0.1
 python-saml==2.4.0
