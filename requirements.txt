@@ -2,9 +2,9 @@ Django>=1.11,<1.12
 siphashc==1.0
 Whoosh>=2.7,<2.8
 translate-toolkit>=2.2,<2.3
-social-auth-core==1.6.0
+social-auth-core==1.7.0
 social-auth-app-django==2.1.0
-django-crispy-forms==1.7.0
+django-crispy-forms==1.7.2
 django_compressor==2.2
 djangorestframework>=3.7,<3.8
 defusedxml==0.5.0
@@ -16,7 +16,7 @@ PyDNS==2.3.6
 Babel==2.5.3
 tesserocr==2.2.2
 akismet==1.0.1
-python-saml==2.3.0
+python-saml==2.4.0
 python-memcached==1.59
 # Following are installed using apt:
 # Pillow
