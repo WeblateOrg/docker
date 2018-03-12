@@ -18,6 +18,7 @@ tesserocr==2.2.2
 akismet==1.0.1
 python-saml==2.4.0
 python-memcached==1.59
+phply==1.2.3
 # Following are installed using apt:
 # Pillow
 # lxml
