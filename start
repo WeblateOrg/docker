@@ -67,7 +67,7 @@ if [ "x$1" = "xrunserver" ] ; then
         # This will fail on consequent runs
         run_weblate createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
     fi
-    if [ -n "$WEBLATE_ALLOWED_HOSTS" ] ; then
+    if [ -n "$WEBLATE_ALLOWED_HOSTS" -a "$WEBLATE_ALLOWED_HOSTS" != '*' ] ; then
         run_weblate changesite --set-name "${WEBLATE_ALLOWED_HOSTS%%,*}"
     fi
     # Create supervisor log dirs and files
