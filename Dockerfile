@@ -55,7 +55,6 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     gcc \
     g++ \
     tesseract-ocr \
-  && pip install git+https://github.com/translate/translate.git@9d67198e10012ef4dada5f969739fd6bf579068b \
   && pip install Weblate==$VERSION -r /tmp/requirements.txt \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && rm /tmp/requirements.txt \
