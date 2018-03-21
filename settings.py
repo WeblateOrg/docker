@@ -71,8 +71,6 @@ DATABASES = {
         'HOST': os.environ['POSTGRES_HOST'],
         # Set to empty string for default. Not used with sqlite3.
         'PORT': os.environ['POSTGRES_PORT'],
-        # Wrap each view in a transaction on this database
-        'ATOMIC_REQUESTS': True,
     }
 }
 
