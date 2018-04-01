@@ -24,9 +24,9 @@ import os
 from logging.handlers import SysLogHandler
 
 
-def get_env_list(name):
+def get_env_list(name, default=None):
     """Helper to get list from environment."""
-    if os.environ.get(name):
+    if os.environ.get(name, default):
         return os.environ[name].split(',')
     return []
 
@@ -738,7 +738,7 @@ SERVER_EMAIL = os.environ['WEBLATE_SERVER_EMAIL']
 DEFAULT_FROM_EMAIL = os.environ['WEBLATE_DEFAULT_FROM_EMAIL']
 
 # List of URLs your site is supposed to serve
-ALLOWED_HOSTS = os.environ.get('WEBLATE_ALLOWED_HOSTS', '*').split(',')
+ALLOWED_HOSTS = get_env_list('WEBLATE_ALLOWED_HOSTS', '*')
 
 # Example configuration to use memcached for caching
 CACHES = {
