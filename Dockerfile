@@ -1,6 +1,6 @@
 FROM debian:stretch
 MAINTAINER Michal Čihař <michal@cihar.com>
-ENV VERSION 2.19.1
+ENV VERSION 2.20
 LABEL version=$VERSION
 
 # Add user early to get a consistent userid
@@ -40,6 +40,7 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     python-rcssmin \
     python-rjsmin \
     python-ldap \
+    python-levenshtein \
     gettext \
     postgresql-client \
     mercurial \
