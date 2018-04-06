@@ -39,7 +39,6 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     python-dateutil \
     python-rcssmin \
     python-rjsmin \
-    python-ldap \
     python-levenshtein \
     gettext \
     postgresql-client \
@@ -52,6 +51,9 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     libxmlsec1-dev \
     libleptonica-dev \
     libtesseract-dev \
+    libsasl2-dev \
+    libldap2-dev \
+    libssl-dev \
     cython \
     gcc \
     g++ \
@@ -60,7 +62,18 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && rm /tmp/requirements.txt \
   && rm -rf /root/.cache \
-  && apt-get -y purge python-dev libleptonica-dev libtesseract-dev libxml2-dev libxmlsec1-dev cython gcc g++ \
+  && apt-get -y purge \
+    python-dev \
+    libleptonica-dev \
+    libtesseract-dev \
+    libxml2-dev \
+    libxmlsec1-dev \
+    cython \
+    gcc \
+    g++ \
+    libsasl2-dev \
+    libldap2-dev \
+    libssl-dev \
   && apt-get -y autoremove \
   && apt-get clean
 
