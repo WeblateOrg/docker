@@ -16,7 +16,7 @@ ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 
 COPY requirements.txt /tmp/requirements.txt
-COPY crontab.txt /app/crontab.txt
+COPY crontab.txt /tmp/crontab.txt
 
 # Install dependencies
 RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
