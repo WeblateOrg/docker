@@ -58,6 +58,7 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     gcc \
     g++ \
     tesseract-ocr \
+    cron \
   && pip install Weblate==$VERSION -r /tmp/requirements.txt \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && rm /tmp/requirements.txt \
@@ -94,9 +95,12 @@ COPY supervisor.conf /etc/supervisor/conf.d/
 
 # Entrypoint
 ADD start /app/bin/
-RUN chmod a+rx /app/bin/start
+COPY crontab.txt /app/crontab.txt
+RUN chmod a+rx /app/bin/start \
+    && crontab -u weblate /app/crontab.txt
 
 ENV DJANGO_SETTINGS_MODULE weblate.settings
+ENV WEBLATE_OFFLOAD_INDEXING 1
 
 EXPOSE 80
 ENTRYPOINT ["/app/bin/start"]

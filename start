@@ -59,6 +59,8 @@ if [ ! -f /app/data/secret ] ; then
     python -c "from django.utils.crypto import get_random_string; print get_random_string(50)" > /app/data/secret
 fi
 
+export | grep -E 'WEBLATE_|POSTGRES_|DJANGO_|MEMCACHED_' > /etc/profile.d/weblate.sh
+
 # Migrate database to current version and collect static files
 if [ "x$1" = "xrunserver" ] ; then
     run_weblate migrate
