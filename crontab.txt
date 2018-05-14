@@ -4,5 +4,5 @@
 # Cleanup stale objects
 @weekly . /etc/profile.d/weblate.sh; /usr/local/bin/weblate cleanuptrans
 
-# Commit pending changes after 96 hours
-@hourly . /etc/profile.d/weblate.sh; /usr/local/bin/weblate commit_pending --all --age=96
+# Commit pending changes
+@hourly . /etc/profile.d/weblate.sh; /usr/local/bin/weblate commit_pending --all
