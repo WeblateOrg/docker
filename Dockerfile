@@ -60,8 +60,7 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     tesseract-ocr \
   && pip install Weblate==$VERSION -r /tmp/requirements.txt \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
-  && rm /tmp/requirements.txt \
-  && rm -rf /root/.cache \
+  && rm -rf /root/.cache /tmp/* \
   && apt-get -y purge \
     python-dev \
     libleptonica-dev \
