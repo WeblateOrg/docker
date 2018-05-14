@@ -2,7 +2,7 @@
 */5 * * * * . /etc/profile.d/weblate.sh; /usr/local/bin/weblate update_index
 
 # Cleanup stale objects
-@daily . /etc/profile.d/weblate.sh; /usr/local/bin/weblate cleanuptrans
+@weekly . /etc/profile.d/weblate.sh; /usr/local/bin/weblate cleanuptrans
 
 # Commit pending changes after 96 hours
 @hourly . /etc/profile.d/weblate.sh; /usr/local/bin/weblate commit_pending --all --age=96
