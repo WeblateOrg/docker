@@ -17,6 +17,7 @@ ENV LC_ALL C.UTF-8
 
 COPY requirements.txt /tmp/requirements.txt
 COPY crontab.txt /tmp/crontab.txt
+COPY Make-tests-work-even-with-UPDATE_INDEX-True.patch /tmp/
 
 # Install dependencies
 RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
@@ -62,6 +63,8 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     cron \
   && pip install Weblate==$VERSION -r /tmp/requirements.txt \
   && crontab -u weblate /tmp/crontab.txt \
+  && cd /usr/local/lib/python2.7/dist-packages/ \
+  && patch -p1 < /tmp/Make-tests-work-even-with-UPDATE_INDEX-True.patch \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && rm -rf /root/.cache /tmp/* \
   && apt-get -y purge \
