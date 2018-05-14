@@ -61,7 +61,7 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     tesseract-ocr \
     cron \
   && pip install Weblate==$VERSION -r /tmp/requirements.txt \
-  && crontab -u weblate /app/crontab.txt \
+  && crontab -u weblate /tmp/crontab.txt \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && rm -rf /root/.cache /tmp/* \
   && apt-get -y purge \
