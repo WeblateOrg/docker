@@ -59,6 +59,7 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     gcc \
     g++ \
     tesseract-ocr \
+    patch \
     cron \
   && pip install Weblate==$VERSION -r /tmp/requirements.txt \
   && crontab -u weblate /tmp/crontab.txt \
@@ -77,6 +78,7 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     g++ \
     libsasl2-dev \
     libldap2-dev \
+    patch \
     libssl-dev \
   && apt-get -y autoremove \
   && apt-get clean
