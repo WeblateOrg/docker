@@ -99,7 +99,6 @@ COPY start /app/bin/
 RUN chmod a+rx /app/bin/start
 
 ENV DJANGO_SETTINGS_MODULE weblate.settings
-ENV WEBLATE_OFFLOAD_INDEXING 1
 
 EXPOSE 80
 ENTRYPOINT ["/app/bin/start"]

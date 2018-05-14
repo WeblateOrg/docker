@@ -660,7 +660,7 @@ BACKGROUND_HOOKS = True
 NEARBY_MESSAGES = 5
 
 # Offload indexing
-OFFLOAD_INDEXING = os.environ.get('WEBLATE_OFFLOAD_INDEXING', '0') == '1'
+OFFLOAD_INDEXING = os.environ.get('WEBLATE_OFFLOAD_INDEXING', '1') == '1'
 
 # Use simple language codes for default language/country combinations
 SIMPLIFY_LANGUAGES = os.environ.get('WEBLATE_SIMPLIFY_LANGUAGES', '1') == '1'
