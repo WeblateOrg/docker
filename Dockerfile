@@ -15,7 +15,7 @@ RUN useradd --shell /bin/sh --user-group weblate \
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 
-ADD requirements.txt /tmp/requirements.txt
+COPY requirements.txt /tmp/requirements.txt
 
 # Install dependencies
 RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
@@ -83,7 +83,7 @@ RUN curl -L https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd
   rm -rf hub-linux-amd64-2.2.9
 
 # Settings
-ADD settings.py /app/etc/
+COPY settings.py /app/etc/
 RUN chmod a+r /app/etc/settings.py && \
   ln -s /app/etc/settings.py /usr/local/lib/python2.7/dist-packages/weblate/settings.py
 
@@ -93,7 +93,7 @@ COPY weblate.uwsgi.ini /etc/uwsgi/apps-enabled/weblate.ini
 COPY supervisor.conf /etc/supervisor/conf.d/
 
 # Entrypoint
-ADD start /app/bin/
+COPY start /app/bin/
 RUN chmod a+rx /app/bin/start
 
 ENV DJANGO_SETTINGS_MODULE weblate.settings
