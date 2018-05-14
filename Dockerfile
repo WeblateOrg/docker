@@ -15,8 +15,7 @@ RUN useradd --shell /bin/sh --user-group weblate \
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 
-COPY requirements.txt /tmp/requirements.txt
-COPY crontab.txt /tmp/crontab.txt
+COPY requirements.txt crontab.txt /tmp/
 COPY Make-tests-work-even-with-UPDATE_INDEX-True.patch /tmp/
 
 # Install dependencies
