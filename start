@@ -5,6 +5,8 @@ export PGPASSWORD="$POSTGRES_PASSWORD"
 
 export WEBLATE_CMD="/usr/local/bin/weblate"
 
+chown weblate:weblate /app/data
+
 run_weblate() {
     sudo -u weblate -E $WEBLATE_CMD "$@"
 }
