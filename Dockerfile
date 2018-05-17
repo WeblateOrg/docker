@@ -98,7 +98,6 @@ COPY weblate.nginx.conf /etc/nginx/sites-available/default
 COPY weblate.uwsgi.ini /etc/uwsgi/apps-enabled/weblate.ini
 COPY supervisor.conf /etc/supervisor/conf.d/
 
-
 # Entrypoint
 COPY start /app/bin/
 RUN chmod a+rx /app/bin/start
