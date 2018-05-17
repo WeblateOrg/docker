@@ -94,9 +94,9 @@ RUN chmod a+r /app/etc/settings.py && \
   ln -s /app/etc/settings.py /usr/local/lib/python2.7/dist-packages/weblate/settings.py
 
 # Configuration for nginx, uwsgi and supervisor
+COPY weblate.nginx.conf /etc/nginx/sites-available/default
 COPY weblate.uwsgi.ini /etc/uwsgi/apps-enabled/weblate.ini
-COPY supervisor /etc/supervisor
-COPY nginx /etc/nginx
+COPY supervisor.conf /etc/supervisor/conf.d/
 
 
 # Entrypoint
