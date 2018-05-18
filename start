@@ -5,6 +5,8 @@ export PGPASSWORD="$POSTGRES_PASSWORD"
 
 export WEBLATE_CMD="/usr/local/bin/weblate"
 
+chown weblate:weblate /app/data
+
 run_weblate() {
     sudo -u weblate -E $WEBLATE_CMD "$@"
 }
@@ -72,15 +74,19 @@ if [ "x$1" = "xrunserver" ] ; then
     if [ -n "$WEBLATE_ALLOWED_HOSTS" -a "$WEBLATE_ALLOWED_HOSTS" != '*' ] ; then
         run_weblate changesite --set-name "${WEBLATE_ALLOWED_HOSTS%%,*}"
     fi
-    # Create supervisor log dirs and files
-    LOGFILE=/var/log/supervisor/supervisord.log
-    mkdir -p `dirname $LOGFILE`
-    touch $LOGFILE
+
     # uswgi dir
     mkdir -p /run/uwsgi/app/weblate
     chown weblate:weblate /run/uwsgi/app/weblate
+
+    ln -sf ${NGINX_ACCESS_LOG:-/dev/stdout} /var/log/nginx/access.log
+    ln -sf ${NGINX_ERROR_LOG:-/dev/stderr} /var/log/nginx/error.log
+
     #  Execute supervisor
-    exec supervisord --nodaemon --loglevel=debug
+    exec supervisord --nodaemon \
+        --loglevel=${SUPERVISOR_LOGLEVEL:-info} \
+        --logfile_maxbytes=0 \
+        --logfile=${SUPERVISOR_LOGFILE:-/dev/null}
 fi
 
 # Start the management command
