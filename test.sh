@@ -28,7 +28,6 @@ RET=$?
 curl --verbose --fail --output /dev/null "http://$IP/static/weblate-128.png"
 if [ $? -ne 0 -o $RET -ne 0 ] ; then
     docker-compose logs
-    docker exec $CONTAINER tail /var/log/syslog
     exit 1
 fi
 
