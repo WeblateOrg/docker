@@ -70,7 +70,7 @@ unset PGPASSWORD
 # Generate secret
 if [ ! -f /app/data/secret ] ; then
     # https://github.com/django/django/blob/1.10.2/django/utils/crypto.py#L54-L56
-    python -c "from django.utils.crypto import get_random_string; print get_random_string(50)" > /app/data/secret
+    python3 -c "from django.utils.crypto import get_random_string; print(get_random_string(50))" > /app/data/secret
 fi
 
 export | grep -E 'WEBLATE_|POSTGRES_|DJANGO_|MEMCACHED_' > /etc/profile.d/weblate.sh

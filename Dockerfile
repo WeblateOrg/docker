@@ -24,31 +24,31 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
   && apt-get install --no-install-recommends -y \
     sudo \
     uwsgi \
-    uwsgi-plugin-python \
+    uwsgi-plugin-python3 \
     netcat-openbsd \
     nginx \
     supervisor \
     openssh-client \
     curl \
-    python-pip \
-    python-lxml \
-    python-yaml \
-    python-pillow \
-    python-setuptools \
-    python-wheel \
-    python-psycopg2 \
-    python-dateutil \
-    python-rcssmin \
-    python-rjsmin \
-    python-levenshtein \
-    python-hiredis \
+    python3-pip \
+    python3-lxml \
+    python3-yaml \
+    python3-pillow \
+    python3-setuptools \
+    python3-wheel \
+    python3-psycopg2 \
+    python3-dateutil \
+    python3-rcssmin \
+    python3-rjsmin \
+    python3-levenshtein \
+    python3-hiredis \
     gettext \
     postgresql-client \
     mercurial \
     git \
     git-svn \
     subversion \
-    python-dev \
+    python3-dev \
     libxml2-dev \
     libxmlsec1-dev \
     libleptonica-dev \
@@ -62,14 +62,14 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     tesseract-ocr \
     patch \
     cron \
-  && pip install Weblate==$VERSION -r /tmp/requirements.txt \
+  && pip3 install Weblate==$VERSION -r /tmp/requirements.txt \
   && crontab -u weblate /tmp/crontab.txt \
-  && cd /usr/local/lib/python2.7/dist-packages/ \
+  && cd /usr/local/lib/python3.5/dist-packages/ \
   && patch -p1 < /tmp/Make-tests-work-even-with-UPDATE_INDEX-True.patch \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && rm -rf /root/.cache /tmp/* \
   && apt-get -y purge \
-    python-dev \
+    python3-dev \
     libleptonica-dev \
     libtesseract-dev \
     libxml2-dev \
@@ -92,7 +92,7 @@ RUN curl -L https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd
 # Settings
 COPY settings.py /app/etc/
 RUN chmod a+r /app/etc/settings.py && \
-  ln -s /app/etc/settings.py /usr/local/lib/python2.7/dist-packages/weblate/settings.py
+  ln -s /app/etc/settings.py /usr/local/lib/python3.5/dist-packages/weblate/settings.py
 
 # Configuration for nginx, uwsgi and supervisor
 COPY weblate.nginx.conf /etc/nginx/sites-available/default
