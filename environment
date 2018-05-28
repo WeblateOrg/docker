@@ -44,8 +44,8 @@ POSTGRES_HOST=database
 POSTGRES_PORT=
 
 # Memcached setup
-MEMCACHED_HOST=cache
-MEMCACHED_PORT=11211
+REDIS_HOST=cache
+REDIS_PORT=6379
 
 # Mail server, the server has to listen on port 587 and understand TLS
 WEBLATE_EMAIL_HOST=smtp.gmail.com
