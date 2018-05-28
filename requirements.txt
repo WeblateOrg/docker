@@ -1,4 +1,4 @@
-Django>=1.11,<1.12
+Django>=2.0,<2.1
 siphashc==1.0
 Whoosh>=2.7,<2.8
 translate-toolkit>=2.3,<2.4
@@ -12,10 +12,10 @@ django-appconf==1.0.2
 httpretty==0.9.4
 pyuca==1.2
 pyLibravatar==1.7
-PyDNS==2.3.6
+py3dns==3.1.0
 tesserocr==2.2.2
 akismet==1.0.1
-python-saml==2.4.1
+python3-saml==1.4.1
 python-memcached==1.59
 django-redis==4.9.0
 phply==1.2.4
