@@ -41,6 +41,7 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     python-rcssmin \
     python-rjsmin \
     python-levenshtein \
+    python-hiredis \
     gettext \
     postgresql-client \
     mercurial \

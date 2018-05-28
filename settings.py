@@ -745,13 +745,6 @@ ALLOWED_HOSTS = get_env_list('WEBLATE_ALLOWED_HOSTS', '*')
 
 # Example configuration to use memcached for caching
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '{0}:{1}'.format(
-            os.environ.get('MEMCACHED_HOST', 'cache'),
-            os.environ.get('MEMCACHED_PORT', '11211'),
-        )
-    },
     'avatar': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
         'LOCATION': os.path.join(DATA_DIR, 'avatar-cache'),
@@ -761,6 +754,29 @@ CACHES = {
         },
     }
 }
+
+if 'MEMCACHED_HOST' in os.environ:
+    CACHES['default'] = {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '{0}:{1}'.format(
+            os.environ.get('MEMCACHED_HOST', 'cache'),
+            os.environ.get('MEMCACHED_PORT', '11211'),
+        )
+    }
+else:
+    CACHES['default'] = {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://{0}:{1}/{2}'.format(
+            os.environ.get('REDIS_HOST', 'cache'),
+            os.environ.get('REDIS_PORT', '6379'),
+            os.environ.get('REDIS_DB', '1'),
+        ),
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'PARSER_CLASS': 'redis.connection.HiredisParser',
+        },
+        'KEY_PREFIX': 'weblate',
+    }
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 
