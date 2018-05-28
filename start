@@ -21,16 +21,28 @@ fail_dep() {
     exit 1
 }
 
-# Wait for memcached
-until (echo stats; echo quit) | nc ${MEMCACHED_HOST:-127.0.0.1} ${MEMCACHED_PORT:-11211} > /dev/null 2>&1 ; do
-    >&2 echo "memcached is unavailable - sleeping"
-    TIMEOUT=$(($TIMEOUT + 1))
-    if [ $TIMEOUT -gt 60 ] ; then
-        (echo stats; echo quit) | nc ${MEMCACHED_HOST:-127.0.0.1} ${MEMCACHED_PORT:-11211}
-        fail_dep memcached
-    fi
-    sleep 1
-done
+# Wait for cache (memcached/redis)
+if [ -n "$MEMCACHED_HOST" ] ; then
+    until echo quit | nc ${MEMCACHED_HOST:-cache} ${MEMCACHED_PORT:-11211} > /dev/null 2>&1 ; do
+        >&2 echo "memcached is unavailable - sleeping"
+        TIMEOUT=$(($TIMEOUT + 1))
+        if [ $TIMEOUT -gt 60 ] ; then
+            echo quit | nc ${MEMCACHED_HOST:-cache} ${MEMCACHED_PORT:-11211}
+            fail_dep memcached
+        fi
+        sleep 1
+    done
+else
+    until echo quit | nc ${REDIS_HOST:-cache} ${REDIS_PORT:-6379} > /dev/null 2>&1 ; do
+        >&2 echo "redis is unavailable - sleeping"
+        TIMEOUT=$(($TIMEOUT + 1))
+        if [ $TIMEOUT -gt 60 ] ; then
+            echo quit | nc ${REDIS_HOST:-cache} ${REDIS_PORT:-6379}
+            fail_dep redis
+        fi
+        sleep 1
+    done
+fi
 
 if [ -z "$POSTGRES_HOST" ] ; then
     export POSTGRES_HOST=database
