@@ -26,9 +26,10 @@ from logging.handlers import SysLogHandler
 
 def get_env_list(name, default=None):
     """Helper to get list from environment."""
-    if os.environ.get(name, default):
-        return os.environ[name].split(',')
-    return []
+    if name not in os.environ:
+        return default or []
+    return os.environ[name].split(',')
+
 
 def get_env_map(name, default={}):
     """
@@ -737,7 +738,7 @@ SERVER_EMAIL = os.environ['WEBLATE_SERVER_EMAIL']
 DEFAULT_FROM_EMAIL = os.environ['WEBLATE_DEFAULT_FROM_EMAIL']
 
 # List of URLs your site is supposed to serve
-ALLOWED_HOSTS = get_env_list('WEBLATE_ALLOWED_HOSTS', '*')
+ALLOWED_HOSTS = get_env_list('WEBLATE_ALLOWED_HOSTS', ['*'])
 
 # Example configuration to use memcached for caching
 CACHES = {
