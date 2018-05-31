@@ -812,16 +812,19 @@ if os.environ.get('WEBLATE_REQUIRE_LOGIN', '0') == '1':
     )
 
     # In such case you will want to include some of the exceptions
-    LOGIN_REQUIRED_URLS_EXCEPTIONS = (
-       r'/accounts/(.*)$', # Required for login
-       r'/static/(.*)$',   # Required for development mode
-       r'/widgets/(.*)$',  # Allowing public access to widgets
-       r'/data/(.*)$',     # Allowing public access to data exports
-       r'/hooks/(.*)$',    # Allowing public access to notification hooks
-       r'/api/(.*)$',      # Allowing access to API
-       r'/js/i18n/$',      # Javascript localization
-       r'/contact/$',      # Optional for contact form
-       r'/legal/(.*)$',    # Optional for legal app
+    LOGIN_REQUIRED_URLS_EXCEPTIONS = get_env_list(
+        'WEBLATE_LOGIN_REQUIRED_URLS_EXCEPTIONS',
+        (
+           r'/accounts/(.*)$', # Required for login
+           r'/static/(.*)$',   # Required for development mode
+           r'/widgets/(.*)$',  # Allowing public access to widgets
+           r'/data/(.*)$',     # Allowing public access to data exports
+           r'/hooks/(.*)$',    # Allowing public access to notification hooks
+           r'/api/(.*)$',      # Allowing access to API
+           r'/js/i18n/$',      # Javascript localization
+           r'/contact/$',      # Optional for contact form
+           r'/legal/(.*)$',    # Optional for legal app
+        ),
     )
 
 # Allow registration
