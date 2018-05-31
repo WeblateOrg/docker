@@ -850,3 +850,9 @@ EMAIL_PORT = int(os.environ.get('WEBLATE_EMAIL_PORT', '587'))
 GOOGLE_ANALYTICS_ID = os.environ.get('WEBLATE_GOOGLE_ANALYTICS_ID', '')
 
 AKISMET_API_KEY = os.environ.get('WEBLATE_AKISMET_API_KEY', None)
+
+ADDITIONAL_CONFIG = '/app/data/settings-override.py'
+if os.path.exists(ADDITIONAL_CONFIG):
+    with open(ADDITIONAL_CONFIG) as handle:
+        code = compile(handle.read(), ADDITIONAL_CONFIG, 'exec')
+        exec(code)
