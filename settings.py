@@ -578,7 +578,7 @@ if 'WEBLATE_MT_MICROSOFT_COGNITIVE_KEY' in os.environ:
 
 # MyMemory identification email, see
 # http://mymemory.translated.net/doc/spec.php
-MT_MYMEMORY_EMAIL = None
+MT_MYMEMORY_EMAIL = os.environ['WEBLATE_ADMIN_EMAIL']
 
 # Optional MyMemory credentials to access private translation memory
 MT_MYMEMORY_USER = None
@@ -588,8 +588,8 @@ if 'WEBLATE_MT_MYMEMORY_ENABLED' in os.environ:
     MACHINE_TRANSLATION_SERVICES += ('weblate.trans.machine.mymemory.MyMemoryTranslation',)
 
 if 'WEBLATE_MT_GLOSBE_ENABLED' in os.environ:
-    MACHINE_TRANSLATION_SERVICES += ('weblateweblate.trans.machine.glosbe.GlosbeTranslation',)   
-    
+    MACHINE_TRANSLATION_SERVICES += ('weblateweblate.trans.machine.glosbe.GlosbeTranslation',)
+
 # Google API key for Google Translate API
 MT_GOOGLE_KEY = os.environ.get('WEBLATE_MT_GOOGLE_KEY', None)
 
