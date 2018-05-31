@@ -220,17 +220,10 @@ TEMPLATES = [
 GITHUB_USERNAME = os.environ.get('WEBLATE_GITHUB_USERNAME', None)
 
 # Authentication configuration
-AUTHENTICATION_BACKENDS = (
-    'social_core.backends.email.EmailAuth',
-    # 'social_core.backends.google.GoogleOAuth2',
-    # 'social_core.backends.github.GithubOAuth2',
-    # 'social_core.backends.bitbucket.BitbucketOAuth',
-    # 'social_core.backends.suse.OpenSUSEOpenId',
-    # 'social_core.backends.ubuntu.UbuntuOpenId',
-    # 'social_core.backends.fedora.FedoraOpenId',
-    # 'social_core.backends.facebook.FacebookOAuth2',
-    'weblate.accounts.auth.WeblateUserBackend',
-)
+AUTHENTICATION_BACKENDS = ()
+
+if 'WEBLATE_NO_EMAIL_AUTH' not in os.environ:
+    AUTHENTICATION_BACKENDS += ('social_core.backends.email.EmailAuth',)
 
 if 'WEBLATE_SOCIAL_AUTH_GITHUB_KEY' in os.environ:
     AUTHENTICATION_BACKENDS += ('social_core.backends.github.GithubOAuth2',)
@@ -276,6 +269,9 @@ if 'WEBLATE_AUTH_LDAP_SERVER_URI' in os.environ:
     AUTH_LDAP_USER_DN_TEMPLATE = os.environ.get('WEBLATE_AUTH_LDAP_USER_DN_TEMPLATE', 'cn=%(user)s,o=Example')
     AUTHENTICATION_BACKENDS = ('django_auth_ldap.backend.LDAPBackend', 'weblate.accounts.auth.WeblateUserBackend')
     AUTH_LDAP_USER_ATTR_MAP = get_env_map('WEBLATE_AUTH_LDAP_USER_ATTR_MAP', { 'first_name': 'name', 'email': 'mail' })
+
+# Always include Weblate backend
+AUTHENTICATION_BACKENDS += ('weblate.accounts.auth.WeblateUserBackend',)
 
 # Social auth settings
 SOCIAL_AUTH_PIPELINE = (
