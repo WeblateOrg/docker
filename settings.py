@@ -761,7 +761,8 @@ if 'MEMCACHED_HOST' in os.environ:
         'LOCATION': '{0}:{1}'.format(
             os.environ.get('MEMCACHED_HOST', 'cache'),
             os.environ.get('MEMCACHED_PORT', '11211'),
-        )
+        ),
+        'KEY_PREFIX': 'weblate',
     }
 else:
     CACHES['default'] = {
