@@ -223,6 +223,9 @@ GITHUB_USERNAME = os.environ.get('WEBLATE_GITHUB_USERNAME', None)
 # Authentication configuration
 AUTHENTICATION_BACKENDS = ()
 
+# Custom user model
+AUTH_USER_MODEL = 'weblate_auth.User'
+
 if 'WEBLATE_NO_EMAIL_AUTH' not in os.environ:
     AUTHENTICATION_BACKENDS += ('social_core.backends.email.EmailAuth',)
 
@@ -359,7 +362,7 @@ AUTH_PASSWORD_VALIDATORS = [
     #     'NAME': 'zxcvbn_password.ZXCVBNValidator',
     #     'OPTIONS': {
     #         'min_score': 3,
-    #         'user_attributes': ('username', 'email', 'first_name')
+    #         'user_attributes': ('username', 'email', 'full_name')
     #     }
     # },
 ]
@@ -399,6 +402,10 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'weblate.addons',
+    'weblate.auth',
+    'weblate.checks',
+    'weblate.formats',
+    'weblate.machinery',
     'weblate.trans',
     'weblate.lang',
     'weblate.langdata',
@@ -407,6 +414,7 @@ INSTALLED_APPS = (
     'weblate.screenshots',
     'weblate.accounts',
     'weblate.utils',
+    'weblate.vcs',
     'weblate.wladmin',
     'weblate',
 
@@ -673,36 +681,36 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 # List of quality checks
 # CHECK_LIST = (
-#     'weblate.trans.checks.same.SameCheck',
-#     'weblate.trans.checks.chars.BeginNewlineCheck',
-#     'weblate.trans.checks.chars.EndNewlineCheck',
-#     'weblate.trans.checks.chars.BeginSpaceCheck',
-#     'weblate.trans.checks.chars.EndSpaceCheck',
-#     'weblate.trans.checks.chars.EndStopCheck',
-#     'weblate.trans.checks.chars.EndColonCheck',
-#     'weblate.trans.checks.chars.EndQuestionCheck',
-#     'weblate.trans.checks.chars.EndExclamationCheck',
-#     'weblate.trans.checks.chars.EndEllipsisCheck',
-#     'weblate.trans.checks.chars.EndSemicolonCheck',
-#     'weblate.trans.checks.chars.MaxLengthCheck',
-#     'weblate.trans.checks.format.PythonFormatCheck',
-#     'weblate.trans.checks.format.PythonBraceFormatCheck',
-#     'weblate.trans.checks.format.PHPFormatCheck',
-#     'weblate.trans.checks.format.CFormatCheck',
-#     'weblate.trans.checks.format.PerlFormatCheck',
-#     'weblate.trans.checks.format.JavascriptFormatCheck',
-#     'weblate.trans.checks.consistency.PluralsCheck',
-#     'weblate.trans.checks.consistency.SamePluralsCheck',
-#     'weblate.trans.checks.consistency.ConsistencyCheck',
-#     'weblate.trans.checks.consistency.TranslatedCheck',
-#     'weblate.trans.checks.chars.NewlineCountingCheck',
-#     'weblate.trans.checks.markup.BBCodeCheck',
-#     'weblate.trans.checks.chars.ZeroWidthSpaceCheck',
-#     'weblate.trans.checks.markup.XMLValidityCheck',
-#     'weblate.trans.checks.markup.XMLTagsCheck',
-#     'weblate.trans.checks.source.OptionalPluralCheck',
-#     'weblate.trans.checks.source.EllipsisCheck',
-#     'weblate.trans.checks.source.MultipleFailingCheck',
+#     'weblate.checks.same.SameCheck',
+#     'weblate.checks.chars.BeginNewlineCheck',
+#     'weblate.checks.chars.EndNewlineCheck',
+#     'weblate.checks.chars.BeginSpaceCheck',
+#     'weblate.checks.chars.EndSpaceCheck',
+#     'weblate.checks.chars.EndStopCheck',
+#     'weblate.checks.chars.EndColonCheck',
+#     'weblate.checks.chars.EndQuestionCheck',
+#     'weblate.checks.chars.EndExclamationCheck',
+#     'weblate.checks.chars.EndEllipsisCheck',
+#     'weblate.checks.chars.EndSemicolonCheck',
+#     'weblate.checks.chars.MaxLengthCheck',
+#     'weblate.checks.format.PythonFormatCheck',
+#     'weblate.checks.format.PythonBraceFormatCheck',
+#     'weblate.checks.format.PHPFormatCheck',
+#     'weblate.checks.format.CFormatCheck',
+#     'weblate.checks.format.PerlFormatCheck',
+#     'weblate.checks.format.JavascriptFormatCheck',
+#     'weblate.checks.consistency.PluralsCheck',
+#     'weblate.checks.consistency.SamePluralsCheck',
+#     'weblate.checks.consistency.ConsistencyCheck',
+#     'weblate.checks.consistency.TranslatedCheck',
+#     'weblate.checks.chars.NewlineCountingCheck',
+#     'weblate.checks.markup.BBCodeCheck',
+#     'weblate.checks.chars.ZeroWidthSpaceCheck',
+#     'weblate.checks.markup.XMLValidityCheck',
+#     'weblate.checks.markup.XMLTagsCheck',
+#     'weblate.checks.source.OptionalPluralCheck',
+#     'weblate.checks.source.EllipsisCheck',
+#     'weblate.checks.source.MultipleFailingCheck',
 # )
 
 # List of automatic fixups
@@ -720,21 +728,16 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 #     'weblate.addons.gettext.UpdateConfigureAddon',
 #     'weblate.addons.gettext.MsgmergeAddon',
 #     'weblate.addons.gettext.GettextCustomizeAddon',
+#     'weblate.addons.gettext.GettextAuthorComments',
 #     'weblate.addons.cleanup.CleanupAddon',
+#     'weblate.addons.consistency.LangaugeConsistencyAddon',
+#     'weblate.addons.discovery.DiscoveryAddon',
 #     'weblate.addons.flags.SourceEditAddon',
 #     'weblate.addons.flags.TargetEditAddon',
-#     'weblate.addons.json.JSONCustomizeAddon',
 #     'weblate.addons.generate.GenerateFileAddon',
+#     'weblate.addons.json.JSONCustomizeAddon',
 #     'weblate.addons.properties.PropertiesSortAddon',
 # )
-
-
-# List of scripts to use in custom processing
-POST_UPDATE_SCRIPTS = get_env_list('WEBLATE_POST_UPDATE_SCRIPTS')
-PRE_COMMIT_SCRIPTS = get_env_list('WEBLATE_PRE_COMMIT_SCRIPTS')
-POST_COMMIT_SCRIPTS = get_env_list('WEBLATE_POST_COMMIT_SCRIPTS')
-POST_PUSH_SCRIPTS = get_env_list('WEBLATE_POST_PUSH_SCRIPTS')
-POST_ADD_SCRIPTS = get_env_list('WEBLATE_POST_ADD_SCRIPTS')
 
 # E-mail address that error messages come from.
 SERVER_EMAIL = os.environ['WEBLATE_SERVER_EMAIL']
@@ -809,7 +812,7 @@ REST_FRAMEWORK = {
     ),
     'PAGE_SIZE': 20,
     'VIEW_DESCRIPTION_FUNCTION': 'weblate.api.views.get_view_description',
-    'UNAUTHENTICATED_USER': 'weblate.accounts.models.get_anonymous',
+    'UNAUTHENTICATED_USER': 'weblate.auth.models.get_anonymous',
 }
 
 if os.environ.get('WEBLATE_REQUIRE_LOGIN', '0') == '1':
