@@ -16,6 +16,7 @@ ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 
 COPY requirements.txt crontab.txt /tmp/
+COPY Fix-running-tests-without-billing-app.patch /tmp/
 
 # Install dependencies
 RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
@@ -58,11 +59,13 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     cython \
     gcc \
     g++ \
-    tesseract-ocr \
+    tesseract-ocr \ 
+    patch \
     cron \
   && pip3 install Weblate==$VERSION -r /tmp/requirements.txt \
   && crontab -u weblate /tmp/crontab.txt \
   && cd /usr/local/lib/python3.5/dist-packages/ \
+  && patch -p1 < /tmp/Fix-running-tests-without-billing-app.patch \  
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && rm -rf /root/.cache /tmp/* \
   && apt-get -y purge \
@@ -77,6 +80,7 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     libsasl2-dev \
     libldap2-dev \
     libssl-dev \
+    patch \
   && apt-get -y autoremove \
   && apt-get clean
 
