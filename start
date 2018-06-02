@@ -79,11 +79,13 @@ export | grep -E 'WEBLATE_|POSTGRES_|DJANGO_|MEMCACHED_' > /etc/profile.d/weblat
 if [ "x$1" = "xrunserver" ] ; then
 
     # Migration to 3.0
-    if run_weblate showmigrations --plan | grep -Fq '[ ]  weblate_auth.0001_initial' ; then
+    run_weblate showmigrations --plan > /tmp/migrations.txt
+    if  grep -Fq '[X]  auth.0001_initial' /tmp/migrations.txt && grep -Fq '[ ]  weblate_auth.0001_initial' /tmp/migrations.txt ; then
         sed -i 's/^AUTH_USER_MODEL/#AUTH_USER_MODEL/' /app/etc/settings.py
         run_weblate migrate weblate_auth 0001
         sed -i 's/^#AUTH_USER_MODEL/AUTH_USER_MODEL/' /app/etc/settings.py
     fi
+    rm /tmp/migrations.txt
 
     run_weblate migrate
     run_weblate collectstatic --noinput
