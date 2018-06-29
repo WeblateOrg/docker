@@ -16,7 +16,7 @@ ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 
 COPY requirements.txt crontab.txt /tmp/
-COPY 0001-Invalidate-per-project-cache-on-start.patch 0002-Make-userdata-migration-keep-even-non-existing-langu.patch 0003-Allow-to-install-multi-addon-multiple-times.patch /tmp/
+COPY 0001-Invalidate-per-project-cache-on-start.patch 0002-Make-userdata-migration-keep-even-non-existing-langu.patch 0003-Allow-to-install-multi-addon-multiple-times.patch 0004-Remove-unique-constraint-on-addons.patch /tmp/
 
 # Install dependencies
 RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
@@ -68,6 +68,7 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
   && patch -p1 < /tmp/0001-Invalidate-per-project-cache-on-start.patch \
   && patch -p1 < /tmp/0002-Make-userdata-migration-keep-even-non-existing-langu.patch \
   && patch -p1 < /tmp/0003-Allow-to-install-multi-addon-multiple-times.patch \
+  && patch -p1 < /tmp/0004-Remove-unique-constraint-on-addons.patch \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && rm -rf /root/.cache /tmp/* \
   && apt-get -y purge \
