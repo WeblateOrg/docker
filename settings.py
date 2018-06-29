@@ -267,6 +267,13 @@ SOCIAL_AUTH_GITLAB_KEY = os.environ.get('WEBLATE_SOCIAL_AUTH_GITLAB_KEY', '')
 SOCIAL_AUTH_GITLAB_SECRET = os.environ.get('WEBLATE_SOCIAL_AUTH_GITLAB_SECRET', '')
 SOCIAL_AUTH_GITLAB_SCOPE = ['api']
 
+# Azure
+if 'WEBLATE_SOCIAL_AUTH_AZUREAD_OAUTH2_KEY' in os.environ:
+    AUTHENTICATION_BACKENDS += ('social_core.backends.azuread.AzureADOAuth2',)
+
+SOCIAL_AUTH_AZUREAD_OAUTH2_KEY = os.environ.get('WEBLATE_SOCIAL_AUTH_AZUREAD_OAUTH2_KEY', '')
+SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET = os.environ.get('WEBLATE_SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET', '')
+
 # https://docs.weblate.org/en/latest/admin/auth.html#ldap-authentication
 if 'WEBLATE_AUTH_LDAP_SERVER_URI' in os.environ:
     AUTH_LDAP_SERVER_URI = os.environ.get('WEBLATE_AUTH_LDAP_SERVER_URI')
