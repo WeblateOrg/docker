@@ -16,7 +16,7 @@ ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 
 COPY requirements.txt crontab.txt /tmp/
-COPY 0001-Invalidate-per-project-cache-on-start.patch /tmp/
+COPY 0001-Invalidate-per-project-cache-on-start.patch 0002-Make-userdata-migration-keep-even-non-existing-langu.patch /tmp/
 
 # Install dependencies
 RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
@@ -66,6 +66,7 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
   && crontab -u weblate /tmp/crontab.txt \
   && cd /usr/local/lib/python3.5/dist-packages/ \
   && patch -p1 < /tmp/0001-Invalidate-per-project-cache-on-start.patch \
+  && patch -p1 < /tmp/0002-Make-userdata-migration-keep-even-non-existing-langu.patch \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && rm -rf /root/.cache /tmp/* \
   && apt-get -y purge \
