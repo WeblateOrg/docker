@@ -23,8 +23,11 @@ services:
       - postgres-data:/var/lib/postgresql/data
     restart: always
   cache:
-    image: memcached:1.5-alpine
+    image: redis:4-alpine
     restart: always
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
   https-portal:
     image: steveltn/https-portal:1
     ports:
@@ -38,3 +41,4 @@ services:
 volumes:
   weblate-data: {}
   postgres-data: {}
+  redis-data: {}
