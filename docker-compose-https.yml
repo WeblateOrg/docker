@@ -38,6 +38,7 @@ services:
     restart: always
     environment:
       STAGE: production
+      PROXY_READ_TIMEOUT: 3600
 volumes:
   weblate-data: {}
   postgres-data: {}
