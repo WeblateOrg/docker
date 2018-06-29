@@ -833,6 +833,7 @@ if os.environ.get('WEBLATE_REQUIRE_LOGIN', '0') == '1':
         'WEBLATE_LOGIN_REQUIRED_URLS_EXCEPTIONS',
         (
            r'/accounts/(.*)$', # Required for login
+           r'/admin/login/(.*)$', # Required for admin login
            r'/static/(.*)$',   # Required for development mode
            r'/widgets/(.*)$',  # Allowing public access to widgets
            r'/data/(.*)$',     # Allowing public access to data exports
