@@ -43,14 +43,6 @@ https://docs.weblate.org/en/latest/admin/deployments.html#docker
 
 4. For more detailed instructions visit https://docs.weblate.org/en/latest/admin/deployments.html#docker
 
-## Maintenance tasks
-
-There are some cron jobs to run. You should set `WEBLATE_OFFLOAD_INDEXING=1` when these are setup
-
-    */5 * * * * cd /usr/share/weblate/; docker-compose run --rm weblate update_index
-    @daily cd /usr/share/weblate/; docker-compose run --rm weblate cleanuptrans
-    @hourly cd /usr/share/weblate-docker/; docker-compose run --rm weblate commit_pending --all --age=96
-
 ## Rebuilding the weblate docker image
 
 The `docker-compose` files can be found in the `master` branch of https://github.com/WeblateOrg/docker.
