@@ -43,7 +43,8 @@ POSTGRES_DATABASE=weblate
 POSTGRES_HOST=database
 POSTGRES_PORT=
 
-# Memcached setup
+# Cache setup
+# https://docs.weblate.org/en/latest/admin/install.html#production-cache
 REDIS_HOST=cache
 REDIS_PORT=6379
 
