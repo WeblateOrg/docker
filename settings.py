@@ -40,7 +40,7 @@ def get_env_map(name, default={}):
     """
     if os.environ.get(name):
         return dict(e.split(':') for e in os.environ[name].split(','))
-    return {}
+    return default
 
 #
 # Django settings for Weblate project.
