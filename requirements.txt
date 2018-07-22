@@ -18,6 +18,7 @@ python-memcached==1.59
 django-redis==4.9.0
 phply==1.2.4
 django-auth-ldap==1.7.0
+rollbar
 # Following are installed using apt:
 # Pillow
 # lxml

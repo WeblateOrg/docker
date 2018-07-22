@@ -22,6 +22,8 @@ from __future__ import unicode_literals
 import platform
 import os
 from logging.handlers import SysLogHandler
+from django.core.exceptions import PermissionDenied
+from django.http import Http404
 
 
 def get_env_list(name, default=None):
@@ -389,6 +391,23 @@ MIDDLEWARE = [
     'weblate.middleware.SecurityMiddleware',
     'weblate.wladmin.middleware.ConfigurationErrorsMiddleware',
 ]
+
+# Rollbar integration
+if 'ROLLBAR_KEY' in os.environ:
+    MIDDLEWARE.append(
+        'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
+    )
+
+    ROLLBAR = {
+        'access_token': os.environ['ROLLBAR_KEY'],
+        'environment': os.environ.get('ROLLBAR_ENVIRONMENT', 'production'),
+        'branch': 'master',
+        'root': '/usr/local/lib/python3.5/dist-packages/weblate/',
+        'exception_level_filters': [
+             (PermissionDenied, 'ignored'),
+             (Http404, 'ignored'),
+        ],
+    }
 
 ROOT_URLCONF = 'weblate.urls'
 
