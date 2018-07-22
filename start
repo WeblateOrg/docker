@@ -84,11 +84,11 @@ if [ "x$1" = "xrunserver" ] ; then
         sed -i 's/^AUTH_USER_MODEL/#AUTH_USER_MODEL/' /app/etc/settings.py
         run_weblate migrate weblate_auth 0001
         sed -i 's/^#AUTH_USER_MODEL/AUTH_USER_MODEL/' /app/etc/settings.py
-        rm -rf /app/data/avatar-cache/*
     fi
     rm /tmp/migrations.txt
 
     run_weblate migrate
+    run_weblate cleanup_avatar_cache
     run_weblate collectstatic --noinput
     if [ -n "$WEBLATE_ADMIN_PASSWORD" ] ; then
         # This will fail on consequent runs
