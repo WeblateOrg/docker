@@ -642,8 +642,20 @@ CSRF_COOKIE_SECURE = ENABLE_HTTPS
 # Store CSRF token in session (since Django 1.11)
 CSRF_USE_SESSIONS = True
 SESSION_COOKIE_SECURE = ENABLE_HTTPS
+# SSL redirect
+SECURE_SSL_REDIRECT = ENABLE_HTTPS
 # Session cookie age (in seconds)
 SESSION_COOKIE_AGE = 1209600
+
+# Some security headers
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Optionally enable HSTS
+SECURE_HSTS_SECONDS = 0
+SECURE_HSTS_PRELOAD = False
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False
 
 # URL of login
 LOGIN_URL = '{0}/accounts/login/'.format(URL_PREFIX)
@@ -658,8 +670,8 @@ LOGIN_REDIRECT_URL = '{0}/'.format(URL_PREFIX)
 ANONYMOUS_USER_NAME = 'anonymous'
 
 # Reverse proxy settings
-IP_PROXY_HEADER = os.environ.get('WEBLATE_IP_PROXY_HEADER', '')
 IP_BEHIND_REVERSE_PROXY = bool(IP_PROXY_HEADER)
+IP_PROXY_HEADER = os.environ.get('WEBLATE_IP_PROXY_HEADER', '')
 IP_PROXY_OFFSET = 0
 
 # Sending HTML in mails
@@ -832,16 +844,17 @@ if os.environ.get('WEBLATE_REQUIRE_LOGIN', '0') == '1':
     LOGIN_REQUIRED_URLS_EXCEPTIONS = get_env_list(
         'WEBLATE_LOGIN_REQUIRED_URLS_EXCEPTIONS',
         (
-           r'/accounts/(.*)$', # Required for login
-           r'/admin/login/(.*)$', # Required for admin login
-           r'/static/(.*)$',   # Required for development mode
-           r'/widgets/(.*)$',  # Allowing public access to widgets
-           r'/data/(.*)$',     # Allowing public access to data exports
-           r'/hooks/(.*)$',    # Allowing public access to notification hooks
-           r'/api/(.*)$',      # Allowing access to API
-           r'/js/i18n/$',      # Javascript localization
-           r'/contact/$',      # Optional for contact form
-           r'/legal/(.*)$',    # Optional for legal app
+           r'/accounts/(.*)$',      # Required for login
+           r'/admin/login/(.*)$',   # Required for admin login
+           r'/static/(.*)$',        # Required for development mode
+           r'/widgets/(.*)$',       # Allowing public access to widgets
+           r'/data/(.*)$',          # Allowing public access to data exports
+           r'/hooks/(.*)$',         # Allowing public access to notification hooks
+           r'/healthz/$',           # Allowing public access to health check
+           r'/api/(.*)$',           # Allowing access to API
+           r'/js/i18n/$',           # Javascript localization
+           r'/contact/$',           # Optional for contact form
+           r'/legal/(.*)$',         # Optional for legal app
         ),
     )
 
