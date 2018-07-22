@@ -31,7 +31,7 @@ def get_env_list(name, default=None):
     return os.environ[name].split(',')
 
 
-def get_env_map(name, default={}):
+def get_env_map(name, default=None):
     """
     Helper to get mapping from environment.
 
@@ -40,7 +40,7 @@ def get_env_map(name, default={}):
     """
     if os.environ.get(name):
         return dict(e.split(':') for e in os.environ[name].split(','))
-    return default
+    return default or {}
 
 #
 # Django settings for Weblate project.
