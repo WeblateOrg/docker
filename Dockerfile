@@ -5,10 +5,6 @@ LABEL version=$VERSION
 
 # Add user early to get a consistent userid
 RUN useradd --shell /bin/sh --user-group weblate \
-  && mkdir -p /home/weblate/.ssh \
-  && touch /home/weblate/.ssh/authorized_keys \
-  && chown -R weblate:weblate /home/weblate \
-  && chmod 700 /home/weblate/.ssh \
   && install -d -o weblate -g weblate -m 755 /app/data
 
 # Configure utf-8 locales
