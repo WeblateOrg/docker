@@ -57,8 +57,8 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        # Use 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # Use 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.postgresql',
         # Database name or path to database file if using sqlite3.
         'NAME': os.environ['POSTGRES_DATABASE'],
         # Use same database for tests (needed as Docker MySQL can
