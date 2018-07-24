@@ -12,7 +12,6 @@ ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 
 COPY requirements.txt crontab.txt /usr/src/weblate/
-COPY patches /usr/src/weblate/
 
 # Install dependencies
 RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
@@ -60,8 +59,6 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     cron \
   && pip3 install Weblate==$VERSION -r /usr/src/weblate/requirements.txt \
   && crontab -u weblate /usr/src/weblate/crontab.txt \
-  && cd /usr/local/lib/python3.5/dist-packages/ \
-  && cat /usr/src/weblate/*.patch | patch -p1 \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && rm -rf /root/.cache /tmp/* \
   && apt-get -y purge \
@@ -71,7 +68,6 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     libxml2-dev \
     libxmlsec1-dev \
     cython \
-    patch \
     gcc \
     g++ \
     libsasl2-dev \
@@ -89,6 +85,10 @@ RUN curl -L https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd
 COPY settings.py /app/etc/
 RUN chmod a+r /app/etc/settings.py && \
   ln -s /app/etc/settings.py /usr/local/lib/python3.5/dist-packages/weblate/settings.py
+
+# Apply hotfixes
+COPY patches /usr/src/weblate/
+RUN cat /usr/src/weblate/*.patch | patch -p1 -d /usr/local/lib/python3.5/dist-packages/
 
 # Configuration for nginx, uwsgi and supervisor
 COPY weblate.nginx.conf /etc/nginx/sites-available/default
