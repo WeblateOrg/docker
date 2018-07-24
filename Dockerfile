@@ -61,13 +61,7 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
   && pip3 install Weblate==$VERSION -r /usr/src/weblate/requirements.txt \
   && crontab -u weblate /usr/src/weblate/crontab.txt \
   && cd /usr/local/lib/python3.5/dist-packages/ \
-  && patch -p1 < /usr/src/weblate/0001-Invalidate-per-project-cache-on-start.patch \
-  && patch -p1 < /usr/src/weblate/0002-Make-userdata-migration-keep-even-non-existing-langu.patch \
-  && patch -p1 < /usr/src/weblate/0003-Allow-to-install-multi-addon-multiple-times.patch \
-  && patch -p1 < /usr/src/weblate/0004-Remove-unique-constraint-on-addons.patch \
-  && patch -p1 < /usr/src/weblate/0005-Fix-permission-check-for-auto-translate.patch \
-  && patch -p1 < /usr/src/weblate/0006-Add-avatar-cache-cleanup-management-command.patch \
-  && patch -p1 < /usr/src/weblate/social-fix-openid.patch \
+  && cat /usr/src/weblate/*.patch | patch -p1 \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && rm -rf /root/.cache /tmp/* \
   && apt-get -y purge \
