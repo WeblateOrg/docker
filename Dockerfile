@@ -11,8 +11,8 @@ RUN useradd --shell /bin/sh --user-group weblate \
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 
-COPY requirements.txt crontab.txt /tmp/
-COPY 0001-Invalidate-per-project-cache-on-start.patch 0002-Make-userdata-migration-keep-even-non-existing-langu.patch 0003-Allow-to-install-multi-addon-multiple-times.patch 0004-Remove-unique-constraint-on-addons.patch 0005-Fix-permission-check-for-auto-translate.patch 0006-Add-avatar-cache-cleanup-management-command.patch social-fix-openid.patch /tmp/
+COPY requirements.txt crontab.txt /usr/src/weblate/
+COPY patches /usr/src/weblate/
 
 # Install dependencies
 RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
@@ -58,16 +58,16 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     tesseract-ocr \ 
     patch \
     cron \
-  && pip3 install Weblate==$VERSION -r /tmp/requirements.txt \
-  && crontab -u weblate /tmp/crontab.txt \
+  && pip3 install Weblate==$VERSION -r /usr/src/weblate/requirements.txt \
+  && crontab -u weblate /usr/src/weblate/crontab.txt \
   && cd /usr/local/lib/python3.5/dist-packages/ \
-  && patch -p1 < /tmp/0001-Invalidate-per-project-cache-on-start.patch \
-  && patch -p1 < /tmp/0002-Make-userdata-migration-keep-even-non-existing-langu.patch \
-  && patch -p1 < /tmp/0003-Allow-to-install-multi-addon-multiple-times.patch \
-  && patch -p1 < /tmp/0004-Remove-unique-constraint-on-addons.patch \
-  && patch -p1 < /tmp/0005-Fix-permission-check-for-auto-translate.patch \
-  && patch -p1 < /tmp/0006-Add-avatar-cache-cleanup-management-command.patch \
-  && patch -p1 < /tmp/social-fix-openid.patch \
+  && patch -p1 < /usr/src/weblate/0001-Invalidate-per-project-cache-on-start.patch \
+  && patch -p1 < /usr/src/weblate/0002-Make-userdata-migration-keep-even-non-existing-langu.patch \
+  && patch -p1 < /usr/src/weblate/0003-Allow-to-install-multi-addon-multiple-times.patch \
+  && patch -p1 < /usr/src/weblate/0004-Remove-unique-constraint-on-addons.patch \
+  && patch -p1 < /usr/src/weblate/0005-Fix-permission-check-for-auto-translate.patch \
+  && patch -p1 < /usr/src/weblate/0006-Add-avatar-cache-cleanup-management-command.patch \
+  && patch -p1 < /usr/src/weblate/social-fix-openid.patch \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && rm -rf /root/.cache /tmp/* \
   && apt-get -y purge \
