@@ -10,6 +10,7 @@ You can use following tags on Docker hub:
 
 * `latest` - latest stable release
 * `edge` - bleeding edge docker image (contains stable Weblate, but the Docker image changes might not yet be fully tested)
+* specific tag from [weblate/weblate](https://hub.docker.com/r/weblate/weblate/tags/) image
 
 ## Documentation
 
