@@ -21,6 +21,7 @@ django-auth-ldap==1.7.0
 rollbar
 setuptools
 jellyfish==0.6.1
+selenium
 # Following are installed using apt:
 # Pillow
 # lxml
