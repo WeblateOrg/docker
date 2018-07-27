@@ -81,11 +81,9 @@ if [ "x$1" = "xrunserver" ] ; then
     # Migration to 3.0
     run_weblate showmigrations --plan > /tmp/migrations.txt
     if  grep -Fq '[X]  auth.0001_initial' /tmp/migrations.txt && grep -Fq '[ ]  weblate_auth.0001_initial' /tmp/migrations.txt ; then
-        sed -i 's/^AUTH_USER_MODEL/#AUTH_USER_MODEL/' /app/etc/settings.py
-        # To avoid problems when migrating from old version
-        run_weblate migrate lang
-        run_weblate migrate weblate_auth 0001
-        sed -i 's/^#AUTH_USER_MODEL/AUTH_USER_MODEL/' /app/etc/settings.py
+        echo "Migration from this version is not supported!"
+        echo "Please upgrade to 3.0.1-6 first."
+        exit 1
     fi
     rm /tmp/migrations.txt
 
