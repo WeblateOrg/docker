@@ -578,18 +578,18 @@ if not HAVE_SYSLOG:
 
 # List of machine translations
 MT_SERVICES = (
-#     'weblate.trans.machine.apertium.ApertiumAPYTranslation',
-#     'weblate.trans.machine.deepl.DeepLTranslation',
-#     'weblate.trans.machine.glosbe.GlosbeTranslation',
-#     'weblate.trans.machine.google.GoogleTranslation',
-#     'weblate.trans.machine.microsoft.MicrosoftCognitiveTranslation',
-#     'weblate.trans.machine.mymemory.MyMemoryTranslation',
-#     'weblate.trans.machine.tmserver.AmagamaTranslation',
-#     'weblate.trans.machine.tmserver.TMServerTranslation',
-#     'weblate.trans.machine.yandex.YandexTranslation',
-    'weblate.trans.machine.weblatetm.WeblateTranslation',
-#     'weblate.trans.machine.saptranslationhub.SAPTranslationHub',
-    'weblate.memory.machine.WeblateMemory',
+#     'weblate.machinery.apertium.ApertiumAPYTranslation',
+#     'weblate.machinery.deepl.DeepLTranslation',
+#     'weblate.machinery.glosbe.GlosbeTranslation',
+#     'weblate.machinery.google.GoogleTranslation',
+#     'weblate.machinery.microsoft.MicrosoftCognitiveTranslation',
+#     'weblate.machinery.mymemory.MyMemoryTranslation',
+#     'weblate.machinery.tmserver.AmagamaTranslation',
+#     'weblate.machinery.tmserver.TMServerTranslation',
+#     'weblate.machinery.yandex.YandexTranslation',
+     'weblate.machinery.weblatetm.WeblateTranslation',
+#     'weblate.machinery.saptranslationhub.SAPTranslationHub',
+     'weblate.memory.machine.WeblateMemory'
 )
 
 # Machine translation API keys
@@ -600,14 +600,14 @@ MT_APERTIUM_APY = None
 # DeepL API key
 MT_DEEPL_KEY = os.environ.get('WEBLATE_MT_DEEPL_KEY', None)
 if MT_DEEPL_KEY:
-    MACHINE_TRANSLATION_SERVICES += ('weblate.trans.machine.deepl.DeepLTranslation',)
+    MT_SERVICES += ('weblate.machinery.deepl.DeepLTranslation',)
 
 # Microsoft Cognitive Services Translator API, register at
 # https://portal.azure.com/
 MT_MICROSOFT_COGNITIVE_KEY = os.environ.get('WEBLATE_MT_MICROSOFT_COGNITIVE_KEY', None)
 
 if 'WEBLATE_MT_MICROSOFT_COGNITIVE_KEY' in os.environ:
-    MACHINE_TRANSLATION_SERVICES += ('weblate.trans.machine.microsoft.MicrosoftCognitiveTranslation',)
+    MT_SERVICES += ('weblate.machinery.microsoft.MicrosoftCognitiveTranslation',)
 
 # MyMemory identification email, see
 # http://mymemory.translated.net/doc/spec.php
@@ -618,16 +618,16 @@ MT_MYMEMORY_USER = None
 MT_MYMEMORY_KEY = None
 
 if 'WEBLATE_MT_MYMEMORY_ENABLED' in os.environ:
-    MACHINE_TRANSLATION_SERVICES += ('weblate.trans.machine.mymemory.MyMemoryTranslation',)
+    MT_SERVICES += ('weblate.machinery.mymemory.MyMemoryTranslation',)
 
 if 'WEBLATE_MT_GLOSBE_ENABLED' in os.environ:
-    MACHINE_TRANSLATION_SERVICES += ('weblateweblate.trans.machine.glosbe.GlosbeTranslation',)
+    MT_SERVICES += ('weblateweblate.trans.glosbe.GlosbeTranslation',)
 
 # Google API key for Google Translate API
 MT_GOOGLE_KEY = os.environ.get('WEBLATE_MT_GOOGLE_KEY', None)
 
 if 'WEBLATE_MT_GOOGLE_KEY' in os.environ:
-    MACHINE_TRANSLATION_SERVICES += ('weblate.trans.machine.google.GoogleTranslation',)
+    MT_SERVICES += ('weblate.machinery.google.GoogleTranslation',)
 
 # API key for Yandex Translate API
 MT_YANDEX_KEY = None
