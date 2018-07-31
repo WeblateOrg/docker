@@ -577,7 +577,7 @@ if not HAVE_SYSLOG:
     del LOGGING['handlers']['syslog']
 
 # List of machine translations
-MACHINE_TRANSLATION_SERVICES = (
+MT_SERVICES = (
 #     'weblate.trans.machine.apertium.ApertiumAPYTranslation',
 #     'weblate.trans.machine.deepl.DeepLTranslation',
 #     'weblate.trans.machine.glosbe.GlosbeTranslation',
