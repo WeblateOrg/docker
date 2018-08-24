@@ -82,7 +82,7 @@ if [ "x$1" = "xrunserver" ] ; then
     run_weblate showmigrations --plan > /tmp/migrations.txt
     if  grep -Fq '[X]  auth.0001_initial' /tmp/migrations.txt && grep -Fq '[ ]  weblate_auth.0001_initial' /tmp/migrations.txt ; then
         echo "Migration from this version is not supported!"
-        echo "Please upgrade to 3.0.1-6 first."
+        echo "Please upgrade to 3.0.1-7 first."
         exit 1
     fi
     rm /tmp/migrations.txt
