@@ -86,6 +86,7 @@ if [ "x$1" = "xrunserver" ] ; then
         run_weblate migrate lang
         run_weblate migrate weblate_auth 0001
         sed -i 's/^#AUTH_USER_MODEL/AUTH_USER_MODEL/' /app/etc/settings.py
+        run_weblate rebuild_index --clean --all
     fi
     rm /tmp/migrations.txt
 
