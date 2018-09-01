@@ -1,5 +1,5 @@
 Django>=2.0,<2.1
-siphashc==1.0
+siphashc==1.1
 Whoosh>=2.7,<2.8
 translate-toolkit>=2.3,<2.4
 social-auth-core==1.7.0
@@ -11,12 +11,12 @@ defusedxml==0.5.0
 django-appconf==1.0.2
 httpretty==0.9.5
 pyuca==1.2
-tesserocr==2.3.0
+tesserocr==2.3.1
 akismet==1.0.1
 python3-saml==1.4.1
 python-memcached==1.59
 django-redis==4.9.0
-phply==1.2.4
+phply==1.2.5
 django-auth-ldap==1.7.0
 rollbar
 setuptools
