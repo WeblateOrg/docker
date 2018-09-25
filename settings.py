@@ -885,7 +885,7 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 # Email server
 EMAIL_USE_TLS = os.environ.get('WEBLATE_EMAIL_USE_TLS', '1') == '1'
 EMAIL_USE_SSL = os.environ.get('WEBLATE_EMAIL_USE_SSL', '0') == '1'
-EMAIL_HOST = os.environ.get('WEBLATE_EMAIL_HOST', '')
+EMAIL_HOST = os.environ.get('WEBLATE_EMAIL_HOST', 'localhost')
 EMAIL_HOST_USER = os.environ.get(
     'WEBLATE_EMAIL_HOST_USER',
     os.environ.get('WEBLATE_EMAIL_USER', '')
@@ -894,7 +894,7 @@ EMAIL_HOST_PASSWORD = os.environ.get(
     'WEBLATE_EMAIL_HOST_PASSWORD',
     os.environ.get('WEBLATE_EMAIL_PASSWORD', '')
 )
-EMAIL_PORT = int(os.environ.get('WEBLATE_EMAIL_PORT', '587'))
+EMAIL_PORT = int(os.environ.get('WEBLATE_EMAIL_PORT', '25'))
 
 GOOGLE_ANALYTICS_ID = os.environ.get('WEBLATE_GOOGLE_ANALYTICS_ID', '')
 
