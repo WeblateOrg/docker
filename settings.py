@@ -412,7 +412,7 @@ if 'ROLLBAR_KEY' in os.environ:
 ROOT_URLCONF = 'weblate.urls'
 
 # Django and Weblate apps
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -445,7 +445,20 @@ INSTALLED_APPS = (
 
     # Optional: Git exporter
     'weblate.gitexport',
-)
+]
+
+# Sentry integration
+if 'SENTRY_DSN' in os.environ:
+    import raven
+    RAVEN_CONFIG = {
+        'dsn': os.environ['SENTRY_DSN'],
+        'public_dsn': os.environ.get('SENTRY_PUBLIC_DSN', ''),
+        # If you are using git, you can also automatically configure the
+        # release based on the git info.
+        'release': raven.fetch_git_sha(BASE_DIR),
+        'environment': os.environ.get('SENTRY_ENVIRONMENT', 'production'),
+    }
+    INSTALLED_APPS.append('raven.contrib.django.raven_compat')
 
 # Path to locales
 LOCALE_PATHS = (os.path.join(BASE_DIR, 'weblate', 'locale'), )
