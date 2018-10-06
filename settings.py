@@ -448,14 +448,12 @@ INSTALLED_APPS = [
 
 # Sentry integration
 if 'SENTRY_DSN' in os.environ:
-    import raven
     RAVEN_CONFIG = {
         'dsn': os.environ['SENTRY_DSN'],
         'public_dsn': os.environ.get('SENTRY_PUBLIC_DSN', ''),
-        # If you are using git, you can also automatically configure the
-        # release based on the git info.
-        'release': raven.fetch_git_sha(BASE_DIR),
         'environment': os.environ.get('SENTRY_ENVIRONMENT', 'production'),
+        'string_max_length': 1000,
+        'list_max_length': 100,
     }
     INSTALLED_APPS.append('raven.contrib.django.raven_compat')
 
