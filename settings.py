@@ -919,12 +919,6 @@ GOOGLE_ANALYTICS_ID = os.environ.get('WEBLATE_GOOGLE_ANALYTICS_ID', '')
 
 AKISMET_API_KEY = os.environ.get('WEBLATE_AKISMET_API_KEY', None)
 
-ADDITIONAL_CONFIG = '/app/data/settings-override.py'
-if os.path.exists(ADDITIONAL_CONFIG):
-    with open(ADDITIONAL_CONFIG) as handle:
-        code = compile(handle.read(), ADDITIONAL_CONFIG, 'exec')
-        exec(code)
-
 # Celery worker configuration for testing
 if 'MEMCACHED_HOST' in os.environ:
     CELERY_TASK_ALWAYS_EAGER = True
@@ -943,3 +937,9 @@ CELERY_WORKER_PREFETCH_MULTIPLIER = 0
 CELERY_BEAT_SCHEDULE_FILENAME = os.path.join(
     DATA_DIR, 'celery', 'beat-schedule'
 )
+
+ADDITIONAL_CONFIG = '/app/data/settings-override.py'
+if os.path.exists(ADDITIONAL_CONFIG):
+    with open(ADDITIONAL_CONFIG) as handle:
+        code = compile(handle.read(), ADDITIONAL_CONFIG, 'exec')
+        exec(code)
