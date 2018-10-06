@@ -389,7 +389,6 @@ MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware',
     'weblate.accounts.middleware.RequireLoginMiddleware',
     'weblate.middleware.SecurityMiddleware',
-    'weblate.wladmin.middleware.ConfigurationErrorsMiddleware',
 ]
 
 # Rollbar integration
@@ -592,16 +591,19 @@ if not HAVE_SYSLOG:
 # List of machine translations
 MT_SERVICES = (
 #     'weblate.machinery.apertium.ApertiumAPYTranslation',
+#     'weblate.machinery.baidu.BaiduTranslation',
 #     'weblate.machinery.deepl.DeepLTranslation',
 #     'weblate.machinery.glosbe.GlosbeTranslation',
 #     'weblate.machinery.google.GoogleTranslation',
 #     'weblate.machinery.microsoft.MicrosoftCognitiveTranslation',
+#     'weblate.machinery.microsoftterminology.MicrosoftTerminologyService',
 #     'weblate.machinery.mymemory.MyMemoryTranslation',
 #     'weblate.machinery.tmserver.AmagamaTranslation',
 #     'weblate.machinery.tmserver.TMServerTranslation',
 #     'weblate.machinery.yandex.YandexTranslation',
      'weblate.machinery.weblatetm.WeblateTranslation',
 #     'weblate.machinery.saptranslationhub.SAPTranslationHub',
+#     'weblate.machinery.youdao.YoudaoTranslation',
      'weblate.memory.machine.WeblateMemory'
 )
 
@@ -641,6 +643,14 @@ MT_GOOGLE_KEY = os.environ.get('WEBLATE_MT_GOOGLE_KEY', None)
 
 if 'WEBLATE_MT_GOOGLE_KEY' in os.environ:
     MT_SERVICES += ('weblate.machinery.google.GoogleTranslation',)
+
+# Baidu app key and secret
+MT_BAIDU_ID = None
+MT_BAIDU_SECRET = None
+
+# Youdao Zhiyun app key and secret
+MT_YOUDAO_ID = None
+MT_YOUDAO_SECRET = None
 
 # API key for Yandex Translate API
 MT_YANDEX_KEY = None
@@ -701,8 +711,8 @@ LOGIN_REDIRECT_URL = '{0}/'.format(URL_PREFIX)
 ANONYMOUS_USER_NAME = 'anonymous'
 
 # Reverse proxy settings
-IP_PROXY_HEADER = os.environ.get('WEBLATE_IP_PROXY_HEADER', '')
 IP_BEHIND_REVERSE_PROXY = bool(IP_PROXY_HEADER)
+IP_PROXY_HEADER = os.environ.get('WEBLATE_IP_PROXY_HEADER', '')
 IP_PROXY_OFFSET = 0
 
 # Sending HTML in mails
@@ -714,14 +724,8 @@ EMAIL_SUBJECT_PREFIX = '[{0}] '.format(SITE_TITLE)
 # Enable remote hooks
 ENABLE_HOOKS = True
 
-# Whether to run hooks in background
-BACKGROUND_HOOKS = True
-
 # Number of nearby messages to show in each direction
 NEARBY_MESSAGES = 5
-
-# Offload indexing
-OFFLOAD_INDEXING = os.environ.get('WEBLATE_OFFLOAD_INDEXING', '1') == '1'
 
 # Use simple language codes for default language/country combinations
 SIMPLIFY_LANGUAGES = os.environ.get('WEBLATE_SIMPLIFY_LANGUAGES', '1') == '1'
@@ -749,6 +753,10 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 #     'weblate.checks.format.CFormatCheck',
 #     'weblate.checks.format.PerlFormatCheck',
 #     'weblate.checks.format.JavascriptFormatCheck',
+#     'weblate.checks.format.CSharpFormatCheck',
+#     'weblate.checks.format.JavaFormatCheck',
+#     'weblate.checks.format.JavaMessageFormatCheck',
+#     'weblate.checks.angularjs.AngularJSInterpolationCheck',
 #     'weblate.checks.consistency.PluralsCheck',
 #     'weblate.checks.consistency.SamePluralsCheck',
 #     'weblate.checks.consistency.ConsistencyCheck',
@@ -799,7 +807,7 @@ DEFAULT_FROM_EMAIL = os.environ['WEBLATE_DEFAULT_FROM_EMAIL']
 # List of URLs your site is supposed to serve
 ALLOWED_HOSTS = get_env_list('WEBLATE_ALLOWED_HOSTS', ['*'])
 
-# Example configuration to use memcached for caching
+# Example configuration for caching
 CACHES = {
     'avatar': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
@@ -918,3 +926,22 @@ if os.path.exists(ADDITIONAL_CONFIG):
     with open(ADDITIONAL_CONFIG) as handle:
         code = compile(handle.read(), ADDITIONAL_CONFIG, 'exec')
         exec(code)
+
+# Celery worker configuration for testing
+if 'MEMCACHED_HOST' in os.environ:
+    CELERY_TASK_ALWAYS_EAGER = True
+    CELERY_BROKER_URL = 'memory://'
+# Celery worker configuration for production
+else:
+    CELERY_TASK_ALWAYS_EAGER = False
+    CELERY_BROKER_URL = 'redis://{0}:{1}/?virtual_host={2}'.format(
+        os.environ.get('REDIS_HOST', 'cache'),
+        os.environ.get('REDIS_PORT', '6379'),
+        os.environ.get('REDIS_DB', '1'),
+    )
+
+# Celery settings, it is not recommended to change these
+CELERY_WORKER_PREFETCH_MULTIPLIER = 0
+CELERY_BEAT_SCHEDULE_FILENAME = os.path.join(
+    DATA_DIR, 'celery', 'beat-schedule'
+)
