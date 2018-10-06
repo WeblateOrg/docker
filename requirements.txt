@@ -23,6 +23,10 @@ raven
 setuptools
 jellyfish==0.6.1
 selenium
+openpyxl==2.5.8
+celery>=4.2.0,<4.3
+celery-batches==0.2
+zeep==3.1.0
 # Following are installed using apt:
 # Pillow
 # lxml
