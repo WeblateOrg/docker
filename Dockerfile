@@ -15,7 +15,7 @@ RUN useradd --shell /bin/sh --user-group weblate \
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 
-COPY requirements.txt crontab.txt /usr/src/weblate/
+COPY requirements.txt /usr/src/weblate/
 
 # Install dependencies
 RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
@@ -59,9 +59,7 @@ RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
     g++ \
     tesseract-ocr \ 
     patch \
-    cron \
   && pip3 install Weblate==$VERSION -r /usr/src/weblate/requirements.txt \
-  && crontab -u weblate /usr/src/weblate/crontab.txt \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && rm -rf /root/.cache /tmp/* \
   && apt-get -y purge \
