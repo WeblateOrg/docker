@@ -1,5 +1,5 @@
-Django>=2.0,<2.1
-siphashc==1.1
+Django>=2.1,<2.2
+siphashc==1.2
 Whoosh>=2.7,<2.8
 translate-toolkit>=2.3,<2.4
 social-auth-core==1.7.0
