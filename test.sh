@@ -26,13 +26,14 @@ done
 curl --verbose --fail "http://$IP/about/" | grep 'Powered by.*Weblate'
 RET=$?
 curl --verbose --fail --output /dev/null "http://$IP/static/weblate-128.png"
-if [ $? -ne 0 -o $RET -ne 0 ] ; then
-    docker-compose logs
+RET2=$?
+# Display logs so far
+docker-compose logs
+
+if [ $RET2 -ne 0 -o $RET -ne 0 ] ; then
     exit 1
 fi
 
-# Display logs so far
-docker-compose logs
 
 echo "Creating admin..."
 docker-compose run --rm weblate createadmin || exit 1
