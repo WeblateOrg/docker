@@ -19,10 +19,14 @@ services:
 before_script:
   - git clone --depth 1 https://github.com/WeblateOrg/docker-compose.git
 
-script:
-  - docker build -t weblate/weblate:latest . || travis_terminate 1
-  - cd docker
-  - ./test.sh
+jobs:
+  include:
+    - stage: build
+      script:
+      - docker build -t weblate/weblate:latest .
+    - stage: test
+      script: export DEBUG=0; ./test.sh
+    - script: export DEBUG=1; ./test.sh
 
 addons:
   apt:
