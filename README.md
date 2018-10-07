@@ -1,10 +1,12 @@
 # Weblate image for Docker
 
-[![Build Status](https://travis-ci.org/WeblateOrg/docker.svg?branch=docker)](https://travis-ci.org/WeblateOrg/docker)
+[![Build Status](https://travis-ci.org/WeblateOrg/docker.svg?branch=master)](https://travis-ci.org/WeblateOrg/docker)
 [![Docker Layers](https://images.microbadger.com/badges/image/weblate/weblate.svg)](https://microbadger.com/images/weblate/weblate "Get your own image badge on microbadger.com")
-[![Requirements Status](https://requires.io/github/WeblateOrg/docker/requirements.svg?branch=docker)](https://requires.io/github/WeblateOrg/docker/requirements/?branch=docker)
+[![Requirements Status](https://requires.io/github/WeblateOrg/docker/requirements.svg?branch=master)](https://requires.io/github/WeblateOrg/docker/requirements/?branch=master)
 
 Docker container for Weblate
+
+You might want to use [Weblate docker-compose](https://github.com/WeblateOrg/docker-compose) to run Weblate.
 
 ## Docker hub tags
 
