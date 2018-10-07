@@ -39,7 +39,7 @@ echo "Creating admin..."
 docker-compose exec weblate weblate createadmin || exit 1
 
 echo "Running testsuite..."
-docker-compose exec weblate weblate test --noinput weblate.accounts weblate.trans weblate.lang weblate.api weblate.gitexport weblate.screenshots weblate.utils
+docker-compose exec --env DJANGO_SETTINGS_MODULE=weblate.settings_test weblate weblate test --noinput weblate.accounts weblate.trans weblate.lang weblate.api weblate.gitexport weblate.screenshots weblate.utils
 if [ $? -ne 0 ] ; then
     docker-compose logs
     exit 1
