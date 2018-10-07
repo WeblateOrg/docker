@@ -12,3 +12,8 @@ script:
   - docker build -t weblate/weblate:latest . || travis_terminate 1
   - cd docker
   - ./test.sh
+
+addons:
+  apt:
+    packages:
+      - docker-ce
