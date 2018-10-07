@@ -1,6 +1,9 @@
 sudo: required
 
 env:
+  matrix:
+    - DEBUG=1
+    - DEBUG=0
   global:
     - DOCKER_COMPOSE_VERSION=1.22.0
 
@@ -16,17 +19,10 @@ services:
 before_script:
   - git clone --depth 1 https://github.com/WeblateOrg/docker-compose.git
 
-jobs:
-  include:
-    - stage: build
-      name: Build Docker image
-      script:
-      - docker build -t weblate/weblate:latest .
-    - stage: test
-      name: Test production mode
-      script: export DEBUG=0; ./test.sh
-    - name: Test debug mode
-      script: export DEBUG=1; ./test.sh
+script:
+  - docker build -t weblate/weblate:latest . || travis_terminate 1
+  - cd docker-compose
+  - ./test.sh
 
 addons:
   apt:
