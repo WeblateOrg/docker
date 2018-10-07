@@ -17,7 +17,7 @@ services:
   - docker
 
 before_script:
-  - git clone --depth 1 https://github.com/WeblateOrg/docker.git
+  - git clone --depth 1 https://github.com/WeblateOrg/docker-compose.git
 
 script:
   - docker build -t weblate/weblate:latest . || travis_terminate 1
