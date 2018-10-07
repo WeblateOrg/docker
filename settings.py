@@ -926,7 +926,7 @@ if 'MEMCACHED_HOST' in os.environ:
 # Celery worker configuration for production
 else:
     CELERY_TASK_ALWAYS_EAGER = False
-    CELERY_BROKER_URL = 'redis://{0}:{1}/?virtual_host={2}'.format(
+    CELERY_BROKER_URL = 'redis://{0}:{1}/{2}'.format(
         os.environ.get('REDIS_HOST', 'cache'),
         os.environ.get('REDIS_PORT', '6379'),
         os.environ.get('REDIS_DB', '1'),
