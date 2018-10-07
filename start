@@ -90,10 +90,11 @@ if [ "x$1" = "xrunserver" ] ; then
     run_weblate migrate
     run_weblate cleanup_avatar_cache
     run_weblate collectstatic --noinput
+    # Create or update admin account
     if [ -n "$WEBLATE_ADMIN_PASSWORD" ] ; then
-        # This will fail on consequent runs
-        run_weblate createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
+        run_weblate createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME"
     fi
+    # Change site name
     if [ -n "$WEBLATE_ALLOWED_HOSTS" -a "$WEBLATE_ALLOWED_HOSTS" != '*' ] ; then
         run_weblate changesite --set-name "${WEBLATE_ALLOWED_HOSTS%%,*}"
     fi
