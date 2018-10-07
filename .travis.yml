@@ -1,9 +1,6 @@
 sudo: required
 
 env:
-  matrix:
-    - DEBUG=1
-    - DEBUG=0
   global:
     - DOCKER_COMPOSE_VERSION=1.22.0
 
