@@ -1,0 +1,65 @@
+From 877a2fbd4e3cea9e938dffc24301158b27e5bef4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Sun, 7 Oct 2018 14:32:24 +0200
+Subject: [PATCH 03/10] Rewrite test for broken project path
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Avoid assuming some path will not work, rather craete temporary file
+and use that as path. That is guaranteed to be broken.
+
+Signed-off-by: Michal Čihař <michal@cihar.com>
+---
+ weblate/trans/tests/test_models.py | 27 +++++++++++++++++----------
+ 1 file changed, 17 insertions(+), 10 deletions(-)
+
+diff --git a/weblate/trans/tests/test_models.py b/weblate/trans/tests/test_models.py
+index fa1a97fac8..33d167ede0 100644
+--- a/weblate/trans/tests/test_models.py
++++ b/weblate/trans/tests/test_models.py
+@@ -21,8 +21,9 @@
+ """Test for translation models."""
+ 
+ 
+-import shutil
+ import os
++import shutil
++import tempfile
+ 
+ from django.core.management.color import no_style
+ from django.db import connection
+@@ -117,15 +118,21 @@ class ProjectTest(RepoTestCase):
+     def test_wrong_path(self):
+         project = self.create_project()
+ 
+-        with override_settings(DATA_DIR='/weblate-nonexisting:path'):
+-            # Invalidate cache
+-            project.invalidate_path_cache()
+-
+-            self.assertRaisesMessage(
+-                ValidationError,
+-                'Could not create project directory',
+-                project.full_clean
+-            )
++        # Create temporary file and try to use
++        # it as data directory
++        temp = tempfile.NamedTemporaryFile()
++        try:
++            with override_settings(DATA_DIR=temp.name):
++                # Invalidate cache
++                project.invalidate_path_cache()
++
++                self.assertRaisesMessage(
++                    ValidationError,
++                    'Could not create project directory',
++                    project.full_clean
++                )
++        finally:
++            temp.close()
+ 
+     def test_acl(self):
+         """Test for ACL handling."""
+-- 
+2.19.0
+

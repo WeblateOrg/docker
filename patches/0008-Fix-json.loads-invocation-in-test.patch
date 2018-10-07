@@ -1,0 +1,29 @@
+From f8e9fe693de946cc3a70fc093462f51d92b96389 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Sun, 7 Oct 2018 17:05:17 +0200
+Subject: [PATCH 08/10] Fix json.loads invocation in test
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+It needs string on python 3
+
+Signed-off-by: Michal Čihař <michal@cihar.com>
+---
+ weblate/trans/tests/test_dictionary.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/weblate/trans/tests/test_dictionary.py b/weblate/trans/tests/test_dictionary.py
+index ff832c54e2..e8f4d63608 100644
+--- a/weblate/trans/tests/test_dictionary.py
++++ b/weblate/trans/tests/test_dictionary.py
+@@ -408,5 +408,5 @@ class DictionaryTest(FixtureTestCase):
+             reverse('js-add-glossary', kwargs={'unit_id': unit.pk}),
+             {'source': 'source', 'target': 'překlad'}
+         )
+-        content = json.loads(response.content)
++        content = json.loads(response.content.decode('utf-8'))
+         self.assertEqual(content['responseCode'], 200)
+-- 
+2.19.0
+
