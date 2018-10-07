@@ -16,3 +16,8 @@ before_script:
 
 script:
   - ./test.sh
+
+addons:
+  apt:
+    packages:
+      - docker-ce
