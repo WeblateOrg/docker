@@ -1,0 +1,34 @@
+Django>=2.1,<2.2
+siphashc==1.2
+Whoosh>=2.7,<2.8
+translate-toolkit>=2.3,<2.4
+social-auth-core==1.7.0
+social-auth-app-django==2.1.0
+django-crispy-forms==1.7.2
+django_compressor==2.2
+djangorestframework>=3.8,<3.9
+defusedxml==0.5.0
+django-appconf==1.0.2
+httpretty==0.9.5
+pyuca==1.2
+tesserocr==2.3.1
+akismet==1.0.1
+python3-saml==1.4.1
+python-memcached==1.59
+django-redis==4.9.0
+phply==1.2.5
+django-auth-ldap==1.7.0
+rollbar
+raven
+setuptools
+jellyfish==0.6.1
+selenium
+openpyxl==2.5.8
+celery>=4.2.0,<4.3
+celery-batches==0.2
+zeep==3.1.0
+# Following are installed using apt:
+# Pillow
+# lxml
+# python-dateutil
+# PyYAML

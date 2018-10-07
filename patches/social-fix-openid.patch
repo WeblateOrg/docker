@@ -1,0 +1,23 @@
+From 4ed094b0b28afbb6fde4089022ea96d2901aac78 Mon Sep 17 00:00:00 2001
+From: Claude Paroz <claude@2xlibre.net>
+Date: Thu, 29 Mar 2018 13:53:27 +0200
+Subject: [PATCH] Fixes #135 - Properly store Association.secret on Python 3
+
+---
+ social_django/storage.py | 2 +-
+ tests/test_models.py     | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/social_django/storage.py b/social_django/storage.py
+index afc21fe..c4f141e 100644
+--- a/social_django/storage.py
++++ b/social_django/storage.py
+@@ -152,7 +152,7 @@ def store(cls, server_url, association):
+         except cls.DoesNotExist:
+             assoc = cls(server_url=server_url,
+                         handle=association.handle)
+-        assoc.secret = base64.encodestring(association.secret)
++        assoc.secret = base64.encodestring(association.secret).decode()
+         assoc.issued = association.issued
+         assoc.lifetime = association.lifetime
+         assoc.assoc_type = association.assoc_type
