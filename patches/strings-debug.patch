@@ -1,0 +1,17 @@
+diff --git a/weblate/trans/tests/test_files.py b/weblate/trans/tests/test_files.py
+index fa04ecfa44..b785c9064c 100644
+--- a/weblate/trans/tests/test_files.py
++++ b/weblate/trans/tests/test_files.py
+@@ -294,7 +294,11 @@ class ImportPHPMonoTest(ImportTest):
+ 
+ class StringsImportTest(ImportTest):
+     def create_component(self):
+-        return self.create_iphone()
++        component = self.create_iphone()
++        from weblate.trans.models import Unit
++        for unit in Unit.objects.all():
++            print 'U:', repr(unit.source), repr(unit.target), repr(unit.context)
++        return component
+ 
+ 
+ class AndroidImportTest(ViewTestCase):
