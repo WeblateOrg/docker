@@ -1,0 +1,84 @@
+From 7fd13ca08ef602bfdad4557b8631d45e589e0501 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Mon, 8 Oct 2018 13:08:25 +0200
+Subject: [PATCH 1/1] Improved handling of properties files
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The transalte-toolkit happily parses any file even without delimiters,
+leading to being able to parse anything random. For example our test
+cs.po file is also valid in UTF-16 and can be parsed as single unit
+properties file with random (not only) Chinese chars.
+
+We now validate whether first parsed unit has delimiter defined - it
+should be present in all cases where the file was valid.
+
+Fixes #2296
+
+Signed-off-by: Michal Čihař <michal@cihar.com>
+---
+ weblate/formats/base.py  |  2 +-
+ weblate/formats/ttkit.py | 19 ++++++++++++++++---
+ 2 files changed, 17 insertions(+), 4 deletions(-)
+
+diff --git a/weblate/formats/base.py b/weblate/formats/base.py
+index c66b104c8f..71d0e3082b 100644
+--- a/weblate/formats/base.py
++++ b/weblate/formats/base.py
+@@ -362,7 +362,7 @@ class FileFormat(object):
+         # Check store validity
+         if not self.is_valid(self.store):
+             raise ValueError(
+-                'Invalid file format {0}'.format(self.store)
++                'Invalid file format {0}'.format(repr(self.store))
+             )
+         # Remember template
+         self.template_store = template_store
+diff --git a/weblate/formats/ttkit.py b/weblate/formats/ttkit.py
+index e9a1d0fe40..84d6d9fbd5 100644
+--- a/weblate/formats/ttkit.py
++++ b/weblate/formats/ttkit.py
+@@ -328,7 +328,20 @@ class PoXliffFormat(XliffFormat):
+     loader = PoXliffFile
+ 
+ 
+-class StringsFormat(FileFormat):
++class PropertiesBaseFormat(FileFormat):
++    @classmethod
++    def is_valid(cls, store):
++        result = super(PropertiesBaseFormat, cls).is_valid(store)
++        if not result:
++            return False
++
++        # Accept emty file, but reject file without a delimiter.
++        # Translate-toolkit happily parses anything into a property
++        # even if there is no delimiter used in the line.
++        return not store.units or store.units[0].delimiter
++
++
++class StringsFormat(PropertiesBaseFormat):
+     name = _('OS X Strings')
+     format_id = 'strings'
+     loader = ('properties', 'stringsfile')
+@@ -348,7 +361,7 @@ class StringsUtf8Format(StringsFormat):
+     new_translation = '\n'
+ 
+ 
+-class PropertiesUtf8Format(FileFormat):
++class PropertiesUtf8Format(PropertiesBaseFormat):
+     name = _('Java Properties (UTF-8)')
+     format_id = 'properties-utf8'
+     loader = ('properties', 'javautf8file')
+@@ -383,7 +396,7 @@ class PropertiesFormat(PropertiesUtf8Format):
+         return store
+ 
+ 
+-class JoomlaFormat(FileFormat):
++class JoomlaFormat(PropertiesBaseFormat):
+     name = _('Joomla Language File')
+     format_id = 'joomla'
+     loader = ('properties', 'joomlafile')
+-- 
+2.19.1
+
