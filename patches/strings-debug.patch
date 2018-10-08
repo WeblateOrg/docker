@@ -10,7 +10,7 @@ index fa04ecfa44..b785c9064c 100644
 +        component = self.create_iphone()
 +        from weblate.trans.models import Unit
 +        for unit in Unit.objects.all():
-+            print 'U:', repr(unit.source), repr(unit.target), repr(unit.context)
++            print('U:', repr(unit.source), repr(unit.target), repr(unit.context))
 +        return component
  
  
