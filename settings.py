@@ -452,6 +452,7 @@ if 'SENTRY_DSN' in os.environ:
         'dsn': os.environ['SENTRY_DSN'],
         'public_dsn': os.environ.get('SENTRY_PUBLIC_DSN', ''),
         'environment': os.environ.get('SENTRY_ENVIRONMENT', 'production'),
+        'release': 'weblate-{}'.format(os.environ['VERSION']),
         'string_max_length': 1000,
         'list_max_length': 100,
     }
