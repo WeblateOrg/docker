@@ -6,7 +6,7 @@ social-auth-core==1.7.0
 social-auth-app-django==2.1.0
 django-crispy-forms==1.7.2
 django_compressor==2.2
-djangorestframework>=3.8,<3.9
+djangorestframework>=3.9,<3.10
 defusedxml==0.5.0
 django-appconf==1.0.2
 httpretty==0.9.5
