@@ -1,0 +1,62 @@
+From bae748afde2c309b4e590439e432ec4f03405082 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Fri, 26 Oct 2018 14:10:11 +0200
+Subject: [PATCH 1/1] Run project wide checks just once for linked repos
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This can save huge amount of time with lot of linked components.
+
+Signed-off-by: Michal Čihař <michal@cihar.com>
+---
+ weblate/trans/models/component.py | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
+
+diff --git a/weblate/trans/models/component.py b/weblate/trans/models/component.py
+index 46605128ca..1572579b88 100644
+--- a/weblate/trans/models/component.py
++++ b/weblate/trans/models/component.py
+@@ -949,7 +949,7 @@ class Component(models.Model, URLMixin, PathMixin):
+         self.updated_sources = {}
+ 
+     def create_translations(self, force=False, langs=None, request=None,
+-                            changed_template=False):
++                            changed_template=False, skip_checks=False):
+         """Load translations from VCS."""
+         self.needs_cleanup = False
+         self.updated_sources = {}
+@@ -1002,19 +1002,23 @@ class Component(models.Model, URLMixin, PathMixin):
+                     )
+                     todelete.delete()
+ 
+-        # Run target checks (consistency)
+-        self.run_target_checks()
+-
+         if self.updated_sources:
+             self.update_source_checks()
+ 
+         # Process linked repos
+-        for component in self.get_linked_childs():
++        childs = self.get_linked_childs()
++        for pos, component in enumerate(childs):
+             self.log_info(
+-                'updating linked project %s',
+-                component
++                'updating linked project %s [%d/%d]',
++                component, pos, len(childs),
+             )
+-            component.create_translations(force, langs, request=request)
++            component.create_translations(
++                force, langs, request=request, skip_checks=True
++            )
++
++        # Run target checks (consistency)
++        if not skip_checks:
++            self.run_target_checks()
+ 
+         if self.needs_cleanup:
+             from weblate.trans.tasks import cleanup_project
+-- 
+2.19.0
+
