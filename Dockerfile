@@ -18,7 +18,9 @@ ENV LC_ALL C.UTF-8
 COPY requirements.txt /usr/src/weblate/
 
 # Install dependencies
-RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
+RUN set -x \
+  && export DEBIAN_FRONTEND=noninteractive \
+  && apt-get update \
   && apt-get -y upgrade \
   && apt-get install --no-install-recommends -y \
     sudo \
