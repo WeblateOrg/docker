@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM ubuntu:bionic
 MAINTAINER Michal Čihař <michal@cihar.com>
 ENV VERSION 3.2.2
 LABEL version=$VERSION
@@ -18,7 +18,9 @@ ENV LC_ALL C.UTF-8
 COPY requirements.txt /usr/src/weblate/
 
 # Install dependencies
-RUN set -x && env DEBIAN_FRONTEND=noninteractive apt-get update \
+RUN set -x \
+  && export DEBIAN_FRONTEND=noninteractive \
+  && apt-get update \
   && apt-get -y upgrade \
   && apt-get install --no-install-recommends -y \
     sudo \
@@ -85,11 +87,11 @@ RUN curl -L https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd
 # Settings
 COPY settings.py /app/etc/
 RUN chmod a+r /app/etc/settings.py && \
-  ln -s /app/etc/settings.py /usr/local/lib/python3.5/dist-packages/weblate/settings.py
+  ln -s /app/etc/settings.py /usr/local/lib/python3.6/dist-packages/weblate/settings.py
 
 # Apply hotfixes
 COPY patches /usr/src/weblate/
-RUN cat /usr/src/weblate/*.patch | patch -p1 -d /usr/local/lib/python3.5/dist-packages/
+RUN cat /usr/src/weblate/*.patch | patch -p1 -d /usr/local/lib/python3.6/dist-packages/
 
 # Configuration for nginx, uwsgi and supervisor
 COPY weblate.nginx.conf /etc/nginx/sites-available/default
