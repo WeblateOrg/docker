@@ -1,0 +1,83 @@
+From accedf77b0a5289d829c60f083343ece5072779c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Tue, 23 Oct 2018 07:36:24 +0200
+Subject: [PATCH 1/1] Fix commit_pending with specified age
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+It is now also covered by tests.
+
+Fixes #2341
+
+Signed-off-by: Michal Čihař <michal@cihar.com>
+---
+ weblate/trans/tasks.py               |  2 ++
+ weblate/trans/tests/test_commands.py | 19 ++++++++++++++-----
+ 2 files changed, 16 insertions(+), 5 deletions(-)
+
+diff --git a/weblate/trans/tasks.py b/weblate/trans/tasks.py
+index a679c5142c..e91315b9ec 100644
+--- a/weblate/trans/tasks.py
++++ b/weblate/trans/tasks.py
+@@ -87,6 +87,8 @@ def commit_pending(hours=None, pks=None, logger=None):
+             age = timezone.now() - timedelta(
+                 hours=translation.component.commit_pending_age
+             )
++        else:
++            age = timezone.now() - timedelta(hours=hours)
+ 
+         last_change = translation.stats.last_changed
+         if not last_change:
+diff --git a/weblate/trans/tests/test_commands.py b/weblate/trans/tests/test_commands.py
+index ac64c7288a..fa8aa1c65b 100644
+--- a/weblate/trans/tests/test_commands.py
++++ b/weblate/trans/tests/test_commands.py
+@@ -30,6 +30,7 @@ from django.core.management import call_command
+ from django.core.management.base import CommandError, SystemCheckError
+ 
+ from weblate.trans.tests.test_models import RepoTestCase
++from weblate.trans.tests.test_views import ViewTestCase
+ from weblate.trans.models import Translation, Component, Suggestion, Source
+ from weblate.trans.search import Fulltext
+ from weblate.runner import main
+@@ -386,16 +387,12 @@ class CleanupCommandTest(RepoTestCase):
+             Fulltext.FAKE = orig_fake
+ 
+ 
+-class CheckGitTest(RepoTestCase):
++class CheckGitTest(ViewTestCase):
+     """Base class for handling tests of WeblateComponentCommand
+     based commands."""
+     command_name = 'checkgit'
+     expected_string = 'On branch master'
+ 
+-    def setUp(self):
+-        super(CheckGitTest, self).setUp()
+-        self.create_component()
+-
+     def do_test(self, *args, **kwargs):
+         output = StringIO()
+         call_command(
+@@ -443,6 +440,18 @@ class CommitPendingTest(CheckGitTest):
+     command_name = 'commit_pending'
+     expected_string = ''
+ 
++    def test_age(self):
++        self.do_test('test', '--age', '1')
++
++
++class CommitPendingChangesTest(CommitPendingTest):
++    def setUp(self):
++        super(CommitPendingChangesTest, self).setUp()
++        self.edit_unit(
++            'Hello, world!\n',
++            'Nazdar svete!\n'
++        )
++
+ 
+ class CommitGitTest(CheckGitTest):
+     command_name = 'commitgit'
+-- 
+2.19.0
+
