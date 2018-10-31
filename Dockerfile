@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM ubuntu:bionic
 MAINTAINER Michal Čihař <michal@cihar.com>
 ENV VERSION 3.2.2
 LABEL version=$VERSION
