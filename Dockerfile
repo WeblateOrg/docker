@@ -78,6 +78,8 @@ RUN set -x \
     libssl-dev \
   && apt-get -y autoremove \
   && apt-get clean
+  && update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
+  && update-alternatives --install /usr/bin/python python /usr/bin/python3.6 2
 
 # Hub
 RUN curl -L https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd64-2.2.9.tgz | tar xzv --wildcards hub-linux*/bin/hub && \
