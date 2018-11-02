@@ -77,8 +77,8 @@ RUN set -x \
     libldap2-dev \
     libssl-dev \
   && apt-get -y autoremove \
-  && apt-get clean
-  && update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1
+  && apt-get clean \
+  && update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1 \
   && update-alternatives --install /usr/bin/python python /usr/bin/python3.6 2
 
 # Hub
