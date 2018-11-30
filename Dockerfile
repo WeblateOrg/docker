@@ -91,8 +91,8 @@ RUN chmod a+r /app/etc/settings.py && \
   ln -s /app/etc/settings.py /usr/local/lib/python3.6/dist-packages/weblate/settings.py
 
 # Apply hotfixes
-COPY patches /usr/src/weblate/
-RUN cat /usr/src/weblate/*.patch | patch -p1 -d /usr/local/lib/python3.6/dist-packages/
+#COPY patches /usr/src/weblate/
+#RUN cat /usr/src/weblate/*.patch | patch -p1 -d /usr/local/lib/python3.6/dist-packages/
 
 # Configuration for nginx, uwsgi and supervisor
 COPY weblate.nginx.conf /etc/nginx/sites-available/default
