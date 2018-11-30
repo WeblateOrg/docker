@@ -376,8 +376,12 @@ AUTH_PASSWORD_VALIDATORS = [
     # },
 ]
 
+# Allow new user registrations
+REGISTRATION_OPEN = os.environ.get('WEBLATE_REGISTRATION_OPEN', '1') == '1'
+
 # Middleware
 MIDDLEWARE = [
+    'weblate.middleware.ProxyMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -597,6 +601,7 @@ MT_SERVICES = (
 #     'weblate.machinery.microsoft.MicrosoftCognitiveTranslation',
 #     'weblate.machinery.microsoftterminology.MicrosoftTerminologyService',
 #     'weblate.machinery.mymemory.MyMemoryTranslation',
+#     'weblate.machinery.netease.NeteaseSightTranslation',
 #     'weblate.machinery.tmserver.AmagamaTranslation',
 #     'weblate.machinery.tmserver.TMServerTranslation',
 #     'weblate.machinery.yandex.YandexTranslation',
@@ -651,6 +656,10 @@ MT_BAIDU_SECRET = None
 MT_YOUDAO_ID = None
 MT_YOUDAO_SECRET = None
 
+# Netease Sight (Jianwai) app key and secret
+MT_NETEASE_KEY = None
+MT_NETEASE_SECRET = None
+
 # API key for Yandex Translate API
 MT_YANDEX_KEY = None
 
@@ -672,7 +681,7 @@ ENABLE_HTTPS = os.environ.get('WEBLATE_ENABLE_HTTPS', '0') == '1'
 
 # Use HTTPS when creating redirect URLs for social authentication, see
 # documentation for more details:
-# http://python-social-auth-docs.readthedocs.io/en/latest/configuration/settings.html#processing-redirects-and-urlopen
+# https://python-social-auth-docs.readthedocs.io/en/latest/configuration/settings.html#processing-redirects-and-urlopen
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = ENABLE_HTTPS
 
 # Make CSRF cookie HttpOnly, see documentation for more details:
@@ -896,9 +905,6 @@ if os.environ.get('WEBLATE_REQUIRE_LOGIN', '0') == '1':
         ),
     )
 
-# Allow registration
-REGISTRATION_OPEN = os.environ.get('WEBLATE_REGISTRATION_OPEN', '1') == '1'
-
 # Force sane test runner
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
@@ -932,6 +938,7 @@ else:
         os.environ.get('REDIS_PORT', '6379'),
         os.environ.get('REDIS_DB', '1'),
     )
+    CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 
 # Celery settings, it is not recommended to change these
 CELERY_WORKER_PREFETCH_MULTIPLIER = 0
