@@ -9,7 +9,6 @@ django_compressor==2.2
 djangorestframework>=3.9,<3.10
 defusedxml==0.5.0
 django-appconf==1.0.2
-httpretty==0.9.6
 pyuca==1.2
 tesserocr==2.3.1
 akismet==1.0.1
@@ -27,6 +26,8 @@ openpyxl==2.5.12
 celery>=4.2.0,<4.3
 celery-batches==0.2
 zeep==3.1.0
+httpretty==0.9.6
+botocore==1.12.57
 # Following are installed using apt:
 # Pillow
 # lxml
