@@ -38,7 +38,6 @@ RUN set -x \
     python3-setuptools \
     python3-wheel \
     python3-psycopg2 \
-    python3-dateutil \
     python3-rcssmin \
     python3-rjsmin \
     python3-redis \
