@@ -477,15 +477,6 @@ DEFAULT_EXCEPTION_REPORTER_FILTER = \
 
 # Detect if we can connect to syslog
 HAVE_SYSLOG = False
-if platform.system() != 'Windows':
-    try:
-        handler = SysLogHandler(
-            address='/dev/log', facility=SysLogHandler.LOG_LOCAL2
-        )
-        handler.close()
-        HAVE_SYSLOG = True
-    except IOError:
-        HAVE_SYSLOG = False
 
 if DEBUG or not HAVE_SYSLOG:
     DEFAULT_LOG = 'console'
