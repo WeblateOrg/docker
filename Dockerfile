@@ -84,18 +84,14 @@ RUN curl -L https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd
   cp hub-linux-amd64-2.2.9/bin/hub /usr/bin && \
   rm -rf hub-linux-amd64-2.2.9
 
-# Settings
-COPY settings.py /app/etc/
-RUN chmod a+r /app/etc/settings.py && \
-  ln -s /app/etc/settings.py /usr/local/lib/python3.6/dist-packages/weblate/settings.py
+# Configuration for Weblate, nginx, uwsgi and supervisor
+COPY etc /etc/
+RUN chmod a+r /etc/weblate/settings.py && \
+  ln -s /etc/weblate/setttings.py /app/etc/settings.py && \
+  ln -s /etc/weblate/setttings.py /usr/local/lib/python3.6/dist-packages/weblate/settings.py
 
 # Apply hotfixes
 RUN find /usr/src/weblate/ -name '*.patch' -print0 | xargs -0 -r patch -p1 -d /usr/local/lib/python3.6/dist-packages/
-
-# Configuration for nginx, uwsgi and supervisor
-COPY weblate.nginx.conf /etc/nginx/sites-available/default
-COPY weblate.uwsgi.ini /etc/uwsgi/apps-enabled/weblate.ini
-COPY supervisor.conf /etc/supervisor/conf.d/
 
 # Entrypoint
 COPY start /app/bin/
