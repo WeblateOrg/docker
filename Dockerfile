@@ -97,8 +97,6 @@ RUN find /usr/src/weblate/ -name '*.patch' -print0 | xargs -0 -r patch -p1 -d /u
 COPY start /app/bin/
 RUN chmod a+rx /app/bin/start
 
-ENV DJANGO_SETTINGS_MODULE weblate.settings
-
 EXPOSE 80
 ENTRYPOINT ["/app/bin/start"]
 CMD ["runserver"]
