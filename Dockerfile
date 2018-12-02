@@ -89,7 +89,8 @@ RUN chmod a+r /etc/weblate/settings.py && \
   ln -s /etc/weblate/setttings.py /usr/local/lib/python3.6/dist-packages/weblate/settings.py
 
 # Apply hotfixes
-RUN find /usr/src/weblate/ -name '*.patch' -print0 | xargs -0 -r patch -p1 -d /usr/local/lib/python3.6/dist-packages/
+RUN find /usr/src/weblate/patches -name '*.patch' -print0 | \
+    xargs -0 -r patch -p1 -d /usr/local/lib/python3.6/dist-packages/
 
 # Entrypoint
 COPY start /app/bin/
