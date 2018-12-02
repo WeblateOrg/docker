@@ -15,7 +15,7 @@ RUN useradd --shell /bin/sh --user-group weblate \
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 
-COPY requirements.txt /usr/src/weblate/
+COPY requirements.txt patches /usr/src/weblate/
 
 # Install dependencies
 RUN set -x \
@@ -90,8 +90,7 @@ RUN chmod a+r /app/etc/settings.py && \
   ln -s /app/etc/settings.py /usr/local/lib/python3.6/dist-packages/weblate/settings.py
 
 # Apply hotfixes
-COPY patches /usr/src/weblate/
-RUN cat /usr/src/weblate/*.patch | patch -p1 -d /usr/local/lib/python3.6/dist-packages/
+RUN find /usr/src/weblate/ -name '*.patch' -print0 | xargs -0 -r patch -p1 -d /usr/local/lib/python3.6/dist-packages/
 
 # Configuration for nginx, uwsgi and supervisor
 COPY weblate.nginx.conf /etc/nginx/sites-available/default
