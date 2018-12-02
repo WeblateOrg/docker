@@ -86,7 +86,6 @@ RUN curl -L https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd
 # Configuration for Weblate, nginx, uwsgi and supervisor
 COPY etc /etc/
 RUN chmod a+r /etc/weblate/settings.py && \
-  ln -s /etc/weblate/setttings.py /app/etc/settings.py && \
   ln -s /etc/weblate/setttings.py /usr/local/lib/python3.6/dist-packages/weblate/settings.py
 
 # Apply hotfixes
