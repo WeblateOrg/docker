@@ -12,8 +12,7 @@ RUN useradd --shell /bin/sh --user-group weblate \
   && install -d -o weblate -g weblate -m 755 /app/data
 
 # Configure utf-8 locales
-ENV LANG C.UTF-8
-ENV LC_ALL C.UTF-8
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
 COPY requirements.txt patches /usr/src/weblate/
 
