@@ -1,0 +1,78 @@
+From 089c82fe7efe3f35bda148443810adbf3cb09a90 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Sun, 2 Dec 2018 08:53:37 +0100
+Subject: [PATCH 1/1] Add management command to cleanup Celery
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+See https://github.com/WeblateOrg/docker/issues/102
+
+Signed-off-by: Michal Čihař <michal@cihar.com>
+---
+ weblate/utils/management/__init__.py          |  0
+ weblate/utils/management/commands/__init__.py |  0
+ .../management/commands/cleanup_celery.py     | 43 +++++++++++++++++++
+ 3 files changed, 43 insertions(+)
+ create mode 100644 weblate/utils/management/__init__.py
+ create mode 100644 weblate/utils/management/commands/__init__.py
+ create mode 100644 weblate/utils/management/commands/cleanup_celery.py
+
+diff --git a/weblate/utils/management/__init__.py b/weblate/utils/management/__init__.py
+new file mode 100644
+index 0000000000..e69de29bb2
+diff --git a/weblate/utils/management/commands/__init__.py b/weblate/utils/management/commands/__init__.py
+new file mode 100644
+index 0000000000..e69de29bb2
+diff --git a/weblate/utils/management/commands/cleanup_celery.py b/weblate/utils/management/commands/cleanup_celery.py
+new file mode 100644
+index 0000000000..5278246d82
+--- /dev/null
++++ b/weblate/utils/management/commands/cleanup_celery.py
+@@ -0,0 +1,43 @@
++# -*- coding: utf-8 -*-
++#
++# Copyright © 2012 - 2018 Michal Čihař <michal@cihar.com>
++#
++# This file is part of Weblate <https://weblate.org/>
++#
++# This program is free software: you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation, either version 3 of the License, or
++# (at your option) any later version.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program.  If not, see <https://www.gnu.org/licenses/>.
++#
++
++from celery.beat import PersistentScheduler
++
++from django.conf import settings
++from django.core.management.base import BaseCommand
++
++from weblate.celery import app
++
++
++class Command(BaseCommand):
++    help = 'removes incompatible celery schedule file'
++
++    def handle(self, *args, **options):
++        scheduler = PersistentScheduler(
++            schedule_filename=settings.CELERY_BEAT_SCHEDULE_FILENAME,
++            app=app
++        )
++        try:
++            scheduler.setup_schedule()
++        except Exception as error:
++            self.stderr.write(
++                'Removing corrupted schedule file: {:r}'.format(error)
++            )
++            scheduler._remove_db()
+-- 
+2.19.1
+
