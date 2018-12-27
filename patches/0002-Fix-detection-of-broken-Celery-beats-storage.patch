@@ -1,0 +1,39 @@
+From e86861d4238bbbcd3f878615bcb06a823da391a1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Thu, 27 Dec 2018 22:28:04 +0100
+Subject: [PATCH 1/1] Fix detection of broken Celery beats storage
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The constructor already tries to setup the database, so we need to
+handle exceptions there.
+
+Signed-off-by: Michal Čihař <michal@cihar.com>
+---
+ weblate/utils/management/commands/cleanup_celery.py | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/weblate/utils/management/commands/cleanup_celery.py b/weblate/utils/management/commands/cleanup_celery.py
+index 5278246d82..9b1f11208b 100644
+--- a/weblate/utils/management/commands/cleanup_celery.py
++++ b/weblate/utils/management/commands/cleanup_celery.py
+@@ -30,11 +30,11 @@ class Command(BaseCommand):
+     help = 'removes incompatible celery schedule file'
+ 
+     def handle(self, *args, **options):
+-        scheduler = PersistentScheduler(
+-            schedule_filename=settings.CELERY_BEAT_SCHEDULE_FILENAME,
+-            app=app
+-        )
+         try:
++            scheduler = PersistentScheduler(
++                schedule_filename=settings.CELERY_BEAT_SCHEDULE_FILENAME,
++                app=app
++            )
+             scheduler.setup_schedule()
+         except Exception as error:
+             self.stderr.write(
+-- 
+2.20.0.rc2
+
