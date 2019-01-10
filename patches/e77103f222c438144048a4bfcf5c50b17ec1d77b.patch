@@ -1,0 +1,79 @@
+From e77103f222c438144048a4bfcf5c50b17ec1d77b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Sat, 8 Dec 2018 12:44:33 +0100
+Subject: [PATCH] Improve XLSX file format loader
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+- use backports.csv on Python 2 to hide differences (fixes #2444)
+- use unix dialect to always quote strings (fixes #2317)
+
+Fixes WEBLATE-1HF
+Fixes WEBLATE-1HG
+
+Signed-off-by: Michal Čihař <michal@cihar.com>
+---
+ weblate/formats/external.py | 25 ++++++-------------------
+ 1 file changed, 6 insertions(+), 19 deletions(-)
+
+diff --git a/weblate/formats/external.py b/weblate/formats/external.py
+index fe64ca562c..6c0ffe478e 100644
+--- a/weblate/formats/external.py
++++ b/weblate/formats/external.py
+@@ -20,7 +20,6 @@
+ """External file format specific behavior."""
+ from __future__ import unicode_literals
+ 
+-import csv
+ import os
+ import re
+ 
+@@ -36,6 +35,8 @@
+ 
+ from openpyxl import Workbook, load_workbook
+ 
++from translate.storage.csvl10n import csv
++
+ from weblate.formats.helpers import BytesIOMode
+ from weblate.formats.ttkit import CSVFormat
+ 
+@@ -94,15 +95,12 @@ def parse_store(cls, storefile):
+         except BadZipFile:
+             return None, None
+ 
+-        if six.PY3:
+-            output = six.StringIO()
+-        else:
+-            output = six.BytesIO()
++        output = six.StringIO()
+ 
+-        writer = csv.writer(output)
++        writer = csv.writer(output, dialect='unix')
+ 
+         for row in worksheet.rows:
+-            writer.writerow([cls.encode(cell.value) for cell in row])
++            writer.writerow([cell.value for cell in row])
+ 
+         if isinstance(storefile, six.string_types):
+             name = os.path.basename(storefile) + ".csv"
+@@ -110,18 +108,7 @@ def parse_store(cls, storefile):
+             name = os.path.basename(storefile.name) + ".csv"
+ 
+         # return the new csv as bytes
+-        content = output.getvalue()
+-
+-        if six.PY3:
+-            content = content.encode("utf-8")
++        content = output.getvalue().encode("utf-8")
+ 
+         # Load the file as CSV
+         return super(XlsxFormat, cls).parse_store(BytesIOMode(name, content))
+-
+-    @staticmethod
+-    def encode(value):
+-        if value is None:
+-            return value
+-        if six.PY2:
+-            return value.encode("utf-8")
+-        return value
