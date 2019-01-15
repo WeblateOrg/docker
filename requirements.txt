@@ -2,7 +2,7 @@ Django==2.1.5
 siphashc==1.2
 Whoosh==2.7.4
 translate-toolkit==2.3.1
-social-auth-core==2.0.0
+social-auth-core==3.0.0
 social-auth-app-django==3.1.0
 django-crispy-forms==1.7.2
 django_compressor==2.2
@@ -20,15 +20,15 @@ django-auth-ldap==1.7.0
 rollbar
 raven
 setuptools
-jellyfish==0.6.1
+jellyfish==0.7.1
 selenium
 openpyxl==2.5.12
 celery==4.2.1
 celery-batches==0.2
 zeep==3.1.0
-boto3==1.9.62
+boto3==1.9.79
 httpretty==0.9.6
-botocore==1.12.62
+botocore==1.12.79
 python-dateutil==2.7.5
 # Following are installed using apt:
 # Pillow
