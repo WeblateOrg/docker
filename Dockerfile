@@ -1,6 +1,6 @@
 FROM ubuntu:bionic
 MAINTAINER Michal Čihař <michal@cihar.com>
-ENV VERSION 3.3
+ENV VERSION 3.4
 LABEL version=$VERSION
 
 # Add user early to get a consistent userid
