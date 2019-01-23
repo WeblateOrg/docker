@@ -9,7 +9,7 @@ RUN useradd --shell /bin/sh --user-group weblate \
   && touch /home/weblate/.ssh/authorized_keys \
   && chown -R weblate:weblate /home/weblate \
   && chmod 700 /home/weblate/.ssh \
-  && install -d -o weblate -g weblate -m 755 /usr/local/lib/python3.6/dist-packages/data-test &&
+  && install -d -o weblate -g weblate -m 755 /usr/local/lib/python3.6/dist-packages/data-test \
   && install -d -o weblate -g weblate -m 755 /app/run \
   && install -d -o weblate -g weblate -m 755 /app/data
 
