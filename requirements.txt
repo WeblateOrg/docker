@@ -28,7 +28,7 @@ celery-batches==0.2
 zeep==3.2.0
 boto3==1.9.86
 httpretty==0.9.6
-botocore==1.12.83
+botocore==1.12.86
 python-dateutil==2.7.5
 # For Azure Tenant auth
 cryptography==2.5
