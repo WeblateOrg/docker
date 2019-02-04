@@ -104,6 +104,8 @@ if [ "x$1" = "xrunserver" ] ; then
     # uswgi dir
     mkdir -p /run/uwsgi/app/weblate
     chown weblate:weblate /run/uwsgi/app/weblate
+    # Remove possible stale PID file
+    rm -f /run/celerybeat.pid
 
     ln -sf ${NGINX_ACCESS_LOG:-/dev/stdout} /var/log/nginx/access.log
     ln -sf ${NGINX_ERROR_LOG:-/dev/stderr} /var/log/nginx/error.log
