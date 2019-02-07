@@ -23,7 +23,7 @@ raven
 setuptools
 jellyfish==0.7.1
 selenium
-openpyxl==2.5.14
+openpyxl==2.6.0
 celery==4.2.1
 celery-batches==0.2
 zeep==3.2.0
