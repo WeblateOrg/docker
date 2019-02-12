@@ -954,6 +954,9 @@ CELERY_TASK_ROUTES = {
     'weblate.memory.tasks.*': {'queue': 'memory'},
 }
 
+# Add option to silence some system checks
+SILENCED_SYSTEM_CHECKS = get_env_list('WEBLATE_SILENCED_SYSTEM_CHECKS')
+
 ADDITIONAL_CONFIG = '/app/data/settings-override.py'
 if os.path.exists(ADDITIONAL_CONFIG):
     with open(ADDITIONAL_CONFIG) as handle:
