@@ -19,6 +19,7 @@ django-redis==4.10.0
 phply==1.2.5
 django-auth-ldap==1.7.0
 rollbar
+eventlet
 raven
 setuptools
 jellyfish==0.7.1
