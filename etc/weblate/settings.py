@@ -148,7 +148,7 @@ USE_L10N = True
 USE_TZ = True
 
 # URL prefix to use, please see documentation for more details
-URL_PREFIX = ''
+URL_PREFIX = os.environ.get('WEBLATE_URL_PREFIX', '')
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
