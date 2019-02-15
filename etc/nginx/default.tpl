@@ -14,13 +14,13 @@ server {
         expires 30d;
     }
 
-    location /static/ {
+    location {{URL_PREFIX}}/static/ {
         # DATA_DIR/static/
         alias /app/data/static/;
         expires 30d;
     }
 
-    location /media/ {
+    location {{URL_PREFIX}}/media/ {
         # DATA_DIR/media/
         alias /app/data/media/;
         expires 30d;
