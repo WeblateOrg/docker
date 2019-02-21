@@ -24,25 +24,7 @@ import os
 from logging.handlers import SysLogHandler
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
-
-
-def get_env_list(name, default=None):
-    """Helper to get list from environment."""
-    if name not in os.environ:
-        return default or []
-    return os.environ[name].split(',')
-
-
-def get_env_map(name, default=None):
-    """
-    Helper to get mapping from environment.
-
-    parses 'full_name:name,email:mail'
-    into {'email': 'mail', 'full_name': 'name'}
-    """
-    if os.environ.get(name):
-        return dict(e.split(':') for e in os.environ[name].split(','))
-    return default or {}
+from weblate.utils.environment import get_env_list, get_env_map
 
 #
 # Django settings for Weblate project.
