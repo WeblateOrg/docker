@@ -58,7 +58,7 @@ DATABASES = {
         'PORT': os.environ['POSTGRES_PORT'],
         # Customizations for databases
         'OPTIONS': {
-            'sslmode': os.environ.get('POSTGRES_SSL_MODE'),
+            'sslmode': os.environ.get('POSTGRES_SSL_MODE', 'prefer'),
         },
     }
 }
