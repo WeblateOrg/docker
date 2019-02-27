@@ -56,6 +56,10 @@ DATABASES = {
         'HOST': os.environ['POSTGRES_HOST'],
         # Set to empty string for default. Not used with sqlite3.
         'PORT': os.environ['POSTGRES_PORT'],
+        # Customizations for databases
+        'OPTIONS': {
+            'sslmode': os.environ.get('POSTGRES_SSL_MODE'),
+        },
     }
 }
 
