@@ -1,7 +1,14 @@
 #!/bin/sh
 set -e
 
+# Provide sane default value
+if [ -z "POSTGRES_SSL_MODE" ] ; then
+    export POSTGRES_SSL_MODE="prefer"
+fi
+
+# Export variables for psql use
 export PGPASSWORD="$POSTGRES_PASSWORD"
+export PGSSLMODE="$POSTGRES_SSL_MODE"
 
 export WEBLATE_CMD="/usr/local/bin/weblate"
 
