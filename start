@@ -2,7 +2,7 @@
 set -e
 
 # Provide sane default value
-if [ -z "POSTGRES_SSL_MODE" ] ; then
+if [ -z "$POSTGRES_SSL_MODE" ] ; then
     export POSTGRES_SSL_MODE="prefer"
 fi
 
