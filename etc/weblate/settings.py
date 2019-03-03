@@ -238,6 +238,8 @@ if 'WEBLATE_SOCIAL_AUTH_FACEBOOK_KEY' in os.environ:
 SOCIAL_AUTH_FACEBOOK_KEY = os.environ.get('WEBLATE_SOCIAL_AUTH_FACEBOOK_KEY', '')
 SOCIAL_AUTH_FACEBOOK_SECRET = os.environ.get('WEBLATE_SOCIAL_AUTH_FACEBOOK_SECRET', '')
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'public_profile']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {'fields': 'id,name,email'}
+SOCIAL_AUTH_FACEBOOK_API_VERSION = '3.1'
 
 if 'WEBLATE_SOCIAL_AUTH_GOOGLE_OAUTH2_KEY' in os.environ:
     AUTHENTICATION_BACKENDS += ('social_core.backends.google.GoogleOAuth2',)
@@ -561,6 +563,11 @@ LOGGING = {
             'handlers': [DEFAULT_LOG],
             'level': os.environ.get('WEBLATE_LOGLEVEL', 'DEBUG'),
         },
+        # Logging search operations
+        'weblate.search': {
+            'handlers': [DEFAULT_LOG],
+            'level': 'INFO',
+        },
         # Logging VCS operations
         'weblate.vcs': {
             'handlers': [DEFAULT_LOG],
@@ -742,6 +749,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 #     'weblate.checks.chars.EndEllipsisCheck',
 #     'weblate.checks.chars.EndSemicolonCheck',
 #     'weblate.checks.chars.MaxLengthCheck',
+#     'weblate.checks.chars.KashidaCheck',
 #     'weblate.checks.format.PythonFormatCheck',
 #     'weblate.checks.format.PythonBraceFormatCheck',
 #     'weblate.checks.format.PHPFormatCheck',
@@ -761,6 +769,10 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 #     'weblate.checks.chars.ZeroWidthSpaceCheck',
 #     'weblate.checks.markup.XMLValidityCheck',
 #     'weblate.checks.markup.XMLTagsCheck',
+#     'weblate.checks.markup.MarkdownRefLinkCheck',
+#     'weblate.checks.markup.MarkdownLinkCheck',
+#     'weblate.checks.markup.MarkdownSyntaxCheck',
+#     'weblate.checks.markup.URLCheck',
 #     'weblate.checks.source.OptionalPluralCheck',
 #     'weblate.checks.source.EllipsisCheck',
 #     'weblate.checks.source.MultipleFailingCheck',
@@ -914,6 +926,14 @@ GOOGLE_ANALYTICS_ID = os.environ.get('WEBLATE_GOOGLE_ANALYTICS_ID', '')
 
 AKISMET_API_KEY = os.environ.get('WEBLATE_AKISMET_API_KEY', None)
 
+# Silence some of the Django system checks
+SILENCED_SYSTEM_CHECKS = [
+    # We have modified django.contrib.auth.middleware.AuthenticationMiddleware
+    # as weblate.accounts.middleware.AuthenticationMiddleware
+    'admin.E408',
+]
+SILENCED_SYSTEM_CHECKS.extend(get_env_list('WEBLATE_SILENCED_SYSTEM_CHECKS'))
+
 # Celery worker configuration for testing
 if 'MEMCACHED_HOST' in os.environ:
     CELERY_TASK_ALWAYS_EAGER = True
@@ -940,9 +960,6 @@ CELERY_TASK_ROUTES = {
     'weblate.trans.tasks.cleanup_fulltext': {'queue': 'search'},
     'weblate.memory.tasks.*': {'queue': 'memory'},
 }
-
-# Add option to silence some system checks
-SILENCED_SYSTEM_CHECKS = get_env_list('WEBLATE_SILENCED_SYSTEM_CHECKS')
 
 # Enable auto updating
 AUTO_UPDATE = os.environ.get('WEBLATE_AUTO_UPDATE', '0') == '1'
