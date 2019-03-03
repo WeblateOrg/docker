@@ -40,8 +40,6 @@ RUN set -x \
     python3-psycopg2 \
     python3-rcssmin \
     python3-rjsmin \
-    python3-redis \
-    python3-hiredis \
     gettext \
     postgresql-client \
     mercurial \
