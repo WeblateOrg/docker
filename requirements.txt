@@ -9,7 +9,7 @@ django-crispy-forms==1.7.2
 django_compressor==2.2
 djangorestframework>=3.9,<3.10
 defusedxml==0.5.0
-django-appconf==1.0.2
+django-appconf==1.0.3
 pyuca==1.2
 tesserocr==2.4.0
 akismet==1.0.1
