@@ -10,6 +10,11 @@ fi
 export PGPASSWORD="$POSTGRES_PASSWORD"
 export PGSSLMODE="$POSTGRES_SSL_MODE"
 
+# Export Redis CLI varibables
+if [ -n "$REDIS_PASSWORD" ] ; then
+    export REDISCLI_AUTH="$REDIS_PASSWORD"
+fi
+
 export WEBLATE_CMD="/usr/local/bin/weblate"
 
 chown -R weblate:weblate /app/data

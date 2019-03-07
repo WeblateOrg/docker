@@ -827,6 +827,9 @@ CACHES = {
     }
 }
 
+# Extract redis password
+REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', None)
+
 if 'MEMCACHED_HOST' in os.environ:
     CACHES['default'] = {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
@@ -847,6 +850,7 @@ else:
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
             'PARSER_CLASS': 'redis.connection.HiredisParser',
+            'PASSWORD': REDIS_PASSWORD if REDIS_PASSWORD else None,
         },
         'KEY_PREFIX': 'weblate',
     }
@@ -941,7 +945,8 @@ if 'MEMCACHED_HOST' in os.environ:
 # Celery worker configuration for production
 else:
     CELERY_TASK_ALWAYS_EAGER = False
-    CELERY_BROKER_URL = 'redis://{0}:{1}/{2}'.format(
+    CELERY_BROKER_URL = 'redis://{0}{1}:{2}/{3}'.format(
+        ':{}'.format(REDIS_PASSWORD) if REDIS_PASSWORD else '',
         os.environ.get('REDIS_HOST', 'cache'),
         os.environ.get('REDIS_PORT', '6379'),
         os.environ.get('REDIS_DB', '1'),
