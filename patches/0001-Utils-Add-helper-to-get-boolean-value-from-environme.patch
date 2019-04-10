@@ -1,0 +1,71 @@
+From 92d97a849b6ff62c25f0a358618bd920ae9875c3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Wed, 10 Apr 2019 06:59:19 +0200
+Subject: [PATCH 1/1] Utils: Add helper to get boolean value from environment
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+To be used in the Docker container to accept more flexible values for
+boolean flags.
+
+See https://github.com/WeblateOrg/docker/issues/198
+
+Signed-off-by: Michal Čihař <michal@cihar.com>
+---
+ weblate/utils/environment.py            |  8 ++++++++
+ weblate/utils/tests/test_environment.py | 18 +++++++++++++++++-
+ 2 files changed, 25 insertions(+), 1 deletion(-)
+
+diff --git a/weblate/utils/environment.py b/weblate/utils/environment.py
+index 03e6b7d20c..ce3366efef 100644
+--- a/weblate/utils/environment.py
++++ b/weblate/utils/environment.py
+@@ -39,3 +39,11 @@ def get_env_map(name, default=None):
+     if os.environ.get(name):
+         return dict(e.split(':') for e in os.environ[name].split(','))
+     return default or {}
++
++
++def get_env_bool(name, default=False):
++    """Helper to get boolean value from environment."""
++    if name not in os.environ:
++        return default
++    true_values = {'true', 'yes', '1'}
++    return os.environ[name].lower() in true_values
+diff --git a/weblate/utils/tests/test_environment.py b/weblate/utils/tests/test_environment.py
+index c9a8e8426b..8784fc9160 100644
+--- a/weblate/utils/tests/test_environment.py
++++ b/weblate/utils/tests/test_environment.py
+@@ -24,7 +24,7 @@ import os
+ 
+ from django.test import SimpleTestCase
+ 
+-from weblate.utils.environment import get_env_list, get_env_map
++from weblate.utils.environment import get_env_list, get_env_map, get_env_bool
+ 
+ 
+ class EnvTest(SimpleTestCase):
+@@ -47,3 +47,19 @@ class EnvTest(SimpleTestCase):
+         del os.environ['TEST_DATA']
+         self.assertEqual(get_env_map('TEST_DATA'), {})
+         self.assertEqual(get_env_map('TEST_DATA', {'x': 'y'}), {'x': 'y'})
++
++    def test_bool(self):
++        os.environ['TEST_DATA'] = '1'
++        self.assertEqual(get_env_bool('TEST_DATA'), True)
++        os.environ['TEST_DATA'] = 'True'
++        self.assertEqual(get_env_bool('TEST_DATA'), True)
++        os.environ['TEST_DATA'] = 'true'
++        self.assertEqual(get_env_bool('TEST_DATA'), True)
++        os.environ['TEST_DATA'] = 'Yes'
++        self.assertEqual(get_env_bool('TEST_DATA'), True)
++        os.environ['TEST_DATA'] = 'no'
++        self.assertEqual(get_env_bool('TEST_DATA'), False)
++        os.environ['TEST_DATA'] = '0'
++        self.assertEqual(get_env_bool('TEST_DATA'), False)
++        del os.environ['TEST_DATA']
++        self.assertEqual(get_env_bool('TEST_DATA'), False)
+-- 
+2.20.1
+

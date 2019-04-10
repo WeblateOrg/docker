@@ -24,13 +24,13 @@ import os
 from logging.handlers import SysLogHandler
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
-from weblate.utils.environment import get_env_list, get_env_map
+from weblate.utils.environment import get_env_list, get_env_map, get_env_bool
 
 #
 # Django settings for Weblate project.
 #
 
-DEBUG = os.environ.get('WEBLATE_DEBUG', '1') == '1'
+DEBUG = get_env_bool('WEBLATE_DEBUG', True)
 
 ADMINS = (
     (os.environ['WEBLATE_ADMIN_NAME'], os.environ['WEBLATE_ADMIN_EMAIL']),
@@ -375,7 +375,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Allow new user registrations
-REGISTRATION_OPEN = os.environ.get('WEBLATE_REGISTRATION_OPEN', '1') == '1'
+REGISTRATION_OPEN = get_env_bool('WEBLATE_REGISTRATION_OPEN', True)
 
 # Middleware
 MIDDLEWARE = [
@@ -671,7 +671,7 @@ MT_SAP_USE_MT = True
 SITE_TITLE = os.environ.get('WEBLATE_SITE_TITLE', 'Weblate')
 
 # Whether site uses https
-ENABLE_HTTPS = os.environ.get('WEBLATE_ENABLE_HTTPS', '0') == '1'
+ENABLE_HTTPS = get_env_bool('WEBLATE_ENABLE_HTTPS', False)
 
 # Use HTTPS when creating redirect URLs for social authentication, see
 # documentation for more details:
@@ -730,7 +730,7 @@ ENABLE_HOOKS = True
 NEARBY_MESSAGES = 5
 
 # Use simple language codes for default language/country combinations
-SIMPLIFY_LANGUAGES = os.environ.get('WEBLATE_SIMPLIFY_LANGUAGES', '1') == '1'
+SIMPLIFY_LANGUAGES = get_env_bool('WEBLATE_SIMPLIFY_LANGUAGES', True)
 
 # Render forms using bootstrap
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
@@ -885,7 +885,7 @@ REST_FRAMEWORK = {
     'UNAUTHENTICATED_USER': 'weblate.auth.models.get_anonymous',
 }
 
-if os.environ.get('WEBLATE_REQUIRE_LOGIN', '0') == '1':
+if get_env_bool('WEBLATE_REQUIRE_LOGIN', False):
     # Example for restricting access to logged in users
     LOGIN_REQUIRED_URLS = (
         r'/(.*)$',
@@ -913,8 +913,8 @@ if os.environ.get('WEBLATE_REQUIRE_LOGIN', '0') == '1':
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # Email server
-EMAIL_USE_TLS = os.environ.get('WEBLATE_EMAIL_USE_TLS', '1') == '1'
-EMAIL_USE_SSL = os.environ.get('WEBLATE_EMAIL_USE_SSL', '0') == '1'
+EMAIL_USE_TLS = get_env_bool('WEBLATE_EMAIL_USE_TLS', True)
+EMAIL_USE_SSL = get_env_bool('WEBLATE_EMAIL_USE_SSL', False)
 EMAIL_HOST = os.environ.get('WEBLATE_EMAIL_HOST', 'localhost')
 EMAIL_HOST_USER = os.environ.get(
     'WEBLATE_EMAIL_HOST_USER',
@@ -967,7 +967,7 @@ CELERY_TASK_ROUTES = {
 }
 
 # Enable auto updating
-AUTO_UPDATE = os.environ.get('WEBLATE_AUTO_UPDATE', '0') == '1'
+AUTO_UPDATE = get_env_bool('WEBLATE_AUTO_UPDATE', False)
 
 ADDITIONAL_CONFIG = '/app/data/settings-override.py'
 if os.path.exists(ADDITIONAL_CONFIG):
