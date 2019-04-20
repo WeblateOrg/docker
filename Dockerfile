@@ -38,6 +38,7 @@ RUN set -x \
     python3-pillow \
     python3-setuptools \
     python3-wheel \
+    python3-gdbm \
     python3-psycopg2 \
     python3-rcssmin \
     python3-rjsmin \
