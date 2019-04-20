@@ -102,6 +102,7 @@ LANGUAGES = (
     ('id', 'Indonesia'),
     ('it', 'Italiano'),
     ('ja', '日本語'),
+    ('kk', 'Қазақ тілі'),
     ('ko', '한국어'),
     ('ksh', 'Kölsch'),
     ('nb', 'Norsk bokmål'),
@@ -336,7 +337,7 @@ SOCIAL_AUTH_LOGIN_ERROR_URL = \
 SOCIAL_AUTH_EMAIL_FORM_URL = \
     '{0}/accounts/email/'.format(URL_PREFIX)
 SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = \
-    '{0}/accounts/profile/#auth'.format(URL_PREFIX)
+    '{0}/accounts/profile/#account'.format(URL_PREFIX)
 SOCIAL_AUTH_PROTECTED_USER_FIELDS = ('email',)
 SOCIAL_AUTH_SLUGIFY_USERNAMES = True
 SOCIAL_AUTH_SLUGIFY_FUNCTION = 'weblate.accounts.pipeline.slugify_username'
@@ -729,6 +730,11 @@ ENABLE_HOOKS = True
 # Number of nearby messages to show in each direction
 NEARBY_MESSAGES = 5
 
+# By default the length of a given translation is limited to the length of
+# the source string * 10 characters. Set this option to False to allow longer
+# translations (up to 10.000 characters)
+LIMIT_TRANSLATION_LENGTH_BY_SOURCE_LENGTH = True
+
 # Use simple language codes for default language/country combinations
 SIMPLIFY_LANGUAGES = get_env_bool('WEBLATE_SIMPLIFY_LANGUAGES', True)
 
@@ -755,7 +761,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 #     'weblate.checks.format.PHPFormatCheck',
 #     'weblate.checks.format.CFormatCheck',
 #     'weblate.checks.format.PerlFormatCheck',
-#     'weblate.checks.format.JavascriptFormatCheck',
+#     'weblate.checks.format.JavaScriptFormatCheck',
 #     'weblate.checks.format.CSharpFormatCheck',
 #     'weblate.checks.format.JavaFormatCheck',
 #     'weblate.checks.format.JavaMessageFormatCheck',
