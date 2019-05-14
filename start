@@ -88,6 +88,10 @@ chown weblate:weblate /app/data/secret
 
 export | grep -E 'WEBLATE_|POSTGRES_|DJANGO_|MEMCACHED_|REDIS_' > /etc/profile.d/weblate.sh
 
+# Generate git config
+HOME=/app/data/home git config --global user.email "$WEBLATE_SERVER_EMAIL"
+HOME=/app/data/home git config --global user.name "weblate"
+
 # Migrate database to current version and collect static files
 if [ "x$1" = "xrunserver" ] ; then
 
