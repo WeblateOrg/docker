@@ -93,7 +93,7 @@ RUN chmod a+r /etc/weblate/settings.py && \
   ln -s /etc/weblate/settings.py /usr/local/lib/python3.7/dist-packages/weblate/settings.py
 
 # Apply hotfixes
-RUN find /usr/src/weblate -name '*.patch' -print0 | \
+RUN find /usr/src/weblate -name '*.patch' -print0 | sort -z | \
     xargs -n1 -0 -r patch -p1 -d /usr/local/lib/python3.7/dist-packages/ -i
 
 # Entrypoint
