@@ -273,6 +273,15 @@ SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY = os.environ.get('WEBLATE_SOCIAL_AUTH_AZUR
 SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET = os.environ.get('WEBLATE_SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET', '')
 SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID = os.environ.get('WEBLATE_SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID', '')
 
+# Linux distros
+if 'WEBLATE_SOCIAL_AUTH_FEDORA' in os.environ:
+    AUTHENTICATION_BACKENDS += ('social_core.backends.fedora.FedoraOpenId')
+if 'WEBLATE_SOCIAL_AUTH_OPENSUSE' in os.environ:
+    AUTHENTICATION_BACKENDS += ('social_core.backends.suse.OpenSUSEOpenId')
+    SOCIAL_AUTH_OPENSUSE_FORCE_EMAIL_VALIDATION = True
+if 'WEBLATE_SOCIAL_AUTH_UBUNTU' in os.environ:
+    AUTHENTICATION_BACKENDS += ('social_core.backends.ubuntu.UbuntuOpenId')
+
 # https://docs.weblate.org/en/latest/admin/auth.html#ldap-authentication
 if 'WEBLATE_AUTH_LDAP_SERVER_URI' in os.environ:
     AUTH_LDAP_SERVER_URI = os.environ.get('WEBLATE_AUTH_LDAP_SERVER_URI')
