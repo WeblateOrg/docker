@@ -644,7 +644,7 @@ if 'WEBLATE_MT_MYMEMORY_ENABLED' in os.environ:
     MT_SERVICES += ('weblate.machinery.mymemory.MyMemoryTranslation',)
 
 if 'WEBLATE_MT_GLOSBE_ENABLED' in os.environ:
-    MT_SERVICES += ('weblateweblate.trans.glosbe.GlosbeTranslation',)
+    MT_SERVICES += ('weblate.machinery.glosbe.GlosbeTranslation',)
 
 # Google API key for Google Translate API
 MT_GOOGLE_KEY = os.environ.get('WEBLATE_MT_GOOGLE_KEY', None)
