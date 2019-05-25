@@ -33,28 +33,20 @@ fail_dep() {
     exit 1
 }
 
-# Wait for cache (memcached/redis)
 if [ -n "$MEMCACHED_HOST" ] ; then
-    until echo quit | nc ${MEMCACHED_HOST:-cache} ${MEMCACHED_PORT:-11211} > /dev/null 2>&1 ; do
-        >&2 echo "memcached is unavailable - sleeping"
-        TIMEOUT=$(($TIMEOUT + 1))
-        if [ $TIMEOUT -gt 60 ] ; then
-            echo quit | nc ${MEMCACHED_HOST:-cache} ${MEMCACHED_PORT:-11211}
-            fail_dep memcached
-        fi
-        sleep 1
-    done
-else
-    until printf "info\nquit\n" | nc ${REDIS_HOST:-cache} ${REDIS_PORT:-6379} 2>&1 | grep -q loading:0 ; do
-        >&2 echo "redis is unavailable - sleeping"
-        TIMEOUT=$(($TIMEOUT + 1))
-        if [ $TIMEOUT -gt 60 ] ; then
-            printf "info\nquit\n" | nc ${REDIS_HOST:-cache} ${REDIS_PORT:-6379}
-            fail_dep redis
-        fi
-        sleep 1
-    done
+    >&2 echo "memcached is no longer supported, please configure redis"
 fi
+
+# Wait for redis
+until printf "info\nquit\n" | nc ${REDIS_HOST:-cache} ${REDIS_PORT:-6379} 2>&1 | grep -q loading:0 ; do
+    >&2 echo "redis is unavailable - sleeping"
+    TIMEOUT=$(($TIMEOUT + 1))
+    if [ $TIMEOUT -gt 60 ] ; then
+        printf "info\nquit\n" | nc ${REDIS_HOST:-cache} ${REDIS_PORT:-6379}
+        fail_dep redis
+    fi
+    sleep 1
+done
 
 if [ -z "$POSTGRES_HOST" ] ; then
     export POSTGRES_HOST=database
@@ -86,7 +78,7 @@ if [ ! -f /app/data/secret ] ; then
 fi
 chown weblate:weblate /app/data/secret
 
-export | grep -E 'WEBLATE_|POSTGRES_|DJANGO_|MEMCACHED_|REDIS_' > /etc/profile.d/weblate.sh
+export | grep -E 'WEBLATE_|POSTGRES_|DJANGO_|REDIS_' > /etc/profile.d/weblate.sh
 
 # Migrate database to current version and collect static files
 if [ "x$1" = "xrunserver" ] ; then

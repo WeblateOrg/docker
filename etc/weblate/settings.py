@@ -845,30 +845,20 @@ CACHES = {
 # Extract redis password
 REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', None)
 
-if 'MEMCACHED_HOST' in os.environ:
-    CACHES['default'] = {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '{0}:{1}'.format(
-            os.environ.get('MEMCACHED_HOST', 'cache'),
-            os.environ.get('MEMCACHED_PORT', '11211'),
-        ),
-        'KEY_PREFIX': 'weblate',
-    }
-else:
-    CACHES['default'] = {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://{0}:{1}/{2}'.format(
-            os.environ.get('REDIS_HOST', 'cache'),
-            os.environ.get('REDIS_PORT', '6379'),
-            os.environ.get('REDIS_DB', '1'),
-        ),
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-            'PARSER_CLASS': 'redis.connection.HiredisParser',
-            'PASSWORD': REDIS_PASSWORD if REDIS_PASSWORD else None,
-        },
-        'KEY_PREFIX': 'weblate',
-    }
+CACHES['default'] = {
+    'BACKEND': 'django_redis.cache.RedisCache',
+    'LOCATION': 'redis://{0}:{1}/{2}'.format(
+        os.environ.get('REDIS_HOST', 'cache'),
+        os.environ.get('REDIS_PORT', '6379'),
+        os.environ.get('REDIS_DB', '1'),
+    ),
+    'OPTIONS': {
+        'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        'PARSER_CLASS': 'redis.connection.HiredisParser',
+        'PASSWORD': REDIS_PASSWORD if REDIS_PASSWORD else None,
+    },
+    'KEY_PREFIX': 'weblate',
+}
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 
@@ -953,20 +943,15 @@ SILENCED_SYSTEM_CHECKS = [
 ]
 SILENCED_SYSTEM_CHECKS.extend(get_env_list('WEBLATE_SILENCED_SYSTEM_CHECKS'))
 
-# Celery worker configuration for testing
-if 'MEMCACHED_HOST' in os.environ:
-    CELERY_TASK_ALWAYS_EAGER = True
-    CELERY_BROKER_URL = 'memory://'
 # Celery worker configuration for production
-else:
-    CELERY_TASK_ALWAYS_EAGER = False
-    CELERY_BROKER_URL = 'redis://{0}{1}:{2}/{3}'.format(
-        ':{}'.format(REDIS_PASSWORD) if REDIS_PASSWORD else '',
-        os.environ.get('REDIS_HOST', 'cache'),
-        os.environ.get('REDIS_PORT', '6379'),
-        os.environ.get('REDIS_DB', '1'),
-    )
-    CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+CELERY_TASK_ALWAYS_EAGER = False
+CELERY_BROKER_URL = 'redis://{0}{1}:{2}/{3}'.format(
+    ':{}'.format(REDIS_PASSWORD) if REDIS_PASSWORD else '',
+    os.environ.get('REDIS_HOST', 'cache'),
+    os.environ.get('REDIS_PORT', '6379'),
+    os.environ.get('REDIS_DB', '1'),
+)
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 
 # Celery settings, it is not recommended to change these
 CELERY_WORKER_PREFETCH_MULTIPLIER = 0
