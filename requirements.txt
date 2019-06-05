@@ -22,7 +22,7 @@ django-auth-ldap==1.7.0
 rollbar
 raven
 setuptools
-jellyfish==0.7.1
+jellyfish==0.7.2
 selenium
 openpyxl==2.6.2
 celery==4.3.0
