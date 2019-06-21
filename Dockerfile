@@ -1,6 +1,6 @@
 FROM debian:buster-slim
 MAINTAINER Michal Čihař <michal@cihar.com>
-ENV VERSION 3.6.1
+ENV VERSION 3.7
 LABEL version=$VERSION
 
 # Add user early to get a consistent userid
@@ -32,6 +32,10 @@ RUN set -x \
     supervisor \
     openssh-client \
     curl \
+    gir1.2-pango-1.0 \
+    python3-gi \
+    python3-gi-cairo \
+    python3-cairo \
     python3-pip \
     python3-lxml \
     python3-yaml \

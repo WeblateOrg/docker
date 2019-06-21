@@ -354,7 +354,7 @@ SOCIAL_AUTH_SLUGIFY_FUNCTION = 'weblate.accounts.pipeline.slugify_username'
 # Password validation configuration
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',  # noqa: E501, pylint: disable=line-too-long
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
@@ -448,6 +448,7 @@ INSTALLED_APPS = [
     'weblate.langdata',
     'weblate.memory',
     'weblate.screenshots',
+    'weblate.fonts',
     'weblate.accounts',
     'weblate.utils',
     'weblate.vcs',
@@ -694,6 +695,8 @@ CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = ENABLE_HTTPS
 # Store CSRF token in session (since Django 1.11)
 CSRF_USE_SESSIONS = True
+# Customize CSRF failure view
+CSRF_FAILURE_VIEW = 'weblate.trans.views.error.csrf_failure'
 SESSION_COOKIE_SECURE = ENABLE_HTTPS
 # SSL redirect
 SECURE_SSL_REDIRECT = ENABLE_HTTPS
@@ -786,6 +789,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 #     'weblate.checks.chars.NewlineCountingCheck',
 #     'weblate.checks.markup.BBCodeCheck',
 #     'weblate.checks.chars.ZeroWidthSpaceCheck',
+#     'weblate.checks.render.MaxSizeCheck',
 #     'weblate.checks.markup.XMLValidityCheck',
 #     'weblate.checks.markup.XMLTagsCheck',
 #     'weblate.checks.markup.MarkdownRefLinkCheck',
@@ -818,10 +822,13 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 #     'weblate.addons.discovery.DiscoveryAddon',
 #     'weblate.addons.flags.SourceEditAddon',
 #     'weblate.addons.flags.TargetEditAddon',
+#     'weblate.addons.flags.SameEditAddon',
 #     'weblate.addons.generate.GenerateFileAddon',
 #     'weblate.addons.json.JSONCustomizeAddon',
 #     'weblate.addons.properties.PropertiesSortAddon',
 #     'weblate.addons.git.GitSquashAddon',
+#     'weblate.addons.removal.RemoveComments',
+#     'weblate.addons.removal.RemoveSuggestions',
 # )
 
 # E-mail address that error messages come from.
@@ -918,9 +925,6 @@ if get_env_bool('WEBLATE_REQUIRE_LOGIN', False):
         ),
     )
 
-# Force sane test runner
-TEST_RUNNER = 'django.test.runner.DiscoverRunner'
-
 # Email server
 EMAIL_USE_TLS = get_env_bool('WEBLATE_EMAIL_USE_TLS', True)
 EMAIL_USE_SSL = get_env_bool('WEBLATE_EMAIL_USE_SSL', False)
@@ -968,6 +972,7 @@ CELERY_TASK_ROUTES = {
     'weblate.trans.tasks.optimize_fulltext': {'queue': 'search'},
     'weblate.trans.tasks.cleanup_fulltext': {'queue': 'search'},
     'weblate.memory.tasks.*': {'queue': 'memory'},
+    'weblate.accounts.tasks.notify_change': {'queue': 'notify'},
 }
 
 # Enable auto updating
