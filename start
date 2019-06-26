@@ -83,9 +83,13 @@ export | grep -E 'WEBLATE_|POSTGRES_|DJANGO_|REDIS_' > /etc/profile.d/weblate.sh
 # Migrate database to current version and collect static files
 if [ "x$1" = "xrunserver" ] ; then
 
-    # Migration to 3.0
-    run_weblate showmigrations --plan > /tmp/migrations.txt
-    if  grep -Fq '[X]  auth.0001_initial' /tmp/migrations.txt && grep -Fq '[ ]  weblate_auth.0001_initial' /tmp/migrations.txt ; then
+    # Fail on migration to 3.0
+    failure=0
+    run_weblate showmigrations --plan > /tmp/migrations.txt || failure=1
+    has_old_auth=`grep -Fc '[X]  auth.0001_initial' /tmp/migrations.txt`
+    missing_new_auth=`grep -Fc '[ ]  weblate_auth.0001_initial' /tmp/migrations.txt`
+    if [ $failure -gt 0 -o \( $has_old_auth -gt 0 -a $missing_new_auth -gt 0 \) ] ; then
+        echo
         echo "Migration from this version is not supported!"
         echo "Please upgrade to 3.0.1-7 first."
         exit 1
