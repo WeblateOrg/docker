@@ -1,5 +1,5 @@
 #!/bin/sh
-set -ex
+set -e
 
 # Provide sane default value
 if [ -z "$POSTGRES_SSL_MODE" ] ; then
@@ -86,8 +86,8 @@ if [ "x$1" = "xrunserver" ] ; then
     # Fail on migration to 3.0
     failure=0
     run_weblate showmigrations --plan > /tmp/migrations.txt || failure=1
-    has_old_auth=$(grep -Fc '[X]  auth.0001_initial' /tmp/migrations.txt)
-    missing_new_auth=$(grep -Fc '[ ]  weblate_auth.0001_initial' /tmp/migrations.txt)
+    has_old_auth=$(grep -Fc '[X]  auth.0001_initial' /tmp/migrations.txt || true)
+    missing_new_auth=$(grep -Fc '[ ]  weblate_auth.0001_initial' /tmp/migrations.txt || true)
     if [ $failure -gt 0 -o \( $has_old_auth -gt 0 -a $missing_new_auth -gt 0 \) ] ; then
         echo
         echo "Migration from this version is not supported!"
