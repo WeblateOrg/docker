@@ -24,7 +24,6 @@ RUN set -x \
   && apt-get update \
   && apt-get -y upgrade \
   && apt-get install --no-install-recommends -y \
-    sudo \
     uwsgi \
     uwsgi-plugin-python3 \
     netcat-openbsd \
