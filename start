@@ -20,7 +20,7 @@ export WEBLATE_CMD="/usr/local/bin/weblate"
 chown -R weblate:weblate /app/data
 
 run_weblate() {
-    su - weblate $WEBLATE_CMD "$@"
+    sudo -u weblate -E $WEBLATE_CMD "$@"
 }
 
 fail_dep() {
