@@ -124,7 +124,9 @@ if [ "x$1" = "xrunserver" ] ; then
     exec supervisord --nodaemon \
         --loglevel=${SUPERVISOR_LOGLEVEL:-info} \
         --logfile_maxbytes=0 \
-        --logfile=${SUPERVISOR_LOGFILE:-/dev/null}
+        --logfile=${SUPERVISOR_LOGFILE:-/dev/null} \
+        --user=root \
+        --configuration=/etc/supervisor/supervisord.conf
 fi
 
 # Start the management command
