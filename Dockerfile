@@ -38,7 +38,6 @@ RUN set -x \
     python3-cairo \
     python3-pip \
     python3-lxml \
-    python3-yaml \
     python3-pillow \
     python3-setuptools \
     python3-wheel \
