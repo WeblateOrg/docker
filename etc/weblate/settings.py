@@ -397,6 +397,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Allow new user registrations
 REGISTRATION_OPEN = get_env_bool('WEBLATE_REGISTRATION_OPEN', True)
 
+# Email registration filter
+REGISTRATION_EMAIL_MATCH = os.environ.get('WEBLATE_REGISTRATION_EMAIL_MATCH', '.*')
+
 # Middleware
 MIDDLEWARE = [
     'weblate.middleware.ProxyMiddleware',
