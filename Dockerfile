@@ -60,6 +60,7 @@ RUN set -x \
     libsasl2-dev \
     libldap2-dev \
     libssl-dev \
+    libenchant1c2a \
     cython \
     gcc \
     g++ \
