@@ -35,7 +35,7 @@ python-dateutil==2.8.0
 # For Azure Tenant auth
 cryptography==2.7
 # Subtitles
-aeidon==1.2.1
+aeidon==1.6.0
 # Following are installed using apt:
 # Pillow
 # lxml
