@@ -26,10 +26,8 @@ if [ -n "$WEBLATE_TIME_ZONE" -a -f "$zonefile" ] ; then
     mv -f /etc/localtime.dpkg-new /etc/localtime
 fi
 
-chown -R weblate:weblate /app/data
-
 run_weblate() {
-    sudo -u weblate -E $WEBLATE_CMD "$@"
+    $WEBLATE_CMD "$@"
 }
 
 fail_dep() {
@@ -85,7 +83,6 @@ if [ ! -f /app/data/secret ] ; then
     # https://github.com/django/django/blob/1.10.2/django/utils/crypto.py#L54-L56
     python3 -c "from django.utils.crypto import get_random_string; print(get_random_string(50))" > /app/data/secret
 fi
-chown weblate:weblate /app/data/secret
 
 export | grep -E 'WEBLATE_|POSTGRES_|DJANGO_|REDIS_' > /etc/profile.d/weblate.sh
 
@@ -120,10 +117,10 @@ if [ "x$1" = "xrunserver" ] ; then
 
     # uswgi dir
     mkdir -p /run/uwsgi/app/weblate
-    chown weblate:weblate /run/uwsgi/app/weblate
+
     # Celery pid, remove possible stale PID file
     mkdir -p /run/celery
-    chown weblate:weblate /run/celery
+
     rm -f /run/celery/beat.pid
 
     ln -sf ${NGINX_ACCESS_LOG:-/dev/stdout} /var/log/nginx/access.log
@@ -134,7 +131,7 @@ if [ "x$1" = "xrunserver" ] ; then
         --loglevel=${SUPERVISOR_LOGLEVEL:-info} \
         --logfile_maxbytes=0 \
         --logfile=${SUPERVISOR_LOGFILE:-/dev/null} \
-        --user=root \
+        --user=weblate \
         --configuration=/etc/supervisor/supervisord.conf
 fi
 

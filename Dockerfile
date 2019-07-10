@@ -64,7 +64,7 @@ RUN set -x \
     cython \
     gcc \
     g++ \
-    tesseract-ocr \ 
+    tesseract-ocr \
     patch \
   && pip3 install Weblate==$VERSION -r /usr/src/weblate/requirements.txt \
   && python3 -c 'from phply.phpparse import make_parser; make_parser()' \
@@ -93,6 +93,9 @@ RUN curl -L https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd
 
 # Configuration for Weblate, nginx, uwsgi and supervisor
 COPY etc /etc/
+
+RUN chown -R weblate:weblate /etc/nginx/sites-available/ /etc/profile.d/ /var/log/nginx/ /var/lib/nginx /app/data /run
+
 RUN chmod a+r /etc/weblate/settings.py && \
   ln -s /etc/weblate/settings.py /usr/local/lib/python3.7/dist-packages/weblate/settings.py
 
@@ -105,5 +108,6 @@ COPY start /app/bin/
 RUN chmod a+rx /app/bin/start
 
 EXPOSE 80
+USER weblate
 ENTRYPOINT ["/app/bin/start"]
 CMD ["runserver"]
