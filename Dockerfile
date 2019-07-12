@@ -91,10 +91,13 @@ RUN curl -L https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd
   cp hub-linux-amd64-2.2.9/bin/hub /usr/bin && \
   rm -rf hub-linux-amd64-2.2.9
 
+RUN usermod -a -G root weblate
+
 # Configuration for Weblate, nginx, uwsgi and supervisor
 COPY etc /etc/
 
-RUN chown -R weblate:weblate /etc/nginx/sites-available/ /etc/profile.d/ /var/log/nginx/ /var/lib/nginx /app/data /run
+RUN chgrp -R 0 /etc/nginx/sites-available/ /etc/profile.d/ /var/log/nginx/ /var/lib/nginx /app/data /run \
+  && chmod -R g=u /etc/nginx/sites-available/ /etc/profile.d/ /var/log/nginx/ /var/lib/nginx /app/data /run
 
 RUN chmod a+r /etc/weblate/settings.py && \
   ln -s /etc/weblate/settings.py /usr/local/lib/python3.7/dist-packages/weblate/settings.py
@@ -103,11 +106,13 @@ RUN chmod a+r /etc/weblate/settings.py && \
 RUN find /usr/src/weblate -name '*.patch' -print0 | sort -z | \
     xargs -n1 -0 -r patch -p1 -d /usr/local/lib/python3.7/dist-packages/ -i
 
+
 # Entrypoint
 COPY start /app/bin/
 RUN chmod a+rx /app/bin/start
 
+EXPOSE 8080
 EXPOSE 80
-USER weblate
+USER 1001
 ENTRYPOINT ["/app/bin/start"]
 CMD ["runserver"]

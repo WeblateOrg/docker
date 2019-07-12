@@ -1,10 +1,11 @@
 #!/bin/sh
 set -e
+id -u
 
 # Export Weblate variables
 export WEBLATE_CMD="/usr/local/bin/weblate"
 if [ -z "$WEBLATE_PORT" ] ; then
-    export WEBLATE_PORT=80
+    export WEBLATE_PORT=8080
 fi
 
 # Provide sane default value
@@ -135,7 +136,6 @@ if [ "x$1" = "xrunserver" ] ; then
         --loglevel=${SUPERVISOR_LOGLEVEL:-info} \
         --logfile_maxbytes=0 \
         --logfile=${SUPERVISOR_LOGFILE:-/dev/null} \
-        --user=weblate \
         --configuration=/etc/supervisor/supervisord.conf
 fi
 
