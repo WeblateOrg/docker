@@ -1,5 +1,5 @@
 server {
-    listen 80 default_server;
+    listen ${WEBLATE_PORT} default_server;
     root /app/data/static;
 
     location ~ ^/favicon.ico$ {
@@ -14,13 +14,13 @@ server {
         expires 30d;
     }
 
-    location {{URL_PREFIX}}/static/ {
+    location ${WEBLATE_URL_PREFIX}/static/ {
         # DATA_DIR/static/
         alias /app/data/static/;
         expires 30d;
     }
 
-    location {{URL_PREFIX}}/media/ {
+    location ${WEBLATE_URL_PREFIX}/media/ {
         # DATA_DIR/media/
         alias /app/data/media/;
         expires 30d;
