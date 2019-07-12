@@ -1,5 +1,6 @@
 #!/bin/sh
 set -e
+id -u
 
 # Export Weblate variables
 export WEBLATE_CMD="/usr/local/bin/weblate"
@@ -130,7 +131,6 @@ if [ "x$1" = "xrunserver" ] ; then
         --loglevel=${SUPERVISOR_LOGLEVEL:-info} \
         --logfile_maxbytes=0 \
         --logfile=${SUPERVISOR_LOGFILE:-/dev/null} \
-        --user=weblate \
         --configuration=/etc/supervisor/supervisord.conf
 fi
 
