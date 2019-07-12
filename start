@@ -1,6 +1,7 @@
 #!/bin/sh
 set -e
-id -u
+
+echo "Starting..."
 
 # Export Weblate variables
 export WEBLATE_CMD="/usr/local/bin/weblate"
