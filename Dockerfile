@@ -8,9 +8,11 @@ RUN useradd --shell /bin/sh --user-group weblate \
   && mkdir -p /home/weblate/.ssh \
   && touch /home/weblate/.ssh/authorized_keys \
   && chown -R weblate:weblate /home/weblate \
-  && chmod 700 /home/weblate/.ssh \
-  && install -d -o weblate -g weblate -m 755 /usr/local/lib/python3.7/dist-packages/data-test \
-  && install -d -o weblate -g weblate -m 755 /app/data
+  && chmod 700 /home/weblate/.ssh
+
+# I dunno what this line is doing, please document this.
+RUN install -d -o weblate -g weblate -m 755 /usr/local/lib/python3.7/dist-packages/data-test \
+ && install -d -o weblate -g weblate -m 755 /app/data
 
 # Configure utf-8 locales to make sure Python
 # correctly handles unicode filenames
@@ -91,13 +93,17 @@ RUN curl -L https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd
   cp hub-linux-amd64-2.2.9/bin/hub /usr/bin && \
   rm -rf hub-linux-amd64-2.2.9
 
-RUN usermod -a -G root weblate
+RUN usermod -a -G root weblate \
+  # Autorize passwd edition so we can fix uid later.
+  && chmod 664 /etc/passwd /etc/group
 
 # Configuration for Weblate, nginx, uwsgi and supervisor
 COPY etc /etc/
 
-RUN chgrp -R 0 /etc/nginx/sites-available/ /etc/profile.d/ /var/log/nginx/ /var/lib/nginx /app/data /run \
-  && chmod -R 770 /etc/nginx/sites-available/ /etc/profile.d/ /var/log/nginx/ /var/lib/nginx /app/data /run
+ENV HOME=/home/weblate
+
+RUN chgrp -R 0 /etc/nginx/sites-available/ /etc/profile.d/ /var/log/nginx/ /var/lib/nginx /app/data /run /home/weblate \
+  && chmod -R 770 /etc/nginx/sites-available/ /etc/profile.d/ /var/log/nginx/ /var/lib/nginx /app/data /run /home /home/weblate
 
 RUN chmod a+r /etc/weblate/settings.py && \
   ln -s /etc/weblate/settings.py /usr/local/lib/python3.7/dist-packages/weblate/settings.py
@@ -113,6 +119,6 @@ RUN chmod a+rx /app/bin/start
 
 EXPOSE 8080
 EXPOSE 80
-USER 1001
+USER 1000
 ENTRYPOINT ["/app/bin/start"]
 CMD ["runserver"]
