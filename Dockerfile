@@ -8,9 +8,15 @@ RUN useradd --shell /bin/sh --user-group weblate \
   && mkdir -p /home/weblate/.ssh \
   && touch /home/weblate/.ssh/authorized_keys \
   && chown -R weblate:weblate /home/weblate \
-  && chmod 700 /home/weblate/.ssh
+  && chmod 700 /home/weblate/.ssh \
+  # Add weblate in the root group so it can run with any uid.
+  && usermod -a -G root weblate \
+  # Autorize passwd edition so we can fix uid later.
+  && chmod 664 /etc/passwd /etc/group
 
-# I dunno what this line is doing, please document this.
+ENV HOME=/home/weblate
+
+# This is needed to run tests inside the container.
 RUN install -d -o weblate -g weblate -m 755 /usr/local/lib/python3.7/dist-packages/data-test \
  && install -d -o weblate -g weblate -m 755 /app/data
 
@@ -88,37 +94,30 @@ RUN set -x \
   && apt-get -y autoremove \
   && apt-get clean
 
-# Hub
+# Apply hotfixes on Weblate
+RUN find /usr/src/weblate -name '*.patch' -print0 | sort -z | \
+  xargs -n1 -0 -r patch -p1 -d /usr/local/lib/python3.7/dist-packages/ -i
+
+# Install Hub
 RUN curl -L https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd64-2.2.9.tgz | tar xzv --wildcards hub-linux*/bin/hub && \
   cp hub-linux-amd64-2.2.9/bin/hub /usr/bin && \
   rm -rf hub-linux-amd64-2.2.9
 
-RUN usermod -a -G root weblate \
-  # Autorize passwd edition so we can fix uid later.
-  && chmod 664 /etc/passwd /etc/group
-
 # Configuration for Weblate, nginx, uwsgi and supervisor
 COPY etc /etc/
 
-ENV HOME=/home/weblate
-
+# Fix permissions
 RUN chgrp -R 0 /etc/nginx/sites-available/ /etc/profile.d/ /var/log/nginx/ /var/lib/nginx /app/data /run /home/weblate \
   && chmod -R 770 /etc/nginx/sites-available/ /etc/profile.d/ /var/log/nginx/ /var/lib/nginx /app/data /run /home /home/weblate
 
 RUN chmod a+r /etc/weblate/settings.py && \
   ln -s /etc/weblate/settings.py /usr/local/lib/python3.7/dist-packages/weblate/settings.py
 
-# Apply hotfixes
-RUN find /usr/src/weblate -name '*.patch' -print0 | sort -z | \
-    xargs -n1 -0 -r patch -p1 -d /usr/local/lib/python3.7/dist-packages/ -i
-
-
 # Entrypoint
 COPY start /app/bin/
 RUN chmod a+rx /app/bin/start
 
 EXPOSE 8080
-EXPOSE 80
 USER 1000
 ENTRYPOINT ["/app/bin/start"]
 CMD ["runserver"]
