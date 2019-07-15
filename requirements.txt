@@ -19,7 +19,7 @@ redis==3.2.1
 hiredis==1.0.0
 phply==1.2.5
 django-auth-ldap==2.0.0
-ruamel.yaml==0.15.98
+ruamel.yaml==0.15.99
 rollbar
 raven
 setuptools
@@ -29,7 +29,7 @@ openpyxl==2.6.2
 celery==4.3.0
 celery-batches==0.2
 zeep==3.4.0
-boto3==1.9.187
+boto3==1.9.188
 httpretty==0.9.6
 python-dateutil==2.8.0
 # For Azure Tenant auth

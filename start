@@ -62,11 +62,11 @@ if [ -n "$MEMCACHED_HOST" ] ; then
 fi
 
 # Wait for redis
-until printf "info\nquit\n" | nc ${REDIS_HOST:-cache} ${REDIS_PORT:-6379} 2>&1 | grep -q loading:0 ; do
+until redis-cli -h ${REDIS_HOST:-cache} -p ${REDIS_PORT:-6379} info 2>&1 | grep -q loading:0 ; do
     >&2 echo "redis is unavailable - sleeping"
     TIMEOUT=$(($TIMEOUT + 1))
     if [ $TIMEOUT -gt 60 ] ; then
-        printf "info\nquit\n" | nc ${REDIS_HOST:-cache} ${REDIS_PORT:-6379}
+        redis-cli -h ${REDIS_HOST:-cache} -p ${REDIS_PORT:-6379} info
         fail_dep redis
     fi
     sleep 1

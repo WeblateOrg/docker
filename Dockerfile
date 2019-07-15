@@ -29,11 +29,11 @@ RUN set -x \
     sudo \
     uwsgi \
     uwsgi-plugin-python3 \
-    netcat-openbsd \
     nginx \
     supervisor \
     openssh-client \
     curl \
+    redis-tools \
     gir1.2-pango-1.0 \
     python3-gi \
     python3-gi-cairo \
