@@ -967,7 +967,7 @@ SILENCED_SYSTEM_CHECKS.extend(get_env_list('WEBLATE_SILENCED_SYSTEM_CHECKS'))
 # Celery worker configuration for production
 CELERY_TASK_ALWAYS_EAGER = False
 CELERY_BROKER_URL = 'redis://{0}{1}:{2}/{3}'.format(
-    ':{}'.format(REDIS_PASSWORD) if REDIS_PASSWORD else '',
+    ':{}@'.format(REDIS_PASSWORD) if REDIS_PASSWORD else '',
     os.environ.get('REDIS_HOST', 'cache'),
     os.environ.get('REDIS_PORT', '6379'),
     os.environ.get('REDIS_DB', '1'),
