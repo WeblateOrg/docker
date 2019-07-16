@@ -91,8 +91,6 @@ if [ ! -f /app/data/secret ] ; then
 fi
 chown weblate:weblate /app/data/secret
 
-export | grep -E 'WEBLATE_|POSTGRES_|DJANGO_|REDIS_' > /etc/profile.d/weblate.sh
-
 # Migrate database to current version and collect static files
 if [ "x$1" = "xrunserver" ] ; then
 
