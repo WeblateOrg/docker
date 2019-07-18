@@ -1,5 +1,5 @@
 server {
-    listen ${WEBLATE_PORT} default_server;
+    listen 80 default_server;
     root /app/data/static;
 
     location ~ ^/favicon.ico$ {

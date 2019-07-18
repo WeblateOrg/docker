@@ -3,9 +3,6 @@ set -e
 
 # Export Weblate variables
 export WEBLATE_CMD="/usr/local/bin/weblate"
-if [ -z "$WEBLATE_PORT" ] ; then
-    export WEBLATE_PORT=80
-fi
 
 # Provide sane default value
 if [ -z "$POSTGRES_SSL_MODE" ] ; then
