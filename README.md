@@ -10,6 +10,11 @@ World.
 
 You might want to use [Weblate docker-compose](https://github.com/WeblateOrg/docker-compose) to run Weblate.
 
+## Exposed ports
+
+In July 2019 (starting with the 3.7.1-6 tag), the containers is not running as
+root. As a consequence this has lead to changed exposed port from 80 to 8080.
+
 ## Docker hub tags
 
 You can use following tags on Docker hub:
