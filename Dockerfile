@@ -107,8 +107,8 @@ RUN curl -L https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd
 COPY etc /etc/
 
 # Fix permissions
-RUN chgrp -R 0 /etc/nginx/sites-available/ /etc/profile.d/ /var/log/nginx/ /var/lib/nginx /app/data /run /home/weblate \
-  && chmod -R 770 /etc/nginx/sites-available/ /etc/profile.d/ /var/log/nginx/ /var/lib/nginx /app/data /run /home /home/weblate
+RUN chgrp -R 0 /etc/nginx/sites-available/ /var/log/nginx/ /var/lib/nginx /app/data /run /home/weblate \
+  && chmod -R 770 /etc/nginx/sites-available/ /var/log/nginx/ /var/lib/nginx /app/data /run /home /home/weblate
 
 RUN chmod a+r /etc/weblate/settings.py && \
   ln -s /etc/weblate/settings.py /usr/local/lib/python3.7/dist-packages/weblate/settings.py
