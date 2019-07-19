@@ -37,8 +37,7 @@ zonefile="/usr/share/zoneinfo/$WEBLATE_TIME_ZONE"
 if [ -n "$WEBLATE_TIME_ZONE" -a -f "$zonefile" ] ; then
     echo "Updating system timezone to $WEBLATE_TIME_ZONE"
     echo $WEBLATE_TIME_ZONE > /etc/timezone
-    ln -nsf /usr/share/zoneinfo/$WEBLATE_TIME_ZONE /etc/localtime.dpkg-new && \
-    mv -f /etc/localtime.dpkg-new /etc/localtime
+    cat /usr/share/zoneinfo/$WEBLATE_TIME_ZONE > /etc/localtime
 fi
 
 run_weblate() {

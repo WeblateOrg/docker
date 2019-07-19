@@ -106,9 +106,10 @@ RUN curl -L https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd
 # Configuration for Weblate, nginx, uwsgi and supervisor
 COPY etc /etc/
 
-# Fix permissions
-RUN chgrp -R 0 /etc/nginx/sites-available/ /var/log/nginx/ /var/lib/nginx /app/data /run /home/weblate \
-  && chmod -R 770 /etc/nginx/sites-available/ /var/log/nginx/ /var/lib/nginx /app/data /run /home /home/weblate
+# Fix permissions and adjust files to be able to edit them as user on start
+RUN rm -f /etc/localtime && cp /usr/share/zoneinfo/Etc/UTC /etc/localtime \
+  && chgrp -R 0 /etc/nginx/sites-available/ /var/log/nginx/ /var/lib/nginx /app/data /run /home/weblate /etc/timezone /etc/localtime \
+  && chmod -R 770 /etc/nginx/sites-available/ /var/log/nginx/ /var/lib/nginx /app/data /run /home /home/weblate /etc/timezone /etc/localtime
 
 RUN chmod a+r /etc/weblate/settings.py && \
   ln -s /etc/weblate/settings.py /usr/local/lib/python3.7/dist-packages/weblate/settings.py
