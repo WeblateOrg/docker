@@ -1,5 +1,5 @@
 server {
-    listen 80 default_server;
+    listen 8080 default_server;
     root /app/data/static;
 
     location ~ ^/favicon.ico$ {
