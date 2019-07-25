@@ -19,7 +19,7 @@ redis==3.2.1
 hiredis==1.0.0
 phply==1.2.5
 django-auth-ldap==2.0.0
-ruamel.yaml==0.15.100
+ruamel.yaml==0.16.0
 rollbar
 raven
 setuptools
