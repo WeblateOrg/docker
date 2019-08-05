@@ -4,13 +4,13 @@ ENV VERSION 3.7.1
 LABEL version=$VERSION
 
 # Add user early to get a consistent userid
-RUN useradd --shell /bin/sh --user-group weblate \
+# - the root group so it can run with any uid
+# - the tty group for /dev/std* access
+RUN useradd --shell /bin/sh --user-group weblate --groups root,tty \
   && mkdir -p /home/weblate/.ssh \
   && touch /home/weblate/.ssh/authorized_keys \
   && chown -R weblate:weblate /home/weblate \
-  && chmod 700 /home/weblate/.ssh \
-  # Add weblate in the root group so it can run with any uid.
-  && usermod -a -G root weblate
+  && chmod 700 /home/weblate/.ssh
 
 ENV HOME=/home/weblate
 
