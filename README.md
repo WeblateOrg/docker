@@ -1,6 +1,6 @@
 # Official Docker container for Weblate
 
-[![Build Status](https://travis-ci.org/WeblateOrg/docker.svg?branch=master)](https://travis-ci.org/WeblateOrg/docker)
+[![Build Status](https://travis-ci.com/WeblateOrg/docker.svg?branch=master)](https://travis-ci.com/WeblateOrg/docker)
 [![Docker Layers](https://images.microbadger.com/badges/image/weblate/weblate.svg)](https://microbadger.com/images/weblate/weblate "Get your own image badge on microbadger.com")
 [![Documenation](https://img.shields.io/readthedocs/weblate.svg)](https://docs.weblate.org/en/latest/admin/deployments.html#docker)
 
