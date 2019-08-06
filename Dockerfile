@@ -55,6 +55,7 @@ RUN set -x \
     mercurial \
     git \
     git-svn \
+    gnupg \
     subversion \
     pkg-config \
     python3-dev \
