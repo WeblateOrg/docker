@@ -38,6 +38,8 @@ RUN set -x \
     curl \
     redis-tools \
     gir1.2-pango-1.0 \
+    python-pip \
+    python-setuptools \
     python3-gi \
     python3-gi-cairo \
     python3-cairo \
@@ -73,6 +75,7 @@ RUN set -x \
     tesseract-ocr \
     patch \
   && pip3 install Weblate==$VERSION -r /usr/src/weblate/requirements.txt \
+  && pip install supervisor-stdout \
   && python3 -c 'from phply.phpparse import make_parser; make_parser()' \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && rm -rf /root/.cache /tmp/* \
