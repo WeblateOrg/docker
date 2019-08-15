@@ -90,12 +90,11 @@ LANGUAGES = (
     ('da', 'Dansk'),
     ('de', 'Deutsch'),
     ('en', 'English'),
-    ('en-gb', 'English (United Kingdom)'),
     ('el', 'Ελληνικά'),
+    ('en-gb', 'English (United Kingdom)'),
     ('es', 'Español'),
     ('fi', 'Suomi'),
     ('fr', 'Français'),
-    ('fy', 'Frysk'),
     ('gl', 'Galego'),
     ('he', 'עברית'),
     ('hu', 'Magyar'),
@@ -104,7 +103,6 @@ LANGUAGES = (
     ('ja', '日本語'),
     ('kk', 'Қазақ тілі'),
     ('ko', '한국어'),
-    ('ksh', 'Kölsch'),
     ('nb', 'Norsk bokmål'),
     ('nl', 'Nederlands'),
     ('pl', 'Polski'),
@@ -446,6 +444,7 @@ INSTALLED_APPS = [
     'django.contrib.admin.apps.SimpleAdminConfig',
     'django.contrib.admindocs',
     'django.contrib.sitemaps',
+    'django.contrib.humanize',
     'social_django',
     'crispy_forms',
     'compressor',
@@ -604,6 +603,11 @@ LOGGING = {
         # },
     }
 }
+
+# Logging of management commands to console
+if (os.environ.get('DJANGO_IS_MANAGEMENT_COMMAND', False)
+        and 'console' not in LOGGING['loggers']['weblate']['handlers']):
+    LOGGING['loggers']['weblate']['handlers'].append('console')
 
 # Remove syslog setup if it's not present
 if not HAVE_SYSLOG:
@@ -795,6 +799,9 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 #     'weblate.checks.format.JavaFormatCheck',
 #     'weblate.checks.format.JavaMessageFormatCheck',
 #     'weblate.checks.angularjs.AngularJSInterpolationCheck',
+#     'weblate.checks.qt.QtFormatCheck',
+#     'weblate.checks.qt.QtPluralCheck',
+#     'weblate.checks.ruby.RubyFormatCheck',
 #     'weblate.checks.consistency.PluralsCheck',
 #     'weblate.checks.consistency.SamePluralsCheck',
 #     'weblate.checks.consistency.ConsistencyCheck',
@@ -986,6 +993,7 @@ CELERY_TASK_ROUTES = {
     'weblate.trans.tasks.cleanup_fulltext': {'queue': 'search'},
     'weblate.memory.tasks.*': {'queue': 'memory'},
     'weblate.accounts.tasks.notify_change': {'queue': 'notify'},
+    'weblate.accounts.tasks.send_mails': {'queue': 'notify'},
 }
 
 # Enable auto updating
