@@ -4,6 +4,7 @@ Whoosh==2.7.4
 translate-toolkit==2.4.0
 translation-finder==1.6
 social-auth-core==3.2.0
+social-auth-core[openidconnect]==3.2.0
 social-auth-app-django==3.1.0
 django-crispy-forms==1.7.2
 django_compressor==2.3
