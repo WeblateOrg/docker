@@ -126,7 +126,7 @@ RUN chmod a+r /etc/weblate/settings.py && \
 COPY start /app/bin/
 RUN chmod a+rx /app/bin/start
 
-EXPOSE 8080
+EXPOSE 8080 4443
 USER 1000
 ENTRYPOINT ["/app/bin/start"]
 CMD ["runserver"]
