@@ -1,0 +1,47 @@
+From 6d41eb6691c980561cbb1a4f28d62cea7731bcf5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Thu, 22 Aug 2019 13:28:08 +0200
+Subject: [PATCH 1/1] Errors: Catch ProgrammingError as well when saving error
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Michal Čihař <michal@cihar.com>
+---
+ weblate/trans/util.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/weblate/trans/util.py b/weblate/trans/util.py
+index d2827dd34a..b100dbcab5 100644
+--- a/weblate/trans/util.py
++++ b/weblate/trans/util.py
+@@ -27,7 +27,7 @@ import sys
+ import six
+ from django.apps import apps
+ from django.core.cache import cache
+-from django.db.utils import OperationalError
++from django.db.utils import OperationalError, ProgrammingError
+ from django.http import HttpResponseRedirect
+ from django.shortcuts import redirect
+ from django.shortcuts import render as django_render
+@@ -134,7 +134,7 @@ def add_configuration_error(name, message, force_cache=False):
+         try:
+             ConfigurationError.objects.add(name, message)
+             return
+-        except OperationalError:
++        except (OperationalError, ProgrammingError):
+             # The table does not have to be created yet (eg. migration
+             # is about to be executed)
+             pass
+@@ -156,7 +156,7 @@ def delete_configuration_error(name, force_cache=False):
+         try:
+             ConfigurationError.objects.remove(name)
+             return
+-        except OperationalError:
++        except (OperationalError, ProgrammingError):
+             # The table does not have to be created yet (eg. migration
+             # is about to be executed)
+             pass
+-- 
+2.23.0
+
