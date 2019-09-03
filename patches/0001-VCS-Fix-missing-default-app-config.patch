@@ -1,0 +1,30 @@
+From ae7adf851441dcedc6223a14b8f42f9288b01155 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Thu, 22 Aug 2019 11:22:50 +0200
+Subject: [PATCH 1/1] VCS: Fix missing default app config
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Without that the VCS global setup might be missing
+in some cases.
+
+Fixes WEBLATE-2EA
+
+Signed-off-by: Michal Čihař <michal@cihar.com>
+---
+ weblate/vcs/__init__.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/weblate/vcs/__init__.py b/weblate/vcs/__init__.py
+index 361f25a782..81dd4719d7 100644
+--- a/weblate/vcs/__init__.py
++++ b/weblate/vcs/__init__.py
+@@ -17,3 +17,4 @@
+ # You should have received a copy of the GNU General Public License
+ # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ #
++default_app_config = 'weblate.vcs.apps.VCSConfig'
+-- 
+2.23.0
+
