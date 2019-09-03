@@ -1,0 +1,44 @@
+From 0b1971568c8ccd2dd52c7d71b6ca4e2e8ed85e0b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Thu, 22 Aug 2019 12:32:14 +0200
+Subject: [PATCH 1/1] VCS: Fix initial git setup when home does not exist
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Michal Čihař <michal@cihar.com>
+---
+ weblate/vcs/apps.py | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/weblate/vcs/apps.py b/weblate/vcs/apps.py
+index b337cf12c4..dbe00aca9c 100644
+--- a/weblate/vcs/apps.py
++++ b/weblate/vcs/apps.py
+@@ -35,10 +35,13 @@ class VCSConfig(AppConfig):
+     verbose_name = 'VCS'
+ 
+     def ready(self):
++        home = data_dir('home')
++        if not os.path.exists(home):
++            os.makedirs(home)
+         # Configure merge driver for Gettext PO
+         # We need to do this behind lock to avoid errors when servers
+         # start in parallel
+-        lockfile = FileLock(os.path.join(data_dir('home'), 'gitlock'))
++        lockfile = FileLock(os.path.join(home, 'gitlock'))
+         with lockfile:
+             try:
+                 GitRepository.global_setup()
+@@ -50,7 +53,7 @@ class VCSConfig(AppConfig):
+                 )
+ 
+         # Use it for *.po by default
+-        configdir = os.path.join(data_dir('home'), '.config', 'git')
++        configdir = os.path.join(home, '.config', 'git')
+         configfile = os.path.join(configdir, 'attributes')
+         if not os.path.exists(configfile):
+             if not os.path.exists(configdir):
+-- 
+2.23.0
+
