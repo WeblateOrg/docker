@@ -50,7 +50,7 @@ fail_dep() {
     >&2 echo "$1 is expected to run as separate Docker container."
     >&2 echo
     >&2 echo "Please see our docs for more details:"
-    >&2 echo "https://docs.weblate.org/en/latest/admin/deployments.html#docker"
+    >&2 echo "https://docs.weblate.org/en/latest/admin/install/docker.html"
     exit 1
 }
 

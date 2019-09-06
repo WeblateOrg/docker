@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.com/WeblateOrg/docker.svg?branch=master)](https://travis-ci.com/WeblateOrg/docker)
 [![Docker Layers](https://images.microbadger.com/badges/image/weblate/weblate.svg)](https://microbadger.com/images/weblate/weblate "Get your own image badge on microbadger.com")
-[![Documenation](https://img.shields.io/readthedocs/weblate.svg)](https://docs.weblate.org/en/latest/admin/deployments.html#docker)
+[![Documenation](https://img.shields.io/readthedocs/weblate.svg)](https://docs.weblate.org/en/latest/admin/install/docker.html)
 
 Weblate is a libre software web-based continuous localization system used by
 over 1150+ opensource projects & companies in over 115+ countries around the
@@ -27,4 +27,4 @@ You can use following tags on Docker hub:
 
 Detailed documentation is available in Weblate documentation:
 
-https://docs.weblate.org/en/latest/admin/deployments.html#docker
+https://docs.weblate.org/en/latest/admin/install/docker.html
