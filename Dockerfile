@@ -74,7 +74,7 @@ RUN set -x \
     g++ \
     tesseract-ocr \
     patch \
-  && pip3 install Weblate==$VERSION -r /usr/src/weblate/requirements.txt \
+  && pip install Weblate==$VERSION -r /usr/src/weblate/requirements.txt \
   && pip install supervisor-stdout \
   && python3 -c 'from phply.phpparse import make_parser; make_parser()' \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
