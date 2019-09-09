@@ -887,10 +887,12 @@ CACHES = {
 
 # Extract redis password
 REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', None)
+REDIS_PROTO = 'rediss' if get_env_bool('REDIS_TLS', False) else 'redis'
 
 CACHES['default'] = {
     'BACKEND': 'django_redis.cache.RedisCache',
-    'LOCATION': 'redis://{0}:{1}/{2}'.format(
+    'LOCATION': '{}://{}:{}/{}'.format(
+        REDIS_PROTO,
         os.environ.get('REDIS_HOST', 'cache'),
         os.environ.get('REDIS_PORT', '6379'),
         os.environ.get('REDIS_DB', '1'),
@@ -985,7 +987,8 @@ SILENCED_SYSTEM_CHECKS.extend(get_env_list('WEBLATE_SILENCED_SYSTEM_CHECKS'))
 
 # Celery worker configuration for production
 CELERY_TASK_ALWAYS_EAGER = False
-CELERY_BROKER_URL = 'redis://{0}{1}:{2}/{3}'.format(
+CELERY_BROKER_URL = '{}://{}{}:{}/{}'.format(
+    REDIS_PROTO,
     ':{}@'.format(REDIS_PASSWORD) if REDIS_PASSWORD else '',
     os.environ.get('REDIS_HOST', 'cache'),
     os.environ.get('REDIS_PORT', '6379'),
