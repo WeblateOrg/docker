@@ -27,11 +27,6 @@ fi
 export PGPASSWORD="$POSTGRES_PASSWORD"
 export PGSSLMODE="$POSTGRES_SSL_MODE"
 
-# Export Redis CLI varibables
-if [ -n "$REDIS_PASSWORD" ] ; then
-    export REDISCLI_AUTH="$REDIS_PASSWORD"
-fi
-
 # Update the time zone
 zonefile="/usr/share/zoneinfo/$WEBLATE_TIME_ZONE"
 if [ -n "$WEBLATE_TIME_ZONE" -a -f "$zonefile" ] ; then
@@ -59,11 +54,11 @@ if [ -n "$MEMCACHED_HOST" ] ; then
 fi
 
 # Wait for redis
-until redis-cli -h ${REDIS_HOST:-cache} -p ${REDIS_PORT:-6379} info 2>&1 | grep -q loading:0 ; do
+until run_weblate shell -c 'from django.core.cache import cache; cache.has_key("ping")' > /dev/null 2>&1 ; do
     >&2 echo "redis is unavailable - sleeping"
     TIMEOUT=$(($TIMEOUT + 1))
     if [ $TIMEOUT -gt 60 ] ; then
-        redis-cli -h ${REDIS_HOST:-cache} -p ${REDIS_PORT:-6379} info
+        run_weblate shell -c 'from django.core.cache import cache; cache.has_key("ping")'
         fail_dep redis
     fi
     sleep 1
