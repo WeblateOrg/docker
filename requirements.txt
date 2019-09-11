@@ -13,7 +13,7 @@ django-appconf==1.0.3
 pyuca==1.2
 tesserocr==2.4.1
 akismet==1.0.1
-python3-saml==1.7.0
+python3-saml==1.8.0
 django-redis==4.10.0
 redis==3.3.8
 hiredis==1.0.0
