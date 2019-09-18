@@ -28,7 +28,6 @@ selenium
 openpyxl==2.6.3
 celery==4.3.0
 celery-batches==0.2
-eventlet
 zeep==3.4.0
 boto3==1.9.230
 httpretty==0.9.6
