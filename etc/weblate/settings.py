@@ -904,12 +904,12 @@ CACHES['default'] = {
         'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         'PARSER_CLASS': 'redis.connection.HiredisParser',
         'PASSWORD': REDIS_PASSWORD if REDIS_PASSWORD else None,
-        'CONNECTION_POOL_KWARGS': {
-            'ssl_cert_reqs': 'required' if get_env_bool('REDIS_VERIFY_SSL') else None,
-        },
+        'CONNECTION_POOL_KWARGS': {},
     },
     'KEY_PREFIX': 'weblate',
 }
+if not get_env_bool('REDIS_VERIFY_SSL', True):
+    caches['default']['OPTIONS']['CONNECTION_POOL_KWARGS']['ssl_cert_reqs'] = None
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 
