@@ -17,6 +17,7 @@ fi
 
 # Export Weblate variables
 export WEBLATE_CMD="/usr/local/bin/weblate"
+export WEBLATE_PY_PATH="/app/data/python"
 
 # Provide sane default value
 if [ -z "$POSTGRES_SSL_MODE" ] ; then
@@ -33,6 +34,14 @@ if [ -n "$WEBLATE_TIME_ZONE" -a -f "$zonefile" ] ; then
     echo "Updating system timezone to $WEBLATE_TIME_ZONE"
     echo $WEBLATE_TIME_ZONE > /etc/timezone
     cat /usr/share/zoneinfo/$WEBLATE_TIME_ZONE > /etc/localtime
+fi
+
+# Create fake Python app for customization
+if [ ! -d $WEBLATE_PY_PATH ] ; then
+    echo "Creating $WEBLATE_PY_PATH"
+    mkdir -p $WEBLATE_PY_PATH/customize/static
+    touch $WEBLATE_PY_PATH/customize/__init__.py
+    touch $WEBLATE_PY_PATH/customize/models.py
 fi
 
 run_weblate() {

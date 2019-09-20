@@ -119,7 +119,8 @@ RUN rm -f /etc/localtime && cp /usr/share/zoneinfo/Etc/UTC /etc/localtime \
   && sed -i '/pam_rootok.so/a auth requisite pam_deny.so' /etc/pam.d/su
 
 RUN chmod a+r /etc/weblate/settings.py && \
-  ln -s /etc/weblate/settings.py /usr/local/lib/python3.7/dist-packages/weblate/settings.py
+  ln -s /etc/weblate/settings.py /usr/local/lib/python3.7/dist-packages/weblate/settings.py && \
+  echo "/app/data/python" > /usr/local/lib/python3.7/dist-packages/weblate-docker.pth
 
 # Entrypoint
 COPY start /app/bin/
