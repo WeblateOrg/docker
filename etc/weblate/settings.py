@@ -904,6 +904,9 @@ CACHES['default'] = {
         'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         'PARSER_CLASS': 'redis.connection.HiredisParser',
         'PASSWORD': REDIS_PASSWORD if REDIS_PASSWORD else None,
+        'CONNECTION_POOL_KWARGS': {
+            'ssl_cert_reqs': 'required' if get_env_bool('REDIS_VERIFY_SSL') else None,
+        },
     },
     'KEY_PREFIX': 'weblate',
 }
