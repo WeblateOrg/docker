@@ -63,7 +63,8 @@ if [ -n "$MEMCACHED_HOST" ] ; then
 fi
 
 # Wait for redis
-until run_weblate shell -c 'from django.core.cache import cache; cache.has_key("ping")' > /dev/null 2>&1 ; do
+TIMEOUT=0
+until run_weblate shell -c 'from django.core.cache import cache; cache.has_key("ping")' > /dev/null ; do
     >&2 echo "redis is unavailable - waiting $((30 - $TIMEOUT))"
     TIMEOUT=$(($TIMEOUT + 1))
     if [ $TIMEOUT -gt 30 ] ; then
@@ -82,7 +83,7 @@ fi
 
 # Wait for database to get available
 TIMEOUT=0
-until psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "$POSTGRES_DATABASE" -U "$POSTGRES_USER" -c 'SELECT 1' > /dev/null 2>&1 ; do
+until psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "$POSTGRES_DATABASE" -U "$POSTGRES_USER" -c 'SELECT 1' > /dev/null ; do
     >&2 echo "Postgres is unavailable - waiting $((30 - $TIMEOUT))"
     TIMEOUT=$(($TIMEOUT + 1))
     if [ $TIMEOUT -gt 30 ] ; then
