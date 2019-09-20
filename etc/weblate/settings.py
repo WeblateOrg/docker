@@ -24,7 +24,7 @@ import os
 from logging.handlers import SysLogHandler
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
-from weblate.utils.environment import get_env_list, get_env_map, get_env_bool
+from weblate.utils.environment import get_env_list, get_env_map, get_env_bool, modify_env_list
 
 #
 # Django settings for Weblate project.
@@ -498,6 +498,8 @@ if 'SENTRY_DSN' in os.environ:
     }
     INSTALLED_APPS.append('raven.contrib.django.raven_compat')
 
+modify_env_list(INSTALLED_APPS, 'APPS')
+
 # Path to locales
 LOCALE_PATHS = (os.path.join(BASE_DIR, 'weblate', 'locale'), )
 
@@ -790,81 +792,84 @@ SIMPLIFY_LANGUAGES = get_env_bool('WEBLATE_SIMPLIFY_LANGUAGES', True)
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 # List of quality checks
-# CHECK_LIST = (
-#     'weblate.checks.same.SameCheck',
-#     'weblate.checks.chars.BeginNewlineCheck',
-#     'weblate.checks.chars.EndNewlineCheck',
-#     'weblate.checks.chars.BeginSpaceCheck',
-#     'weblate.checks.chars.EndSpaceCheck',
-#     'weblate.checks.chars.EndStopCheck',
-#     'weblate.checks.chars.EndColonCheck',
-#     'weblate.checks.chars.EndQuestionCheck',
-#     'weblate.checks.chars.EndExclamationCheck',
-#     'weblate.checks.chars.EndEllipsisCheck',
-#     'weblate.checks.chars.EndSemicolonCheck',
-#     'weblate.checks.chars.MaxLengthCheck',
-#     'weblate.checks.chars.KashidaCheck',
-#     'weblate.checks.format.PythonFormatCheck',
-#     'weblate.checks.format.PythonBraceFormatCheck',
-#     'weblate.checks.format.PHPFormatCheck',
-#     'weblate.checks.format.CFormatCheck',
-#     'weblate.checks.format.PerlFormatCheck',
-#     'weblate.checks.format.JavaScriptFormatCheck',
-#     'weblate.checks.format.CSharpFormatCheck',
-#     'weblate.checks.format.JavaFormatCheck',
-#     'weblate.checks.format.JavaMessageFormatCheck',
-#     'weblate.checks.angularjs.AngularJSInterpolationCheck',
-#     'weblate.checks.qt.QtFormatCheck',
-#     'weblate.checks.qt.QtPluralCheck',
-#     'weblate.checks.ruby.RubyFormatCheck',
-#     'weblate.checks.consistency.PluralsCheck',
-#     'weblate.checks.consistency.SamePluralsCheck',
-#     'weblate.checks.consistency.ConsistencyCheck',
-#     'weblate.checks.consistency.TranslatedCheck',
-#     'weblate.checks.chars.NewlineCountingCheck',
-#     'weblate.checks.markup.BBCodeCheck',
-#     'weblate.checks.chars.ZeroWidthSpaceCheck',
-#     'weblate.checks.render.MaxSizeCheck',
-#     'weblate.checks.markup.XMLValidityCheck',
-#     'weblate.checks.markup.XMLTagsCheck',
-#     'weblate.checks.markup.MarkdownRefLinkCheck',
-#     'weblate.checks.markup.MarkdownLinkCheck',
-#     'weblate.checks.markup.MarkdownSyntaxCheck',
-#     'weblate.checks.markup.URLCheck',
-#     'weblate.checks.source.OptionalPluralCheck',
-#     'weblate.checks.source.EllipsisCheck',
-#     'weblate.checks.source.MultipleFailingCheck',
-# )
+CHECK_LIST = [
+    'weblate.checks.same.SameCheck',
+    'weblate.checks.chars.BeginNewlineCheck',
+    'weblate.checks.chars.EndNewlineCheck',
+    'weblate.checks.chars.BeginSpaceCheck',
+    'weblate.checks.chars.EndSpaceCheck',
+    'weblate.checks.chars.EndStopCheck',
+    'weblate.checks.chars.EndColonCheck',
+    'weblate.checks.chars.EndQuestionCheck',
+    'weblate.checks.chars.EndExclamationCheck',
+    'weblate.checks.chars.EndEllipsisCheck',
+    'weblate.checks.chars.EndSemicolonCheck',
+    'weblate.checks.chars.MaxLengthCheck',
+    'weblate.checks.chars.KashidaCheck',
+    'weblate.checks.format.PythonFormatCheck',
+    'weblate.checks.format.PythonBraceFormatCheck',
+    'weblate.checks.format.PHPFormatCheck',
+    'weblate.checks.format.CFormatCheck',
+    'weblate.checks.format.PerlFormatCheck',
+    'weblate.checks.format.JavaScriptFormatCheck',
+    'weblate.checks.format.CSharpFormatCheck',
+    'weblate.checks.format.JavaFormatCheck',
+    'weblate.checks.format.JavaMessageFormatCheck',
+    'weblate.checks.angularjs.AngularJSInterpolationCheck',
+    'weblate.checks.qt.QtFormatCheck',
+    'weblate.checks.qt.QtPluralCheck',
+    'weblate.checks.ruby.RubyFormatCheck',
+    'weblate.checks.consistency.PluralsCheck',
+    'weblate.checks.consistency.SamePluralsCheck',
+    'weblate.checks.consistency.ConsistencyCheck',
+    'weblate.checks.consistency.TranslatedCheck',
+    'weblate.checks.chars.NewlineCountingCheck',
+    'weblate.checks.markup.BBCodeCheck',
+    'weblate.checks.chars.ZeroWidthSpaceCheck',
+    'weblate.checks.render.MaxSizeCheck',
+    'weblate.checks.markup.XMLValidityCheck',
+    'weblate.checks.markup.XMLTagsCheck',
+    'weblate.checks.markup.MarkdownRefLinkCheck',
+    'weblate.checks.markup.MarkdownLinkCheck',
+    'weblate.checks.markup.MarkdownSyntaxCheck',
+    'weblate.checks.markup.URLCheck',
+    'weblate.checks.source.OptionalPluralCheck',
+    'weblate.checks.source.EllipsisCheck',
+    'weblate.checks.source.MultipleFailingCheck',
+]
+modify_env_list(CHECK_LIST, 'CHECK')
 
 # List of automatic fixups
-# AUTOFIX_LIST = (
-#     'weblate.trans.autofixes.whitespace.SameBookendingWhitespace',
-#     'weblate.trans.autofixes.chars.ReplaceTrailingDotsWithEllipsis',
-#     'weblate.trans.autofixes.chars.RemoveZeroSpace',
-#     'weblate.trans.autofixes.chars.RemoveControlChars',
-# )
+AUTOFIX_LIST = [
+    'weblate.trans.autofixes.whitespace.SameBookendingWhitespace',
+    'weblate.trans.autofixes.chars.ReplaceTrailingDotsWithEllipsis',
+    'weblate.trans.autofixes.chars.RemoveZeroSpace',
+    'weblate.trans.autofixes.chars.RemoveControlChars',
+]
+modify_env_list(CHECK_LIST, 'AUTOFIX')
 
 # List of enabled addons
-# WEBLATE_ADDONS = (
-#     'weblate.addons.gettext.GenerateMoAddon',
-#     'weblate.addons.gettext.UpdateLinguasAddon',
-#     'weblate.addons.gettext.UpdateConfigureAddon',
-#     'weblate.addons.gettext.MsgmergeAddon',
-#     'weblate.addons.gettext.GettextCustomizeAddon',
-#     'weblate.addons.gettext.GettextAuthorComments',
-#     'weblate.addons.cleanup.CleanupAddon',
-#     'weblate.addons.consistency.LangaugeConsistencyAddon',
-#     'weblate.addons.discovery.DiscoveryAddon',
-#     'weblate.addons.flags.SourceEditAddon',
-#     'weblate.addons.flags.TargetEditAddon',
-#     'weblate.addons.flags.SameEditAddon',
-#     'weblate.addons.generate.GenerateFileAddon',
-#     'weblate.addons.json.JSONCustomizeAddon',
-#     'weblate.addons.properties.PropertiesSortAddon',
-#     'weblate.addons.git.GitSquashAddon',
-#     'weblate.addons.removal.RemoveComments',
-#     'weblate.addons.removal.RemoveSuggestions',
-# )
+WEBLATE_ADDONS = [
+    'weblate.addons.gettext.GenerateMoAddon',
+    'weblate.addons.gettext.UpdateLinguasAddon',
+    'weblate.addons.gettext.UpdateConfigureAddon',
+    'weblate.addons.gettext.MsgmergeAddon',
+    'weblate.addons.gettext.GettextCustomizeAddon',
+    'weblate.addons.gettext.GettextAuthorComments',
+    'weblate.addons.cleanup.CleanupAddon',
+    'weblate.addons.consistency.LangaugeConsistencyAddon',
+    'weblate.addons.discovery.DiscoveryAddon',
+    'weblate.addons.flags.SourceEditAddon',
+    'weblate.addons.flags.TargetEditAddon',
+    'weblate.addons.flags.SameEditAddon',
+    'weblate.addons.generate.GenerateFileAddon',
+    'weblate.addons.json.JSONCustomizeAddon',
+    'weblate.addons.properties.PropertiesSortAddon',
+    'weblate.addons.git.GitSquashAddon',
+    'weblate.addons.removal.RemoveComments',
+    'weblate.addons.removal.RemoveSuggestions',
+]
+modify_env_list(CHECK_LIST, 'ADDONS')
 
 # E-mail address that error messages come from.
 SERVER_EMAIL = os.environ['WEBLATE_SERVER_EMAIL']
