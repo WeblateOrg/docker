@@ -61,6 +61,7 @@ RUN set -x \
     pkg-config \
     python3-dev \
     libxml2-dev \
+    libacl1-dev \
     libxmlsec1-dev \
     libleptonica-dev \
     libtesseract-dev \
