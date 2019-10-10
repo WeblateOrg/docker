@@ -1,0 +1,48 @@
+From c69190c0e16849b57208bf11092816fa50d81bea Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Thu, 10 Oct 2019 13:42:33 +0200
+Subject: [PATCH 1/1] Utils: Insert new elements from top
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+For most cases order does not matter, but we want to insert
+apps first to override static files.
+
+Signed-off-by: Michal Čihař <michal@cihar.com>
+---
+ weblate/utils/environment.py            | 7 ++++---
+ weblate/utils/tests/test_environment.py | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/weblate/utils/environment.py b/weblate/utils/environment.py
+index 242e4f5d71..c129ef6fe2 100644
+--- a/weblate/utils/environment.py
++++ b/weblate/utils/environment.py
+@@ -52,7 +52,8 @@ def get_env_bool(name, default=False):
+ 
+ def modify_env_list(current, name):
+     """Helper to modify list (eg. checks)."""
+-    current.extend(get_env_list("WEBLATE_ADD_{}".format(name)))
+-    for remove in get_env_list("WEBLATE_REMOVE_{}".format(name)):
+-        current.remove(remove)
++    for item in reversed(get_env_list("WEBLATE_ADD_{}".format(name))):
++        current.insert(0, item)
++    for item in get_env_list("WEBLATE_REMOVE_{}".format(name)):
++        current.remove(item)
+     return current
+diff --git a/weblate/utils/tests/test_environment.py b/weblate/utils/tests/test_environment.py
+index 4c3f915ed6..dc644b27f4 100644
+--- a/weblate/utils/tests/test_environment.py
++++ b/weblate/utils/tests/test_environment.py
+@@ -72,6 +72,6 @@ class EnvTest(SimpleTestCase):
+         os.environ['WEBLATE_REMOVE_TEST'] = 'baz,bag'
+         setting = ['baz', 'bag', 'aaa']
+         modify_env_list(setting, 'TEST')
+-        self.assertEqual(setting, ['aaa', 'foo', 'bar'])
++        self.assertEqual(setting, ['foo', 'bar', 'aaa'])
+         del os.environ['WEBLATE_ADD_TEST']
+         del os.environ['WEBLATE_REMOVE_TEST']
+-- 
+2.23.0
+
