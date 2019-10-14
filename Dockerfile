@@ -36,6 +36,7 @@ RUN set -x \
     supervisor \
     openssh-client \
     curl \
+    vim \
     gir1.2-pango-1.0 \
     python-pip \
     python-setuptools \
