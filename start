@@ -17,7 +17,7 @@ fi
 
 # Export Weblate variables
 export WEBLATE_CMD="/usr/local/bin/weblate"
-export WEBLATE_PY_PATH="/app/data/python"
+export WEBLATE_PY_PATH="/app/data/python/customize"
 
 # Provide sane default value
 if [ -z "$POSTGRES_SSL_MODE" ] ; then
@@ -39,9 +39,9 @@ fi
 # Create fake Python app for customization
 if [ ! -d $WEBLATE_PY_PATH ] ; then
     echo "Creating $WEBLATE_PY_PATH"
-    mkdir -p $WEBLATE_PY_PATH/customize/static
-    touch $WEBLATE_PY_PATH/customize/__init__.py
-    touch $WEBLATE_PY_PATH/customize/models.py
+    mkdir -p $WEBLATE_PY_PATH/static
+    touch $WEBLATE_PY_PATH/__init__.py
+    touch $WEBLATE_PY_PATH/models.py
 fi
 
 run_weblate() {
