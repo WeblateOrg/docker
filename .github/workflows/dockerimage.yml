@@ -16,4 +16,12 @@ jobs:
       run: docker build . --file Dockerfile --tag weblate/weblate:latest
     - name: Test the Docker image
       run: |
-        cd docker-compose && ./test.sh
+        cd docker-compose
+        ./test.sh
+    - name: Test the Docker image with SSL
+      run: |
+        VOLUMEPATH=$(docker volume inspect -f '{{.Mountpoint}}' wl_weblate-data)
+        mkdir -p $VOLUMEPATH/ssl
+        openssl req -x509 -nodes -days 365 -subj "/CN=weblate.example.com" -newkey rsa:2048 -keyout $VOLUMEPATH/ssl/privkey.pem -out $VOLUMEPATH/ssl/fullchain.pem
+        chown -R 1000:1000 $VOLUMEPATH/ssl
+        ./test.sh 4443 https no
