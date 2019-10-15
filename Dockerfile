@@ -68,6 +68,7 @@ RUN set -x \
     libsasl2-dev \
     libldap2-dev \
     libssl-dev \
+    libffi-dev \
     libenchant1c2a \
     cython \
     gcc \
@@ -85,6 +86,7 @@ RUN set -x \
     libleptonica-dev \
     libtesseract-dev \
     libxml2-dev \
+    libffi-dev \
     libxmlsec1-dev \
     cython \
     gcc \
