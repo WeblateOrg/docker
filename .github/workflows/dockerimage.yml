@@ -24,4 +24,5 @@ jobs:
         sudo mkdir -p $VOLUMEPATH/ssl
         sudo openssl req -x509 -nodes -days 365 -subj "/CN=weblate.example.com" -newkey rsa:2048 -keyout $VOLUMEPATH/ssl/privkey.pem -out $VOLUMEPATH/ssl/fullchain.pem
         sudo chown -R 1000:1000 $VOLUMEPATH/ssl
+        cd docker-compose
         ./test.sh 4443 https no
