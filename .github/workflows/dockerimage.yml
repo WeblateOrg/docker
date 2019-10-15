@@ -14,5 +14,4 @@ jobs:
       run: docker build . --file Dockerfile --tag weblate/weblate:latest
     - name: Test the Docker image
       run: |
-        cd docker-compose
-        ./test.sh
+        cd docker-compose && ./test.sh
