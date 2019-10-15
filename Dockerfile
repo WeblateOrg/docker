@@ -1,6 +1,6 @@
 FROM debian:buster-slim
 MAINTAINER Michal Čihař <michal@cihar.com>
-ENV VERSION 3.8
+ENV VERSION 3.9
 LABEL version=$VERSION
 
 # Add user early to get a consistent userid
@@ -19,8 +19,8 @@ RUN install -d -o weblate -g weblate -m 755 /usr/local/lib/python3.7/dist-packag
  && install -d -o weblate -g weblate -m 755 /app/data
 
 # Configure utf-8 locales to make sure Python
-# correctly handles unicode filenames
-ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+# correctly handles unicode filenames, configure settings
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 DJANGO_SETTINGS_MODULE=weblate.settings_docker
 
 COPY requirements.txt patches /usr/src/weblate/
 
@@ -121,9 +121,8 @@ RUN rm -f /etc/localtime && cp /usr/share/zoneinfo/Etc/UTC /etc/localtime \
   && chmod 664 /etc/passwd /etc/group \
   && sed -i '/pam_rootok.so/a auth requisite pam_deny.so' /etc/pam.d/su
 
-RUN chmod a+r /etc/weblate/settings.py && \
-  ln -s /etc/weblate/settings.py /usr/local/lib/python3.7/dist-packages/weblate/settings.py && \
-  echo "/app/data/python" > /usr/local/lib/python3.7/dist-packages/weblate-docker.pth
+# Search path for custom modules
+RUN echo "/app/data/python" > /usr/local/lib/python3.7/dist-packages/weblate-docker.pth
 
 # Entrypoint
 COPY start /app/bin/
