@@ -33,7 +33,7 @@ boto3==1.9.251
 httpretty==0.9.7
 python-dateutil==2.8.0
 # For Azure Tenant auth
-cryptography==2.7
+cryptography==2.8
 # Subtitles
 aeidon==1.6.0
 # Following are installed using apt:
