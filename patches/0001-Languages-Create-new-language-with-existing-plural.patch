@@ -1,0 +1,33 @@
+From c45c9c84d1f8b0aed4ca242f4952e4abc2de817f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Mon, 28 Oct 2019 13:42:28 +0100
+Subject: [PATCH 1/1] Languages: Create new language with existing plural
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Otherwise rest of code chokes when it does not exist.
+
+Fixes #3116
+
+Signed-off-by: Michal Čihař <michal@cihar.com>
+---
+ weblate/lang/views.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/weblate/lang/views.py b/weblate/lang/views.py
+index 2704ebc4cb..25cc33c3ff 100644
+--- a/weblate/lang/views.py
++++ b/weblate/lang/views.py
+@@ -171,7 +171,7 @@ class CreateLanguageView(CreateView):
+         plural = form[1].instance
+         plural.language = self.object
+         plural.type = data.PLURAL_UNKNOWN
+-        plural.source = Plural.SOURCE_MANUAL
++        plural.source = Plural.SOURCE_DEFAULT
+         plural.save()
+         return redirect(self.object)
+ 
+-- 
+2.24.0.rc1
+
