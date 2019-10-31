@@ -1,0 +1,33 @@
+From f2c228cf7af13e9fdd8486d923ee8d63ed3feead Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Thu, 31 Oct 2019 14:30:42 +0100
+Subject: [PATCH 1/1] Memory: Make contribute to shared memory actually work
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+The previous commit added just the switch, but did not actually use it.
+
+Fixes #2983
+
+Signed-off-by: Michal Čihař <michal@cihar.com>
+---
+ weblate/memory/tasks.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/weblate/memory/tasks.py b/weblate/memory/tasks.py
+index dd72e6037c..3603e05f1b 100644
+--- a/weblate/memory/tasks.py
++++ b/weblate/memory/tasks.py
+@@ -68,7 +68,7 @@ def update_memory(user, unit):
+     categories = [CATEGORY_PRIVATE_OFFSET + project.pk]
+     if user:
+         categories.append(CATEGORY_USER_OFFSET + user.id)
+-    if unit.translation.component.project.use_shared_tm:
++    if unit.translation.component.project.contribute_shared_tm:
+         categories.append(CATEGORY_SHARED)
+ 
+     for category in categories:
+-- 
+2.24.0.rc2
+
