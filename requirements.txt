@@ -5,7 +5,7 @@ translate-toolkit==2.4.0
 translation-finder==1.7
 social-auth-core[openidconnect]==3.2.0
 social-auth-app-django==3.1.0
-django-crispy-forms==1.7.2
+django-crispy-forms==1.8.1
 django_compressor==2.3
 djangorestframework>=3.9,<3.12
 defusedxml==0.6.0
