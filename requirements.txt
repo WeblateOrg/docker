@@ -18,7 +18,7 @@ django-redis==4.10.0
 redis==3.3.11
 hiredis==1.0.0
 phply==1.2.5
-django-auth-ldap==2.0.0
+django-auth-ldap==2.1.0
 ruamel.yaml==0.16.5
 rollbar
 raven
