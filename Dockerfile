@@ -74,9 +74,11 @@ RUN set -x \
     gcc \
     g++ \
     tesseract-ocr \
+    python-django-auth-ldap \
     patch \
   && pip3 install Weblate==$VERSION -r /usr/src/weblate/requirements.txt \
   && pip install supervisor-stdout \
+  && pip django-auth-ldap>=1.3.0 \
   && python3 -c 'from phply.phpparse import make_parser; make_parser()' \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && rm -rf /root/.cache /tmp/* \
