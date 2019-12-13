@@ -1,5 +1,5 @@
 Django==2.2.8
-siphashc==1.2
+siphashc==1.3
 Whoosh==2.7.4
 translate-toolkit==2.4.0
 translation-finder==1.7
