@@ -30,7 +30,7 @@ celery==4.3.0
 kombu==4.6.3
 celery-batches==0.2
 zeep==3.4.0
-boto3==1.10.40
+boto3==1.10.41
 httpretty==0.9.7
 python-dateutil==2.8.0
 # For Azure Tenant auth
