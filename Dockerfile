@@ -106,6 +106,11 @@ RUN curl -L https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd
   cp hub-linux-amd64-2.2.9/bin/hub /usr/bin && \
   rm -rf hub-linux-amd64-2.2.9
 
+# Install Lab
+RUN curl -sL "https://github.com/zaquestion/lab/releases/download/v0.17.2/lab_0.17.2_linux_amd64.tar.gz" | tar -C /tmp/ -xzf - \ 
+  && mv /tmp/lab /usr/bin \ 
+  && chmod u+x /usr/bin/lab
+
 # Configuration for Weblate, nginx, uwsgi and supervisor
 COPY etc /etc/
 
