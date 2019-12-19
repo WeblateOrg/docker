@@ -26,7 +26,7 @@ setuptools
 jellyfish==0.7.2
 selenium
 openpyxl==3.0.1
-celery==4.3.0
+celery==4.4.0
 kombu==4.6.3
 celery-batches==0.2
 zeep==3.4.0
