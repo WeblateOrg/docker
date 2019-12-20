@@ -15,7 +15,7 @@ RUN useradd --shell /bin/sh --user-group weblate --groups root,tty \
 ENV HOME=/home/weblate
 
 # This is needed to run tests inside the container.
-RUN install -d -o weblate -g weblate -m 755 /usr/local/lib/python3.7/dist-packages/data-test \
+RUN install -d -o weblate -g weblate -m 755 /usr/local/lib/python3.7/dist-packages/data-test /usr/local/lib/python3.7/dist-packages/test-images \
  && install -d -o weblate -g weblate -m 755 /app/data
 
 # Configure utf-8 locales to make sure Python
