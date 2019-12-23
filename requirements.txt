@@ -25,7 +25,7 @@ raven
 setuptools
 jellyfish==0.7.2
 selenium
-openpyxl==3.0.1
+openpyxl==3.0.2
 celery==4.3.0
 kombu==4.6.3
 celery-batches==0.2
