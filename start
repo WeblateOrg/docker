@@ -135,7 +135,8 @@ if [ "x$1" = "xrunserver" ] ; then
     run_weblate migrate
     run_weblate cleanup_avatar_cache
     run_weblate cleanup_celery
-    run_weblate collectstatic --noinput
+    # Run with --clear to ensure all files are up to date
+    run_weblate collectstatic --noinput --clear
     # Create or update admin account
     if [ -n "$WEBLATE_ADMIN_PASSWORD" ] ; then
         run_weblate createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME"
