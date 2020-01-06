@@ -132,6 +132,7 @@ if [ "x$1" = "xrunserver" ] ; then
     fi
     rm /tmp/migrations.txt
 
+    echo "Starting database migration..."
     run_weblate migrate
     run_weblate cleanup_avatar_cache
     run_weblate cleanup_celery
