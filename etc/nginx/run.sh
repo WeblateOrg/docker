@@ -1,7 +1,8 @@
 #!/bin/bash
 if [ -f /app/data/ssl/privkey.pem ] ; then
-    envsubst < /etc/nginx/ssl.tpl > /etc/nginx/sites-available/default;
+    template=/etc/nginx/ssl.tpl
 else
-    envsubst < /etc/nginx/default.tpl > /etc/nginx/sites-available/default;
+    template=/etc/nginx/default.tpl
 fi
+envsubst '$WEBLATE_URL_PREFIX' < $template > /etc/nginx/sites-available/default
 exec /usr/sbin/nginx -g "daemon off;"
