@@ -41,5 +41,5 @@ server {
 
 server {
     listen 8080 default_server;
-    return 301 https://$server_name$request_uri;
+    return 301 https://$host$request_uri;
 }
