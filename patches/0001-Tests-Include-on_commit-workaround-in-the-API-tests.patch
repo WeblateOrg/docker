@@ -15,8 +15,8 @@ Signed-off-by: Michal Čihař <michal@cihar.com>
 
 diff --git weblate/api/tests.py weblate/api/tests.py
 index 903eab752b..a21b7e01f5 100644
---- weblate/api/tests.py
-+++ weblate/api/tests.py
+--- a/weblate/api/tests.py
++++ b/weblate/api/tests.py
 @@ -30,12 +30,42 @@ from weblate.trans.models import Change, Component, Project, Translation, Unit
  from weblate.trans.tests.utils import RepoTestMixin, get_test_file
  from weblate.utils.state import STATE_TRANSLATED
