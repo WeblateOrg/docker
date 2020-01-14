@@ -102,9 +102,9 @@ RUN find /usr/src/weblate -name '*.patch' -print0 | sort -z | \
   xargs -n1 -0 -r patch -p1 -d /usr/local/lib/python3.7/dist-packages/ -i
 
 # Install Hub
-RUN curl -L https://github.com/github/hub/releases/download/v2.2.9/hub-linux-amd64-2.2.9.tgz | tar xzv --wildcards hub-linux*/bin/hub && \
-  cp hub-linux-amd64-2.2.9/bin/hub /usr/bin && \
-  rm -rf hub-linux-amd64-2.2.9
+RUN curl -L https://github.com/github/hub/releases/download/v2.13.0/hub-linux-amd64-2.13.0.tgz | tar xzv --wildcards hub-linux*/bin/hub && \
+  cp hub-linux-amd64-*/bin/hub /usr/bin && \
+  rm -rf hub-linux-amd64-*
 
 # Install Lab
 RUN curl -sL "https://github.com/zaquestion/lab/releases/download/v0.17.2/lab_0.17.2_linux_amd64.tar.gz" | tar -C /tmp/ -xzf - \ 
