@@ -28,7 +28,7 @@ selenium
 openpyxl==3.0.1
 celery==4.4.0
 kombu==4.6.7
-celery-batches==0.2
+celery-batches==0.3
 zeep==3.4.0
 boto3==1.11.9
 httpretty==0.9.7
