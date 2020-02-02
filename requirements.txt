@@ -12,7 +12,7 @@ defusedxml==0.6.0
 django-appconf==1.0.3
 pyuca==1.2
 tesserocr==2.5.0
-akismet==1.0.1
+akismet==1.1
 python3-saml==1.9.0
 django-redis==4.11.0
 redis==3.3.11
