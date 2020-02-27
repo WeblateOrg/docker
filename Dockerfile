@@ -37,6 +37,7 @@ RUN set -x \
     openssh-client \
     curl \
     gir1.2-pango-1.0 \
+    libxmlsec1-openssl \
     python-pip \
     python-setuptools \
     python3-gi \
