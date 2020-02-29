@@ -108,8 +108,8 @@ RUN curl -L https://github.com/github/hub/releases/download/v2.13.0/hub-linux-am
   rm -rf hub-linux-amd64-*
 
 # Install Lab
-RUN curl -sL "https://github.com/zaquestion/lab/releases/download/v0.17.2/lab_0.17.2_linux_amd64.tar.gz" | tar -C /tmp/ -xzf - \ 
-  && mv /tmp/lab /usr/bin \ 
+RUN curl -sL "https://github.com/zaquestion/lab/releases/download/v0.17.2/lab_0.17.2_linux_amd64.tar.gz" | tar -C /tmp/ -xzf - \
+  && mv /tmp/lab /usr/bin \
   && chmod u+x /usr/bin/lab
 
 # Configuration for Weblate, nginx, uwsgi and supervisor
