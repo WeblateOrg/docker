@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
 
-  regular:
+  tet:
 
     runs-on: ubuntu-latest
     name: Test
@@ -25,24 +25,6 @@ jobs:
       run: |
         cd docker-compose
         ./test.sh
-
-  ssl:
-
-    runs-on: ubuntu-latest
-    name: Test with SSL
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Checkout submodules
-      shell: bash
-      run: |
-        # If your submodules are configured to use SSH instead of HTTPS please uncomment the following line
-        # git config --global url."https://github.com/".insteadOf "git@github.com:"
-        auth_header="$(git config --local --get http.https://github.com/.extraheader)"
-        git submodule sync --recursive
-        git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag weblate/weblate:latest
     - name: Test the Docker image with SSL
       run: |
         VOLUMEPATH=$(docker volume inspect -f '{{.Mountpoint}}' wl_weblate-data)
