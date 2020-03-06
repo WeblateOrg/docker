@@ -142,7 +142,7 @@ if [ "x$1" = "xrunserver" ] ; then
     if [ -n "$WEBLATE_ADMIN_PASSWORD" ] ; then
         run_weblate createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME"
     else
-        run_weblate createadmin --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME"
+        run_weblate createadmin --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
     fi
     # Change site name
     if [ -n "$WEBLATE_ALLOWED_HOSTS" -a "$WEBLATE_ALLOWED_HOSTS" != '*' ] ; then
