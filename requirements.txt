@@ -16,7 +16,7 @@ django-redis==4.11.0
 django_compressor==2.4
 djangorestframework>=3.9,<3.12
 hiredis==1.0.1
-httpretty==0.9.7
+httpretty==1.0.0
 jellyfish==0.7.2
 kombu==4.6.8
 openpyxl==3.0.1
