@@ -9,7 +9,7 @@ celery-batches==0.3
 cryptography==2.8
 defusedxml==0.6.0
 Django==3.0.4
-django-appconf==1.0.3
+django-appconf==1.0.4
 django-auth-ldap==2.1.1
 django-crispy-forms==1.8.1
 django-redis==4.11.0
