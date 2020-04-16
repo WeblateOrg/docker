@@ -1,6 +1,6 @@
 FROM debian:buster-slim
 MAINTAINER Michal Čihař <michal@cihar.com>
-ENV VERSION 3.11.3
+ENV VERSION 4.0.1
 LABEL version=$VERSION
 
 # Add user early to get a consistent userid
