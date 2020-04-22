@@ -80,7 +80,6 @@ RUN set -x \
   && pip install supervisor-stdout \
   && python3 -c 'from phply.phpparse import make_parser; make_parser()' \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
-  && rm -rf /root/.cache /tmp/* \
   && apt-get -y purge \
     python3-dev \
     pkg-config \
@@ -96,7 +95,8 @@ RUN set -x \
     libldap2-dev \
     libssl-dev \
   && apt-get -y autoremove \
-  && apt-get clean
+  && apt-get clean \
+  && rm -rf /root/.cache /tmp/* /var/lib/apt/lists/*
 
 # Apply hotfixes on Weblate
 RUN find /usr/src/weblate -name '*.patch' -print0 | sort -z | \
