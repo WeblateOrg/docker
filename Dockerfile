@@ -67,7 +67,7 @@ RUN set -x \
     libssl-dev \
     libffi-dev \
     libenchant1c2a \
-    cython \
+    cython3 \
     gcc \
     g++ \
     tesseract-ocr \
