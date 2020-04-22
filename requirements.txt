@@ -35,7 +35,7 @@ siphashc==1.3
 social-auth-app-django==3.1.0
 social-auth-core[openidconnect]==3.3.3
 supervisor==4.1.0
-supervisor-stdout==0.1.1
+https://github.com/coderanger/supervisor-stdout/archive/87d672c72664f89250f08693505e02d0905926a1.zip
 tesserocr==2.5.1
 translate-toolkit==2.5.0
 Whoosh==2.7.4
