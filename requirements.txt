@@ -1,7 +1,7 @@
 aeidon==1.7.0
 akismet==1.1
 bleach==3.1.4
-boto3==1.12.45
+boto3==1.12.46
 celery==4.4.2
 celery-batches==0.3
 # For Azure Tenant auth
