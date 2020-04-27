@@ -1,0 +1,25 @@
+From 676218b15cf75e9a1e146cde96f5e0a3488a8ca2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Mon, 27 Apr 2020 21:49:38 +0200
+Subject: [PATCH 1/1] Utils: Fix triggering weblate.E003 check
+
+---
+ weblate/utils/checks.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git weblate/utils/checks.py weblate/utils/checks.py
+index 0d80ad9b99..ecf3c802ad 100644
+--- a/weblate/utils/checks.py
++++ b/weblate/utils/checks.py
+@@ -118,7 +118,7 @@ def check_mail_connection(app_configs, **kwargs):
+         connection.close()
+     except Exception as error:
+         message = "Cannot send e-mail ({}), please check EMAIL_* settings."
+-        errors.append(weblate_check(message.format(error), "weblate.E003"))
++        errors.append("weblate.E003", weblate_check(message.format(error)))
+ 
+     return errors
+ 
+-- 
+2.26.2
+
