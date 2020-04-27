@@ -14,6 +14,7 @@ django-crispy-forms==1.9.0
 django-redis==4.11.0
 django_compressor==2.4
 djangorestframework>=3.9,<3.12
+git-review==1.28.0
 hiredis==1.0.1
 httpretty==1.0.2
 https://github.com/coderanger/supervisor-stdout/archive/87d672c72664f89250f08693505e02d0905926a1.zip
