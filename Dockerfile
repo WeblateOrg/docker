@@ -95,7 +95,7 @@ RUN set -x \
 
 # Apply hotfixes on Weblate
 RUN find /usr/src/weblate -name '*.patch' -print0 | sort -z | \
-  xargs -n1 -0 -r patch -p1 -d /usr/local/lib/python3.7/dist-packages/ -i
+  xargs -n1 -0 -r patch -p0 -d /usr/local/lib/python3.7/dist-packages/ -i
 
 # Install Hub
 RUN curl -L https://github.com/github/hub/releases/download/v2.13.0/hub-linux-amd64-2.13.0.tgz | tar xzv --wildcards hub-linux*/bin/hub && \
