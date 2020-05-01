@@ -20,7 +20,7 @@ httpretty==1.0.2
 https://github.com/coderanger/supervisor-stdout/archive/87d672c72664f89250f08693505e02d0905926a1.zip
 jellyfish==0.7.2
 kombu==4.6.8
-mercurial==5.3.2
+mercurial==5.4
 openpyxl==3.0.1
 phply==1.2.5
 python-dateutil==2.8.1
