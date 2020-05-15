@@ -1,4 +1,4 @@
-FROM debian:buster-slim
+FROM debian:10.4-slim
 MAINTAINER Michal Čihař <michal@cihar.com>
 ENV VERSION 4.0.4
 LABEL version=$VERSION
