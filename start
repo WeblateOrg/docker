@@ -153,11 +153,19 @@ if [ "x$1" = "xrunserver" ] ; then
 
     # Celery pid, remove possible stale PID file
     mkdir -p /run/celery
-
     rm -f /run/celery/beat.pid
 
+    # Prepare nginx logs
     ln -sf ${NGINX_ACCESS_LOG:-/dev/stdout} /var/log/nginx/access.log
     ln -sf ${NGINX_ERROR_LOG:-/dev/stderr} /var/log/nginx/error.log
+
+    # Generate nginx configuration
+    if [ -f /app/data/ssl/privkey.pem ] ; then
+        template=/etc/nginx/ssl.tpl
+    else
+        template=/etc/nginx/default.tpl
+    fi
+    envsubst '$WEBLATE_URL_PREFIX' < $template > /etc/nginx/sites-available/default
 
     #  Execute supervisor
     exec supervisord --nodaemon \
