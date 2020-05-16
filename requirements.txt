@@ -10,7 +10,7 @@ defusedxml==0.6.0
 Django==3.0.6
 django-appconf==1.0.4
 django-auth-ldap==2.1.1
-django-crispy-forms==1.9.0
+django-crispy-forms==1.9.1
 django-redis==4.11.0
 django_compressor==2.4
 djangorestframework>=3.9,<3.12
