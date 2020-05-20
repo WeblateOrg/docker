@@ -135,6 +135,8 @@ if [ "x$1" = "xrunserver" ] ; then
     echo "Starting database migration..."
     run_weblate migrate
     run_weblate cleanup_celery
+    echo "Refreshing stats..."
+    run_weblate ensure_stats
     # Run with --clear to ensure all files are up to date
     run_weblate collectstatic --noinput --clear
     # Create or update admin account
