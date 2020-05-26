@@ -46,9 +46,6 @@ RUN set -x \
     python3-setuptools \
     python3-wheel \
     python3-gdbm \
-    python3-psycopg2 \
-    python3-rcssmin \
-    python3-rjsmin \
     gettext \
     postgresql-client \
     git \
@@ -66,6 +63,7 @@ RUN set -x \
     libldap2-dev \
     libssl-dev \
     libffi-dev \
+    libpq-dev \
     libenchant1c2a \
     cython3 \
     gcc \
@@ -83,6 +81,7 @@ RUN set -x \
     libxml2-dev \
     libffi-dev \
     libxmlsec1-dev \
+    libpq-dev \
     cython \
     gcc \
     g++ \
