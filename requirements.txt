@@ -11,7 +11,7 @@ Django==3.0.6
 django-appconf==1.0.4
 django-auth-ldap==2.1.1
 django-crispy-forms==1.9.1
-django-redis==4.11.0
+django-redis==4.12.1
 django_compressor==2.4
 djangorestframework>=3.9,<3.12
 git-review==1.28.0
