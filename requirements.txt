@@ -43,5 +43,4 @@ translate-toolkit==2.5.1
 Whoosh==2.7.4
 zeep==3.4.0
 # Following are installed using apt:
-# Pillow
 # lxml

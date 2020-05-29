@@ -37,12 +37,12 @@ RUN set -x \
     curl \
     gir1.2-pango-1.0 \
     libxmlsec1-openssl \
+    libjpeg62-turbo \
     python3-gi \
     python3-gi-cairo \
     python3-cairo \
     python3-pip \
     python3-lxml \
-    python3-pillow \
     python3-setuptools \
     python3-wheel \
     python3-gdbm \
@@ -64,6 +64,8 @@ RUN set -x \
     libssl-dev \
     libffi-dev \
     libpq-dev \
+    libz-dev \
+    libjpeg62-turbo-dev \
     libenchant1c2a \
     cython3 \
     gcc \
@@ -88,6 +90,8 @@ RUN set -x \
     libsasl2-dev \
     libldap2-dev \
     libssl-dev \
+    libz-dev   \
+    libjpeg62-turbo-dev \
   && apt-get -y autoremove \
   && apt-get clean \
   && rm -rf /root/.cache /tmp/* /var/lib/apt/lists/*
