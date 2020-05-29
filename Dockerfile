@@ -134,5 +134,4 @@ RUN chmod a+rx /app/bin/start
 
 EXPOSE 8080 4443
 USER weblate
-ENTRYPOINT ["/app/bin/start"]
-CMD ["runserver"]
+CMD ["/app/bin/start", "runserver"]
