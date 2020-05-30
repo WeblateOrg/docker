@@ -133,5 +133,5 @@ COPY start /app/bin/
 RUN chmod a+rx /app/bin/start
 
 EXPOSE 8080 4443
-USER weblate
+USER 1000
 CMD ["/app/bin/start", "runserver"]
