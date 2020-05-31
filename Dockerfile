@@ -129,6 +129,10 @@ COPY start /app/bin/
 RUN chmod a+rx /app/bin/start
 
 EXPOSE 8080 4443
+
+# Numerical value is needed for OpenShift S2I, see
+# https://docs.openshift.com/container-platform/latest/openshift_images/create-images.html
 USER 1000
+
 ENTRYPOINT ["/app/bin/start"]
 CMD ["runserver"]
