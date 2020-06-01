@@ -46,9 +46,9 @@ jobs:
       - name: Build images
         run: |
           docker buildx build \
-          --platform linux/amd64,linux/armv7,linux/arm64    \
-          --output "type=image,push=false"      \
-          --file ./Dockerfile .                 \
+          --platform linux/amd64,linux/arm/v7,linux/arm64 \
+          --output "type=image,push=false"                \
+          --file ./Dockerfile .                           \
           --tag weblate/weblate:LOCAL
       - name: Log in to Docker Hub
         uses: azure/docker-login@v1
