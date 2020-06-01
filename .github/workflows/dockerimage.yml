@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
 
-  tet:
+  test:
 
     runs-on: ubuntu-latest
     name: Test
@@ -27,3 +27,45 @@ jobs:
           sudo chown -R 1000:1000 $VOLUMEPATH/ssl
           cd docker-compose
           ./test.sh 4443 https
+
+  push_dockerhub:
+
+    runs-on: ubuntu-latest
+    name: Publish docker images
+    needs: [test]
+    if: startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/master')
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        uses: crazy-max/ghaction-docker-buildx@v1
+        with:
+          buildx-version: v0.4.1
+          qemu-version: 4.2.0-7
+      - name: Build images
+        run: |
+          docker buildx build \
+          --platform linux/amd64,linux/arm/v7,linux/arm64 \
+          --output "type=image,push=false"                \
+          --file ./Dockerfile .                           \
+          --tag weblate/weblate:LOCAL
+      - name: Log in to Docker Hub
+        uses: azure/docker-login@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+      - name: Publish image with edge tag
+        if: github.ref == 'refs/heads/master'
+        run: |
+          docker tag weblate/weblate:LOCAL weblate/weblate:edge
+          docker push weblate/weblate:edge
+      - name: Publish image with latest / version tag
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          docker tag weblate/weblate:LOCAL weblate/weblate:latest
+          docker push weblate/weblate:latest
+          docker tag weblate/weblate:LOCAL "weblate/weblate:${TAGREF#refs/tags/}"
+          docker push weblate/weblate "weblate/weblate:${TAGREF#refs/tags/}"
+        env:
+          TAGREF: ${{ github.ref }}
