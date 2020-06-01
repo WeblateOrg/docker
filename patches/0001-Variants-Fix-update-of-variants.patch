@@ -1,0 +1,27 @@
+From e0841f62af8d8e452beca2276463578b28532b02 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Mon, 1 Jun 2020 19:35:20 +0200
+Subject: [PATCH 1/1] Variants: Fix update of variants
+
+---
+ weblate/trans/models/component.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git weblate/trans/models/component.py weblate/trans/models/component.py
+index b42a78ec52..3652a0209c 100644
+--- weblate/trans/models/component.py
++++ weblate/trans/models/component.py
+@@ -1941,8 +1941,8 @@ class Component(FastDeleteMixin, models.Model, URLMixin, PathMixin):
+     def update_shapings(self):
+         from weblate.trans.models import Unit
+ 
+-        Shaping.objects.exclude(
+-            shaping_regex=self.shaping_regex, component=self
++        Shaping.objects.filter(component=self).exclude(
++            shaping_regex=self.shaping_regex,
+         ).delete()
+         if not self.shaping_regex:
+             return
+-- 
+2.27.0.rc2
+
