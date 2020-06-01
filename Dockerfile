@@ -138,4 +138,5 @@ EXPOSE 8080 4443
 # https://docs.openshift.com/container-platform/latest/openshift_images/create-images.html
 USER 1000
 
-CMD ["/app/bin/start", "runserver"]
+ENTRYPOINT ["/app/bin/start"]
+CMD ["runserver"]
