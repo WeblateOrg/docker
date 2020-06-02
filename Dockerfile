@@ -113,7 +113,7 @@ RUN \
   curl -sL "https://github.com/zaquestion/lab/releases/download/v0.17.2/lab_0.17.2_linux_${TARGETARCH:-amd64}.tar.gz" | tar -C /tmp/ -xzf - \
   && mv /tmp/lab /usr/bin \
   && chmod u+x /usr/bin/lab ; \
-  if
+  fi
 
 # Configuration for Weblate, nginx, uwsgi and supervisor
 COPY etc /etc/
