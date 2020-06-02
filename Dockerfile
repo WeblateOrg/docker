@@ -35,6 +35,7 @@ RUN set -x \
     uwsgi-plugin-python3 \
     nginx \
     openssh-client \
+    ca-certificates \
     curl \
     gir1.2-pango-1.0 \
     libxmlsec1-openssl \
