@@ -2,6 +2,7 @@ FROM debian:10.4-slim
 MAINTAINER Michal Čihař <michal@cihar.com>
 ENV VERSION 4.0.4
 LABEL version=$VERSION
+ARG TARGETARCH
 
 # Add user early to get a consistent userid
 # - the root group so it can run with any uid
@@ -101,12 +102,12 @@ RUN find /usr/src/weblate -name '*.patch' -print0 | sort -z | \
   xargs -n1 -0 -r patch -p0 -d /usr/local/lib/python3.7/dist-packages/ -i
 
 # Install Hub
-RUN curl -L https://github.com/github/hub/releases/download/v2.13.0/hub-linux-amd64-2.13.0.tgz | tar xzv --wildcards hub-linux*/bin/hub && \
-  cp hub-linux-amd64-*/bin/hub /usr/bin && \
-  rm -rf hub-linux-amd64-*
+RUN curl -L https://github.com/github/hub/releases/download/v2.13.0/hub-linux-$TARGETARCH-2.13.0.tgz | tar xzv --wildcards hub-linux*/bin/hub && \
+  cp hub-linux-*/bin/hub /usr/bin && \
+  rm -rf hub-linux-*
 
 # Install Lab
-RUN curl -sL "https://github.com/zaquestion/lab/releases/download/v0.17.2/lab_0.17.2_linux_amd64.tar.gz" | tar -C /tmp/ -xzf - \
+RUN curl -sL "https://github.com/zaquestion/lab/releases/download/v0.17.2/lab_0.17.2_linux_$TARGETARCH.tar.gz" | tar -C /tmp/ -xzf - \
   && mv /tmp/lab /usr/bin \
   && chmod u+x /usr/bin/lab
 
