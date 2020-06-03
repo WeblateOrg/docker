@@ -14,6 +14,8 @@ django-crispy-forms==1.9.1
 django-redis==4.12.1
 django_compressor==2.4
 djangorestframework>=3.9,<3.12
+# Workaround for https://github.com/celery/celery/issues/6145
+future
 git-review==1.28.0
 hiredis==1.0.1
 httpretty==1.0.2
