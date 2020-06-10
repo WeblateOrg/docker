@@ -87,27 +87,22 @@ jobs:
         with:
           buildx-version: v0.4.1
           qemu-version: 4.2.0-7
-      - name: Build images
-        run: |
-          docker buildx build \
-          --platform linux/amd64,linux/arm/v7,linux/arm64 \
-          --file ./Dockerfile . \
-          --load \
-          --tag weblate/weblate:latest
+      - name: Publish image with edge tag
+        if: github.ref == 'refs/heads/master'
+        run: echo "::set-env name=DOCKER_TAG::weblate/weblate:edge"
+      - name: Publish image with latest / version tag
+        if: startsWith(github.ref, 'refs/tags/')
+        run: echo "::set-env name=DOCKER_TAG::weblate/weblate:${GITHUB_REF#refs/tags/}"
+        # TODO: needs to update latest as well
       - name: Log in to Docker Hub
         uses: azure/docker-login@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
-      - name: Publish image with edge tag
-        if: github.ref == 'refs/heads/master'
+      - name: Build images
         run: |
-          docker tag weblate/weblate:latest weblate/weblate:edge
-          docker push weblate/weblate:edge
-      - name: Publish image with latest / version tag
-        if: startsWith(github.ref, 'refs/tags/')
-        run: |
-          docker tag weblate/weblate:latest weblate/weblate:latest
-          docker push weblate/weblate:latest
-          docker tag weblate/weblate:latest "weblate/weblate:${GITHUB_REF#refs/tags/}"
-          docker push weblate/weblate "weblate/weblate:${GITHUB_REF#refs/tags/}"
+          docker buildx build \
+          --platform linux/amd64,linux/arm/v7,linux/arm64 \
+          --file ./Dockerfile . \
+          --push \
+          --tag $DOCKER_TAG
