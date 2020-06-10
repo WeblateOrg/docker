@@ -1,8 +1,15 @@
 FROM debian:10.4-slim
-MAINTAINER Michal Čihař <michal@cihar.com>
 ENV VERSION 4.0.4
-LABEL version=$VERSION
 ARG TARGETARCH
+
+LABEL maintainer="Michal Čihař <michal@cihar.com>" \
+  org.opencontainers.image.url="https://weblate.org/" \
+  org.opencontainers.image.source="https://github.com/WeblateOrg/docker" \
+  org.opencontainers.image.version=$VERSION \
+  org.opencontainers.image.vendor="Michal Čihař" \
+  org.opencontainers.image.title="Weblate" \
+  org.opencontainers.image.description="A web-based continuous localization system with tight version control integration" \
+  org.opencontainers.image.licenses="GPL-3.0-or-later"
 
 # Add user early to get a consistent userid
 # - the root group so it can run with any uid
