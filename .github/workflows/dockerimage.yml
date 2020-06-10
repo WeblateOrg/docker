@@ -16,8 +16,6 @@ jobs:
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
       - name: Build the Docker image
         run: docker buildx build --output "type=image,push=false" $(.github/bin/get-buildx-args)
 
@@ -40,8 +38,6 @@ jobs:
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
       - name: Build the Docker image
         run: docker buildx build --output "type=image,push=false" $(.github/bin/get-buildx-args)
       - name: Test the Docker image
@@ -67,8 +63,6 @@ jobs:
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
       - name: Build the Docker image
         run: docker buildx build --output "type=image,push=false" $(.github/bin/get-buildx-args)
       - name: Prepare the container
@@ -103,8 +97,6 @@ jobs:
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
       - name: Log in to Docker Hub
         uses: azure/docker-login@v1
         with:
