@@ -1,4 +1,4 @@
-name: Publish Docker Readme
+name: Docker Hub Description
 on:
   push:
     branches:
