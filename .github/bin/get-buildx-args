@@ -12,7 +12,7 @@ echo --platform linux/amd64,linux/arm/v7,linux/arm64
 # linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/386,linux/ppc64le,linux/s390x
 
 # CI tag
-if [ "$1" == "bleeding" ] ; then
+if [ "$1" = "bleeding" ] ; then
     echo --tag weblate/weblate:bleeding
 else
     if [ "$1" != "publish" ] ; then
