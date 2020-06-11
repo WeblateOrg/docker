@@ -22,8 +22,9 @@ root. As a consequence this has lead to changed exposed port from 80 to 8080.
 
 You can use following tags on Docker hub:
 
-* `latest` - latest stable release
-* `edge` - bleeding edge docker image (contains stable Weblate, but the Docker image changes might not yet be fully tested)
+* `latest` - latest stable release, use this for rolling updates in production environment
+* `edge` - latest development docker image (contains stable Weblate, but the Docker image changes might not yet be fully tested), this should be safe to use in most cases
+* `bleeding` - latest development Weblate (development version of Weblate and Docker image), this can be heavily broken, use at own risk
 * specific tag from [weblate/weblate](https://hub.docker.com/r/weblate/weblate/tags/) image
 
 ## Documentation

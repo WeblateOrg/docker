@@ -12,20 +12,24 @@ echo --platform linux/amd64,linux/arm/v7,linux/arm64
 # linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/386,linux/ppc64le,linux/s390x
 
 # CI tag
-if [ "$1" != "publish" ] ; then
-    echo --tag weblate/weblate:latest
-fi
-
-# Generate tags
-case $GITHUB_REF in
-    refs/tags/[0-9]*)
-        echo --tag weblate/weblate:${GITHUB_REF#refs/tags/}
+if [ "$1" == "bleeding" ] ; then
+    echo --tag weblate/weblate:bleeding
+else
+    if [ "$1" != "publish" ] ; then
         echo --tag weblate/weblate:latest
-        ;;
-    refs/heads/master)
-        echo --tag weblate/weblate:edge
-        ;;
-esac
+    fi
+
+    # Generate tags
+    case $GITHUB_REF in
+        refs/tags/[0-9]*)
+            echo --tag weblate/weblate:${GITHUB_REF#refs/tags/}
+            echo --tag weblate/weblate:latest
+            ;;
+        refs/heads/master)
+            echo --tag weblate/weblate:edge
+            ;;
+    esac
+fi
 
 # Location
 echo --file ./Dockerfile .
