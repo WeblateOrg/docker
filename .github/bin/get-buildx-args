@@ -16,7 +16,7 @@ if [ "$1" = "bleeding" ] ; then
     echo --tag weblate/weblate:bleeding
 else
     if [ "$1" != "publish" ] ; then
-        echo --tag weblate/weblate:latest
+        echo --tag weblate/weblate:test
     fi
 
     # Generate tags

@@ -17,7 +17,7 @@ jobs:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
       - name: Build the Docker image
-        run: docker buildx build --output "type=image,push=false" $(.github/bin/get-buildx-args)
+        run: docker buildx build $(.github/bin/get-buildx-args)
 
 
   test:
@@ -39,11 +39,11 @@ jobs:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
       - name: Build the Docker image
-        run: docker buildx build --output "type=image,push=false" $(.github/bin/get-buildx-args)
+        run: docker buildx build $(.github/bin/get-buildx-args)
       - name: Test the Docker image
         run: |
           cd docker-compose
-          ./test.sh
+          TEST_CONTAINER=weblate/weblate:test ./test.sh
 
   test-ssl:
     runs-on: ubuntu-latest
@@ -64,20 +64,23 @@ jobs:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
       - name: Build the Docker image
-        run: docker buildx build --output "type=image,push=false" $(.github/bin/get-buildx-args)
+        run: docker buildx build $(.github/bin/get-buildx-args)
       - name: Prepare the container
         run: |
           cd docker-compose
+          TEST_CONTAINER=weblate/weblate:test GENERATE_ONLY=yes ./test.sh 4443 https
           docker-compose up -d
           docker-compose down
-      - name: Test the Docker image with SSL
+      - name: Generate SSL certificate
         run: |
           cd docker-compose
           VOLUMEPATH=$(docker volume inspect -f '{{.Mountpoint}}' wl_weblate-data)
           sudo mkdir -p $VOLUMEPATH/ssl
           sudo openssl req -x509 -nodes -days 365 -subj "/CN=weblate.example.com" -newkey rsa:2048 -keyout $VOLUMEPATH/ssl/privkey.pem -out $VOLUMEPATH/ssl/fullchain.pem
           sudo chown -R 1000:1000 $VOLUMEPATH/ssl
-          ./test.sh 4443 https
+      - name: Test the Docker image with SSL
+        run: |
+          TEST_CONTAINER=weblate/weblate:test ./test.sh 4443 https
 
   push_dockerhub:
 
