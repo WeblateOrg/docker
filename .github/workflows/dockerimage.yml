@@ -103,4 +103,4 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
       - name: Build and publish the Docker image
-        run: docker buildx build --output "type=image,push=trie" $(.github/bin/get-buildx-args publish)
+        run: docker buildx build --output "type=image,push=true" $(.github/bin/get-buildx-args publish)

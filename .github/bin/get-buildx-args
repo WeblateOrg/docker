@@ -2,7 +2,9 @@
 
 # Cache configuratoon
 echo --cache-from "type=local,src=/tmp/.buildx-cache"
-echo --cache-to "type=local,dest=/tmp/.buildx-cache"
+if [ "$1" != "publish" ] ; then
+    echo --cache-to "type=local,dest=/tmp/.buildx-cache"
+fi
 
 # List of platforms
 echo --platform linux/amd64,linux/arm/v7,linux/arm64
