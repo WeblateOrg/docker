@@ -19,8 +19,7 @@ jobs:
       - name: Configure Docker build
         run: .github/bin/get-buildx-args
       - name: Build the Docker image
-        run: docker buildx build --output "type=image,push=false" $(.github/bin/get-buildx-args)
-
+        run: docker buildx build $(.github/bin/get-buildx-args)
 
   test:
     runs-on: ubuntu-latest
@@ -41,7 +40,9 @@ jobs:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
       - name: Build the Docker image
-        run: docker buildx build --output "type=image,push=false" $(.github/bin/get-buildx-args)
+        run: docker buildx build $(.github/bin/get-buildx-args load)
+      - name: List Docker images
+        run: docker image ls --all
       - name: Test the Docker image
         run: |
           cd docker-compose
@@ -66,7 +67,9 @@ jobs:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
       - name: Build the Docker image
-        run: docker buildx build --output "type=image,push=false" $(.github/bin/get-buildx-args)
+        run: docker buildx build $(.github/bin/get-buildx-args load)
+      - name: List Docker images
+        run: docker image ls --all
       - name: Prepare the container
         run: |
           cd docker-compose

@@ -22,9 +22,10 @@ jobs:
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-bleeding-${{ github.sha }}
+      - name: Configure Docker build
+        run: .github/bin/get-buildx-args
       - name: Build the Docker image
-        run: docker buildx build --output "type=image,push=false" $(.github/bin/get-buildx-args)
-
+        run: docker buildx build $(.github/bin/get-buildx-args)
 
   test:
     runs-on: ubuntu-latest
@@ -45,8 +46,8 @@ jobs:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-bleeding-${{ github.sha }}
       - name: Build the Docker image
-        run: docker buildx build --output "type=image,push=false" $(.github/bin/get-buildx-args)
-      - name: Docker images
+        run: docker buildx build $(.github/bin/get-buildx-args load)
+      - name: List Docker images
         run: docker image ls --all
       - name: Test the Docker image
         run: |
@@ -72,7 +73,9 @@ jobs:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-bleeding-${{ github.sha }}
       - name: Build the Docker image
-        run: docker buildx build --output "type=image,push=false" $(.github/bin/get-buildx-args)
+        run: docker buildx build $(.github/bin/get-buildx-args load)
+      - name: List Docker images
+        run: docker image ls --all
       - name: Prepare the container
         run: |
           cd docker-compose
@@ -111,4 +114,4 @@ jobs:
       - name: DockerHub login
         run: echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
       - name: Publish the Docker images
-        run: docker buildx build --output "type=image,push=true" $(.github/bin/get-buildx-args bleeding)
+        run: docker buildx build --output "type=image,push=true" $(.github/bin/get-buildx-args publish-bleeding)
