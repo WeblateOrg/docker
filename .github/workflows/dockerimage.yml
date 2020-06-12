@@ -108,5 +108,7 @@ jobs:
           key: ${{ runner.os }}-buildx-${{ github.sha }}
       - name: DockerHub login
         run: echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+      - name: Configure Docker build
+        run: .github/bin/get-buildx-args publish
       - name: Publish the Docker images
-        run: docker buildx build --output "type=image,push=true" $(.github/bin/get-buildx-args publish)
+        run: docker buildx build $(.github/bin/get-buildx-args publish)
