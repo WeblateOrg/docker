@@ -13,9 +13,9 @@ used by over 1150 libre projects and companies in more than 115 countries.**
 
 ## Running Weblate
 
-You might want to use [Weblate docker-compose](https://github.com/WeblateOrg/docker-compose) to run Weblate.
-
-[Helm chart for Weblate](https://hub.helm.sh/charts/weblate/weblate) is also available.
+* [Weblate docker-compose](https://github.com/WeblateOrg/docker-compose)
+* [OpenShift](https://docs.weblate.org/en/latest/admin/install/openshift.html)
+* [Helm chart for Weblate](https://hub.helm.sh/charts/weblate/weblate)
 
 ## Exposed ports
 
