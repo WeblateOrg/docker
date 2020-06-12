@@ -17,7 +17,7 @@ jobs:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
       - name: Build the Docker image
-        run: docker buildx build $(.github/bin/get-buildx-args)
+        run: docker buildx build --load $(.github/bin/get-buildx-args)
 
 
   test:
@@ -39,7 +39,7 @@ jobs:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
       - name: Build the Docker image
-        run: docker buildx build $(.github/bin/get-buildx-args)
+        run: docker buildx build --load $(.github/bin/get-buildx-args)
       - name: Test the Docker image
         run: |
           cd docker-compose
@@ -64,7 +64,7 @@ jobs:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
       - name: Build the Docker image
-        run: docker buildx build $(.github/bin/get-buildx-args)
+        run: docker buildx build --load $(.github/bin/get-buildx-args)
       - name: Prepare the container
         run: |
           cd docker-compose
