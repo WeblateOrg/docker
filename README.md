@@ -22,17 +22,14 @@ root. As a consequence this has lead to changed exposed port from 80 to 8080.
 
 You can use following tags on Docker hub:
 
-| Tag name   | Description                                                             | Use case                                                             |
-|------------|-------------------------------------------------------------------------|----------------------------------------------------------------------|
-| `latest`   | Weblate stable release, matches latest tagged release                   | Rolling updates in a production environment                          |
-| `edge`     | Weblate stable release with development changes in the Docker container | Staging environment                                                  |
-| `bleeding` | Development version Weblate from Git                                    | Development or staging environment to test upcoming Weblate features |
-| version    | Weblate stable release                                                  | Well defined deploy in a production environment                      |
+| Tag name   | Description                                                                                                  | Use case                                                             |
+|------------|--------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|
+| `latest`   | Weblate stable release, matches latest tagged release                                                        | Rolling updates in a production environment                          |
+| `edge`     | Weblate stable release with development changes in the Docker container (for example updated dependencies)   | Staging environment                                                  |
+| `bleeding` | Development version Weblate from Git                                                                         | Development or staging environment to test upcoming Weblate features |
+| version    | Weblate stable release, see [weblate/weblate](https://hub.docker.com/r/weblate/weblate/tags/)                | Well defined deploy in a production environment                      |
 
-* `latest` - latest stable release, **use this for rolling updates in a production environment**
-* `edge` - latest development docker image (contains stable Weblate, but the Docker image changes might not yet be fully tested), this should be safe to use in most cases
-* `bleeding` - latest development Weblate (development version of Weblate and Docker image), this can be heavily broken, use at own risk
-* specific tag from [weblate/weblate](https://hub.docker.com/r/weblate/weblate/tags/) image
+Every image is tested by our CI before it gets published, so even the `bleeding` version should be quite safe to use.
 
 ## Documentation
 
