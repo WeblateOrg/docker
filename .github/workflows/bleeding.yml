@@ -23,7 +23,7 @@ jobs:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-bleeding-${{ github.sha }}
       - name: Build the Docker image
-        run: docker buildx build --load $(.github/bin/get-buildx-args)
+        run: docker buildx build --output "type=image,push=false" $(.github/bin/get-buildx-args)
 
 
   test:
@@ -45,7 +45,7 @@ jobs:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-bleeding-${{ github.sha }}
       - name: Build the Docker image
-        run: docker buildx build --load $(.github/bin/get-buildx-args)
+        run: docker buildx build --output "type=image,push=false" $(.github/bin/get-buildx-args)
       - name: Test the Docker image
         run: |
           cd docker-compose
@@ -70,7 +70,7 @@ jobs:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-bleeding-${{ github.sha }}
       - name: Build the Docker image
-        run: docker buildx build --load $(.github/bin/get-buildx-args)
+        run: docker buildx build --output "type=image,push=false" $(.github/bin/get-buildx-args)
       - name: Prepare the container
         run: |
           cd docker-compose
@@ -109,4 +109,4 @@ jobs:
       - name: DockerHub login
         run: echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
       - name: Publish the Docker images
-        run: docker buildx build --push $(.github/bin/get-buildx-args bleeding)
+        run: docker buildx build --output "type=image,push=true" $(.github/bin/get-buildx-args bleeding)
