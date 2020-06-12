@@ -47,7 +47,7 @@ jobs:
       - name: Build the Docker image
         run: docker buildx build --output "type=image,push=false" $(.github/bin/get-buildx-args)
       - name: Docker images
-        run: docker image ls -all
+        run: docker image ls --all
       - name: Test the Docker image
         run: |
           cd docker-compose
