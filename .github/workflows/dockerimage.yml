@@ -16,6 +16,8 @@ jobs:
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
+      - name: Configure Docker build
+        run: .github/bin/get-buildx-args
       - name: Build the Docker image
         run: docker buildx build --output "type=image,push=false" $(.github/bin/get-buildx-args)
 
