@@ -91,6 +91,7 @@ jobs:
           sudo chown -R 1000:1000 $VOLUMEPATH/ssl
       - name: Test the Docker image with SSL
         run: |
+          cd docker-compose
           TEST_CONTAINER=weblate/weblate:test ./test.sh 4443 https
 
   push_dockerhub:
