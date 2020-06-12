@@ -11,7 +11,11 @@ used by over 1150 libre projects and companies in more than 115 countries.**
 [![Docker Layers](https://images.microbadger.com/badges/image/weblate/weblate.svg)](https://microbadger.com/images/weblate/weblate "Get your own image badge on microbadger.com")
 [![Documenation](https://readthedocs.org/projects/weblate/badge/)](https://docs.weblate.org/en/latest/admin/install/docker.html)
 
+## Running Weblate
+
 You might want to use [Weblate docker-compose](https://github.com/WeblateOrg/docker-compose) to run Weblate.
+
+[Helm chart for Weblate](https://hub.helm.sh/charts/weblate/weblate) is also available.
 
 ## Exposed ports
 
