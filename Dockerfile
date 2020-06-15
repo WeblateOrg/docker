@@ -1,5 +1,5 @@
 FROM debian:10.4-slim
-ENV VERSION 4.0.4
+ENV VERSION 4.1
 ARG TARGETARCH
 
 LABEL maintainer="Michal Čihař <michal@cihar.com>" \
