@@ -27,6 +27,8 @@ jobs:
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-bleeding-${{ github.sha }}-${{ matrix.architecture }}
+      - name: Adjust bleeding edge image
+        run: .github/bin/bleeding
       - name: Configure Docker build
         run: .github/bin/get-buildx-args
       - name: Build the Docker image
@@ -50,6 +52,8 @@ jobs:
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-bleeding-${{ github.sha }}-${{ matrix.architecture }}
+      - name: Adjust bleeding edge image
+        run: .github/bin/bleeding
       - name: Configure Docker build
         run: .github/bin/get-buildx-args
       - name: Build the Docker image
@@ -77,6 +81,8 @@ jobs:
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-bleeding-${{ github.sha }}-${{ matrix.architecture }}
+      - name: Adjust bleeding edge image
+        run: .github/bin/bleeding
       - name: Build the Docker image
         run: docker buildx build $(.github/bin/get-buildx-args load)
       - name: List Docker images
@@ -108,6 +114,8 @@ jobs:
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-bleeding-${{ github.sha }}-${{ matrix.architecture }}
+      - name: Adjust bleeding edge image
+        run: .github/bin/bleeding
       - name: Build the Docker image
         run: docker buildx build $(.github/bin/get-buildx-args load)
       - name: List Docker images
@@ -155,6 +163,8 @@ jobs:
           key: ${{ runner.os }}-bleeding-${{ github.sha }}-${{ matrix.architecture }}
       - name: DockerHub login
         run: echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+      - name: Adjust bleeding edge image
+        run: .github/bin/bleeding
       - name: Configure Docker build
         run: .github/bin/get-buildx-args publish-bleeding
       - name: Publish the Docker images
