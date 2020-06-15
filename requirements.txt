@@ -17,6 +17,7 @@ djangorestframework>=3.9,<3.12
 # Workaround for https://github.com/celery/celery/issues/6145
 future
 git-review==1.28.0
+google-cloud-translate==2.0.1
 hiredis==1.0.1
 httpretty==1.0.2
 https://github.com/coderanger/supervisor-stdout/archive/87d672c72664f89250f08693505e02d0905926a1.zip
