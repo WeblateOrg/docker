@@ -54,7 +54,6 @@ RUN set -x \
     python3-gi-cairo \
     python3-cairo \
     python3-pip \
-    python3-lxml \
     python3-setuptools \
     python3-wheel \
     python3-gdbm \
@@ -79,7 +78,6 @@ RUN set -x \
     libz-dev \
     libjpeg62-turbo-dev \
     libenchant1c2a \
-    cython3 \
     gcc \
     g++ \
     tesseract-ocr \
