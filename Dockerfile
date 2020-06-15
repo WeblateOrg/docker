@@ -2,33 +2,36 @@ FROM debian:10.4-slim
 ENV VERSION 4.1
 ARG TARGETARCH
 
-LABEL maintainer="Michal Čihař <michal@cihar.com>" \
-  org.opencontainers.image.url="https://weblate.org/" \
-  org.opencontainers.image.source="https://github.com/WeblateOrg/docker" \
-  org.opencontainers.image.version=$VERSION \
-  org.opencontainers.image.vendor="Michal Čihař" \
-  org.opencontainers.image.title="Weblate" \
-  org.opencontainers.image.description="A web-based continuous localization system with tight version control integration" \
-  org.opencontainers.image.licenses="GPL-3.0-or-later"
+LABEL maintainer="Michal Čihař <michal@cihar.com>"
+LABEL org.opencontainers.image.url="https://weblate.org/"
+LABEL org.opencontainers.image.source="https://github.com/WeblateOrg/docker"
+LABEL org.opencontainers.image.version=$VERSION
+LABEL org.opencontainers.image.vendor="Michal Čihař"
+LABEL org.opencontainers.image.title="Weblate"
+LABEL org.opencontainers.image.description="A web-based continuous localization system with tight version control integration"
+LABEL org.opencontainers.image.licenses="GPL-3.0-or-later"
+
 
 # Add user early to get a consistent userid
 # - the root group so it can run with any uid
 # - the tty group for /dev/std* access
+# - create test and app data dirs to be able to run tests
 RUN useradd --shell /bin/sh --user-group weblate --groups root,tty \
   && mkdir -p /home/weblate/.ssh \
   && touch /home/weblate/.ssh/authorized_keys \
   && chown -R weblate:weblate /home/weblate \
-  && chmod 700 /home/weblate/.ssh
-
-ENV HOME=/home/weblate
-
-# This is needed to run tests inside the container.
-RUN install -d -o weblate -g weblate -m 755 /usr/local/lib/python3.7/dist-packages/data-test /usr/local/lib/python3.7/dist-packages/test-images \
- && install -d -o weblate -g weblate -m 755 /app/data
+  && chmod 700 /home/weblate/.ssh \
+  && install -d -o weblate -g weblate -m 755 /usr/local/lib/python3.7/dist-packages/data-test /usr/local/lib/python3.7/dist-packages/test-images \
+  && install -d -o weblate -g weblate -m 755 /app/data
 
 # Configure utf-8 locales to make sure Python
 # correctly handles unicode filenames, configure settings
-ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 DJANGO_SETTINGS_MODULE=weblate.settings_docker
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+# Home directory
+ENV HOME=/home/weblate
+# Use Docker specific settings
+ENV DJANGO_SETTINGS_MODULE=weblate.settings_docker
 
 COPY requirements.txt patches /usr/src/weblate/
 
