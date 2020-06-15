@@ -17,7 +17,7 @@ if [ "$1" = "load" ] ; then
     echo --tag weblate/weblate:test
 else
     # List of platforms
-    echo --platform linux/amd64,linux/arm/v7,linux/arm64
+    echo --platform ${MATRIX_ARCHITECTURE:-linux/amd64,linux/arm/v7,linux/arm64}
     # Enable more platforms in future:
     # linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/386,linux/ppc64le,linux/s390x
 
