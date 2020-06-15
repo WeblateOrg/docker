@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sed \
+sed -i \
     -e 's/\(ENV VERSION .*\)/\1-dev/' \
     -e 's@Weblate==\$VERSION@https://github.com/WeblateOrg/weblate/archive/master.zip@' \
     Dockerfile
