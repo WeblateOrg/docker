@@ -19,7 +19,7 @@ jobs:
         uses: actions/cache@v2
         id: cache
         with:
-          path: /tmp/.buildx-cache
+          path: /tmp/.buildx-cache/${{ matrix.architecture }}
           key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
       - name: Configure Docker build
         run: .github/bin/get-buildx-args
