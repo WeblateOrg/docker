@@ -15,6 +15,7 @@ LABEL org.opencontainers.image.licenses="GPL-3.0-or-later"
 # Add user early to get a consistent userid
 # - the root group so it can run with any uid
 # - the tty group for /dev/std* access
+# - see https://github.com/WeblateOrg/docker/issues/326 and https://github.com/moby/moby/issues/31243#issuecomment-406879017
 # - create test and app data dirs to be able to run tests
 RUN useradd --shell /bin/sh --user-group weblate --groups root,tty \
   && mkdir -p /home/weblate/.ssh \
