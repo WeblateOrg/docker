@@ -5,8 +5,3 @@ sed -i \
     -e 's/\(ENV VERSION .*\)/\1-dev/' \
     -e 's@Weblate==\$VERSION@https://github.com/WeblateOrg/weblate/archive/master.zip@' \
     Dockerfile
-
-# Compile messages
-# This can be removed once https://github.com/WeblateOrg/weblate/issues/3737 is addresses
-sed -i "/ensure_stats/ a\
-    run_weblate compilemessages" start
