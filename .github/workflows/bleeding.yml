@@ -50,7 +50,7 @@ jobs:
         uses: actions/cache@v2
         id: cache
         with:
-          path: /tmp/.buildx-cache
+          path: /tmp/.buildx-cache/${{ matrix.architecture }}
           key: ${{ runner.os }}-bleeding-${{ github.sha }}-${{ matrix.architecture }}
       - name: Adjust bleeding edge image
         run: .github/bin/bleeding
@@ -79,7 +79,7 @@ jobs:
         uses: actions/cache@v2
         id: cache
         with:
-          path: /tmp/.buildx-cache
+          path: /tmp/.buildx-cache/${{ matrix.architecture }}
           key: ${{ runner.os }}-bleeding-${{ github.sha }}-${{ matrix.architecture }}
       - name: Adjust bleeding edge image
         run: .github/bin/bleeding
@@ -112,7 +112,7 @@ jobs:
         uses: actions/cache@v2
         id: cache
         with:
-          path: /tmp/.buildx-cache
+          path: /tmp/.buildx-cache/${{ matrix.architecture }}
           key: ${{ runner.os }}-bleeding-${{ github.sha }}-${{ matrix.architecture }}
       - name: Adjust bleeding edge image
         run: .github/bin/bleeding
