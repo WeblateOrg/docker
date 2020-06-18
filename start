@@ -169,6 +169,7 @@ if [ "x$1" = "xrunserver" ] ; then
     fi
     # Generate self-signed SAML key
     if [ ! -f /app/data/ssl/saml.key ] ; then
+        mkdir -p /app/data/ssl
         openssl req -new -x509 -days 3652 -nodes -out /app/data/ssl/saml.crt -keyout /app/data/ssl/saml.key
     fi
     envsubst '$WEBLATE_URL_PREFIX' < $template > /etc/nginx/sites-available/default
