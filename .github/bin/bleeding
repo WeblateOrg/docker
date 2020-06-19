@@ -7,4 +7,4 @@ sed -i \
     Dockerfile
 
 # Remove patches
-rm patches/*.patch
+find patches -name '*.patch' -delete
