@@ -68,6 +68,7 @@ RUN set -x \
     python3-dev \
     libxml2-dev \
     libacl1-dev \
+    libmariadb-dev \
     libxmlsec1-dev \
     libleptonica-dev \
     libtesseract-dev \
@@ -91,6 +92,7 @@ RUN set -x \
     pkg-config \
     libleptonica-dev \
     libtesseract-dev \
+    libmariadb-dev \
     libxml2-dev \
     libffi-dev \
     libxmlsec1-dev \
@@ -99,6 +101,7 @@ RUN set -x \
     gcc \
     g++ \
     libsasl2-dev \
+    libacl1-dev \
     libldap2-dev \
     libssl-dev \
     libz-dev   \
