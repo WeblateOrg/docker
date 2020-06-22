@@ -40,7 +40,6 @@ COPY requirements.txt patches /usr/src/weblate/
 RUN set -x \
   && export DEBIAN_FRONTEND=noninteractive \
   && apt-get update \
-  && apt-get -y upgrade \
   && apt-get install --no-install-recommends -y \
     uwsgi \
     uwsgi-plugin-python3 \
