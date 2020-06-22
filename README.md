@@ -1,7 +1,9 @@
+<!-- markdownlint-disable -->
 <a href="https://weblate.org/"><img alt="Weblate" src="https://s.weblate.org/cdn/Logo-Darktext-borders.png" height="80px" /></a>
 
 **Weblate is a copylefted libre software web-based continuous localization system,
 used by over 1150 libre projects and companies in more than 115 countries.**
+<!-- markdownlint-restore -->
 
 # Official Docker container for Weblate
 
@@ -39,4 +41,4 @@ Every image is tested by our CI before it gets published, so even the `bleeding`
 
 Detailed documentation is available in Weblate documentation:
 
-https://docs.weblate.org/en/latest/admin/install/docker.html
+<https://docs.weblate.org/en/latest/admin/install/docker.html>
