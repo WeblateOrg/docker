@@ -146,8 +146,9 @@ if [ "x$1" = "xrunserver" ] ; then
         run_weblate createadmin --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
     fi
     # Change site name
-    if [ -n "$WEBLATE_ALLOWED_HOSTS" -a "$WEBLATE_ALLOWED_HOSTS" != '*' ] ; then
-        run_weblate changesite --set-name "${WEBLATE_ALLOWED_HOSTS%%,*}"
+    SITE_DOMAIN="${WEBLATE_ALLOWED_HOSTS%%,*}"
+    if [ -n "$WEBLATE_ALLOWED_HOSTS" -a "$SITE_DOMAIN" != '*' ] ; then
+        run_weblate changesite --set-name "$SITE_DOMAIN"
     fi
 
     # uswgi dir
