@@ -1,0 +1,45 @@
+From 049d04b48d20ad7580bba0adb710b0cf9bd7bb86 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Mon, 22 Jun 2020 10:08:01 +0200
+Subject: [PATCH 1/1] Languages: Fix no underscore languages handling
+
+---
+ weblate/lang/models.py | 2 +-
+ weblate/lang/tests.py  | 8 ++++++++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git weblate/lang/models.py weblate/lang/models.py
+index 87dfc566f7..8ed356fcc2 100644
+--- weblate/lang/models.py
++++ weblate/lang/models.py
+@@ -191,7 +191,7 @@ class LanguageQuerySet(models.QuerySet):
+ 
+         # Country codes used without underscore (ptbr insteat of pt_BR)
+         if len(code) == 4:
+-            expanded_code = "{}_{}".format(code[:2], code[2:])
++            expanded_code = "{}_{}".format(code[:2], code[2:]).lower()
+             lookups.append(Q(code__iexact=expanded_code))
+ 
+         for lookup in lookups:
+diff --git weblate/lang/tests.py weblate/lang/tests.py
+index c9f08012fc..1f0228de56 100644
+--- weblate/lang/tests.py
++++ weblate/lang/tests.py
+@@ -156,6 +156,14 @@ TEST_LANGUAGES = (
+         "Chinese (Traditional, Hong Kong)",
+         False,
+     ),
++    (
++        "plPL",
++        "pl",
++        "ltr",
++        "n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2",
++        "Polish",
++        False,
++    ),
+ )
+ 
+ 
+-- 
+2.27.0
+
