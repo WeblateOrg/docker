@@ -125,7 +125,6 @@ jobs:
           TEST_CONTAINER=weblate/weblate:test ./test.sh 4443 https
 
   push_dockerhub:
-
     runs-on: ubuntu-latest
     name: Publish
     needs: [test, test-ssl, buildx]

@@ -6,7 +6,7 @@ on:
       - master
   pull_request:
   schedule:
-    - cron: '0 4 * * *'
+    - cron: "0 4 * * *"
 
 jobs:
   build:
@@ -139,7 +139,6 @@ jobs:
           TEST_CONTAINER=weblate/weblate:test ./test.sh 4443 https
 
   push_dockerhub:
-
     runs-on: ubuntu-latest
     name: Publish
     needs: [test, test-ssl, buildx]
