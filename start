@@ -148,6 +148,7 @@ if [ "x$1" = "xrunserver" ] ; then
     # Change site name
     SITE_DOMAIN="${WEBLATE_ALLOWED_HOSTS%%,*}"
     if [ -n "$WEBLATE_ALLOWED_HOSTS" -a "$SITE_DOMAIN" != '*' ] ; then
+        echo "Changing site URL to $SITE_DOMAIN..."
         run_weblate changesite --set-name "$SITE_DOMAIN"
     fi
 
