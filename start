@@ -139,6 +139,8 @@ if [ "x$1" = "xrunserver" ] ; then
     run_weblate ensure_stats
     # Run with --clear to ensure all files are up to date
     run_weblate collectstatic --noinput --clear
+    # Compress js and css
+    run_weblate compress --force
     # Create or update admin account
     if [ -n "$WEBLATE_ADMIN_PASSWORD" ] ; then
         run_weblate createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME"
