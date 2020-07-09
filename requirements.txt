@@ -24,7 +24,7 @@ https://github.com/coderanger/supervisor-stdout/archive/87d672c72664f89250f08693
 iniparse==0.5
 jellyfish==0.8.2
 kombu==4.6.11
-lxml==4.5.1
+lxml==4.5.2
 mercurial==5.4.2
 openpyxl==3.0.1
 phply==1.2.5
