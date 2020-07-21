@@ -59,6 +59,7 @@ RUN set -x \
     python3-setuptools \
     python3-wheel \
     python3-gdbm \
+    python3-gevent \
     gettext \
     postgresql-client \
     git \
