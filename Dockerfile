@@ -67,6 +67,8 @@ RUN set -x \
     subversion \
     pkg-config \
     python3-dev \
+    file \
+    make \
     libxml2-dev \
     libacl1-dev \
     libmariadb-dev \
@@ -101,6 +103,8 @@ RUN set -x \
     cython \
     gcc \
     g++ \
+    file \
+    make \
     libsasl2-dev \
     libacl1-dev \
     libldap2-dev \
