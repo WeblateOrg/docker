@@ -14,8 +14,6 @@ django-crispy-forms==1.9.2
 django-redis==4.12.1
 django_compressor==2.4
 djangorestframework>=3.9,<3.12
-# Workaround for https://github.com/celery/celery/issues/6145
-future
 # Alernative Celery pool implementation
 gevent==20.6.2
 git-review==1.28.0
