@@ -184,6 +184,21 @@ if [ "x$1" = "xrunserver" ] ; then
     fi
     envsubst '$WEBLATE_URL_PREFIX' < $template > /etc/nginx/sites-available/default
 
+    # default values for celery options
+    : "${CELERY_MAIN_OPTIONS:=""}"
+    : "${CELERY_NOTIFY_OPTIONS:=""}"
+    : "${CELERY_TRANSLATE_OPTIONS:=""}"
+    : "${CELERY_MEMORY_OPTIONS:=""}"
+    : "${CELERY_BACKUP_OPTIONS:=""}"
+    : "${CELERY_BEAT_OPTIONS:=""}"
+
+    export CELERY_MAIN_OPTIONS
+    export CELERY_NOTIFY_OPTIONS
+    export CELERY_TRANSLATE_OPTIONS
+    export CELERY_MEMORY_OPTIONS
+    export CELERY_BACKUP_OPTIONS
+    export CELERY_BEAT_OPTIONS
+
     #  Execute supervisor
     exec supervisord --nodaemon \
         --loglevel=${SUPERVISOR_LOGLEVEL:-info} \
