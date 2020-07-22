@@ -49,6 +49,7 @@ RUN set -x \
     openssh-client \
     ca-certificates \
     curl \
+    file \
     gir1.2-pango-1.0 \
     libxmlsec1-openssl \
     libjpeg62-turbo \
@@ -67,7 +68,6 @@ RUN set -x \
     subversion \
     pkg-config \
     python3-dev \
-    libev-dev \
     libxml2-dev \
     libacl1-dev \
     libmariadb-dev \
@@ -95,7 +95,6 @@ RUN set -x \
     libleptonica-dev \
     libtesseract-dev \
     libmariadb-dev \
-    libev-dev \
     libxml2-dev \
     libffi-dev \
     libxmlsec1-dev \
