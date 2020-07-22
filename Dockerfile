@@ -68,6 +68,7 @@ RUN set -x \
     pkg-config \
     python3-dev \
     libev-dev \
+    libevent-dev  \
     libxml2-dev \
     libacl1-dev \
     libmariadb-dev \
@@ -93,6 +94,7 @@ RUN set -x \
     python3-dev \
     pkg-config \
     libev-dev \
+    libevent-dev  \
     libleptonica-dev \
     libtesseract-dev \
     libmariadb-dev \
