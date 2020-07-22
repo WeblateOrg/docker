@@ -17,7 +17,7 @@ djangorestframework>=3.9,<3.12
 # Workaround for https://github.com/celery/celery/issues/6145
 future
 # Alernative Celery pool implementation
-gevent 20.6.2
+gevent==20.6.2
 git-review==1.28.0
 google-cloud-translate==2.0.1
 hiredis==1.1.0
