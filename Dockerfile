@@ -67,6 +67,7 @@ RUN set -x \
     subversion \
     pkg-config \
     python3-dev \
+    libev-dev \
     libxml2-dev \
     libacl1-dev \
     libmariadb-dev \
@@ -94,6 +95,7 @@ RUN set -x \
     libleptonica-dev \
     libtesseract-dev \
     libmariadb-dev \
+    libev-dev \
     libxml2-dev \
     libffi-dev \
     libxmlsec1-dev \
