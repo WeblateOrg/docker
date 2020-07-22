@@ -67,8 +67,6 @@ RUN set -x \
     subversion \
     pkg-config \
     python3-dev \
-    libev-dev \
-    libevent-dev  \
     libxml2-dev \
     libacl1-dev \
     libmariadb-dev \
@@ -87,14 +85,12 @@ RUN set -x \
     g++ \
     tesseract-ocr \
     patch \
-  && GEVENTSETUP_EMBED_LIBEV=no pip3 install "Weblate[all]==$VERSION" -r /usr/src/weblate/requirements.txt \
+  && pip3 install "Weblate[all]==$VERSION" -r /usr/src/weblate/requirements.txt \
   && python3 -c 'from phply.phpparse import make_parser; make_parser()' \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && apt-get -y purge \
     python3-dev \
     pkg-config \
-    libev-dev \
-    libevent-dev  \
     libleptonica-dev \
     libtesseract-dev \
     libmariadb-dev \
