@@ -49,7 +49,6 @@ RUN set -x \
     openssh-client \
     ca-certificates \
     curl \
-    file \
     gir1.2-pango-1.0 \
     libxmlsec1-openssl \
     libjpeg62-turbo \
@@ -68,6 +67,7 @@ RUN set -x \
     subversion \
     pkg-config \
     python3-dev \
+    libev-dev \
     libxml2-dev \
     libacl1-dev \
     libmariadb-dev \
@@ -86,12 +86,13 @@ RUN set -x \
     g++ \
     tesseract-ocr \
     patch \
-  && pip3 install "Weblate[all]==$VERSION" -r /usr/src/weblate/requirements.txt \
+  && GEVENTSETUP_EMBED_LIBEV=no pip3 install "Weblate[all]==$VERSION" -r /usr/src/weblate/requirements.txt \
   && python3 -c 'from phply.phpparse import make_parser; make_parser()' \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && apt-get -y purge \
     python3-dev \
     pkg-config \
+    libev-dev \
     libleptonica-dev \
     libtesseract-dev \
     libmariadb-dev \
