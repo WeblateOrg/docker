@@ -1,7 +1,7 @@
 aeidon==1.7.0
 akismet==1.1
 bleach==3.1.5
-boto3==1.14.24
+boto3==1.14.26
 celery==4.4.6
 celery-batches==0.3
 # For Azure Tenant auth
@@ -14,13 +14,17 @@ django-crispy-forms==1.9.2
 django-redis==4.12.1
 django_compressor==2.4
 djangorestframework>=3.9,<3.12
-# Workaround for https://github.com/celery/celery/issues/6145
-future
+# Alernative Celery pool implementation
+gevent==20.6.2
 git-review==1.28.0
 google-cloud-translate==2.0.1
 hiredis==1.1.0
 httpretty==1.0.2
-https://github.com/coderanger/supervisor-stdout/archive/87d672c72664f89250f08693505e02d0905926a1.zip
+# Patched supervisor-stdout with following fixes:
+# - https://github.com/coderanger/supervisor-stdout/pull/12
+# - https://github.com/coderanger/supervisor-stdout/pull/18
+# - https://github.com/coderanger/supervisor-stdout/pull/20
+https://github.com/nijel/supervisor-stdout/archive/c909c1a1ddabaf679dc2eaecb3b8f5ad6bef467a.zip
 iniparse==0.5
 jellyfish==0.8.2
 kombu==4.6.11

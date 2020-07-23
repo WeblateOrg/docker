@@ -67,6 +67,8 @@ RUN set -x \
     subversion \
     pkg-config \
     python3-dev \
+    file \
+    make \
     libxml2-dev \
     libacl1-dev \
     libmariadb-dev \
@@ -85,6 +87,7 @@ RUN set -x \
     g++ \
     tesseract-ocr \
     patch \
+  && pip3 install --upgrade pip \
   && pip3 install "Weblate[all]==$VERSION" -r /usr/src/weblate/requirements.txt \
   && python3 -c 'from phply.phpparse import make_parser; make_parser()' \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
@@ -101,6 +104,8 @@ RUN set -x \
     cython \
     gcc \
     g++ \
+    file \
+    make \
     libsasl2-dev \
     libacl1-dev \
     libldap2-dev \
