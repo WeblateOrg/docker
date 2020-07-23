@@ -200,7 +200,7 @@ if [ "x$1" = "xrunserver" ] ; then
     export CELERY_BACKUP_OPTIONS
     export CELERY_BEAT_OPTIONS
     export UWSGI_WORKERS
-    
+
     #  Execute supervisor
     exec supervisord --nodaemon \
         --loglevel=${SUPERVISOR_LOGLEVEL:-info} \
