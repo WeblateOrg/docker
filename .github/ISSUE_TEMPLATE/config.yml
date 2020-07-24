@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Weblate issue tracker
+    url: https://github.com/WeblateOrg/weblate/issues/
+    about: For issues not specific to the Docker deployment.
+  - name: translation-finder issue tracker
+    url: https://github.com/WeblateOrg/translation-finder/issues/
+    about: If this issue only involves translations discovery while importing, please open a new issue there.
+  - name: wlc issue tracker
+    url: https://github.com/WeblateOrg/wlc/issues/
+    about: If this issue only involves command line client, please open a new issue there.
+  - name: Paid support
+    url: https://weblate.org/support/
+    about: As the subscriber, you will always receive fast replies from our dedicated support team.
