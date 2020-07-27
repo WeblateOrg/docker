@@ -7,6 +7,12 @@ echo "Starting..."
 # Fails silently if the file doesn't exist yet.
 chmod 600 /app/data/ssh/id_rsa 2>/dev/null || true
 
+# Generate secret
+if [ ! -f /app/data/secret ] ; then
+    # https://github.com/django/django/blob/1.10.2/django/utils/crypto.py#L54-L56
+    python3 -c "from django.utils.crypto import get_random_string; print(get_random_string(50))" > /app/data/secret
+fi
+
 # For openshift, create an account in /etc/passwd
 # @see https://docs.okd.io/latest/creating_images/guidelines.html
 if ! whoami &> /dev/null; then
@@ -109,12 +115,6 @@ done
 unset PGPASSWORD
 
 >&2 echo "Postgres is up"
-
-# Generate secret
-if [ ! -f /app/data/secret ] ; then
-    # https://github.com/django/django/blob/1.10.2/django/utils/crypto.py#L54-L56
-    python3 -c "from django.utils.crypto import get_random_string; print(get_random_string(50))" > /app/data/secret
-fi
 
 # Migrate database to current version and collect static files
 if [ "x$1" = "xrunserver" ] ; then
