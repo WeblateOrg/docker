@@ -15,7 +15,7 @@ fi
 
 # For openshift, create an account in /etc/passwd
 # @see https://docs.okd.io/latest/creating_images/guidelines.html
-if ! whoami &> /dev/null; then
+if ! whoami > /dev/null 2>&1 ; then
   if [ -w /etc/passwd ]; then
     echo "${USER_NAME:-weblate}:x:$(id -u):0:${USER_NAME:-weblate} user:${HOME}:/sbin/nologin" >> /etc/passwd
   fi
