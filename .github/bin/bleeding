@@ -3,7 +3,7 @@
 # Install Weblate from master branch
 sed -i \
     -e "s/\\(ENV VERSION .*\\)/\\1+$( date -I )/" \
-    -e 's@Weblate\[all\]"==\$VERSION@https://github.com/WeblateOrg/weblate/archive/master.zip#egg=Weblate[all]" https://github.com/translate/translate/archive/master.zip@' \
+    -e 's@Weblate\[all\]==\$VERSION"@https://github.com/WeblateOrg/weblate/archive/master.zip#egg=Weblate[all]" https://github.com/translate/translate/archive/master.zip@' \
     Dockerfile
 
 # Remove patches
