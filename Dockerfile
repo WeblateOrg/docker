@@ -1,4 +1,4 @@
-FROM debian:10.4-slim
+FROM debian:10.5-slim
 ENV VERSION 4.1.1
 ARG TARGETARCH
 
