@@ -147,11 +147,15 @@ if [ "x$1" = "xrunserver" ] ; then
     else
         run_weblate createadmin --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
     fi
-    # Change site name
-    SITE_DOMAIN="${WEBLATE_ALLOWED_HOSTS%%,*}"
-    if [ -n "$WEBLATE_ALLOWED_HOSTS" -a "$SITE_DOMAIN" != '*' ] ; then
-        echo "Changing site URL to $SITE_DOMAIN..."
-        run_weblate changesite --set-name "$SITE_DOMAIN"
+    # Fallback for site name
+    WEBLATE_SITE_DOMAIN="${WEBLATE_SITE_DOMAIN:-${WEBLATE_ALLOWED_HOSTS%%,*}}"
+    export WEBLATE_SITE_DOMAIN
+    # Change site name, remove this after releasing Weblate 4.2
+    if run_weblate changesite --help > /dev/null 2>&1 ; then
+        if [ -n "$WEBLATE_ALLOWED_HOSTS" -a "$WEBLATE_SITE_DOMAIN" != '*' ] ; then
+            echo "Changing site URL to $WEBLATE_SITE_DOMAIN..."
+            run_weblate changesite --set-name "$WEBLATE_SITE_DOMAIN"
+        fi
     fi
 
     # uswgi dir
@@ -178,7 +182,7 @@ if [ "x$1" = "xrunserver" ] ; then
             -new -x509 \
             -days 3652 \
             -nodes \
-            -subj "/OU=Weblate/CN=$SITE_DOMAIN/emailAddress=$WEBLATE_ADMIN_EMAIL" \
+            -subj "/OU=Weblate/CN=$WEBLATE_SITE_DOMAIN/emailAddress=$WEBLATE_ADMIN_EMAIL" \
             -out /app/data/ssl/saml.crt \
             -keyout /app/data/ssl/saml.key
     fi
