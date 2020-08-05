@@ -1,27 +1,30 @@
+# This file is generated in https://github.com/WeblateOrg/meta/
 version: 2
 updates:
-  - package-ecosystem: github-actions
-    directory: "/"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
-  - package-ecosystem: gitsubmodule
-    directory: "/"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 10
   - package-ecosystem: docker
-    directory: "/"
+    directory: /
     schedule:
       interval: daily
-    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+      - automerge
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: daily
+    labels:
+      - dependencies
+      - automerge
+  - package-ecosystem: gitsubmodule
+    directory: /
+    schedule:
+      interval: daily
+    labels:
+      - dependencies
   - package-ecosystem: pip
-    directory: "/"
+    directory: /
     schedule:
       interval: daily
-    open-pull-requests-limit: 10
-    ignore:
-      - dependency-name: openpyxl
-        versions:
-          - "> 3.0.1"
-          - "< 3.1"
+    labels:
+      - dependencies
+      - automerge
