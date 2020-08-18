@@ -88,7 +88,7 @@ RUN set -x \
     tesseract-ocr \
     patch \
   && python3 -m pip install --upgrade pip \
-  && python3 -m pip install "Weblate[all]==$VERSION" -r /usr/src/weblate/requirements.txt \
+  && python3 -m pip install "Weblate[all,MySQL]==$VERSION" -r /usr/src/weblate/requirements.txt \
   && python3 -c 'from phply.phpparse import make_parser; make_parser()' \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && apt-get -y purge \
