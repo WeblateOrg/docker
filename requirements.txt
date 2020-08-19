@@ -27,7 +27,6 @@ httpretty==1.0.2
 https://github.com/nijel/supervisor-stdout/archive/c909c1a1ddabaf679dc2eaecb3b8f5ad6bef467a.zip
 iniparse==0.5
 jellyfish==0.8.2
-kombu==4.6.11
 lxml==4.5.2
 mercurial==5.5
 openpyxl==3.0.4
