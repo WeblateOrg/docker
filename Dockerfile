@@ -60,7 +60,7 @@ RUN set -x \
     python3-wheel \
     python3-gdbm \
     gettext \
-    postgresql-client \
+    postgresql-common \
     git \
     git-svn \
     gnupg \
@@ -87,6 +87,13 @@ RUN set -x \
     g++ \
     tesseract-ocr \
     patch \
+  && echo | /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh \
+  && apt-get update \
+  && if apt-cache show postgresql-client-12 > /dev/null 2>&1 ; then \
+        apt-get install --no-install-recommends -y postgresql-client-12 ; \
+    else \
+        apt-get install --no-install-recommends -y postgresql-client ; \
+    fi \
   && python3 -m pip install --upgrade pip \
   && python3 -m pip install "Weblate[all,MySQL]==$VERSION" -r /usr/src/weblate/requirements.txt \
   && python3 -c 'from phply.phpparse import make_parser; make_parser()' \
