@@ -21,6 +21,11 @@ if ! whoami > /dev/null 2>&1 ; then
   fi
 fi
 
+if [ -z "$WEBLATE_SITE_DOMAIN" ] ; then
+    echo "Missing WEBLATE_SITE_DOMAIN, please configure it"
+    exit 1
+fi
+
 # Export Weblate variables
 export WEBLATE_CMD="/usr/local/bin/weblate"
 export WEBLATE_PY_PATH="/app/data/python/customize"
