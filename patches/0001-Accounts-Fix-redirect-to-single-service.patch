@@ -1,0 +1,26 @@
+From 4d7235a9535154221f164d9376619cb75f484ce3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Fri, 21 Aug 2020 21:54:47 +0200
+Subject: [PATCH 1/1] Accounts: Fix redirect to single service
+
+Fixes WEBLATE-4M5
+---
+ weblate/accounts/views.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git weblate/accounts/views.py weblate/accounts/views.py
+index f2b0bd2659..1bec92001b 100644
+--- weblate/accounts/views.py
++++ weblate/accounts/views.py
+@@ -621,7 +621,7 @@ class WeblateLoginView(LoginView):
+         # Redirect if there is only one backend
+         auth_backends = get_auth_keys()
+         if len(auth_backends) == 1 and "email" not in auth_backends:
+-            return redirect_single(request, auth_backends[0])
++            return redirect_single(request, auth_backends.pop())
+ 
+         return super().dispatch(request, *args, **kwargs)
+ 
+-- 
+2.28.0
+
