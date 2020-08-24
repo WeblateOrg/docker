@@ -37,7 +37,7 @@ python3-saml==1.9.0
 pyuca==1.2
 raven
 redis==3.5.3
-responses>=0.10.1,<0.11.0
+responses>=0.10.1,<0.12.0
 rollbar
 ruamel.yaml==0.16.10
 selenium
