@@ -127,12 +127,10 @@ if [ "x$1" = "xrunserver" ] ; then
     # Fail on migration to 3.0
     failure=0
     run_weblate showmigrations --plan > /tmp/migrations.txt || failure=1
-    has_old_auth=$(grep -Fc '[X]  auth.0001_initial' /tmp/migrations.txt || true)
-    missing_new_auth=$(grep -Fc '[ ]  weblate_auth.0001_initial' /tmp/migrations.txt || true)
-    if [ $failure -gt 0 -o \( $has_old_auth -gt 0 -a $missing_new_auth -gt 0 \) ] ; then
+    if [ $failure -gt 0 ] ; then
         echo
         echo "Migration from this version is not supported!"
-        echo "Please upgrade to 3.0.1-7 first."
+        echo "Please upgrade to 4.1.1-3 first."
         exit 1
     fi
     rm /tmp/migrations.txt
