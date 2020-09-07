@@ -31,7 +31,7 @@ lxml==4.5.2
 mercurial==5.5.1
 openpyxl==3.0.5
 phply==1.2.5
-psycopg2==2.8.5
+psycopg2==2.8.6
 python-dateutil==2.8.1
 python3-saml==1.9.0
 pyuca==1.2
