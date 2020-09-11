@@ -15,13 +15,15 @@ LABEL org.opencontainers.image.licenses="GPL-3.0-or-later"
 
 HEALTHCHECK --interval=5m --timeout=3s CMD /app/bin/health_check
 
+SHELL ["/bin/bash", "-o", "pipefail", "-x", "-c"]
+
 # Add user early to get a consistent userid
 # - the root group so it can run with any uid
 # - the tty group for /dev/std* access
 # - see https://github.com/WeblateOrg/docker/issues/326 and https://github.com/moby/moby/issues/31243#issuecomment-406879017
 # - create test and app data dirs to be able to run tests
-RUN set -o pipefail -x \
-  && useradd --shell /bin/sh --user-group weblate --groups root,tty \
+RUN \
+  useradd --shell /bin/sh --user-group weblate --groups root,tty \
   && mkdir -p /home/weblate/.ssh \
   && touch /home/weblate/.ssh/authorized_keys \
   && chown -R weblate:weblate /home/weblate \
@@ -41,8 +43,8 @@ ENV DJANGO_SETTINGS_MODULE=weblate.settings_docker
 COPY requirements.txt patches /usr/src/weblate/
 
 # Install dependencies
-RUN set -o pipefail -x \
-  && export DEBIAN_FRONTEND=noninteractive \
+RUN \
+  export DEBIAN_FRONTEND=noninteractive \
   && apt-get update \
   && apt-get install --no-install-recommends -y \
     uwsgi \
@@ -136,19 +138,16 @@ RUN set -o pipefail -x \
   && rm -rf /root/.cache /tmp/* /var/lib/apt/lists/*
 
 # Apply hotfixes on Weblate
-RUN set -o pipefail -x \
-  && find /usr/src/weblate -name '*.patch' -print0 | sort -z | \
+RUN find /usr/src/weblate -name '*.patch' -print0 | sort -z | \
   xargs -n1 -0 -r patch -p0 -d /usr/local/lib/python3.7/dist-packages/ -i
 
 # Install Hub
-RUN set -o pipefail -x \
-  && curl --cacert /etc/ssl/certs/ca-certificates.crt -L https://github.com/github/hub/releases/download/v2.13.0/hub-linux-${TARGETARCH:-amd64}-2.13.0.tgz | tar xzv --wildcards hub-linux*/bin/hub && \
+RUN curl --cacert /etc/ssl/certs/ca-certificates.crt -L https://github.com/github/hub/releases/download/v2.13.0/hub-linux-${TARGETARCH:-amd64}-2.13.0.tgz | tar xzv --wildcards hub-linux*/bin/hub && \
   cp hub-linux-*/bin/hub /usr/bin && \
   rm -rf hub-linux-*
 
 # Install Lab
-RUN set -o pipefail -x \
-  && if [ ${TARGETARCH:-amd64} = "amd64" ] ; then  \
+RUN if [ ${TARGETARCH:-amd64} = "amd64" ] ; then  \
   curl --cacert /etc/ssl/certs/ca-certificates.crt -L "https://github.com/zaquestion/lab/releases/download/v0.17.2/lab_0.17.2_linux_${TARGETARCH:-amd64}.tar.gz" | tar -C /tmp/ -xzf - \
   && mv /tmp/lab /usr/bin \
   && chmod u+x /usr/bin/lab ; \
@@ -163,8 +162,7 @@ COPY etc /etc/
 # - autorize passwd edition so we can fix weblate uid on startup
 # - log, run and home directories
 # - disable su for non root to avoid privilege escapation by chaging /etc/passwd
-RUN set -o pipefail -x \
-  && rm -f /etc/localtime && cp /usr/share/zoneinfo/Etc/UTC /etc/localtime \
+RUN rm -f /etc/localtime && cp /usr/share/zoneinfo/Etc/UTC /etc/localtime \
   && chgrp -R 0 /etc/nginx/sites-available/ /var/log/nginx/ /var/lib/nginx /app/data /run /home/weblate /etc/timezone /etc/localtime \
   && chmod -R 770 /etc/nginx/sites-available/ /var/log/nginx/ /var/lib/nginx /app/data /run /home /home/weblate /etc/timezone /etc/localtime \
   && chmod 664 /etc/passwd /etc/group \
