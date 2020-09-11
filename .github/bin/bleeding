@@ -3,9 +3,6 @@
 # Install Weblate from master branch
 sed -i \
     -e "s/\\(ENV VERSION .*\\)/\\1+$( date -I )/" \
-    -e '/install --upgrade pip/a \
-  && python3 -m pip install https://github.com/translate/translate/archive/master.zip \\' \
-    -e 's@Weblate\[all,MySQL\]==\$VERSION@https://github.com/WeblateOrg/weblate/archive/master.zip#egg=Weblate[all,MySQL]@' \
     Dockerfile
 
 # Remove patches
