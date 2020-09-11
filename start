@@ -113,8 +113,8 @@ fi
 # Wait for database to get available
 TIMEOUT=0
 until psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "$POSTGRES_DATABASE" -U "$POSTGRES_USER" -c 'SELECT 1' > /dev/null ; do
-    >&2 echo "Postgres is unavailable - waiting $((30 - $TIMEOUT))"
-    TIMEOUT=$(($TIMEOUT + 1))
+    >&2 echo "Postgres is unavailable - waiting $((30 - TIMEOUT))"
+    TIMEOUT=$((TIMEOUT + 1))
     if [ $TIMEOUT -gt 30 ] ; then
         psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "$POSTGRES_DATABASE" -U "$POSTGRES_USER" -c 'SELECT 1'
         fail_dep PosgreSQL
@@ -194,7 +194,7 @@ if [ "x$1" = "xrunserver" ] ; then
             -out /app/data/ssl/saml.crt \
             -keyout /app/data/ssl/saml.key
     fi
-    envsubst '$WEBLATE_URL_PREFIX' < $template > /etc/nginx/sites-available/default
+    envsubst "\$WEBLATE_URL_PREFIX" < $template > /etc/nginx/sites-available/default
 
     # default values for celery options
     : "${CELERY_MAIN_OPTIONS:=""}"
