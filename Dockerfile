@@ -43,6 +43,7 @@ ENV DJANGO_SETTINGS_MODULE=weblate.settings_docker
 COPY requirements.txt patches /usr/src/weblate/
 
 # Install dependencies
+# hadolint ignore=DL3008
 RUN \
   export DEBIAN_FRONTEND=noninteractive \
   && apt-get update \
