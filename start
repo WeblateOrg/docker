@@ -75,7 +75,12 @@ if [ -n "${WEBLATE_GITLAB_USERNAME+x}" ]; then
         echo "WARNING: WEBLATE_GITLAB_HOST or WEBLATE_GITLAB_TOKEN not set. Skip lab.hcl generation..."
     else
         mkdir -p /app/data/home/.config/
-        echo "\"core\" = { \n \"host\" = \"${WEBLATE_GITLAB_HOST}\" \n \"token\" = \"${WEBLATE_GITLAB_TOKEN}\" \n }" > /app/data/home/.config/lab.hcl
+        cat > /app/data/home/.config/lab.hcl <<EOT
+"core" = {
+  "host" = "${WEBLATE_GITLAB_HOST}"
+  "token" = "${WEBLATE_GITLAB_TOKEN}"
+}
+EOT
         unset WEBLATE_GITLAB_TOKEN
         echo "lab configured"
     fi;
