@@ -13,6 +13,7 @@ LABEL org.opencontainers.image.title="Weblate"
 LABEL org.opencontainers.image.description="A web-based continuous localization system with tight version control integration"
 LABEL org.opencontainers.image.licenses="GPL-3.0-or-later"
 
+HEALTHCHECK --interval=5m --timeout=3s CMD /app/bin/health_check
 
 # Add user early to get a consistent userid
 # - the root group so it can run with any uid
@@ -159,7 +160,7 @@ RUN rm -f /etc/localtime && cp /usr/share/zoneinfo/Etc/UTC /etc/localtime \
 RUN echo "/app/data/python" > /usr/local/lib/python3.7/dist-packages/weblate-docker.pth
 
 # Entrypoint
-COPY start /app/bin/
+COPY start health_check /app/bin/
 RUN chmod a+rx /app/bin/start
 
 EXPOSE 8080 4443
