@@ -23,7 +23,7 @@ if [ "$1" = "load" ] ; then
     echo --tag weblate/weblate:test
 else
     # List of platforms
-    echo --platform ${MATRIX_ARCHITECTURE:-linux/amd64,linux/arm/v7,linux/arm64}
+    echo --platform "${MATRIX_ARCHITECTURE:-linux/amd64,linux/arm/v7,linux/arm64}"
     # Enable more platforms in future:
     # linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/386,linux/ppc64le,linux/s390x
 
@@ -36,9 +36,9 @@ else
         echo --output "type=image,push=true"
 
         # Generate tags
-        case $GITHUB_REF in
+        case "$GITHUB_REF" in
             refs/tags/[0-9]*)
-                echo --tag weblate/weblate:${GITHUB_REF#refs/tags/}
+                echo --tag "weblate/weblate:${GITHUB_REF#refs/tags/}"
                 echo --tag weblate/weblate:latest
                 ;;
             refs/heads/master)

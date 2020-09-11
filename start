@@ -41,22 +41,22 @@ export PGSSLMODE="$POSTGRES_SSL_MODE"
 
 # Update the time zone
 zonefile="/usr/share/zoneinfo/$WEBLATE_TIME_ZONE"
-if [ -n "$WEBLATE_TIME_ZONE" -a -f "$zonefile" ] ; then
+if [ -n "$WEBLATE_TIME_ZONE" ] && [ -f "$zonefile" ] ; then
     echo "Updating system timezone to $WEBLATE_TIME_ZONE"
-    echo $WEBLATE_TIME_ZONE > /etc/timezone
-    cat /usr/share/zoneinfo/$WEBLATE_TIME_ZONE > /etc/localtime
+    echo "$WEBLATE_TIME_ZONE" > /etc/timezone
+    cat "/usr/share/zoneinfo/$WEBLATE_TIME_ZONE" > /etc/localtime
 fi
 
 # Create fake Python app for customization
-if [ ! -d $WEBLATE_PY_PATH ] ; then
+if [ ! -d "$WEBLATE_PY_PATH" ] ; then
     echo "Creating $WEBLATE_PY_PATH"
-    mkdir -p $WEBLATE_PY_PATH/static
-    touch $WEBLATE_PY_PATH/__init__.py
-    touch $WEBLATE_PY_PATH/models.py
+    mkdir -p "$WEBLATE_PY_PATH/static"
+    touch "$WEBLATE_PY_PATH/__init__.py"
+    touch "$WEBLATE_PY_PATH/models.py"
 fi
 
 run_weblate() {
-    $WEBLATE_CMD "$@"
+    "$WEBLATE_CMD" "$@"
 }
 
 fail_dep() {
@@ -70,8 +70,8 @@ fail_dep() {
 }
 
 
-if [ ! -z ${WEBLATE_GITLAB_USERNAME+x} ]; then
-    if [ -z ${WEBLATE_GITLAB_HOST+x} ] || [ -z ${WEBLATE_GITLAB_TOKEN+x} ] ; then
+if [ -n "${WEBLATE_GITLAB_USERNAME+x}" ]; then
+    if [ -z "${WEBLATE_GITLAB_HOST+x}" ] || [ -z "${WEBLATE_GITLAB_TOKEN+x}" ] ; then
         echo "WARNING: WEBLATE_GITLAB_HOST or WEBLATE_GITLAB_TOKEN not set. Skip lab.hcl generation..."
     else
         mkdir -p /app/data/home/.config/
@@ -89,8 +89,8 @@ fi
 # Wait for redis
 TIMEOUT=0
 until run_weblate shell -c 'from django.core.cache import cache; cache.has_key("ping")' > /dev/null ; do
-    >&2 echo "redis is unavailable - waiting $((30 - $TIMEOUT))"
-    TIMEOUT=$(($TIMEOUT + 1))
+    >&2 echo "redis is unavailable - waiting $((30 - TIMEOUT))"
+    TIMEOUT=$((TIMEOUT + 1))
     if [ $TIMEOUT -gt 30 ] ; then
         run_weblate shell -c 'from django.core.cache import cache; cache.has_key("ping")'
         fail_dep redis
@@ -155,7 +155,7 @@ if [ "x$1" = "xrunserver" ] ; then
     export WEBLATE_SITE_DOMAIN
     # Change site name, remove this after releasing Weblate 4.2
     if run_weblate changesite --help > /dev/null 2>&1 ; then
-        if [ -n "$WEBLATE_ALLOWED_HOSTS" -a "$WEBLATE_SITE_DOMAIN" != '*' ] ; then
+        if [ -n "$WEBLATE_ALLOWED_HOSTS" ] && [ "$WEBLATE_SITE_DOMAIN" != '*' ] ; then
             echo "Changing site URL to $WEBLATE_SITE_DOMAIN..."
             run_weblate changesite --set-name "$WEBLATE_SITE_DOMAIN"
         fi
@@ -169,8 +169,8 @@ if [ "x$1" = "xrunserver" ] ; then
     rm -f /run/celery/beat.pid
 
     # Prepare nginx logs
-    ln -sf ${NGINX_ACCESS_LOG:-/dev/stdout} /var/log/nginx/access.log
-    ln -sf ${NGINX_ERROR_LOG:-/dev/stderr} /var/log/nginx/error.log
+    ln -sf "${NGINX_ACCESS_LOG:-/dev/stdout}" /var/log/nginx/access.log
+    ln -sf "${NGINX_ERROR_LOG:-/dev/stderr}" /var/log/nginx/error.log
 
     # Generate nginx configuration
     if [ -f /app/data/ssl/privkey.pem ] ; then
@@ -179,7 +179,7 @@ if [ "x$1" = "xrunserver" ] ; then
         template=/etc/nginx/default.tpl
     fi
     # Generate self-signed SAML key
-    if [ ! -f /app/data/ssl/saml.key -o ! -f /app/data/ssl/saml.crt ] ; then
+    if [ ! -f /app/data/ssl/saml.key ] || [ ! -f /app/data/ssl/saml.crt ] ; then
         mkdir -p /app/data/ssl
         openssl req \
             -new -x509 \
@@ -198,7 +198,7 @@ if [ "x$1" = "xrunserver" ] ; then
     : "${CELERY_MEMORY_OPTIONS:=""}"
     : "${CELERY_BACKUP_OPTIONS:=""}"
     : "${CELERY_BEAT_OPTIONS:=""}"
-    : "${UWSGI_WORKERS:=$((`nproc` + 1))}"
+    : "${UWSGI_WORKERS:=$(($(nproc) + 1))}"
 
     export CELERY_MAIN_OPTIONS
     export CELERY_NOTIFY_OPTIONS
@@ -210,9 +210,9 @@ if [ "x$1" = "xrunserver" ] ; then
 
     #  Execute supervisor
     exec supervisord --nodaemon \
-        --loglevel=${SUPERVISOR_LOGLEVEL:-info} \
+        --loglevel="${SUPERVISOR_LOGLEVEL:-info}" \
         --logfile_maxbytes=0 \
-        --logfile=${SUPERVISOR_LOGFILE:-/dev/null} \
+        --logfile="${SUPERVISOR_LOGFILE:-/dev/null}" \
         --configuration=/etc/supervisor/supervisord.conf
 fi
 
