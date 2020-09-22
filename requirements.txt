@@ -1,6 +1,6 @@
 aeidon==1.7.0
 akismet==1.1
-bleach==3.2.0
+bleach==3.2.1
 boto3==1.15.2
 celery==4.4.7
 celery-batches==0.3
