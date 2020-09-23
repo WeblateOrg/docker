@@ -5,7 +5,7 @@ boto3==1.15.2
 celery==4.4.7
 celery-batches==0.3
 # For Azure Tenant auth
-cryptography==3.1
+cryptography==3.1.1
 defusedxml==0.6.0
 Django==3.1.1
 django-appconf==1.0.4
