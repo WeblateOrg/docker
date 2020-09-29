@@ -1,6 +1,6 @@
 aeidon==1.7.0
 akismet==1.1
-bleach==3.2.1
+bleach==3.1.5
 boto3==1.15.7
 celery==4.4.7
 celery-batches==0.3
@@ -13,7 +13,7 @@ django-auth-ldap==2.2.0
 django-crispy-forms==1.9.2
 django-redis==4.12.1
 django_compressor==2.4
-djangorestframework>=3.9,<3.13
+djangorestframework==3.11.1
 # Alernative Celery pool implementation
 gevent==20.9.0
 git-review==1.28.0
