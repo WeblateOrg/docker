@@ -103,12 +103,14 @@ RUN \
   && case "$VERSION" in \
     *+* ) \
       python3 -m pip install \
+        --use-feature=2020-resolver \
         -r /usr/src/weblate/requirements.txt \
         "https://github.com/translate/translate/archive/master.zip" \
         "https://github.com/WeblateOrg/weblate/archive/master.zip#egg=Weblate[all,MySQL]" \
         ;; \
     * ) \
       python3 -m pip install \
+        --use-feature=2020-resolver \
         -r /usr/src/weblate/requirements.txt \
         "Weblate[all,MySQL]==$VERSION" \
       ;; \
