@@ -184,7 +184,10 @@ if [ "x$1" = "xrunserver" ] ; then
             -out /app/data/ssl/saml.crt \
             -keyout /app/data/ssl/saml.key
     fi
-    envsubst "\$WEBLATE_URL_PREFIX" < $template > /etc/nginx/sites-available/default
+    WEBLATE_SITE_HOST="${WEBLATE_SITE_DOMAIN%:*}"
+    export WEBLATE_SITE_HOST
+    # shellcheck disable=SC2016
+    envsubst '$WEBLATE_URL_PREFIX $WEBLATE_SITE_DOMAIN $WEBLATE_SITE_HOST=' < $template > /etc/nginx/sites-available/default
 
     # default values for celery options
     : "${CELERY_MAIN_OPTIONS:=""}"
