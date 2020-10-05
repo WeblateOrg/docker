@@ -65,7 +65,6 @@ RUN \
     python3-wheel \
     python3-gdbm \
     gettext \
-    postgresql-common \
     git \
     git-svn \
     gnupg \
@@ -92,10 +91,11 @@ RUN \
     g++ \
     tesseract-ocr \
     patch \
-  && echo | /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh \
+  && echo "deb http://apt.postgresql.org/pub/repos/apt buster-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+  && curl --cacert /etc/ssl/certs/ca-certificates.crt -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
   && apt-get update \
-  && if apt-cache show postgresql-client-12 > /dev/null 2>&1 ; then \
-        apt-get install --no-install-recommends -y postgresql-client-12 ; \
+  && if apt-cache show postgresql-client-13 > /dev/null 2>&1 ; then \
+        apt-get install --no-install-recommends -y postgresql-client-13 ; \
     else \
         apt-get install --no-install-recommends -y postgresql-client ; \
     fi \
