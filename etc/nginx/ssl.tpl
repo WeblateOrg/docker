@@ -1,5 +1,7 @@
 server {
     listen 4443 ssl;
+    server_name ${WEBLATE_SITE_HOST};
+
     ssl_certificate /app/data/ssl/fullchain.pem;
     ssl_certificate_key /app/data/ssl/privkey.pem;
 
@@ -41,5 +43,14 @@ server {
 
 server {
     listen 8080 default_server;
-    return 301 https://$host$request_uri;
+    return 301 https://${WEBLATE_SITE_DOMAIN}$request_uri;
+}
+
+server {
+    listen 4443 default_server ssl;
+
+    ssl_certificate /app/data/ssl/fullchain.pem;
+    ssl_certificate_key /app/data/ssl/privkey.pem;
+
+    return 301 https://${WEBLATE_SITE_DOMAIN}$request_uri;
 }
