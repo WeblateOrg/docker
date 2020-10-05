@@ -158,11 +158,9 @@ jobs:
       - name: Anchore scan action
         uses: anchore/scan-action@v2.0.0
         with:
-          image-reference: "weblate/weblate:test"
-          dockerfile-path: "Dockerfile"
+          image: "weblate/weblate:test"
           acs-report-enable: true
           fail-build: true
-          include-app-packages: true
       - name: Upload Anchore Scan Report
         uses: github/codeql-action/upload-sarif@v1
         with:
