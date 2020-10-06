@@ -39,6 +39,8 @@ ENV LC_ALL=C.UTF-8
 ENV HOME=/home/weblate
 # Use Docker specific settings
 ENV DJANGO_SETTINGS_MODULE=weblate.settings_docker
+# Avoid Python buffering stdout and delaying logs
+ENV PYTHONUNBUFFERED=1
 
 COPY requirements.txt patches /usr/src/weblate/
 
