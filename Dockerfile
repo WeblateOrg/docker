@@ -181,6 +181,7 @@ COPY start health_check /app/bin/
 RUN chmod a+rx /app/bin/start
 
 EXPOSE 8080 4443
+VOLUME /app/data
 
 # Numerical value is needed for OpenShift S2I, see
 # https://docs.openshift.com/container-platform/latest/openshift_images/create-images.html
