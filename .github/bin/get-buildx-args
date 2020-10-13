@@ -31,6 +31,7 @@ else
         # Publishing bleeding edge image
         echo --output "type=image,push=true"
         echo --tag weblate/weblate:bleeding
+        echo --tag "weblate/weblate:bleeding-$(date -I)-$(git ls-remote --quiet https://github.com/WeblateOrg/weblate HEAD | awk '{print $1}')"
     elif [ "$1" = "publish" ] ; then
         # Publishing normal image
         echo --output "type=image,push=true"
@@ -43,6 +44,7 @@ else
                 ;;
             refs/heads/master)
                 echo --tag weblate/weblate:edge
+                echo --tag "weblate/weblate:edge-$(date -I)-${GITHUB_SHA}"
                 ;;
         esac
     else
