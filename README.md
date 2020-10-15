@@ -6,6 +6,7 @@
 used by over 1150 libre projects and companies in more than 115 countries.**
 
 <!-- markdownlint-restore -->
+<!-- markdownlint-disable MD013 -->
 
 # Official Docker container for Weblate
 
