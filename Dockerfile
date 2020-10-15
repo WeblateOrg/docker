@@ -1,5 +1,5 @@
 FROM debian:10.6-slim
-ENV VERSION 4.2.2
+ENV VERSION 4.3
 ARG TARGETARCH
 
 LABEL name="Weblate"
