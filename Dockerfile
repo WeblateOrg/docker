@@ -148,18 +148,6 @@ RUN \
 RUN find /usr/src/weblate -name '*.patch' -print0 | sort -z | \
   xargs -n1 -0 -r patch -p0 -d /usr/local/lib/python3.7/dist-packages/ -i
 
-# Install Hub
-RUN curl --cacert /etc/ssl/certs/ca-certificates.crt -L https://github.com/github/hub/releases/download/v2.13.0/hub-linux-${TARGETARCH:-amd64}-2.13.0.tgz | tar xzv --wildcards hub-linux*/bin/hub && \
-  cp hub-linux-*/bin/hub /usr/bin && \
-  rm -rf hub-linux-*
-
-# Install Lab
-RUN if [ ${TARGETARCH:-amd64} = "amd64" ] ; then  \
-  curl --cacert /etc/ssl/certs/ca-certificates.crt -L "https://github.com/zaquestion/lab/releases/download/v0.17.2/lab_0.17.2_linux_${TARGETARCH:-amd64}.tar.gz" | tar -C /tmp/ -xzf - \
-  && mv /tmp/lab /usr/bin \
-  && chmod u+x /usr/bin/lab ; \
-  fi
-
 # Configuration for Weblate, nginx, uwsgi and supervisor
 COPY etc /etc/
 

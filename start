@@ -69,24 +69,6 @@ fail_dep() {
     exit 1
 }
 
-
-if [ -n "${WEBLATE_GITLAB_USERNAME+x}" ]; then
-    if [ -z "${WEBLATE_GITLAB_HOST+x}" ] || [ -z "${WEBLATE_GITLAB_TOKEN+x}" ] ; then
-        echo "WARNING: WEBLATE_GITLAB_HOST or WEBLATE_GITLAB_TOKEN not set. Skip lab.hcl generation..."
-    else
-        mkdir -p /app/data/home/.config/
-        cat > /app/data/home/.config/lab.hcl <<EOT
-"core" = {
-  "host" = "${WEBLATE_GITLAB_HOST}"
-  "token" = "${WEBLATE_GITLAB_TOKEN}"
-}
-EOT
-        unset WEBLATE_GITLAB_TOKEN
-        echo "lab configured"
-    fi;
-fi;
-
-
 if [ -n "$MEMCACHED_HOST" ] ; then
     >&2 echo "memcached is no longer supported, please configure redis"
 fi
