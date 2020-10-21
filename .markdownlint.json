@@ -1,3 +1,4 @@
 {
-  "first-line-heading": false
+  "first-line-heading": false,
+  "line-length": false
 }
