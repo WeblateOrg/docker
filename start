@@ -159,7 +159,9 @@ if [ "x$1" = "xrunserver" ] ; then
     if [ ! -f /app/data/ssl/saml.key ] || [ ! -f /app/data/ssl/saml.crt ] ; then
         mkdir -p /app/data/ssl
         openssl req \
-            -new -x509 \
+            -new \
+            -newkey rsa:4096 \
+            -x509 \
             -days 3652 \
             -nodes \
             -subj "/OU=Weblate/CN=$WEBLATE_SITE_DOMAIN/emailAddress=$WEBLATE_ADMIN_EMAIL" \
