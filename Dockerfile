@@ -170,7 +170,7 @@ RUN echo "/app/data/python" > /usr/local/lib/python3.7/dist-packages/weblate-doc
 COPY start health_check /app/bin/
 RUN chmod a+rx /app/bin/start
 
-EXPOSE 8080 4443
+EXPOSE 8080
 VOLUME /app/data
 
 # Numerical value is needed for OpenShift S2I, see
