@@ -18,8 +18,8 @@ repos:
   - repo: meta
     hooks:
       - id: check-hooks-apply
-  - repo: https://github.com/prettier/prettier
-    rev: 2.1.2
+  - repo: https://github.com/prettier/pre-commit
+    rev: 83c5da9dc412f5a2294d6c67ab349e9d30caca31
     hooks:
       - id: prettier
   - repo: https://github.com/pryorda/dockerfilelint-precommit-hooks
