@@ -13,7 +13,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Lint Code Base
-        uses: github/super-linter@v3
+        # Workaround for https://github.com/github/super-linter/issues/938
+        # uses: github/super-linter@v3.13.1
+        uses: docker://github/super-linter:v3.13.1
         env:
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
