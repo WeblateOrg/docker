@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
 
       - name: Lint Code Base
         # Workaround for https://github.com/github/super-linter/issues/938
