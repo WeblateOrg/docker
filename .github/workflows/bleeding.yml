@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     name: Build, bleeding, ${{ matrix.architecture }}
     strategy:
       matrix:
@@ -35,7 +35,7 @@ jobs:
         run: docker buildx build $(.github/bin/get-buildx-args)
 
   buildx:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     name: Build, bleeding, ${{ matrix.architecture }}
     strategy:
       matrix:
@@ -64,7 +64,7 @@ jobs:
         run: docker buildx build $(.github/bin/get-buildx-args)
 
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     name: Test, bleeding, ${{ matrix.architecture }}
     needs: [build]
     strategy:
@@ -97,7 +97,7 @@ jobs:
           TEST_CONTAINER=weblate/weblate:test ./test.sh
 
   test-ssl:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     name: Test SSL, bleeding, ${{ matrix.architecture }}
     needs: [build]
     strategy:
@@ -143,7 +143,7 @@ jobs:
           TEST_CONTAINER=weblate/weblate:test ./test.sh 4443 https
 
   push_dockerhub:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     name: Publish, bleeding
     needs: [test, test-ssl, buildx]
     if: startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/master')
