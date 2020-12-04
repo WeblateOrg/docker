@@ -101,10 +101,11 @@ RUN \
     else \
         apt-get install --no-install-recommends -y postgresql-client ; \
     fi \
-  && python3 -m pip install --upgrade pip wheel \
+  && python3 -m pip install --no-cache-dir --upgrade pip wheel \
   && case "$VERSION" in \
     *+* ) \
       python3 -m pip install \
+        --no-cache-dir \
         --use-feature=2020-resolver \
         -r /usr/src/weblate/requirements.txt \
         "https://github.com/translate/translate/archive/master.zip" \
@@ -112,6 +113,7 @@ RUN \
         ;; \
     * ) \
       python3 -m pip install \
+        --no-cache-dir \
         --use-feature=2020-resolver \
         -r /usr/src/weblate/requirements.txt \
         "Weblate[all,MySQL]==$VERSION" \
@@ -129,7 +131,6 @@ RUN \
     libffi-dev \
     libxmlsec1-dev \
     libpq-dev \
-    cython \
     gcc \
     g++ \
     file \
