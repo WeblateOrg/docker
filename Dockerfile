@@ -104,6 +104,7 @@ RUN \
   && python3 -m pip install --no-cache-dir --upgrade pip wheel \
   && case "$VERSION" in \
     *+* ) \
+      sed -i /^translate-toolkit/D /usr/src/weblate/requirements.txt; \
       python3 -m pip install \
         --no-cache-dir \
         --use-feature=2020-resolver \
