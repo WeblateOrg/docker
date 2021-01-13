@@ -69,6 +69,7 @@ jobs:
     env:
       MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
       COMPOSE_PROJECT_NAME: wl
+      TEST_CONTAINER: weblate/weblate:test
     steps:
       - uses: actions/checkout@v2
         with:
@@ -85,10 +86,50 @@ jobs:
         run: docker buildx build $(.github/bin/get-buildx-args load)
       - name: List Docker images
         run: docker image ls --all
-      - name: Test the Docker image
+      - name: Generate configuration
         run: |
           cd docker-compose
-          TEST_CONTAINER=weblate/weblate:test ./test.sh
+          ./test-generate
+      - name: Startup container
+        run: |
+          cd docker-compose
+          ./test-boot
+      - name: List Python packages
+        run: |
+          cd docker-compose
+          ./test-pip
+      - name: Inspect container
+        run: |
+          cd docker-compose
+          ./test-inspect
+      - name: Check service is running
+        run: |
+          cd docker-compose
+          ./test-online
+      - name: Run Django Checks
+        run: |
+          cd docker-compose
+          ./test-checks
+      - name: Verify supervisor
+        run: |
+          cd docker-compose
+          ./test-supervisor
+      - name: Test admin creation
+        run: |
+          cd docker-compose
+          ./test-admin
+      - name: Verify SAML certificate
+        run: |
+          cd docker-compose
+          ./test-saml
+      - name: Run tests
+        run: |
+          cd docker-compose
+          ./test-tests
+      - name: Shutdown service
+        run: |
+          cd docker-compose
+          ./test-stop
 
   test-ssl:
     runs-on: ubuntu-20.04
@@ -100,6 +141,7 @@ jobs:
     env:
       MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
       COMPOSE_PROJECT_NAME: wl
+      TEST_CONTAINER: weblate/weblate:test
     steps:
       - uses: actions/checkout@v2
         with:
@@ -116,23 +158,59 @@ jobs:
         run: docker buildx build $(.github/bin/get-buildx-args load)
       - name: List Docker images
         run: docker image ls --all
-      - name: Prepare the container
+      - name: Generate configuration
         run: |
           cd docker-compose
-          TEST_CONTAINER=weblate/weblate:test GENERATE_ONLY=yes ./test.sh 4443 https
-          docker-compose up -d
-          docker-compose down
+          ./test-generate 4443 https
       - name: Generate SSL certificate
         run: |
           cd docker-compose
+          docker-compose up -d
+          docker-compose down
           VOLUMEPATH=$(docker volume inspect -f '{{.Mountpoint}}' wl_weblate-data)
           sudo mkdir -p $VOLUMEPATH/ssl
           sudo openssl req -x509 -nodes -days 365 -subj "/CN=weblate.example.com" -newkey rsa:2048 -keyout $VOLUMEPATH/ssl/privkey.pem -out $VOLUMEPATH/ssl/fullchain.pem
           sudo chown -R 1000:1000 $VOLUMEPATH/ssl
-      - name: Test the Docker image with SSL
+      - name: Startup container
         run: |
           cd docker-compose
-          TEST_CONTAINER=weblate/weblate:test ./test.sh 4443 https
+          ./test-boot
+      - name: List Python packages
+        run: |
+          cd docker-compose
+          ./test-pip
+      - name: Inspect container
+        run: |
+          cd docker-compose
+          ./test-inspect
+      - name: Check service is running
+        run: |
+          cd docker-compose
+          ./test-online
+      - name: Run Django Checks
+        run: |
+          cd docker-compose
+          ./test-checks
+      - name: Verify supervisor
+        run: |
+          cd docker-compose
+          ./test-supervisor
+      - name: Test admin creation
+        run: |
+          cd docker-compose
+          ./test-admin
+      - name: Verify SAML certificate
+        run: |
+          cd docker-compose
+          ./test-saml
+      - name: Run tests
+        run: |
+          cd docker-compose
+          ./test-tests
+      - name: Shutdown service
+        run: |
+          cd docker-compose
+          ./test-stop
 
   anchore:
     runs-on: ubuntu-20.04
