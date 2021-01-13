@@ -13,7 +13,7 @@ LABEL org.opencontainers.image.title="Weblate"
 LABEL org.opencontainers.image.description="A web-based continuous localization system with tight version control integration"
 LABEL org.opencontainers.image.licenses="GPL-3.0-or-later"
 
-HEALTHCHECK --interval=5m --timeout=3s CMD /app/bin/health_check
+HEALTHCHECK --interval=30s --timeout=3s CMD /app/bin/health_check
 
 SHELL ["/bin/bash", "-o", "pipefail", "-x", "-c"]
 
