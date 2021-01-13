@@ -73,6 +73,7 @@ jobs:
     env:
       MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
       COMPOSE_PROJECT_NAME: wl
+      PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
     steps:
       - uses: actions/checkout@v2
@@ -147,6 +148,7 @@ jobs:
     env:
       MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
       COMPOSE_PROJECT_NAME: wl
+      PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
     steps:
       - uses: actions/checkout@v2
