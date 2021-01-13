@@ -2,6 +2,7 @@ server {
     listen 8080 default_server;
     root /app/data/static;
     client_max_body_size 100M;
+    server_tokens off;
 
     location ~ ^/favicon.ico$ {
         # DATA_DIR/static/favicon.ico
