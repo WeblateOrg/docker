@@ -113,6 +113,10 @@ jobs:
         run: |
           cd docker-compose
           ./test-online
+      - name: Check service health status
+        run: |
+          cd docker-compose
+          ./test-health
       - name: Run Django Checks
         run: |
           cd docker-compose
@@ -197,6 +201,10 @@ jobs:
         run: |
           cd docker-compose
           ./test-online
+      - name: Check service health status
+        run: |
+          cd docker-compose
+          ./test-health
       - name: Run Django Checks
         run: |
           cd docker-compose
