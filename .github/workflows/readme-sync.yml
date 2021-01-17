@@ -6,6 +6,7 @@ on:
 jobs:
   sync-readme:
     runs-on: ubuntu-20.04
+    if: github.repository == 'WeblateOrg/weblate'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
