@@ -261,7 +261,7 @@ jobs:
     runs-on: ubuntu-20.04
     name: Publish, stable
     needs: [test, test-ssl, anchore, buildx]
-    if: startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/master')
+    if: (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/master')) && github.repository == 'WeblateOrg/weblate'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
