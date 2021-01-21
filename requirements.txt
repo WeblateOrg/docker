@@ -1,6 +1,6 @@
 aeidon==1.9
 akismet==1.1
-bleach==3.2.1
+bleach==3.2.2
 celery==5.0.5
 # For Azure Tenant auth
 cryptography==3.3.1
