@@ -111,7 +111,6 @@ RUN \
         -r /usr/src/weblate/requirements.txt \
         "https://github.com/translate/translate/archive/master.zip" \
         "https://github.com/WeblateOrg/language-data/archive/master.zip" \
-        "https://github.com/WeblateOrg/translation-finder/archive/master.zip" \
         "https://github.com/WeblateOrg/weblate/archive/master.zip#egg=Weblate[all,MySQL]" \
         ;; \
     * ) \
