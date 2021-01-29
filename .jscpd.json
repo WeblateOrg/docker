@@ -1,6 +1,0 @@
-{
-  "absolute": true,
-  "ignore": ["**/.github/workflows/**", "**/.github/ISSUE_TEMPLATES/**"],
-  "reporters": ["consoleFull"],
-  "threshold": 0
-}
