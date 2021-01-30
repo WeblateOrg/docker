@@ -1,0 +1,27 @@
+From b2f0c94e4433d6425184ffecbd3aa07f47a2a6e6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Wed, 27 Jan 2021 08:14:12 +0100
+Subject: [PATCH 1/1] Tests: Adjust to recent language-data extensions
+
+---
+ weblate/api/tests.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git weblate/api/tests.py weblate/api/tests.py
+index 00a4858916..cca004bede 100644
+--- weblate/api/tests.py
++++ weblate/api/tests.py
+@@ -1825,8 +1825,8 @@ class LanguageAPITest(APIBaseTest):
+         # Check plural exists
+         self.assertEqual(response.data["plural"]["type"], 2)
+         self.assertEqual(response.data["plural"]["number"], 3)
+-        # Check for aliases
+-        self.assertEqual(len(response.data["aliases"]), 2)
++        # Check for aliases, with recent language-data there are 3
++        self.assertGreaterEqual(len(response.data["aliases"]), 2)
+ 
+     def test_create(self):
+         self.do_request("api:language-list", method="post", code=403)
+-- 
+2.30.0
+
