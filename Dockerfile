@@ -155,14 +155,15 @@ RUN find /usr/src/weblate -name '*.patch' -print0 | sort -z | \
 COPY etc /etc/
 
 # Fix permissions and adjust files to be able to edit them as user on start
-# - localtime/timezone is needed for setting system timezone based on environment
+# - localtime is needed for setting system timezone based on environment
+# - timezone is removed to avoid dpkg handling localtime updates
 # - we generate nginx configuration based on environment
 # - autorize passwd edition so we can fix weblate uid on startup
 # - log, run and home directories
 # - disable su for non root to avoid privilege escapation by chaging /etc/passwd
-RUN rm -f /etc/localtime && cp /usr/share/zoneinfo/Etc/UTC /etc/localtime \
-  && chgrp -R 0 /etc/nginx/sites-available/ /var/log/nginx/ /var/lib/nginx /app/data /run /home/weblate /etc/timezone /etc/localtime \
-  && chmod -R 770 /etc/nginx/sites-available/ /var/log/nginx/ /var/lib/nginx /app/data /run /home /home/weblate /etc/timezone /etc/localtime \
+RUN rm -f /etc/localtime /etc/timezone && cp /usr/share/zoneinfo/Etc/UTC /etc/localtime \
+  && chgrp -R 0 /etc/nginx/sites-available/ /var/log/nginx/ /var/lib/nginx /app/data /run /home/weblate /etc/localtime \
+  && chmod -R 770 /etc/nginx/sites-available/ /var/log/nginx/ /var/lib/nginx /app/data /run /home /home/weblate /etc/localtime \
   && chmod 664 /etc/passwd /etc/group \
   && sed -i '/pam_rootok.so/a auth requisite pam_deny.so' /etc/pam.d/su
 
