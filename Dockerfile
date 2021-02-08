@@ -93,14 +93,17 @@ RUN \
     g++ \
     tesseract-ocr \
     patch \
+  && export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt \
   && echo "deb http://apt.postgresql.org/pub/repos/apt buster-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
-  && curl --cacert /etc/ssl/certs/ca-certificates.crt -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+  && curl -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
   && apt-get update \
   && if apt-cache show postgresql-client-13 > /dev/null 2>&1 ; then \
         apt-get install --no-install-recommends -y postgresql-client-13 ; \
     else \
         apt-get install --no-install-recommends -y postgresql-client ; \
     fi \
+  && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
+  && export "PATH=~/.cargo/bin:$PATH" \
   && python3 -m pip install --no-cache-dir --upgrade pip wheel \
   && case "$VERSION" in \
     *+* ) \
@@ -145,6 +148,7 @@ RUN \
     libjpeg62-turbo-dev \
   && apt-get -y autoremove \
   && apt-get clean \
+  && rustup self uninstall -y \
   && rm -rf /root/.cache /tmp/* /var/lib/apt/lists/*
 
 # Apply hotfixes on Weblate
