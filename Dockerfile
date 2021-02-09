@@ -103,7 +103,7 @@ RUN \
         apt-get install --no-install-recommends -y postgresql-client ; \
     fi \
   && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
-  && export "PATH=~/.cargo/bin:$PATH" \
+  && source $HOME/.cargo/env \
   && python3 -m pip install --no-cache-dir --upgrade pip wheel \
   && case "$VERSION" in \
     *+* ) \
