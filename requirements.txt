@@ -46,5 +46,4 @@ translate-toolkit==3.3.2
 translation-finder==2.7
 weblate-fedora-messaging==0.2
 weblate-language-data==2021.2
-Whoosh==2.7.4
 zeep==4.0.0
