@@ -1,4 +1,4 @@
-FROM debian:10.8-slim
+FROM debian:buster-20210208-slim
 ENV VERSION 4.4.2
 ARG TARGETARCH
 
