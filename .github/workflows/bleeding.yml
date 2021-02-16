@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - main
   pull_request:
   schedule:
     - cron: "0 4 * * *"
@@ -229,6 +230,93 @@ jobs:
         run: |
           cd docker-compose
           ./test-stop
+
+  anchore:
+    runs-on: ubuntu-20.04
+    name: Anchore Container Scan, ${{ matrix.architecture }}
+    needs: [build]
+    strategy:
+      matrix:
+        architecture: [linux/amd64]
+    env:
+      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Cache Docker layers
+        uses: actions/cache@v2.1.4
+        id: cache
+        with:
+          path: /tmp/.buildx-cache/${{ matrix.architecture }}
+          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+      - name: Adjust bleeding edge image
+        run: .github/bin/bleeding
+      - name: Build the Docker image
+        run: docker buildx build $(.github/bin/get-buildx-args load)
+      - name: List Docker images
+        run: docker image ls --all
+      - name: Checkout the code
+        uses: actions/checkout@v2
+      - name: Anchore scan action
+        uses: anchore/scan-action@2.0.3
+        with:
+          image: "weblate/weblate:test"
+          acs-report-enable: true
+          severity-cutoff: high
+      - name: Upload Anchore Scan Report
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: results.sarif
+      - uses: actions/upload-artifact@v2.2.2
+        with:
+          name: Anchore scan
+          path: results.sarif
+
+  trivy:
+    runs-on: ubuntu-20.04
+    name: Trivy Container Scan, ${{ matrix.architecture }}
+    needs: [build]
+    strategy:
+      matrix:
+        architecture: [linux/amd64]
+    env:
+      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Cache Docker layers
+        uses: actions/cache@v2.1.4
+        id: cache
+        with:
+          path: /tmp/.buildx-cache/${{ matrix.architecture }}
+          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+      - name: Adjust bleeding edge image
+        run: .github/bin/bleeding
+      - name: Build the Docker image
+        run: docker buildx build $(.github/bin/get-buildx-args load)
+      - name: List Docker images
+        run: docker image ls --all
+      - name: Checkout the code
+        uses: actions/checkout@v2
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@v0.0.8
+        with:
+          image-ref: "weblate/weblate:test"
+          format: "template"
+          template: "@/contrib/sarif.tpl"
+          output: "trivy-results.sarif"
+          severity: "CRITICAL,HIGH"
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: "trivy-results.sarif"
+      - uses: actions/upload-artifact@v2.2.2
+        with:
+          name: Trivy scan
+          path: trivy-results.sarif
 
   push_dockerhub:
     runs-on: ubuntu-20.04
