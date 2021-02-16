@@ -248,7 +248,7 @@ jobs:
       - name: Checkout the code
         uses: actions/checkout@v2
       - name: Anchore scan action
-        uses: anchore/scan-action@2.0.3
+        uses: anchore/scan-action@v2.0.4
         with:
           image: "weblate/weblate:test"
           acs-report-enable: true
