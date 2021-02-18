@@ -6,15 +6,15 @@ labels: question
 ---
 
 <!--
-Want your answer quickly and guaranteed? Follow https://weblate.org/support/ to reach our dedicated support team. As a subscriber, you will always have priority and help Weblate growing.
+Want your answer quickly and guaranteed? Visit https://weblate.org/support/ to reach our dedicated support team. As a subscriber, you will always have priority and help Weblate growing.
 -->
 
 <!--
-Thank you for reporting issue on Weblate. Few things to note:
+Thank you for reporting an issue on Weblate! Here are a few things to note:
 
-* This template will guide you to create useful issue report, please do not delete it.
-* The description blocks like this one are comments and won't be shown in the issue.
-* Please write your text outsite them or replace them.
+* This template will guide you to create a useful issue report, so please do NOT delete it.
+* The description blocks like this one are comments and won't be shown in the issue once it’s created.
+* Please write your text outside them or replace them.
 -->
 
 **Describe the issue**
@@ -35,8 +35,8 @@ Describe the steps you tried to solve the problem yourself.
 Steps to reproduce the behavior:
 
 1. Go to '...'
-2. Scroll down to '....'
-3. Click on '....'
+2. Scroll down to '...'
+3. Click on '...'
 4. See error
 
 **Expected behavior**
