@@ -1,0 +1,43 @@
+From 3f4d6888c5f9752ebe81bf533966b7e5d8e8f683 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Fri, 19 Feb 2021 09:19:03 +0100
+Subject: [PATCH 1/1] Test: Fix test condition
+
+---
+ weblate/api/tests.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git weblate/api/tests.py weblate/api/tests.py
+index cdc65c1fec..ad8b22be8f 100644
+--- weblate/api/tests.py
++++ weblate/api/tests.py
+@@ -919,7 +919,7 @@ class ProjectAPITest(APIBaseTest):
+ 
+     def test_changes(self):
+         request = self.do_request("api:project-changes", self.project_kwargs)
+-        self.assertEqual(request.data["count"], 21)
++        self.assertEqual(request.data["count"], 20)
+ 
+     def test_statistics(self):
+         request = self.do_request("api:project-statistics", self.project_kwargs)
+@@ -2646,7 +2646,7 @@ class ScreenshotAPITest(APIBaseTest):
+ class ChangeAPITest(APIBaseTest):
+     def test_list_changes(self):
+         response = self.client.get(reverse("api:change-list"))
+-        self.assertEqual(response.data["count"], 21)
++        self.assertEqual(response.data["count"], 20)
+ 
+     def test_filter_changes_after(self):
+         """Filter chanages since timestamp."""
+@@ -2654,7 +2654,7 @@ class ChangeAPITest(APIBaseTest):
+         response = self.client.get(
+             reverse("api:change-list"), {"timestamp_after": start.isoformat()}
+         )
+-        self.assertEqual(response.data["count"], 21)
++        self.assertEqual(response.data["count"], 20)
+ 
+     def test_filter_changes_before(self):
+         """Filter changes prior to timestamp."""
+-- 
+2.30.0
+
