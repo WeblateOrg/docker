@@ -1,0 +1,29 @@
+From 9f9e1ded569fba5f9c7e7b96d0479dcd8ae95713 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Sat, 20 Feb 2021 13:07:18 +0100
+Subject: [PATCH 1/1] Project: Make sure that child components are not
+ duplicated
+
+It seems to be possible to have self links in the shared components.
+
+Fixes #5478
+---
+ weblate/trans/models/project.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git weblate/trans/models/project.py weblate/trans/models/project.py
+index 8b2fee770c..c6c251115a 100644
+--- weblate/trans/models/project.py
++++ weblate/trans/models/project.py
+@@ -430,7 +430,7 @@ class Project(FastDeleteModelMixin, models.Model, URLMixin, PathMixin, CacheKeyM
+ 
+     @cached_property
+     def child_components(self):
+-        return self.component_set.all() | self.shared_components.all()
++        return self.component_set.distinct() | self.shared_components.distinct()
+ 
+     def scratch_create_component(
+         self, name, slug, source_language, file_format, has_template=True, **kwargs
+-- 
+2.30.0
+
