@@ -45,5 +45,5 @@ tesserocr==2.5.1
 translate-toolkit==3.3.2
 translation-finder==2.9
 weblate-fedora-messaging==0.2
-weblate-language-data==2021.2
+weblate-language-data==2021.3
 zeep==4.0.0
