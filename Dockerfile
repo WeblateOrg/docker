@@ -110,7 +110,6 @@ RUN \
       sed -Ei '/^(translate-toolkit|aeidon)/D' /usr/src/weblate/requirements.txt; \
       python3 -m pip install \
         --no-cache-dir \
-        --use-feature=2020-resolver \
         -r /usr/src/weblate/requirements.txt \
         "https://github.com/translate/translate/archive/master.zip" \
         "https://github.com/WeblateOrg/language-data/archive/master.zip" \
@@ -119,7 +118,6 @@ RUN \
     * ) \
       python3 -m pip install \
         --no-cache-dir \
-        --use-feature=2020-resolver \
         -r /usr/src/weblate/requirements.txt \
         "Weblate[all,MySQL]==$VERSION" \
       ;; \
