@@ -77,6 +77,7 @@ RUN \
     make \
     libxml2-dev \
     libacl1-dev \
+    libmariadb3 \
     libmariadb-dev \
     libxmlsec1-dev \
     libleptonica-dev \
