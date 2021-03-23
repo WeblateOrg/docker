@@ -42,7 +42,7 @@ else
                 echo --tag "weblate/weblate:${GITHUB_REF#refs/tags/}"
                 echo --tag weblate/weblate:latest
                 ;;
-            refs/heads/master)
+            refs/heads/main)
                 echo --tag weblate/weblate:edge
                 echo --tag "weblate/weblate:edge-$(date -I)-${GITHUB_SHA}"
                 ;;

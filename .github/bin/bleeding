@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Install Weblate from master branch
+# Install Weblate from main branch
 sed -i \
     -e "s/\\(ENV VERSION .*\\)/\\1+$( date -I )/" \
     Dockerfile
