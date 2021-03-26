@@ -10,7 +10,7 @@ django-auth-ldap==2.3.0
 django-crispy-forms==1.11.2
 django-redis==4.12.1
 django_compressor==2.4
-djangorestframework==3.12.2
+djangorestframework==3.12.3
 # Alernative Celery pool implementation
 gevent==21.1.2
 git-review==2.0.0
