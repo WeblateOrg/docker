@@ -267,7 +267,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v1
         with:
           sarif_file: results.sarif
-      - uses: actions/upload-artifact@v2.2.2
+      - uses: actions/upload-artifact@v2.2.3
         with:
           name: Anchore scan SARIF
           path: results.sarif
@@ -312,7 +312,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v1
         with:
           sarif_file: "trivy-results.sarif"
-      - uses: actions/upload-artifact@v2.2.2
+      - uses: actions/upload-artifact@v2.2.3
         with:
           name: Trivy scan SARIF
           path: trivy-results.sarif
