@@ -6,6 +6,7 @@ LABEL name="Weblate"
 LABEL version=$VERSION
 LABEL maintainer="Michal Čihař <michal@cihar.com>"
 LABEL org.opencontainers.image.url="https://weblate.org/"
+LABEL org.opencontainers.image.documentation="https://docs.weblate.org/en/latest/admin/install/docker.html"
 LABEL org.opencontainers.image.source="https://github.com/WeblateOrg/docker"
 LABEL org.opencontainers.image.version=$VERSION
 LABEL org.opencontainers.image.vendor="Michal Čihař"
