@@ -30,7 +30,8 @@ RUN \
   && chown -R weblate:weblate /home/weblate \
   && chmod 700 /home/weblate/.ssh \
   && install -d -o weblate -g weblate -m 755 /usr/local/lib/python3.7/dist-packages/data-test /usr/local/lib/python3.7/dist-packages/test-images \
-  && install -d -o weblate -g weblate -m 755 /app/data
+  && install -d -o weblate -g weblate -m 755 /app/data \
+  && install -d -o weblate -g weblate -m 755 /app/cache
 
 # Configure utf-8 locales to make sure Python
 # correctly handles unicode filenames, configure settings
@@ -166,8 +167,8 @@ COPY etc /etc/
 # - log, run and home directories
 # - disable su for non root to avoid privilege escapation by chaging /etc/passwd
 RUN rm -f /etc/localtime /etc/timezone && cp /usr/share/zoneinfo/Etc/UTC /etc/localtime \
-  && chgrp -R 0 /etc/nginx/sites-available/ /var/log/nginx/ /var/lib/nginx /app/data /run /home/weblate /etc/localtime \
-  && chmod -R 770 /etc/nginx/sites-available/ /var/log/nginx/ /var/lib/nginx /app/data /run /home /home/weblate /etc/localtime \
+  && chgrp -R 0 /etc/nginx/sites-available/ /var/log/nginx/ /var/lib/nginx /app/data /app/cache /run /home/weblate /etc/localtime /etc/supervisor/conf.d \
+  && chmod -R 770 /etc/nginx/sites-available/ /var/log/nginx/ /var/lib/nginx /app/data /app/cache /run /home /home/weblate /etc/localtime /etc/supervisor/conf.d \
   && chmod 664 /etc/passwd /etc/group \
   && sed -i '/pam_rootok.so/a auth requisite pam_deny.so' /etc/pam.d/su
 
@@ -180,6 +181,7 @@ RUN chmod a+rx /app/bin/start
 
 EXPOSE 8080
 VOLUME /app/data
+VOLUME /app/cache
 
 # Numerical value is needed for OpenShift S2I, see
 # https://docs.openshift.com/container-platform/latest/openshift_images/create-images.html

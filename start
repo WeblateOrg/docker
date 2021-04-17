@@ -121,20 +121,44 @@ if [ "x$1" = "xrunserver" ] ; then
     fi
     rm /tmp/migrations.txt
 
-    echo "Starting database migration..."
-    run_weblate migrate
-    run_weblate cleanup_celery
-    echo "Refreshing stats..."
-    run_weblate ensure_stats
-    # Run with --clear to ensure all files are up to date
-    run_weblate collectstatic --noinput --clear
-    # Compress js and css
-    run_weblate compress --force
+    DO_STATIC=1
+    DO_MIGRATE=1
+    DO_CELERY=1
+    if [ -n "$WEBLATE_SERVICE" ] ; then
+        if [ "$WEBLATE_SERVICE" != "web" ] ; then
+            DO_STATIC=0
+            DO_MIGRATE=0
+        fi
+        if [ "$WEBLATE_SERVICE" != "celery-beat" ] ; then
+            DO_CELERY=0
+        fi
+        find /etc/supervisor/conf.d/ -mindepth 1 -not -name "$WEBLATE_SERVICE.conf" -delete
+    fi
+
+    if [ $DO_MIGRATE -eq 1 ] ; then
+        echo "Starting database migration..."
+        run_weblate migrate
+    fi
+    if [ $DO_CELERY -eq 1 ] ; then
+        run_weblate cleanup_celery
+    fi
+    if [ $DO_MIGRATE -eq 1 ] ; then
+        echo "Refreshing stats..."
+        run_weblate ensure_stats
+    fi
+    if [ $DO_STATIC -eq 1 ] ; then
+        # Run with --clear to ensure all files are up to date
+        run_weblate collectstatic --noinput --clear
+        # Compress js and css
+        run_weblate compress --force
+    fi
     # Create or update admin account
-    if [ -n "$WEBLATE_ADMIN_PASSWORD" ] ; then
-        run_weblate createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME"
-    else
-        run_weblate createadmin --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
+    if [ $DO_MIGRATE -eq 1 ] ; then
+        if [ -n "$WEBLATE_ADMIN_PASSWORD" ] ; then
+            run_weblate createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME"
+        else
+            run_weblate createadmin --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
+        fi
     fi
 
     # uswgi dir
@@ -185,6 +209,7 @@ if [ "x$1" = "xrunserver" ] ; then
     export CELERY_BACKUP_OPTIONS
     export CELERY_BEAT_OPTIONS
     export UWSGI_WORKERS
+
 
     #  Execute supervisor
     exec supervisord --nodaemon \

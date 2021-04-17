@@ -1,3 +1,4 @@
 [submodule "docker-compose"]
 	path = docker-compose
 	url = https://github.com/WeblateOrg/docker-compose.git
+	branch = main

@@ -136,6 +136,84 @@ jobs:
           cd docker-compose
           ./test-stop
 
+  test-split:
+    runs-on: ubuntu-20.04
+    name: Test split, stable, ${{ matrix.architecture }}
+    needs: [build]
+    strategy:
+      matrix:
+        architecture: [linux/amd64]
+    env:
+      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+      COMPOSE_PROJECT_NAME: wl
+      PYTHONUNBUFFERED: 1
+      TEST_CONTAINER: weblate/weblate:test
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      - name: Cache Docker layers
+        uses: actions/cache@v2.1.5
+        id: cache
+        with:
+          path: /tmp/.buildx-cache/${{ matrix.architecture }}
+          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+      - name: Build the Docker image
+        run: docker buildx build $(.github/bin/get-buildx-args load)
+      - name: List Docker images
+        run: docker image ls --all
+      - name: Generate configuration
+        run: |
+          cd docker-compose
+          ./test-generate 8080 http 1
+          mv docker-compose-split.yml docker-compose.yml
+      - name: Startup container
+        run: |
+          cd docker-compose
+          ./test-boot
+      - name: List Python packages
+        run: |
+          cd docker-compose
+          ./test-pip
+      - name: Inspect container
+        run: |
+          cd docker-compose
+          ./test-inspect
+      - name: Check service is running
+        run: |
+          cd docker-compose
+          ./test-online
+      - name: Check service health status
+        run: |
+          cd docker-compose
+          ./test-health
+      - name: Run Django Checks
+        run: |
+          cd docker-compose
+          ./test-checks
+      - name: Verify supervisor
+        run: |
+          cd docker-compose
+          ./test-supervisor
+      - name: Test admin creation
+        run: |
+          cd docker-compose
+          ./test-admin
+      - name: Verify SAML certificate
+        run: |
+          cd docker-compose
+          ./test-saml
+      - name: Run tests
+        run: |
+          cd docker-compose
+          ./test-tests
+      - name: Shutdown service
+        run: |
+          cd docker-compose
+          ./test-stop
+
   test-ssl:
     runs-on: ubuntu-20.04
     name: Test SSL, stable, ${{ matrix.architecture }}
