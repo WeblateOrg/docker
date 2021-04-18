@@ -124,11 +124,9 @@ if [ "x$1" = "xrunserver" ] ; then
     DO_MIGRATE=1
     DO_CELERY=1
     if [ -n "$WEBLATE_SERVICE" ] ; then
-        if [ "$WEBLATE_SERVICE" != "web" ] ; then
-            DO_MIGRATE=0
-        fi
         if [ "$WEBLATE_SERVICE" != "celery-beat" ] ; then
             DO_CELERY=0
+            DO_MIGRATE=0
         fi
         find /etc/supervisor/conf.d/ -mindepth 1 -not -name "$WEBLATE_SERVICE.conf" -delete
     fi
