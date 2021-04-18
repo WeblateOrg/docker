@@ -7,7 +7,7 @@ celery==5.0.5
 cryptography==3.4.7
 Django==3.2
 django-appconf==1.0.4
-django-auth-ldap==2.3.0
+django-auth-ldap==2.4.0
 django-crispy-forms==1.11.2
 django-redis==4.12.1
 django_compressor==2.4.1
