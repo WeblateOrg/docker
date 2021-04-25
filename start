@@ -1,6 +1,20 @@
 #!/bin/sh
 set -e
 
+# Allow sensitive settings to be defined in a file
+# in order to support Docker secrets
+if [ -n "${POSTGRES_PASSWORD_FILE}" ]; then
+  export POSTGRES_PASSWORD=$(cat $POSTGRES_PASSWORD_FILE)
+fi
+
+if [ -n "${WEBLATE_ADMIN_PASSWORD_FILE}" ]; then
+  export WEBLATE_ADMIN_PASSWORD=$(cat $WEBLATE_ADMIN_PASSWORD_FILE)
+fi
+
+if [ -n "${WEBLATE_EMAIL_HOST_PASSWORD_FILE}" ]; then
+  export WEBLATE_EMAIL_HOST_PASSWORD=$(cat $WEBLATE_EMAIL_HOST_PASSWORD_FILE)
+fi
+
 echo "Starting..."
 
 # Fix permissions on SSH private key.
