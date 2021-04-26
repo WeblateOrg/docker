@@ -14,7 +14,7 @@ django_compressor==2.4.1
 djangorestframework==3.12.4
 # Alernative Celery pool implementation
 gevent==21.1.2
-git-review==2.0.0
+git-review==2.1.0
 hiredis==2.0.0
 httpretty==1.0.5
 # Patched supervisor-stdout with following fixes:
