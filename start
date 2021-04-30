@@ -218,7 +218,7 @@ if [ "x$1" = "xrunserver" ] ; then
     : "${CELERY_MEMORY_OPTIONS:="--concurrency $((WEBLATE_WORKERS / 2))"}"
     : "${CELERY_BACKUP_OPTIONS:="--concurrency 1"}"
     : "${CELERY_BEAT_OPTIONS:=""}"
-    : "${UWSGI_WORKERS:="$WEBLATE_WORKERS"}"
+    : "${UWSGI_WORKERS:="$((WEBLATE_WORKERS + 1))"}"
 
     export CELERY_MAIN_OPTIONS
     export CELERY_NOTIFY_OPTIONS
