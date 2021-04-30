@@ -204,14 +204,21 @@ if [ "x$1" = "xrunserver" ] ; then
     fi
     envsubst "\$WEBLATE_URL_PREFIX" < $template > /etc/nginx/sites-available/default
 
+    # Calculate number of processes, at least 2, at most 4, depending on CPU cores
+    if [ -z "$WEBLATE_WORKERS" ] ; then
+        PROCESSORS=$(nproc)
+        WEBLATE_WORKERS=$((PROCESSORS < 2 ? 2 : PROCESSORS > 4  ? 4 : PROCESSORS))
+        echo "Auto-scaled to $WEBLATE_WORKERS processes, adjust by setting WEBLATE_WORKERS"
+    fi
+
     # default values for celery options
-    : "${CELERY_MAIN_OPTIONS:=""}"
-    : "${CELERY_NOTIFY_OPTIONS:=""}"
-    : "${CELERY_TRANSLATE_OPTIONS:=""}"
-    : "${CELERY_MEMORY_OPTIONS:=""}"
-    : "${CELERY_BACKUP_OPTIONS:=""}"
+    : "${CELERY_MAIN_OPTIONS:="--concurrency $WEBLATE_WORKERS"}"
+    : "${CELERY_NOTIFY_OPTIONS:="--concurrency $((WEBLATE_WORKERS / 2))"}"
+    : "${CELERY_TRANSLATE_OPTIONS:="--concurrency $((WEBLATE_WORKERS / 2))"}"
+    : "${CELERY_MEMORY_OPTIONS:="--concurrency $((WEBLATE_WORKERS / 2))"}"
+    : "${CELERY_BACKUP_OPTIONS:="--concurrency 1"}"
     : "${CELERY_BEAT_OPTIONS:=""}"
-    : "${UWSGI_WORKERS:=$(($(nproc) + 1))}"
+    : "${UWSGI_WORKERS:="$WEBLATE_WORKERS"}"
 
     export CELERY_MAIN_OPTIONS
     export CELERY_NOTIFY_OPTIONS
