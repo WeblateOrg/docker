@@ -1,5 +1,5 @@
 FROM debian:buster-20210408-slim
-ENV VERSION 4.6
+ENV VERSION 4.6.1
 ARG TARGETARCH
 
 LABEL name="Weblate"
