@@ -125,7 +125,7 @@ unset PGPASSWORD
 >&2 echo "Postgres is up"
 
 # Migrate database to current version and collect static files
-if [ "x$1" = "xrunserver" ] ; then
+if [ "$1" = "runserver" ] ; then
 
     # Fail on migration to 3.0
     failure=0
