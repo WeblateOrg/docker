@@ -95,10 +95,6 @@ jobs:
         run: |
           cd docker-compose
           ./test-boot
-      - name: Verify SAML certificate
-        run: |
-          cd docker-compose
-          ./test-saml
       - name: Run tests
         run: |
           cd docker-compose
@@ -137,6 +133,77 @@ jobs:
       - name: List Docker images
         run: docker image ls --all
       - name: Generate configuration
+        run: |
+          cd docker-compose
+          ./test-generate
+      - name: Startup container
+        run: |
+          cd docker-compose
+          ./test-boot
+      - name: List Python packages
+        run: |
+          cd docker-compose
+          ./test-pip
+      - name: Inspect container
+        run: |
+          cd docker-compose
+          ./test-inspect
+      - name: Check service is running
+        run: |
+          cd docker-compose
+          ./test-online
+      - name: Check service health status
+        run: |
+          cd docker-compose
+          ./test-health
+      - name: Run Django Checks
+        run: |
+          cd docker-compose
+          ./test-checks
+      - name: Verify supervisor
+        run: |
+          cd docker-compose
+          ./test-supervisor
+      - name: Test admin creation
+        run: |
+          cd docker-compose
+          ./test-admin
+      - name: Shutdown service
+        run: |
+          cd docker-compose
+          ./test-stop
+
+  test-saml:
+    runs-on: ubuntu-20.04
+    name: Test SAML, stable, ${{ matrix.architecture }}
+    needs: [build]
+    strategy:
+      matrix:
+        architecture: [linux/amd64]
+    env:
+      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+      COMPOSE_PROJECT_NAME: wl
+      PYTHONUNBUFFERED: 1
+      TEST_CONTAINER: weblate/weblate:test
+    steps:
+      - uses: actions/checkout@v2.3.4
+        with:
+          submodules: recursive
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1.3.0
+      - name: Cache Docker layers
+        uses: actions/cache@v2.1.5
+        id: cache
+        with:
+          path: /tmp/.buildx-cache/${{ matrix.architecture }}
+          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+      - name: Build the Docker image
+        run: docker buildx build $(.github/bin/get-buildx-args load)
+      - name: List Docker images
+        run: docker image ls --all
+      - name: Generate configuration
+        env:
+          TEST_EXTRA_ENV: "WEBLATE_SAML_IDP_URL: https://example.com/idp"
         run: |
           cd docker-compose
           ./test-generate
@@ -246,10 +313,6 @@ jobs:
         run: |
           cd docker-compose
           ./test-admin
-      - name: Verify SAML certificate
-        run: |
-          cd docker-compose
-          ./test-saml
       - name: Shutdown service
         run: |
           cd docker-compose
@@ -328,10 +391,6 @@ jobs:
         run: |
           cd docker-compose
           ./test-admin
-      - name: Verify SAML certificate
-        run: |
-          cd docker-compose
-          ./test-saml
       - name: Shutdown service
         run: |
           cd docker-compose
