@@ -31,6 +31,24 @@ if [ ! -f /app/data/secret ] ; then
     python3 -c "from django.utils.crypto import get_random_string; print(get_random_string(50))" > /app/data/secret
 fi
 
+# Generate self-signed SAML key
+# This has to be done early as it is used from the settings_docker.py
+if [ -n "$WEBLATE_SAML_IDP_URL" ] ; then
+  if [ ! -f /app/data/ssl/saml.key ] || [ ! -f /app/data/ssl/saml.crt ] ; then
+      echo "Generating self-signed certificate for SAML..."
+      mkdir -p /app/data/ssl
+      openssl req \
+          -new \
+          -newkey rsa:4096 \
+          -x509 \
+          -days 3652 \
+          -nodes \
+          -subj "/OU=Weblate/CN=$WEBLATE_SITE_DOMAIN/emailAddress=$WEBLATE_ADMIN_EMAIL" \
+          -out /app/data/ssl/saml.crt \
+          -keyout /app/data/ssl/saml.key
+  fi
+fi
+
 # For openshift, create an account in /etc/passwd
 # @see https://docs.okd.io/latest/creating_images/guidelines.html
 if ! whoami > /dev/null 2>&1 ; then
@@ -187,20 +205,6 @@ if [ "$1" = "runserver" ] ; then
         template=/etc/nginx/ssl.tpl
     else
         template=/etc/nginx/default.tpl
-    fi
-    # Generate self-signed SAML key
-    if [ ! -f /app/data/ssl/saml.key ] || [ ! -f /app/data/ssl/saml.crt ] ; then
-        echo "Generating self-signed certificate for SAML..."
-        mkdir -p /app/data/ssl
-        openssl req \
-            -new \
-            -newkey rsa:4096 \
-            -x509 \
-            -days 3652 \
-            -nodes \
-            -subj "/OU=Weblate/CN=$WEBLATE_SITE_DOMAIN/emailAddress=$WEBLATE_ADMIN_EMAIL" \
-            -out /app/data/ssl/saml.crt \
-            -keyout /app/data/ssl/saml.key
     fi
     envsubst "\$WEBLATE_URL_PREFIX" < $template > /etc/nginx/sites-available/default
 
