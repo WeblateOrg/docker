@@ -151,13 +151,12 @@ if [ "$1" = "runserver" ] ; then
     if [ $DO_MIGRATE -eq 1 ] ; then
         echo "Starting database migration..."
         run_weblate migrate
+
+        echo "Refreshing stats..."
+        run_weblate ensure_stats
     fi
     if [ $DO_CELERY -eq 1 ] ; then
         run_weblate cleanup_celery
-    fi
-    if [ $DO_MIGRATE -eq 1 ] ; then
-        echo "Refreshing stats..."
-        run_weblate ensure_stats
     fi
     # Run with --clear to ensure all files are up to date
     run_weblate collectstatic --noinput --clear
