@@ -71,6 +71,20 @@ if [ ! -d "$WEBLATE_PY_PATH" ] ; then
     touch "$WEBLATE_PY_PATH/models.py"
 fi
 
+# Generate self-signed SAML key
+if [ ! -f /app/data/ssl/saml.key ] || [ ! -f /app/data/ssl/saml.crt ] ; then
+    mkdir -p /app/data/ssl
+    openssl req \
+        -new \
+        -newkey rsa:4096 \
+        -x509 \
+        -days 3652 \
+        -nodes \
+        -subj "/OU=Weblate/CN=$WEBLATE_SITE_DOMAIN/emailAddress=$WEBLATE_ADMIN_EMAIL" \
+        -out /app/data/ssl/saml.crt \
+        -keyout /app/data/ssl/saml.key
+fi
+
 run_weblate() {
     "$WEBLATE_CMD" "$@"
 }
@@ -188,19 +202,6 @@ if [ "$1" = "runserver" ] ; then
         template=/etc/nginx/ssl.tpl
     else
         template=/etc/nginx/default.tpl
-    fi
-    # Generate self-signed SAML key
-    if [ ! -f /app/data/ssl/saml.key ] || [ ! -f /app/data/ssl/saml.crt ] ; then
-        mkdir -p /app/data/ssl
-        openssl req \
-            -new \
-            -newkey rsa:4096 \
-            -x509 \
-            -days 3652 \
-            -nodes \
-            -subj "/OU=Weblate/CN=$WEBLATE_SITE_DOMAIN/emailAddress=$WEBLATE_ADMIN_EMAIL" \
-            -out /app/data/ssl/saml.crt \
-            -keyout /app/data/ssl/saml.key
     fi
     envsubst "\$WEBLATE_URL_PREFIX" < $template > /etc/nginx/sites-available/default
 
