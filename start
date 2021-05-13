@@ -190,6 +190,7 @@ if [ "$1" = "runserver" ] ; then
     fi
     # Generate self-signed SAML key
     if [ ! -f /app/data/ssl/saml.key ] || [ ! -f /app/data/ssl/saml.crt ] ; then
+        echo "Generating self-signed certificate for SAML..."
         mkdir -p /app/data/ssl
         openssl req \
             -new \
