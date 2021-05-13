@@ -500,7 +500,13 @@ jobs:
   push_dockerhub:
     runs-on: ubuntu-20.04
     name: Publish, bleeding
-    needs: [test, test-ssl, buildx]
+    needs:
+      - test
+      - test-basic
+      - test-saml
+      - test-split
+      - test-ssl
+      - buildx
     if: (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/main')) && github.repository == 'WeblateOrg/docker'
     steps:
       - name: Checkout
