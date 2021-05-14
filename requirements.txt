@@ -16,7 +16,7 @@ djangorestframework==3.12.4
 gevent==21.1.2
 git-review==2.1.0
 hiredis==2.0.0
-httpretty==1.1.0
+httpretty==1.1.1
 # Patched supervisor-stdout with following fixes:
 # - https://github.com/coderanger/supervisor-stdout/pull/12
 # - https://github.com/coderanger/supervisor-stdout/pull/18
