@@ -11,7 +11,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.3.4
       - name: Docker Hub Description
-        uses: peter-evans/dockerhub-description@v2.4.2
+        uses: peter-evans/dockerhub-description@v2.4.3
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
