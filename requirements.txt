@@ -41,7 +41,7 @@ selenium
 setuptools
 siphashc==2.1
 supervisor==4.2.2
-tesserocr==2.5.1
+tesserocr==2.5.2
 translate-toolkit==3.3.6
 translation-finder==2.9
 weblate-fedora-messaging==0.4
