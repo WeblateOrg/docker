@@ -22,21 +22,6 @@ used by over 2500 libre projects and companies in more than 165 countries.**
 In July 2019 (starting with the 3.7.1-6 tag), the containers is not running as
 root. As a consequence this has lead to changed exposed port from 80 to 8080.
 
-## Docker hub tags
-
-You can use following tags on Docker hub:
-
-| Tag name                | Description                                                                                                | Use case                                             |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| `latest`                | Weblate stable release, matches latest tagged release                                                      | Rolling updates in a production environment          |
-| `<VERSION>`             | Weblate stable release, see [weblate/weblate](https://hub.docker.com/r/weblate/weblate/tags/)              | Well defined deploy in a production environment      |
-| `edge`                  | Weblate stable release with development changes in the Docker container (for example updated dependencies) | Rolling updates in staging environment               |
-| `edge-<DATE>-<SHA>`     | Weblate stable release with development changes in the Docker container (for example updated dependencies) | Well defined deploy in staging environment           |
-| `bleeding`              | Development version Weblate from Git                                                                       | Rollling updates to test upcoming Weblate features   |
-| `bleeding-<DATE>-<SHA>` | Development version Weblate from Git                                                                       | Well define deploy to test upcoming Weblate features |
-
-Every image is tested by our CI before it gets published, so even the `bleeding` version should be quite safe to use.
-
 ## Documentation
 
 Detailed documentation is available in Weblate documentation:
