@@ -96,6 +96,7 @@ RUN \
     g++ \
     tesseract-ocr \
     patch \
+    xz-utils \
   && c_rehash \
   && echo "deb http://apt.postgresql.org/pub/repos/apt buster-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
   && curl -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
