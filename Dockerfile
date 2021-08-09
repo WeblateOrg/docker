@@ -96,6 +96,7 @@ RUN \
     g++ \
     tesseract-ocr \
     patch \
+    unzip \
     xz-utils \
   && c_rehash \
   && echo "deb http://apt.postgresql.org/pub/repos/apt buster-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
