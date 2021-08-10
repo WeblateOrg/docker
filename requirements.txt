@@ -43,7 +43,7 @@ siphashc==2.1
 supervisor==4.2.2
 tesserocr==2.5.2
 translate-toolkit==3.3.6
-translation-finder==2.9
+translation-finder==2.10
 weblate-fedora-messaging==0.4
 weblate-language-data==2021.5
 zeep==4.0.0
