@@ -1,4 +1,4 @@
-FROM debian:buster-20210721-slim
+FROM debian:buster-20210816-slim
 ENV VERSION 4.7.2
 ARG TARGETARCH
 
