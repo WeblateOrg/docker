@@ -36,13 +36,13 @@ raven
 redis==3.5.3
 responses>=0.10.1,<0.14.0
 rollbar
-ruamel.yaml==0.17.10
+ruamel.yaml==0.17.11
 selenium
 setuptools
 siphashc==2.1
 supervisor==4.2.2
 tesserocr==2.5.2
-translate-toolkit==3.3.6
+translate-toolkit==3.4.0
 translation-finder==2.10
 weblate-fedora-messaging==0.4
 weblate-language-data==2021.5
