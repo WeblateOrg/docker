@@ -4,7 +4,7 @@ argon2-cffi==20.1.0
 bleach==4.0.0
 celery==5.1.2
 # For Azure Tenant auth
-cryptography==3.4.7
+cryptography==3.4.8
 Django==3.2.6
 django-appconf==1.0.4
 django-auth-ldap==3.0.0
