@@ -1,4 +1,4 @@
-FROM debian:buster-20210816-slim
+FROM debian:bullseye-20210816-slim
 ENV VERSION 4.8
 ARG TARGETARCH
 
@@ -29,7 +29,7 @@ RUN \
   && touch /home/weblate/.ssh/authorized_keys \
   && chown -R weblate:weblate /home/weblate \
   && chmod 700 /home/weblate/.ssh \
-  && install -d -o weblate -g weblate -m 755 /usr/local/lib/python3.7/dist-packages/data-test /usr/local/lib/python3.7/dist-packages/test-images \
+  && install -d -o weblate -g weblate -m 755 /usr/local/lib/python3.9/dist-packages/data-test /usr/local/lib/python3.9/dist-packages/test-images \
   && install -d -o weblate -g weblate -m 755 /app/data \
   && install -d -o weblate -g weblate -m 755 /app/cache
 
@@ -89,9 +89,9 @@ RUN \
     libssl-dev \
     libffi-dev \
     libpq-dev \
-    libz-dev \
+    zlib1g-dev \
     libjpeg62-turbo-dev \
-    libenchant1c2a \
+    libenchant-2-2 \
     gcc \
     g++ \
     tesseract-ocr \
@@ -99,7 +99,7 @@ RUN \
     unzip \
     xz-utils \
   && c_rehash \
-  && echo "deb http://apt.postgresql.org/pub/repos/apt buster-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+  && echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
   && curl -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
   && apt-get update \
   && if apt-cache show postgresql-client-13 > /dev/null 2>&1 ; then \
@@ -156,7 +156,7 @@ RUN \
 
 # Apply hotfixes on Weblate
 RUN find /usr/src/weblate -name '*.patch' -print0 | sort -z | \
-  xargs -n1 -0 -r patch -p0 -d /usr/local/lib/python3.7/dist-packages/ -i
+  xargs -n1 -0 -r patch -p0 -d /usr/local/lib/python3.9/dist-packages/ -i
 
 # Configuration for Weblate, nginx, uwsgi and supervisor
 COPY etc /etc/
@@ -175,7 +175,7 @@ RUN rm -f /etc/localtime /etc/timezone && cp /usr/share/zoneinfo/Etc/UTC /etc/lo
   && sed -i '/pam_rootok.so/a auth requisite pam_deny.so' /etc/pam.d/su
 
 # Search path for custom modules
-RUN echo "/app/data/python" > /usr/local/lib/python3.7/dist-packages/weblate-docker.pth
+RUN echo "/app/data/python" > /usr/local/lib/python3.9/dist-packages/weblate-docker.pth
 
 # Entrypoint
 COPY start health_check /app/bin/
