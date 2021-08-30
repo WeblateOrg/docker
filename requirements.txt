@@ -1,6 +1,6 @@
 aeidon==1.9
 akismet==1.1
-argon2-cffi==20.1.0
+argon2-cffi==21.1.0
 bleach==4.1.0
 celery==5.1.2
 # For Azure Tenant auth
