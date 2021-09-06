@@ -1,4 +1,4 @@
-FROM debian:bullseye-20210816-slim
+FROM debian:bullseye-20210902-slim
 ENV VERSION 4.8
 ARG TARGETARCH
 
