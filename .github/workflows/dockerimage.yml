@@ -430,10 +430,12 @@ jobs:
         uses: github/codeql-action/upload-sarif@v1
         with:
           sarif_file: results.sarif
+        if: always()
       - uses: actions/upload-artifact@v2.2.4
         with:
           name: Anchore scan SARIF
           path: results.sarif
+        if: always()
 
   trivy:
     runs-on: ubuntu-20.04
@@ -473,10 +475,12 @@ jobs:
         uses: github/codeql-action/upload-sarif@v1
         with:
           sarif_file: "trivy-results.sarif"
+        if: always()
       - uses: actions/upload-artifact@v2.2.4
         with:
           name: Trivy scan SARIF
           path: trivy-results.sarif
+        if: always()
 
   push_dockerhub:
     runs-on: ubuntu-20.04
