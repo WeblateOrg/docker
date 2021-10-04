@@ -110,6 +110,7 @@ RUN \
   && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
   && source $HOME/.cargo/env \
   && python3 -m pip install --no-cache-dir --upgrade pip wheel setuptools \
+  && python3 -m pip install --no-cache-dir --no-binary :all: "$(grep ^cffi== /usr/src/weblate/requirements.txt)" \
   && case "$VERSION" in \
     *+* ) \
       sed -Ei '/^(translate-toolkit|aeidon)/D' /usr/src/weblate/requirements.txt; \

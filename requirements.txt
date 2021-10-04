@@ -3,6 +3,8 @@ akismet==1.1
 argon2-cffi==21.1.0
 bleach==4.1.0
 celery==5.1.2
+# For Argon2 and misaka
+cffi==1.14.6
 # For Azure Tenant auth
 cryptography==35.0.0
 Django==3.2.7
