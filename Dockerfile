@@ -86,6 +86,7 @@ RUN \
     libtesseract-dev \
     libsasl2-dev \
     libldap2-dev \
+    libldap-common \
     libssl-dev \
     libffi-dev \
     libpq-dev \
