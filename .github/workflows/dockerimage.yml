@@ -18,7 +18,7 @@ jobs:
     env:
       MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v2.3.5
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1.6.0
       - name: Cache Docker layers
@@ -41,7 +41,7 @@ jobs:
     env:
       MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v2.3.5
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1.2.0
         with:
@@ -72,7 +72,7 @@ jobs:
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v2.3.5
         with:
           submodules: recursive
       - name: Set up Docker Buildx
@@ -117,7 +117,7 @@ jobs:
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v2.3.5
         with:
           submodules: recursive
       - name: Set up Docker Buildx
@@ -186,7 +186,7 @@ jobs:
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v2.3.5
         with:
           submodules: recursive
       - name: Set up Docker Buildx
@@ -261,7 +261,7 @@ jobs:
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v2.3.5
         with:
           submodules: recursive
       - name: Set up Docker Buildx
@@ -331,7 +331,7 @@ jobs:
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v2.3.5
         with:
           submodules: recursive
       - name: Set up Docker Buildx
@@ -405,7 +405,7 @@ jobs:
     env:
       MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v2.3.5
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1.6.0
       - name: Cache Docker layers
@@ -419,7 +419,7 @@ jobs:
       - name: List Docker images
         run: docker image ls --all
       - name: Checkout the code
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
       - name: Anchore scan action
         uses: anchore/scan-action@v3
         with:
@@ -446,7 +446,7 @@ jobs:
     env:
       MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v2.3.5
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1.6.0
       - name: Cache Docker layers
@@ -460,7 +460,7 @@ jobs:
       - name: List Docker images
         run: docker image ls --all
       - name: Checkout the code
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.0.20
         with:
@@ -494,7 +494,7 @@ jobs:
     if: ${{ (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/main')) && github.repository == 'WeblateOrg/docker' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2.3.5
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1.2.0
         with:
