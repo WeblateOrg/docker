@@ -47,7 +47,7 @@ ENV PYTHONUNBUFFERED=1
 COPY requirements.txt patches /usr/src/weblate/
 
 # Install dependencies
-# hadolint ignore=DL3008,DL3013
+# hadolint ignore=DL3008,DL3013,SC2046
 RUN \
   export DEBIAN_FRONTEND=noninteractive \
   && apt-get update \
