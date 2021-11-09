@@ -2,7 +2,7 @@ aeidon==1.9
 akismet==1.1
 argon2-cffi==21.1.0
 bleach==4.1.0
-celery==5.1.2
+celery==5.2.0
 # For Argon2 and misaka
 cffi==1.15.0
 # For Azure Tenant auth
