@@ -24,6 +24,5 @@ root. As a consequence this has lead to changed exposed port from 80 to 8080.
 
 ## Documentation
 
-Detailed documentation is available in Weblate documentation:
-
-<https://docs.weblate.org/en/latest/admin/install/docker.html>
+Detailed documentation is available in
+[Weblate documentation](https://docs.weblate.org/en/latest/admin/install/docker.html).
