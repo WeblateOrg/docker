@@ -48,6 +48,6 @@ tesserocr==2.5.2
 translate-toolkit==3.5.1
 translation-finder==2.10
 weblate-fedora-messaging==0.4
-weblate-language-data==2021.5
+weblate-language-data==2021.6
 wheel==0.37.0
 zeep==4.1.0
