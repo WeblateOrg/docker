@@ -52,8 +52,6 @@ RUN \
   export DEBIAN_FRONTEND=noninteractive \
   && apt-get update \
   && apt-get install --no-install-recommends -y \
-    uwsgi \
-    uwsgi-plugin-python3 \
     nginx \
     openssh-client \
     ca-certificates \
@@ -160,7 +158,7 @@ RUN \
 RUN find /usr/src/weblate -name '*.patch' -print0 | sort -z | \
   xargs -n1 -0 -r patch -p0 -d /usr/local/lib/python3.9/dist-packages/ -i
 
-# Configuration for Weblate, nginx, uwsgi and supervisor
+# Configuration for Weblate, nginx and supervisor
 COPY etc /etc/
 
 # Fix permissions and adjust files to be able to edit them as user on start
