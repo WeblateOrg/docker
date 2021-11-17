@@ -196,7 +196,7 @@ if [ "$1" = "runserver" ] ; then
     fi
 
     # uswgi dir
-    mkdir -p /run/uwsgi/app/weblate
+    mkdir -p /run/gunicorn/app/weblate
 
     # Celery pid, remove possible stale PID file
     mkdir -p /run/celery
@@ -229,7 +229,7 @@ if [ "$1" = "runserver" ] ; then
     : "${CELERY_MEMORY_OPTIONS:="--concurrency $((WEBLATE_WORKERS / 2))"}"
     : "${CELERY_BACKUP_OPTIONS:="--concurrency 1"}"
     : "${CELERY_BEAT_OPTIONS:=""}"
-    : "${UWSGI_WORKERS:="$((WEBLATE_WORKERS + 1))"}"
+    : "${GUNICORN_WORKERS:="$((WEBLATE_WORKERS + 1))"}"
 
     export CELERY_MAIN_OPTIONS
     export CELERY_NOTIFY_OPTIONS
@@ -237,7 +237,7 @@ if [ "$1" = "runserver" ] ; then
     export CELERY_MEMORY_OPTIONS
     export CELERY_BACKUP_OPTIONS
     export CELERY_BEAT_OPTIONS
-    export UWSGI_WORKERS
+    export GUNICORN_WORKERS
 
 
     #  Execute supervisor
