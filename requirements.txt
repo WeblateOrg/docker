@@ -36,7 +36,7 @@ python-dateutil==2.8.2
 python3-saml==1.12.0
 pyuca==1.2
 raven
-redis==4.0.0
+redis==4.0.1
 responses>=0.10.1,<0.17.0
 rollbar
 ruamel.yaml==0.17.17
