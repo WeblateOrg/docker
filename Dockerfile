@@ -1,5 +1,5 @@
 FROM debian:bullseye-20211115-slim
-ENV VERSION 4.9
+ENV VERSION 4.9.1
 ARG TARGETARCH
 
 LABEL name="Weblate"
