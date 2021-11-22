@@ -39,7 +39,9 @@ jobs:
     name: Build, bleeding, ${{ matrix.architecture }}
     strategy:
       matrix:
-        architecture: [linux/arm64]
+        architecture:
+          - linux/arm64
+          - linux/arm/v7
     env:
       MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
     steps:
@@ -525,6 +527,12 @@ jobs:
         with:
           path: /tmp/.buildx-cache/linux/arm64
           key: ${{ runner.os }}-bleeding-${{ github.sha }}-linux/arm64
+      - name: Cache Docker layers
+        uses: actions/cache@v2.1.4
+        id: cache-arm-v7
+        with:
+          path: /tmp/.buildx-cache/linux/arm/v7
+          key: ${{ runner.os }}-bleeding-${{ github.sha }}-linux/arm/v7
       - name: Cache Docker layers
         uses: actions/cache@v2.1.6
         id: cache-amd64

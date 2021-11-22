@@ -110,6 +110,11 @@ RUN \
     fi \
   && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
   && source $HOME/.cargo/env \
+  # Handle an extremely specific issue when building the cryptography package for \
+  # 32-bit architectures within QEMU running on a 64-bit host (issue #30). \
+  && if [ "${BUILDX_QEMU_ENV}" = "true" -a "$(getconf LONG_BIT)" = "32" ] ; then \
+        sed -i s/^cryptography==/cryptography==3.3.2/ /usr/src/weblate/requirements.txt ; \
+  fi \
   && python3 -m pip install --no-cache-dir --upgrade $(grep -E '^(pip|wheel|setuptools)==' /usr/src/weblate/requirements.txt) \
   && python3 -m pip install --no-cache-dir --no-binary :all: $(grep ^cffi== /usr/src/weblate/requirements.txt) \
   && case "$VERSION" in \
