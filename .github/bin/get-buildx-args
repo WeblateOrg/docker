@@ -39,12 +39,12 @@ else
         # Generate tags
         case "$GITHUB_REF" in
             refs/tags/[0-9]*)
-                echo --tag "weblate/weblate:${GITHUB_REF#refs/tags/}"
-                echo --tag weblate/weblate:latest
+                echo --tag "${DOCKER_REPO}weblate/weblate:${GITHUB_REF#refs/tags/}"
+                echo --tag "${DOCKER_REPO}weblate/weblate:latest"
                 ;;
             refs/heads/main)
-                echo --tag weblate/weblate:edge
-                echo --tag "weblate/weblate:edge-$(date -I)-${GITHUB_SHA}"
+                echo --tag "${DOCKER_REPO}weblate/weblate:edge"
+                echo --tag "${DOCKER_REPO}weblate/weblate:edge-$(date -I)-${GITHUB_SHA}"
                 ;;
         esac
     else
