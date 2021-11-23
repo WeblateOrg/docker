@@ -230,6 +230,11 @@ if [ "$1" = "runserver" ] ; then
     : "${CELERY_BACKUP_OPTIONS:="--concurrency 1"}"
     : "${CELERY_BEAT_OPTIONS:=""}"
     : "${WEB_WORKERS:="$((WEBLATE_WORKERS + 1))"}"
+    # This is for legacy configurations, should be removed in the future
+    if [ -n "$UWSGI_WORKERS" ] ; then
+        echo "Configuration using UWSGI_WORKERS is deprecated, please use WEB_WORKERS instead!"
+        WEB_WORKERS="$UWSGI_WORKERS"
+    fi
 
     export CELERY_MAIN_OPTIONS
     export CELERY_NOTIFY_OPTIONS
