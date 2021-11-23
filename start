@@ -229,7 +229,7 @@ if [ "$1" = "runserver" ] ; then
     : "${CELERY_MEMORY_OPTIONS:="--concurrency $((WEBLATE_WORKERS / 2))"}"
     : "${CELERY_BACKUP_OPTIONS:="--concurrency 1"}"
     : "${CELERY_BEAT_OPTIONS:=""}"
-    : "${GUNICORN_WORKERS:="$((WEBLATE_WORKERS + 1))"}"
+    : "${WEB_WORKERS:="$((WEBLATE_WORKERS + 1))"}"
 
     export CELERY_MAIN_OPTIONS
     export CELERY_NOTIFY_OPTIONS
@@ -237,7 +237,7 @@ if [ "$1" = "runserver" ] ; then
     export CELERY_MEMORY_OPTIONS
     export CELERY_BACKUP_OPTIONS
     export CELERY_BEAT_OPTIONS
-    export GUNICORN_WORKERS
+    export WEB_WORKERS
 
 
     #  Execute supervisor
