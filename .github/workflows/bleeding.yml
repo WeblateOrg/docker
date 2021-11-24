@@ -22,7 +22,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1.6.0
       - name: Cache Docker layers
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         id: cache
         with:
           path: /tmp/.buildx-cache/${{ matrix.architecture }}
@@ -62,7 +62,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1.6.0
       - name: Cache Docker layers
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         id: cache
         with:
           path: /tmp/.buildx-cache/${{ matrix.architecture }}
@@ -93,7 +93,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1.6.0
       - name: Cache Docker layers
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         id: cache
         with:
           path: /tmp/.buildx-cache/${{ matrix.architecture }}
@@ -140,7 +140,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1.6.0
       - name: Cache Docker layers
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         id: cache
         with:
           path: /tmp/.buildx-cache/${{ matrix.architecture }}
@@ -211,7 +211,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1.6.0
       - name: Cache Docker layers
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         id: cache
         with:
           path: /tmp/.buildx-cache/${{ matrix.architecture }}
@@ -288,7 +288,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1.6.0
       - name: Cache Docker layers
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         id: cache
         with:
           path: /tmp/.buildx-cache/${{ matrix.architecture }}
@@ -360,7 +360,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1.6.0
       - name: Cache Docker layers
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         id: cache
         with:
           path: /tmp/.buildx-cache/${{ matrix.architecture }}
@@ -434,7 +434,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1.6.0
       - name: Cache Docker layers
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         id: cache
         with:
           path: /tmp/.buildx-cache/${{ matrix.architecture }}
@@ -477,7 +477,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1.6.0
       - name: Cache Docker layers
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         id: cache
         with:
           path: /tmp/.buildx-cache/${{ matrix.architecture }}
@@ -531,19 +531,19 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1.6.0
       - name: Cache Docker layers
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         id: cache-arm64
         with:
           path: /tmp/.buildx-cache/linux/arm64
           key: ${{ runner.os }}-bleeding-${{ github.sha }}-linux/arm64
       - name: Cache Docker layers
-        uses: actions/cache@v2.1.4
+        uses: actions/cache@v2.1.7
         id: cache-arm-v7
         with:
           path: /tmp/.buildx-cache/linux/arm/v7
           key: ${{ runner.os }}-bleeding-${{ github.sha }}-linux/arm/v7
       - name: Cache Docker layers
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         id: cache-amd64
         with:
           path: /tmp/.buildx-cache/linux/amd64
@@ -582,13 +582,13 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1.6.0
       - name: Cache Docker layers
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         id: cache-arm64
         with:
           path: /tmp/.buildx-cache/linux/arm64
           key: ${{ runner.os }}-bleeding-${{ github.sha }}-linux/arm64
       - name: Cache Docker layers
-        uses: actions/cache@v2.1.6
+        uses: actions/cache@v2.1.7
         id: cache-amd64
         with:
           path: /tmp/.buildx-cache/linux/amd64
