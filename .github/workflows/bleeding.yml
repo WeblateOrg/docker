@@ -571,7 +571,7 @@ jobs:
       - trivy
     if: ${{ (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/main')) && github.repository == 'WeblateOrg/docker' }}
     env:
-      DOCKER_REPO: "ghcr.io/WeblateOrg/docker:"
+      DOCKER_IMAGE: "ghcr.io/WeblateOrg/weblate"
     steps:
       - name: Checkout
         uses: actions/checkout@v2.4.0
