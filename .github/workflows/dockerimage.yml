@@ -569,6 +569,12 @@ jobs:
           key: ${{ runner.os }}-buildx-${{ github.sha }}-linux/arm64
       - name: Cache Docker layers
         uses: actions/cache@v2.1.7
+        id: cache-arm-v7
+        with:
+          path: /tmp/.buildx-cache/linux/arm/v7
+          key: ${{ runner.os }}-buildx-${{ github.sha }}-linux/arm/v7
+      - name: Cache Docker layers
+        uses: actions/cache@v2.1.7
         id: cache-amd64
         with:
           path: /tmp/.buildx-cache/linux/amd64
