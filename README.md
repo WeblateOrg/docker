@@ -19,8 +19,7 @@ used by over 2500 libre projects and companies in more than 165 countries.**
 
 ## Exposed ports
 
-In July 2019 (starting with the 3.7.1-6 tag), the containers is not running as
-root. As a consequence this has lead to changed exposed port from 80 to 8080.
+The webserver is running on the port 8080.
 
 ## Documentation
 
