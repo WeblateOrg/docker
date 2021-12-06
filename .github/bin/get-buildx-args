@@ -13,7 +13,7 @@ fi
 
 # Write to local cache unless publishing (not compatible with push)
 if [ "$1" != "publish" ] ; then
-    echo --cache-to "type=local,dest=/tmp/.buildx-cache/$MATRIX_ARCHITECTURE"
+    echo --cache-to "type=local,dest=/tmp/.buildx-cache/$MATRIX_ARCHITECTURE,mode=max"
 fi
 
 if [ "$1" = "load" ] ; then
