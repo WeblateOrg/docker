@@ -1,6 +1,6 @@
 aeidon==1.10.1
 akismet==1.1
-argon2-cffi==21.2.0
+argon2-cffi==21.3.0
 bleach==4.1.0
 celery==5.2.1
 # For Argon2 and misaka
@@ -27,7 +27,7 @@ httpretty==1.1.4
 https://github.com/nijel/supervisor-stdout/archive/c909c1a1ddabaf679dc2eaecb3b8f5ad6bef467a.zip
 iniparse==0.5
 jellyfish==0.8.9
-lxml==4.6.4
+lxml==4.7.0
 mercurial==6.0
 openpyxl==3.0.9
 phply==1.2.5
