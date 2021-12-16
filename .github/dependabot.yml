@@ -8,6 +8,7 @@ updates:
     labels:
       - dependencies
       - automerge
+    open-pull-requests-limit: 10
   - package-ecosystem: github-actions
     directory: /
     schedule:
@@ -15,12 +16,14 @@ updates:
     labels:
       - dependencies
       - automerge
+    open-pull-requests-limit: 10
   - package-ecosystem: gitsubmodule
     directory: /
     schedule:
       interval: daily
     labels:
       - dependencies
+    open-pull-requests-limit: 10
   - package-ecosystem: pip
     directory: /
     schedule:
@@ -28,3 +31,4 @@ updates:
     labels:
       - dependencies
       - automerge
+    open-pull-requests-limit: 10
