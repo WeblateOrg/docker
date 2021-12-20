@@ -144,9 +144,18 @@ until psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "$POSTGRES_DATABASE" -U "$
     sleep 1
 done
 
+# Fetch server version
+PGVERSION=$(psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "$POSTGRES_DATABASE" -U "$POSTGRES_USER" -t -A -c 'SHOW server_version_num;')
+
 unset PGPASSWORD
 
->&2 echo "Postgres is up"
+>&2 echo "Postgres $PGVERSION is up"
+
+# Check if supported PostgreSQL version is used
+if [ "$PGVERSION" -lt 100000 ] ; then
+    >&2 echo "PostgreSQL 10 or newer is required to run Weblate"
+    exit 1
+fi
 
 # Migrate database to current version and collect static files
 if [ "$1" = "runserver" ] ; then
