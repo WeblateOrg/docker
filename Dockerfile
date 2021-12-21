@@ -1,4 +1,5 @@
-FROM debian:bullseye-20211220-slim
+FROM python:3.10.1-slim-bullseye
+ENV PYVERSION 3.10
 ENV VERSION 4.10
 ARG TARGETARCH
 
@@ -29,7 +30,7 @@ RUN \
   && touch /home/weblate/.ssh/authorized_keys \
   && chown -R weblate:weblate /home/weblate \
   && chmod 700 /home/weblate/.ssh \
-  && install -d -o weblate -g weblate -m 755 /usr/local/lib/python3.9/dist-packages/data-test /usr/local/lib/python3.9/dist-packages/test-images \
+  && install -d -o weblate -g weblate -m 755 "/usr/local/lib/python${PYVERSION}/site-packages/data-test" "/usr/local/lib/python${PYVERSION}/site-packages/test-images" \
   && install -d -o weblate -g weblate -m 755 /app/data \
   && install -d -o weblate -g weblate -m 755 /app/cache
 
@@ -59,22 +60,15 @@ RUN \
     gir1.2-pango-1.0 \
     libxmlsec1-openssl \
     libjpeg62-turbo \
-    python3-gi \
-    python3-gi-cairo \
-    python3-cairo \
-    python3-pip \
-    python3-setuptools \
-    python3-wheel \
-    python3-gdbm \
     gettext \
     git \
     git-svn \
     gnupg \
     subversion \
     pkg-config \
-    python3-dev \
     file \
     make \
+    libcairo2-dev \
     libxml2-dev \
     libacl1-dev \
     libmariadb3 \
@@ -91,6 +85,8 @@ RUN \
     zlib1g-dev \
     libjpeg62-turbo-dev \
     libenchant-2-2 \
+    libgirepository1.0-dev \
+    libcairo-gobject2 \
     gcc \
     g++ \
     tesseract-ocr \
@@ -108,12 +104,12 @@ RUN \
     fi \
   && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
   && source $HOME/.cargo/env \
-  && python3 -m pip install --no-cache-dir --upgrade $(grep -E '^(pip|wheel|setuptools)==' /usr/src/weblate/requirements.txt) \
-  && python3 -m pip install --no-cache-dir --no-binary :all: $(grep ^cffi== /usr/src/weblate/requirements.txt) \
+  && pip install --no-cache-dir --upgrade $(grep -E '^(pip|wheel|setuptools)==' /usr/src/weblate/requirements.txt) \
+  && pip install --no-cache-dir --no-binary :all: $(grep ^cffi== /usr/src/weblate/requirements.txt) \
   && case "$VERSION" in \
     *+* ) \
       sed -Ei '/^(translate-toolkit|aeidon)/D' /usr/src/weblate/requirements.txt; \
-      python3 -m pip install \
+      pip install \
         --no-cache-dir \
         -r /usr/src/weblate/requirements.txt \
         "https://github.com/translate/translate/archive/master.zip" \
@@ -121,23 +117,24 @@ RUN \
         "https://github.com/WeblateOrg/weblate/archive/main.zip#egg=Weblate[all,MySQL]" \
         ;; \
     * ) \
-      python3 -m pip install \
+      pip install \
         --no-cache-dir \
         -r /usr/src/weblate/requirements.txt \
         "Weblate[all,MySQL]==$VERSION" \
       ;; \
   esac \
-  && python3 -c 'from phply.phpparse import make_parser; make_parser()' \
+  && python -c 'from phply.phpparse import make_parser; make_parser()' \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && apt-get -y purge \
-    python3-dev \
     pkg-config \
     libleptonica-dev \
     libtesseract-dev \
     libmariadb-dev \
+    libgirepository1.0-dev \
     libxml2-dev \
     libffi-dev \
     libxmlsec1-dev \
+    libcairo2-dev \
     libpq-dev \
     gcc \
     g++ \
@@ -149,14 +146,14 @@ RUN \
     libssl-dev \
     libz-dev   \
     libjpeg62-turbo-dev \
-  && apt-get -y autoremove \
+  && apt-get -y purge --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && apt-get clean \
   && rustup self uninstall -y \
   && rm -rf /root/.cache /root/.cargo /tmp/* /var/lib/apt/lists/*
 
 # Apply hotfixes on Weblate
 RUN find /usr/src/weblate -name '*.patch' -print0 | sort -z | \
-  xargs -n1 -0 -r patch -p0 -d /usr/local/lib/python3.9/dist-packages/ -i
+  xargs -n1 -0 -r patch -p0 -d "/usr/local/lib/python${PYVERSION}/site-packages/" -i
 
 # Configuration for Weblate, nginx and supervisor
 COPY etc /etc/
@@ -175,7 +172,7 @@ RUN rm -f /etc/localtime /etc/timezone && cp /usr/share/zoneinfo/Etc/UTC /etc/lo
   && sed -i '/pam_rootok.so/a auth requisite pam_deny.so' /etc/pam.d/su
 
 # Search path for custom modules
-RUN echo "/app/data/python" > /usr/local/lib/python3.9/dist-packages/weblate-docker.pth
+RUN echo "/app/data/python" > "/usr/local/lib/python${PYVERSION}/site-packages/weblate-docker.pth"
 
 # Entrypoint
 COPY start health_check /app/bin/
