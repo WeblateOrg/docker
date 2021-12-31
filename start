@@ -185,6 +185,13 @@ if [ "$1" = "runserver" ] ; then
         echo "Starting database migration..."
         run_weblate migrate
 
+        # Create or update admin account
+        if [ -n "$WEBLATE_ADMIN_PASSWORD" ] ; then
+            run_weblate createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME"
+        else
+            run_weblate createadmin --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
+        fi
+
         echo "Refreshing stats..."
         run_weblate ensure_stats
     fi
@@ -195,14 +202,6 @@ if [ "$1" = "runserver" ] ; then
     run_weblate collectstatic --noinput --clear
     # Compress js and css
     run_weblate compress --force
-    # Create or update admin account
-    if [ $DO_MIGRATE -eq 1 ] ; then
-        if [ -n "$WEBLATE_ADMIN_PASSWORD" ] ; then
-            run_weblate createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME"
-        else
-            run_weblate createadmin --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
-        fi
-    fi
 
     # uswgi dir
     mkdir -p /run/gunicorn/app/weblate
