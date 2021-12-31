@@ -46,7 +46,7 @@ ruamel.yaml==0.17.19
 selenium
 setuptools==60.2.0
 siphashc==2.1
-supervisor==4.2.3
+supervisor==4.2.4
 tesserocr==2.5.2
 translate-toolkit==3.5.1
 translation-finder==2.10
