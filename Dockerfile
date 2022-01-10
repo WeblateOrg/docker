@@ -123,6 +123,7 @@ RUN \
         "Weblate[all,MySQL]==$VERSION" \
       ;; \
   esac \
+  && pip uninstall --yes setuptools \
   && python -c 'from phply.phpparse import make_parser; make_parser()' \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && apt-get -y purge \
