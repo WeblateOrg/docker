@@ -40,7 +40,7 @@ pyuca==1.2
 raven
 # 4.0.0 is blocked by celery https://github.com/celery/celery/pull/7094
 redis==3.5.3
-responses>=0.10.1,<0.17.0
+responses>=0.10.1,<0.18.0
 rollbar
 ruamel.yaml==0.17.20
 selenium
