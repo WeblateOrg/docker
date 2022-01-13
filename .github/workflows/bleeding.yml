@@ -12,7 +12,7 @@ jobs:
   bleeding:
     runs-on: ubuntu-20.04
     outputs:
-      weblate_sha: ${{ steps.get_sha.sha }}
+      weblate_sha: ${{ steps.get_sha.outputs.sha }}
     steps:
       - id: get_sha
         run: echo "::set-output name=sha::$(git ls-remote --quiet https://github.com/WeblateOrg/weblate.git HEAD | awk '{print $1}')"
