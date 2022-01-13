@@ -46,6 +46,8 @@ jobs:
   buildx:
     runs-on: ubuntu-20.04
     name: Build, bleeding, ${{ matrix.architecture }}
+    needs:
+      - bleeding
     strategy:
       matrix:
         architecture:
@@ -86,7 +88,9 @@ jobs:
   test:
     runs-on: ubuntu-20.04
     name: Test, bleeding, ${{ matrix.architecture }}
-    needs: [build]
+    needs:
+      - bleeding
+      - build
     strategy:
       matrix:
         architecture: [linux/amd64]
@@ -133,7 +137,9 @@ jobs:
   test-basic:
     runs-on: ubuntu-20.04
     name: Test basic, bleeding, ${{ matrix.architecture }}
-    needs: [build]
+    needs:
+      - bleeding
+      - build
     strategy:
       matrix:
         architecture: [linux/amd64]
@@ -204,7 +210,9 @@ jobs:
   test-saml:
     runs-on: ubuntu-20.04
     name: Test SAML, bleeding, ${{ matrix.architecture }}
-    needs: [build]
+    needs:
+      - bleeding
+      - build
     strategy:
       matrix:
         architecture: [linux/amd64]
