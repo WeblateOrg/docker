@@ -1,6 +1,11 @@
 #!/bin/sh
 
-SHA=$(git ls-remote --quiet https://github.com/WeblateOrg/weblate HEAD | awk '{print $1}')
+SHA=$1
+
+if [ -z "$SHA" ] ; then
+  echo "Usage: .github/bin/bleeding SHA"
+  exit 1
+fi
 
 # Install Weblate from main branch
 sed -i \
