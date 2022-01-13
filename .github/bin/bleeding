@@ -11,5 +11,7 @@ sed -i \
     LABEL org.opencontainers.image.revision=\"$SHA\"" \
     Dockerfile
 
+cat Dockerfile
+
 # Remove patches
 find patches -name '*.patch' -delete
