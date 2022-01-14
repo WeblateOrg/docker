@@ -1,20 +1,24 @@
 #!/bin/sh
 
 SHA=$1
+DATE=$2
 
-if [ -z "$SHA" ] ; then
-  echo "Usage: .github/bin/bleeding SHA"
+if [ -z "$SHA" -o -z "$DATE" ] ; then
+  echo "Usage: .github/bin/bleeding SHA DATE"
   exit 1
 fi
 
 # Install Weblate from main branch
 sed -i \
-    -e "s/\\(ENV VERSION .*\\)/\\1+$( date -I )/" \
+    -e "s/\\(ENV VERSION .*\\)/\\1+$( date --date "$DATE" -I )/" \
     -e "/ENV VERSION/a \
     ENV WEBLATE_DOCKER_GIT_REVISION $SHA" \
     -e "/LABEL org.opencontainers.image.version/a \
     LABEL org.opencontainers.image.revision=\"$SHA\"" \
     Dockerfile
+
+# Consistent timestamp
+touch --date="$DATE" Dockerfile
 
 cat Dockerfile
 
