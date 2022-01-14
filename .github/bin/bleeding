@@ -3,7 +3,7 @@
 SHA=$1
 DATE=$2
 
-if [ -z "$SHA" -o -z "$DATE" ] ; then
+if [ -z "$SHA" ] || [ -z "$DATE" ] ; then
   echo "Usage: .github/bin/bleeding SHA DATE"
   exit 1
 fi
