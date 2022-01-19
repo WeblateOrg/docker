@@ -7,7 +7,6 @@ updates:
       interval: daily
     labels:
       - dependencies
-      - automerge
     open-pull-requests-limit: 10
   - package-ecosystem: github-actions
     directory: /
