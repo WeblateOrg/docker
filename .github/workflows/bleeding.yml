@@ -38,7 +38,7 @@ jobs:
         id: cache
         with:
           path: /tmp/.buildx-cache/${{ matrix.architecture }}
-          key: ${{ runner.os }}-bleeding-${{ github.sha }}-${{ matrix.architecture }}
+          key: ${{ runner.os }}-bleeding-${{ github.run_id }}-${{ matrix.architecture }}
       - name: Adjust bleeding edge image
         run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
       - name: Configure Docker build
@@ -80,7 +80,7 @@ jobs:
         id: cache
         with:
           path: /tmp/.buildx-cache/${{ matrix.architecture }}
-          key: ${{ runner.os }}-bleeding-${{ github.sha }}-${{ matrix.architecture }}
+          key: ${{ runner.os }}-bleeding-${{ github.run_id }}-${{ matrix.architecture }}
       - name: Adjust bleeding edge image
         run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
       - name: Configure Docker build
@@ -113,7 +113,7 @@ jobs:
         id: cache
         with:
           path: /tmp/.buildx-cache/${{ matrix.architecture }}
-          key: ${{ runner.os }}-bleeding-${{ github.sha }}-${{ matrix.architecture }}
+          key: ${{ runner.os }}-bleeding-${{ github.run_id }}-${{ matrix.architecture }}
       - name: Adjust bleeding edge image
         run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
       - name: Build the Docker image
@@ -162,7 +162,7 @@ jobs:
         id: cache
         with:
           path: /tmp/.buildx-cache/${{ matrix.architecture }}
-          key: ${{ runner.os }}-bleeding-${{ github.sha }}-${{ matrix.architecture }}
+          key: ${{ runner.os }}-bleeding-${{ github.run_id }}-${{ matrix.architecture }}
       - name: Adjust bleeding edge image
         run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
       - name: Build the Docker image
@@ -235,7 +235,7 @@ jobs:
         id: cache
         with:
           path: /tmp/.buildx-cache/${{ matrix.architecture }}
-          key: ${{ runner.os }}-bleeding-${{ github.sha }}-${{ matrix.architecture }}
+          key: ${{ runner.os }}-bleeding-${{ github.run_id }}-${{ matrix.architecture }}
       - name: Adjust bleeding edge image
         run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
       - name: Build the Docker image
@@ -314,7 +314,7 @@ jobs:
         id: cache
         with:
           path: /tmp/.buildx-cache/${{ matrix.architecture }}
-          key: ${{ runner.os }}-bleeding-${{ github.sha }}-${{ matrix.architecture }}
+          key: ${{ runner.os }}-bleeding-${{ github.run_id }}-${{ matrix.architecture }}
       - name: Adjust bleeding edge image
         run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
       - name: Build the Docker image
@@ -388,7 +388,7 @@ jobs:
         id: cache
         with:
           path: /tmp/.buildx-cache/${{ matrix.architecture }}
-          key: ${{ runner.os }}-bleeding-${{ github.sha }}-${{ matrix.architecture }}
+          key: ${{ runner.os }}-bleeding-${{ github.run_id }}-${{ matrix.architecture }}
       - name: Adjust bleeding edge image
         run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
       - name: Build the Docker image
@@ -464,7 +464,7 @@ jobs:
         id: cache
         with:
           path: /tmp/.buildx-cache/${{ matrix.architecture }}
-          key: ${{ runner.os }}-bleeding-${{ github.sha }}-${{ matrix.architecture }}
+          key: ${{ runner.os }}-bleeding-${{ github.run_id }}-${{ matrix.architecture }}
       - name: Adjust bleeding edge image
         run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
       - name: Build the Docker image
@@ -509,7 +509,7 @@ jobs:
         id: cache
         with:
           path: /tmp/.buildx-cache/${{ matrix.architecture }}
-          key: ${{ runner.os }}-bleeding-${{ github.sha }}-${{ matrix.architecture }}
+          key: ${{ runner.os }}-bleeding-${{ github.run_id }}-${{ matrix.architecture }}
       - name: Adjust bleeding edge image
         run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
       - name: Build the Docker image
@@ -564,19 +564,19 @@ jobs:
         id: cache-arm64
         with:
           path: /tmp/.buildx-cache/linux/arm64
-          key: ${{ runner.os }}-bleeding-${{ github.sha }}-linux/arm64
+          key: ${{ runner.os }}-bleeding-${{ github.run_id }}-linux/arm64
       - name: Cache Docker layers
         uses: actions/cache@v2.1.7
         id: cache-arm-v7
         with:
           path: /tmp/.buildx-cache/linux/arm/v7
-          key: ${{ runner.os }}-bleeding-${{ github.sha }}-linux/arm/v7
+          key: ${{ runner.os }}-bleeding-${{ github.run_id }}-linux/arm/v7
       - name: Cache Docker layers
         uses: actions/cache@v2.1.7
         id: cache-amd64
         with:
           path: /tmp/.buildx-cache/linux/amd64
-          key: ${{ runner.os }}-bleeding-${{ github.sha }}-linux/amd64
+          key: ${{ runner.os }}-bleeding-${{ github.run_id }}-linux/amd64
       - name: DockerHub login
         run: echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
       - name: Adjust bleeding edge image
@@ -616,19 +616,19 @@ jobs:
         id: cache-arm64
         with:
           path: /tmp/.buildx-cache/linux/arm64
-          key: ${{ runner.os }}-bleeding-${{ github.sha }}-linux/arm64
+          key: ${{ runner.os }}-bleeding-${{ github.run_id }}-linux/arm64
       - name: Cache Docker layers
         uses: actions/cache@v2.1.7
         id: cache-arm-v7
         with:
           path: /tmp/.buildx-cache/linux/arm/v7
-          key: ${{ runner.os }}-bleeding-${{ github.sha }}-linux/arm/v7
+          key: ${{ runner.os }}-bleeding-${{ github.run_id }}-linux/arm/v7
       - name: Cache Docker layers
         uses: actions/cache@v2.1.7
         id: cache-amd64
         with:
           path: /tmp/.buildx-cache/linux/amd64
-          key: ${{ runner.os }}-bleeding-${{ github.sha }}-linux/amd64
+          key: ${{ runner.os }}-bleeding-${{ github.run_id }}-linux/amd64
       - name: Login to GitHub Container Registry
         if: ${{ github.event_name != 'pull_request'}}
         uses: docker/login-action@v1
