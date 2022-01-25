@@ -2,7 +2,7 @@ name: Docker Hub Description
 on:
   push:
     branches:
-    - master
+    - main
 jobs:
   sync-readme:
     runs-on: ubuntu-20.04
