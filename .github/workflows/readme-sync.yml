@@ -2,17 +2,17 @@ name: Docker Hub Description
 on:
   push:
     branches:
-      - master
+    - master
 jobs:
   sync-readme:
     runs-on: ubuntu-20.04
     if: ${{ github.repository == 'WeblateOrg/weblate'}}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2.4.0
-      - name: Docker Hub Description
-        uses: peter-evans/dockerhub-description@v2.4.3
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-          DOCKERHUB_REPOSITORY: weblate/weblate
+    - name: Checkout
+      uses: actions/checkout@v2.4.0
+    - name: Docker Hub Description
+      uses: peter-evans/dockerhub-description@v2.4.3
+      env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+        DOCKERHUB_REPOSITORY: weblate/weblate

@@ -4,10 +4,10 @@ name: Lint Code Base
 on:
   push:
     branches-ignore:
-      - "dependabot/**"
-      - "deepsource-fix-**"
-      - "renovate/**"
-      - weblate
+    - dependabot/**
+    - deepsource-fix-**
+    - renovate/**
+    - weblate
   pull_request:
 
 jobs:
@@ -16,14 +16,14 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2.4.0
+    - name: Checkout Code
+      uses: actions/checkout@v2.4.0
 
-      - name: Lint Code Base
-        uses: github/super-linter/slim@v4.8.5
-        env:
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALIDATE_PYTHON_ISORT: "false"
-          VALIDATE_JSCPD: "false"
-          VALIDATE_GITHUB_ACTIONS: "false"
+    - name: Lint Code Base
+      uses: github/super-linter/slim@v4.8.5
+      env:
+        DEFAULT_BRANCH: main
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VALIDATE_PYTHON_ISORT: 'false'
+        VALIDATE_JSCPD: 'false'
+        VALIDATE_GITHUB_ACTIONS: 'false'

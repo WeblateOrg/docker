@@ -3,9 +3,9 @@ name: Docker Image CI
 on:
   push:
     branches-ignore:
-      - "dependabot/**"
+    - dependabot/**
     tags:
-      - "*"
+    - '*'
   pull_request:
 
 jobs:
@@ -18,19 +18,19 @@ jobs:
     env:
       MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
     steps:
-      - uses: actions/checkout@v2.4.0
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1.6.0
-      - name: Cache Docker layers
-        uses: actions/cache@v2.1.7
-        id: cache
-        with:
-          path: /tmp/.buildx-cache/${{ matrix.architecture }}
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
-      - name: Configure Docker build
-        run: .github/bin/get-buildx-args
-      - name: Build the Docker image
-        run: docker buildx build $(.github/bin/get-buildx-args)
+    - uses: actions/checkout@v2.4.0
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1.6.0
+    - name: Cache Docker layers
+      uses: actions/cache@v2.1.7
+      id: cache
+      with:
+        path: /tmp/.buildx-cache/${{ matrix.architecture }}
+        key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+    - name: Configure Docker build
+      run: .github/bin/get-buildx-args
+    - name: Build the Docker image
+      run: docker buildx build $(.github/bin/get-buildx-args)
 
   buildx:
     runs-on: ubuntu-20.04
@@ -38,37 +38,37 @@ jobs:
     strategy:
       matrix:
         architecture:
-          - linux/arm64
-          - linux/arm/v7
+        - linux/arm64
+        - linux/arm/v7
     env:
       MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
     steps:
-      - name: Set Swap Space
-        uses: pierotofy/set-swap-space@v1.0
-        with:
-          swap-size-gb: 10
-      - run: |
-          # Workaround for https://github.com/rust-lang/cargo/issues/8719
-          sudo mkdir -p /var/lib/docker
-          sudo mount -t tmpfs -o size=10G none /var/lib/docker
-          sudo systemctl restart docker
-      - uses: actions/checkout@v2.4.0
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1.2.0
-        with:
-          platforms: ${{ matrix.architecture }}
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1.6.0
-      - name: Cache Docker layers
-        uses: actions/cache@v2.1.7
-        id: cache
-        with:
-          path: /tmp/.buildx-cache/${{ matrix.architecture }}
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
-      - name: Configure Docker build
-        run: .github/bin/get-buildx-args
-      - name: Build the Docker image
-        run: docker buildx build $(.github/bin/get-buildx-args)
+    - name: Set Swap Space
+      uses: pierotofy/set-swap-space@v1.0
+      with:
+        swap-size-gb: 10
+    - run: |
+        # Workaround for https://github.com/rust-lang/cargo/issues/8719
+        sudo mkdir -p /var/lib/docker
+        sudo mount -t tmpfs -o size=10G none /var/lib/docker
+        sudo systemctl restart docker
+    - uses: actions/checkout@v2.4.0
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1.2.0
+      with:
+        platforms: ${{ matrix.architecture }}
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1.6.0
+    - name: Cache Docker layers
+      uses: actions/cache@v2.1.7
+      id: cache
+      with:
+        path: /tmp/.buildx-cache/${{ matrix.architecture }}
+        key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+    - name: Configure Docker build
+      run: .github/bin/get-buildx-args
+    - name: Build the Docker image
+      run: docker buildx build $(.github/bin/get-buildx-args)
 
   test:
     runs-on: ubuntu-20.04
@@ -83,37 +83,37 @@ jobs:
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
     steps:
-      - uses: actions/checkout@v2.4.0
-        with:
-          submodules: recursive
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1.6.0
-      - name: Cache Docker layers
-        uses: actions/cache@v2.1.7
-        id: cache
-        with:
-          path: /tmp/.buildx-cache/${{ matrix.architecture }}
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
-      - name: Build the Docker image
-        run: docker buildx build $(.github/bin/get-buildx-args load)
-      - name: List Docker images
-        run: docker image ls --all
-      - name: Generate configuration
-        run: |
-          cd docker-compose
-          ./test-generate
-      - name: Startup container
-        run: |
-          cd docker-compose
-          ./test-boot
-      - name: Run tests
-        run: |
-          cd docker-compose
-          ./test-tests
-      - name: Shutdown service
-        run: |
-          cd docker-compose
-          ./test-stop
+    - uses: actions/checkout@v2.4.0
+      with:
+        submodules: recursive
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1.6.0
+    - name: Cache Docker layers
+      uses: actions/cache@v2.1.7
+      id: cache
+      with:
+        path: /tmp/.buildx-cache/${{ matrix.architecture }}
+        key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+    - name: Build the Docker image
+      run: docker buildx build $(.github/bin/get-buildx-args load)
+    - name: List Docker images
+      run: docker image ls --all
+    - name: Generate configuration
+      run: |
+        cd docker-compose
+        ./test-generate
+    - name: Startup container
+      run: |
+        cd docker-compose
+        ./test-boot
+    - name: Run tests
+      run: |
+        cd docker-compose
+        ./test-tests
+    - name: Shutdown service
+      run: |
+        cd docker-compose
+        ./test-stop
 
   test-basic:
     runs-on: ubuntu-20.04
@@ -128,61 +128,61 @@ jobs:
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
     steps:
-      - uses: actions/checkout@v2.4.0
-        with:
-          submodules: recursive
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1.6.0
-      - name: Cache Docker layers
-        uses: actions/cache@v2.1.7
-        id: cache
-        with:
-          path: /tmp/.buildx-cache/${{ matrix.architecture }}
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
-      - name: Build the Docker image
-        run: docker buildx build $(.github/bin/get-buildx-args load)
-      - name: List Docker images
-        run: docker image ls --all
-      - name: Generate configuration
-        run: |
-          cd docker-compose
-          ./test-generate
-      - name: Startup container
-        run: |
-          cd docker-compose
-          ./test-boot
-      - name: List Python packages
-        run: |
-          cd docker-compose
-          ./test-pip
-      - name: Inspect container
-        run: |
-          cd docker-compose
-          ./test-inspect
-      - name: Check service is running
-        run: |
-          cd docker-compose
-          ./test-online
-      - name: Check service health status
-        run: |
-          cd docker-compose
-          ./test-health
-      - name: Run Django Checks
-        run: |
-          cd docker-compose
-          ./test-checks
-      - name: Verify supervisor
-        run: |
-          cd docker-compose
-          ./test-supervisor
-      - name: Test admin creation
-        run: |
-          cd docker-compose
-          ./test-admin
-      - name: Shutdown service
-        run: |
-          cd docker-compose
-          ./test-stop
+    - uses: actions/checkout@v2.4.0
+      with:
+        submodules: recursive
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1.6.0
+    - name: Cache Docker layers
+      uses: actions/cache@v2.1.7
+      id: cache
+      with:
+        path: /tmp/.buildx-cache/${{ matrix.architecture }}
+        key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+    - name: Build the Docker image
+      run: docker buildx build $(.github/bin/get-buildx-args load)
+    - name: List Docker images
+      run: docker image ls --all
+    - name: Generate configuration
+      run: |
+        cd docker-compose
+        ./test-generate
+    - name: Startup container
+      run: |
+        cd docker-compose
+        ./test-boot
+    - name: List Python packages
+      run: |
+        cd docker-compose
+        ./test-pip
+    - name: Inspect container
+      run: |
+        cd docker-compose
+        ./test-inspect
+    - name: Check service is running
+      run: |
+        cd docker-compose
+        ./test-online
+    - name: Check service health status
+      run: |
+        cd docker-compose
+        ./test-health
+    - name: Run Django Checks
+      run: |
+        cd docker-compose
+        ./test-checks
+    - name: Verify supervisor
+      run: |
+        cd docker-compose
+        ./test-supervisor
+    - name: Test admin creation
+      run: |
+        cd docker-compose
+        ./test-admin
+    - name: Shutdown service
+      run: |
+        cd docker-compose
+        ./test-stop
 
   test-saml:
     runs-on: ubuntu-20.04
@@ -197,67 +197,67 @@ jobs:
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
     steps:
-      - uses: actions/checkout@v2.4.0
-        with:
-          submodules: recursive
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1.6.0
-      - name: Cache Docker layers
-        uses: actions/cache@v2.1.7
-        id: cache
-        with:
-          path: /tmp/.buildx-cache/${{ matrix.architecture }}
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
-      - name: Build the Docker image
-        run: docker buildx build $(.github/bin/get-buildx-args load)
-      - name: List Docker images
-        run: docker image ls --all
-      - name: Generate configuration
-        env:
-          TEST_EXTRA_ENV: "WEBLATE_SAML_IDP_URL: https://example.com/idp"
-        run: |
-          cd docker-compose
-          ./test-generate
-      - name: Startup container
-        run: |
-          cd docker-compose
-          ./test-boot
-      - name: List Python packages
-        run: |
-          cd docker-compose
-          ./test-pip
-      - name: Inspect container
-        run: |
-          cd docker-compose
-          ./test-inspect
-      - name: Check service is running
-        run: |
-          cd docker-compose
-          ./test-online
-      - name: Check service health status
-        run: |
-          cd docker-compose
-          ./test-health
-      - name: Run Django Checks
-        run: |
-          cd docker-compose
-          ./test-checks
-      - name: Verify supervisor
-        run: |
-          cd docker-compose
-          ./test-supervisor
-      - name: Test admin creation
-        run: |
-          cd docker-compose
-          ./test-admin
-      - name: Verify SAML certificate
-        run: |
-          cd docker-compose
-          ./test-saml
-      - name: Shutdown service
-        run: |
-          cd docker-compose
-          ./test-stop
+    - uses: actions/checkout@v2.4.0
+      with:
+        submodules: recursive
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1.6.0
+    - name: Cache Docker layers
+      uses: actions/cache@v2.1.7
+      id: cache
+      with:
+        path: /tmp/.buildx-cache/${{ matrix.architecture }}
+        key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+    - name: Build the Docker image
+      run: docker buildx build $(.github/bin/get-buildx-args load)
+    - name: List Docker images
+      run: docker image ls --all
+    - name: Generate configuration
+      env:
+        TEST_EXTRA_ENV: 'WEBLATE_SAML_IDP_URL: https://example.com/idp'
+      run: |
+        cd docker-compose
+        ./test-generate
+    - name: Startup container
+      run: |
+        cd docker-compose
+        ./test-boot
+    - name: List Python packages
+      run: |
+        cd docker-compose
+        ./test-pip
+    - name: Inspect container
+      run: |
+        cd docker-compose
+        ./test-inspect
+    - name: Check service is running
+      run: |
+        cd docker-compose
+        ./test-online
+    - name: Check service health status
+      run: |
+        cd docker-compose
+        ./test-health
+    - name: Run Django Checks
+      run: |
+        cd docker-compose
+        ./test-checks
+    - name: Verify supervisor
+      run: |
+        cd docker-compose
+        ./test-supervisor
+    - name: Test admin creation
+      run: |
+        cd docker-compose
+        ./test-admin
+    - name: Verify SAML certificate
+      run: |
+        cd docker-compose
+        ./test-saml
+    - name: Shutdown service
+      run: |
+        cd docker-compose
+        ./test-stop
 
   test-split:
     runs-on: ubuntu-20.04
@@ -272,62 +272,62 @@ jobs:
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
     steps:
-      - uses: actions/checkout@v2.4.0
-        with:
-          submodules: recursive
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1.6.0
-      - name: Cache Docker layers
-        uses: actions/cache@v2.1.7
-        id: cache
-        with:
-          path: /tmp/.buildx-cache/${{ matrix.architecture }}
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
-      - name: Build the Docker image
-        run: docker buildx build $(.github/bin/get-buildx-args load)
-      - name: List Docker images
-        run: docker image ls --all
-      - name: Generate configuration
-        run: |
-          cd docker-compose
-          ./test-generate 8080 http 1
-          mv docker-compose-split.yml docker-compose.yml
-      - name: Startup container
-        run: |
-          cd docker-compose
-          ./test-boot
-      - name: List Python packages
-        run: |
-          cd docker-compose
-          ./test-pip
-      - name: Inspect container
-        run: |
-          cd docker-compose
-          ./test-inspect
-      - name: Check service is running
-        run: |
-          cd docker-compose
-          ./test-online
-      - name: Check service health status
-        run: |
-          cd docker-compose
-          ./test-health
-      - name: Run Django Checks
-        run: |
-          cd docker-compose
-          ./test-checks
-      - name: Verify supervisor
-        run: |
-          cd docker-compose
-          ./test-supervisor
-      - name: Test admin creation
-        run: |
-          cd docker-compose
-          ./test-admin
-      - name: Shutdown service
-        run: |
-          cd docker-compose
-          ./test-stop
+    - uses: actions/checkout@v2.4.0
+      with:
+        submodules: recursive
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1.6.0
+    - name: Cache Docker layers
+      uses: actions/cache@v2.1.7
+      id: cache
+      with:
+        path: /tmp/.buildx-cache/${{ matrix.architecture }}
+        key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+    - name: Build the Docker image
+      run: docker buildx build $(.github/bin/get-buildx-args load)
+    - name: List Docker images
+      run: docker image ls --all
+    - name: Generate configuration
+      run: |
+        cd docker-compose
+        ./test-generate 8080 http 1
+        mv docker-compose-split.yml docker-compose.yml
+    - name: Startup container
+      run: |
+        cd docker-compose
+        ./test-boot
+    - name: List Python packages
+      run: |
+        cd docker-compose
+        ./test-pip
+    - name: Inspect container
+      run: |
+        cd docker-compose
+        ./test-inspect
+    - name: Check service is running
+      run: |
+        cd docker-compose
+        ./test-online
+    - name: Check service health status
+      run: |
+        cd docker-compose
+        ./test-health
+    - name: Run Django Checks
+      run: |
+        cd docker-compose
+        ./test-checks
+    - name: Verify supervisor
+      run: |
+        cd docker-compose
+        ./test-supervisor
+    - name: Test admin creation
+      run: |
+        cd docker-compose
+        ./test-admin
+    - name: Shutdown service
+      run: |
+        cd docker-compose
+        ./test-stop
 
   test-ssl:
     runs-on: ubuntu-20.04
@@ -342,69 +342,69 @@ jobs:
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
     steps:
-      - uses: actions/checkout@v2.4.0
-        with:
-          submodules: recursive
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1.6.0
-      - name: Cache Docker layers
-        uses: actions/cache@v2.1.7
-        id: cache
-        with:
-          path: /tmp/.buildx-cache/${{ matrix.architecture }}
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
-      - name: Build the Docker image
-        run: docker buildx build $(.github/bin/get-buildx-args load)
-      - name: List Docker images
-        run: docker image ls --all
-      - name: Generate configuration
-        run: |
-          cd docker-compose
-          ./test-generate 4443 https
-      - name: Generate SSL certificate
-        run: |
-          cd docker-compose
-          docker-compose up --no-start
-          VOLUMEPATH=$(docker volume inspect -f '{{.Mountpoint}}' wl_weblate-data)
-          sudo mkdir -p $VOLUMEPATH/ssl
-          sudo openssl req -x509 -nodes -days 365 -subj "/CN=localhost" -newkey rsa:2048 -keyout $VOLUMEPATH/ssl/privkey.pem -out $VOLUMEPATH/ssl/fullchain.pem
-          sudo chown -R 1000:1000 $VOLUMEPATH/ssl
-      - name: Startup container
-        run: |
-          cd docker-compose
-          ./test-boot
-      - name: List Python packages
-        run: |
-          cd docker-compose
-          ./test-pip
-      - name: Inspect container
-        run: |
-          cd docker-compose
-          ./test-inspect
-      - name: Check service is running
-        run: |
-          cd docker-compose
-          ./test-online
-      - name: Check service health status
-        run: |
-          cd docker-compose
-          ./test-health
-      - name: Run Django Checks
-        run: |
-          cd docker-compose
-          ./test-checks
-      - name: Verify supervisor
-        run: |
-          cd docker-compose
-          ./test-supervisor
-      - name: Test admin creation
-        run: |
-          cd docker-compose
-          ./test-admin
-      - name: Shutdown service
-        run: |
-          cd docker-compose
-          ./test-stop
+    - uses: actions/checkout@v2.4.0
+      with:
+        submodules: recursive
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1.6.0
+    - name: Cache Docker layers
+      uses: actions/cache@v2.1.7
+      id: cache
+      with:
+        path: /tmp/.buildx-cache/${{ matrix.architecture }}
+        key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+    - name: Build the Docker image
+      run: docker buildx build $(.github/bin/get-buildx-args load)
+    - name: List Docker images
+      run: docker image ls --all
+    - name: Generate configuration
+      run: |
+        cd docker-compose
+        ./test-generate 4443 https
+    - name: Generate SSL certificate
+      run: |
+        cd docker-compose
+        docker-compose up --no-start
+        VOLUMEPATH=$(docker volume inspect -f '{{.Mountpoint}}' wl_weblate-data)
+        sudo mkdir -p $VOLUMEPATH/ssl
+        sudo openssl req -x509 -nodes -days 365 -subj "/CN=localhost" -newkey rsa:2048 -keyout $VOLUMEPATH/ssl/privkey.pem -out $VOLUMEPATH/ssl/fullchain.pem
+        sudo chown -R 1000:1000 $VOLUMEPATH/ssl
+    - name: Startup container
+      run: |
+        cd docker-compose
+        ./test-boot
+    - name: List Python packages
+      run: |
+        cd docker-compose
+        ./test-pip
+    - name: Inspect container
+      run: |
+        cd docker-compose
+        ./test-inspect
+    - name: Check service is running
+      run: |
+        cd docker-compose
+        ./test-online
+    - name: Check service health status
+      run: |
+        cd docker-compose
+        ./test-health
+    - name: Run Django Checks
+      run: |
+        cd docker-compose
+        ./test-checks
+    - name: Verify supervisor
+      run: |
+        cd docker-compose
+        ./test-supervisor
+    - name: Test admin creation
+      run: |
+        cd docker-compose
+        ./test-admin
+    - name: Shutdown service
+      run: |
+        cd docker-compose
+        ./test-stop
 
   anchore:
     runs-on: ubuntu-20.04
@@ -416,36 +416,36 @@ jobs:
     env:
       MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
     steps:
-      - uses: actions/checkout@v2.4.0
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1.6.0
-      - name: Cache Docker layers
-        uses: actions/cache@v2.1.7
-        id: cache
-        with:
-          path: /tmp/.buildx-cache/${{ matrix.architecture }}
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
-      - name: Build the Docker image
-        run: docker buildx build $(.github/bin/get-buildx-args load)
-      - name: List Docker images
-        run: docker image ls --all
-      - name: Checkout the code
-        uses: actions/checkout@v2.4.0
-      - name: Anchore scan action
-        uses: anchore/scan-action@v3
-        with:
-          image: "weblate/weblate:test"
-          fail-build: false
-          acs-report-enable: true
-          severity-cutoff: high
-      - name: Upload Anchore Scan Report
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: results.sarif
-      - uses: actions/upload-artifact@v2.3.1
-        with:
-          name: Anchore scan SARIF
-          path: results.sarif
+    - uses: actions/checkout@v2.4.0
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1.6.0
+    - name: Cache Docker layers
+      uses: actions/cache@v2.1.7
+      id: cache
+      with:
+        path: /tmp/.buildx-cache/${{ matrix.architecture }}
+        key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+    - name: Build the Docker image
+      run: docker buildx build $(.github/bin/get-buildx-args load)
+    - name: List Docker images
+      run: docker image ls --all
+    - name: Checkout the code
+      uses: actions/checkout@v2.4.0
+    - name: Anchore scan action
+      uses: anchore/scan-action@v3
+      with:
+        image: weblate/weblate:test
+        fail-build: false
+        acs-report-enable: true
+        severity-cutoff: high
+    - name: Upload Anchore Scan Report
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: results.sarif
+    - uses: actions/upload-artifact@v2.3.1
+      with:
+        name: Anchore scan SARIF
+        path: results.sarif
 
   trivy:
     runs-on: ubuntu-20.04
@@ -457,136 +457,136 @@ jobs:
     env:
       MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
     steps:
-      - uses: actions/checkout@v2.4.0
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1.6.0
-      - name: Cache Docker layers
-        uses: actions/cache@v2.1.7
-        id: cache
-        with:
-          path: /tmp/.buildx-cache/${{ matrix.architecture }}
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
-      - name: Build the Docker image
-        run: docker buildx build $(.github/bin/get-buildx-args load)
-      - name: List Docker images
-        run: docker image ls --all
-      - name: Checkout the code
-        uses: actions/checkout@v2.4.0
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.2.1
-        with:
-          image-ref: "weblate/weblate:test"
-          format: "template"
-          template: "@/contrib/sarif.tpl"
-          output: "trivy-results.sarif"
-          severity: "CRITICAL,HIGH"
+    - uses: actions/checkout@v2.4.0
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1.6.0
+    - name: Cache Docker layers
+      uses: actions/cache@v2.1.7
+      id: cache
+      with:
+        path: /tmp/.buildx-cache/${{ matrix.architecture }}
+        key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
+    - name: Build the Docker image
+      run: docker buildx build $(.github/bin/get-buildx-args load)
+    - name: List Docker images
+      run: docker image ls --all
+    - name: Checkout the code
+      uses: actions/checkout@v2.4.0
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@0.2.1
+      with:
+        image-ref: weblate/weblate:test
+        format: template
+        template: '@/contrib/sarif.tpl'
+        output: trivy-results.sarif
+        severity: CRITICAL,HIGH
 
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: "trivy-results.sarif"
-      - uses: actions/upload-artifact@v2.3.1
-        with:
-          name: Trivy scan SARIF
-          path: trivy-results.sarif
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: trivy-results.sarif
+    - uses: actions/upload-artifact@v2.3.1
+      with:
+        name: Trivy scan SARIF
+        path: trivy-results.sarif
 
   push_dockerhub:
     runs-on: ubuntu-20.04
     name: Publish to Docker Hub, stable
     needs:
-      - test
-      - test-basic
-      - test-saml
-      - test-split
-      - test-ssl
-      - buildx
-      - anchore
-      - trivy
+    - test
+    - test-basic
+    - test-saml
+    - test-split
+    - test-ssl
+    - buildx
+    - anchore
+    - trivy
     if: ${{ (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/main')) && github.repository == 'WeblateOrg/docker' }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2.4.0
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1.2.0
-        with:
-          platforms: all
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1.6.0
-      - name: Cache Docker layers
-        uses: actions/cache@v2.1.7
-        id: cache-arm64
-        with:
-          path: /tmp/.buildx-cache/linux/arm64
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-linux/arm64
-      - name: Cache Docker layers
-        uses: actions/cache@v2.1.7
-        id: cache-arm-v7
-        with:
-          path: /tmp/.buildx-cache/linux/arm/v7
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-linux/arm/v7
-      - name: Cache Docker layers
-        uses: actions/cache@v2.1.7
-        id: cache-amd64
-        with:
-          path: /tmp/.buildx-cache/linux/amd64
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-linux/amd64
-      - name: DockerHub login
-        run: echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-      - name: Configure Docker build
-        run: .github/bin/get-buildx-args publish
-      - name: Publish the Docker images
-        run: docker buildx build $(.github/bin/get-buildx-args publish)
+    - name: Checkout
+      uses: actions/checkout@v2.4.0
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1.2.0
+      with:
+        platforms: all
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1.6.0
+    - name: Cache Docker layers
+      uses: actions/cache@v2.1.7
+      id: cache-arm64
+      with:
+        path: /tmp/.buildx-cache/linux/arm64
+        key: ${{ runner.os }}-buildx-${{ github.sha }}-linux/arm64
+    - name: Cache Docker layers
+      uses: actions/cache@v2.1.7
+      id: cache-arm-v7
+      with:
+        path: /tmp/.buildx-cache/linux/arm/v7
+        key: ${{ runner.os }}-buildx-${{ github.sha }}-linux/arm/v7
+    - name: Cache Docker layers
+      uses: actions/cache@v2.1.7
+      id: cache-amd64
+      with:
+        path: /tmp/.buildx-cache/linux/amd64
+        key: ${{ runner.os }}-buildx-${{ github.sha }}-linux/amd64
+    - name: DockerHub login
+      run: echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+    - name: Configure Docker build
+      run: .github/bin/get-buildx-args publish
+    - name: Publish the Docker images
+      run: docker buildx build $(.github/bin/get-buildx-args publish)
 
   push_github:
     runs-on: ubuntu-20.04
     name: Publish to GitHub, stable
     needs:
-      - test
-      - test-basic
-      - test-saml
-      - test-split
-      - test-ssl
-      - buildx
-      - anchore
-      - trivy
+    - test
+    - test-basic
+    - test-saml
+    - test-split
+    - test-ssl
+    - buildx
+    - anchore
+    - trivy
     if: ${{ (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/main')) && github.repository == 'WeblateOrg/docker' }}
     env:
-      DOCKER_IMAGE: "ghcr.io/weblateorg/weblate"
+      DOCKER_IMAGE: ghcr.io/weblateorg/weblate
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2.4.0
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1.2.0
-        with:
-          platforms: all
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1.6.0
-      - name: Cache Docker layers
-        uses: actions/cache@v2.1.7
-        id: cache-arm64
-        with:
-          path: /tmp/.buildx-cache/linux/arm64
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-linux/arm64
-      - name: Cache Docker layers
-        uses: actions/cache@v2.1.7
-        id: cache-arm-v7
-        with:
-          path: /tmp/.buildx-cache/linux/arm/v7
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-linux/arm/v7
-      - name: Cache Docker layers
-        uses: actions/cache@v2.1.7
-        id: cache-amd64
-        with:
-          path: /tmp/.buildx-cache/linux/amd64
-          key: ${{ runner.os }}-buildx-${{ github.sha }}-linux/amd64
-      - name: Login to GitHub Container Registry
-        if: ${{ github.event_name != 'pull_request'}}
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Configure Docker build
-        run: .github/bin/get-buildx-args publish
-      - name: Publish the Docker images
-        run: docker buildx build $(.github/bin/get-buildx-args publish)
+    - name: Checkout
+      uses: actions/checkout@v2.4.0
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1.2.0
+      with:
+        platforms: all
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1.6.0
+    - name: Cache Docker layers
+      uses: actions/cache@v2.1.7
+      id: cache-arm64
+      with:
+        path: /tmp/.buildx-cache/linux/arm64
+        key: ${{ runner.os }}-buildx-${{ github.sha }}-linux/arm64
+    - name: Cache Docker layers
+      uses: actions/cache@v2.1.7
+      id: cache-arm-v7
+      with:
+        path: /tmp/.buildx-cache/linux/arm/v7
+        key: ${{ runner.os }}-buildx-${{ github.sha }}-linux/arm/v7
+    - name: Cache Docker layers
+      uses: actions/cache@v2.1.7
+      id: cache-amd64
+      with:
+        path: /tmp/.buildx-cache/linux/amd64
+        key: ${{ runner.os }}-buildx-${{ github.sha }}-linux/amd64
+    - name: Login to GitHub Container Registry
+      if: ${{ github.event_name != 'pull_request'}}
+      uses: docker/login-action@v1
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Configure Docker build
+      run: .github/bin/get-buildx-args publish
+    - name: Publish the Docker images
+      run: docker buildx build $(.github/bin/get-buildx-args publish)
