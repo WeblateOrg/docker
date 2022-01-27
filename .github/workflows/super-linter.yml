@@ -24,7 +24,7 @@ jobs:
       env:
         DEFAULT_BRANCH: main
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        VALIDATE_PYTHON_ISORT: 'false'
-        VALIDATE_JSCPD: 'false'
-        VALIDATE_GITHUB_ACTIONS: 'false'
-        YAML_CONFIG_FILE: .yamllint.yml
+        VALIDATE_PYTHON_ISORT: false
+        VALIDATE_JSCPD: false
+        VALIDATE_GITHUB_ACTIONS: false
+        VALIDATE_YAML: false
