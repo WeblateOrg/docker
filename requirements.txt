@@ -31,7 +31,7 @@ lxml==4.7.1
 mercurial==6.0.2
 openpyxl==3.0.9
 phply==1.2.5
-pip==22.0.2
+pip==22.0.3
 psycopg2==2.9.3
 Pygments==2.11.2
 python-dateutil==2.8.2
