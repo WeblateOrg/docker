@@ -25,6 +25,8 @@ server {
     }
 
     location / {
+        ${WEBLATE_ENABLE_CORS}
+
         proxy_set_header Host $http_host;
         proxy_pass http://unix:/run/gunicorn/app/weblate/socket;
         proxy_read_timeout 3600;
