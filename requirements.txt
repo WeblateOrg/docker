@@ -52,7 +52,7 @@ siphashc==2.1
 supervisor==4.2.4
 tesserocr==2.5.2
 translate-toolkit==3.6.0
-translation-finder==2.11
+translation-finder==2.12
 weblate-fedora-messaging==0.4
 weblate-language-data==2022.2
 wheel==0.37.1
