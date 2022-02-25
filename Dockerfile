@@ -1,6 +1,6 @@
 FROM python:3.10.2-slim-bullseye
 ENV PYVERSION 3.10
-ENV VERSION 4.10.1
+ENV VERSION 4.11
 ARG TARGETARCH
 
 LABEL name="Weblate"
