@@ -97,8 +97,8 @@ RUN \
   && echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
   && curl -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
   && apt-get update \
-  && if apt-cache show postgresql-client-13 > /dev/null 2>&1 ; then \
-        apt-get install --no-install-recommends -y postgresql-client-13 ; \
+  && if apt-cache show postgresql-client-14 > /dev/null 2>&1 ; then \
+        apt-get install --no-install-recommends -y postgresql-client-14 ; \
     else \
         apt-get install --no-install-recommends -y postgresql-client ; \
     fi \
