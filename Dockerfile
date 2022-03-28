@@ -1,4 +1,4 @@
-FROM python:3.10.3-slim-bullseye
+FROM python:3.10.4-slim-bullseye
 ENV PYVERSION 3.10
 ENV VERSION 4.11.2
 ARG TARGETARCH
