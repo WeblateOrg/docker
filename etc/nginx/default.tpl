@@ -4,6 +4,8 @@ server {
     client_max_body_size 100M;
     server_tokens off;
 
+    ${WEBLATE_REALIP}
+
     location ~ ^/favicon.ico$ {
         # DATA_DIR/static/favicon.ico
         alias /app/cache/static/favicon.ico;

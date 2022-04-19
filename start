@@ -221,7 +221,20 @@ if [ "$1" = "runserver" ] ; then
     else
         template=/etc/nginx/default.tpl
     fi
-    envsubst "\$WEBLATE_URL_PREFIX" < $template > /etc/nginx/sites-available/default
+    case "$WEBLATE_IP_PROXY_HEADER" in
+        HTTP_X_FORWARDED_FOR)
+            WEBLATE_REALIP="
+real_ip_header X-Forwarded-For;
+set_real_ip_from 0.0.0.0/0;
+"
+            ;;
+        *)
+            WEBLATE_REALIP=""
+            ;;
+    esac
+
+    export WEBLATE_REALIP
+    envsubst "\$WEBLATE_URL_PREFIX:\$WEBLATE_REALIP" < $template > /etc/nginx/sites-available/default
 
     # Calculate number of processes, at least 2, at most 4, depending on CPU cores
     if [ -z "$WEBLATE_WORKERS" ] ; then
