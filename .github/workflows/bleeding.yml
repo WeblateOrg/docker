@@ -32,7 +32,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1.6.0
+      uses: docker/setup-buildx-action@v1.7.0
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache
@@ -71,7 +71,7 @@ jobs:
       with:
         platforms: ${{ matrix.architecture }}
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1.6.0
+      uses: docker/setup-buildx-action@v1.7.0
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache
@@ -104,7 +104,7 @@ jobs:
       with:
         submodules: recursive
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1.6.0
+      uses: docker/setup-buildx-action@v1.7.0
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache
@@ -153,7 +153,7 @@ jobs:
       with:
         submodules: recursive
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1.6.0
+      uses: docker/setup-buildx-action@v1.7.0
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache
@@ -226,7 +226,7 @@ jobs:
       with:
         submodules: recursive
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1.6.0
+      uses: docker/setup-buildx-action@v1.7.0
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache
@@ -305,7 +305,7 @@ jobs:
       with:
         submodules: recursive
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1.6.0
+      uses: docker/setup-buildx-action@v1.7.0
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache
@@ -379,7 +379,7 @@ jobs:
       with:
         submodules: recursive
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1.6.0
+      uses: docker/setup-buildx-action@v1.7.0
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache
@@ -455,7 +455,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1.6.0
+      uses: docker/setup-buildx-action@v1.7.0
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache
@@ -500,7 +500,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1.6.0
+      uses: docker/setup-buildx-action@v1.7.0
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache
@@ -555,7 +555,7 @@ jobs:
       with:
         platforms: all
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1.6.0
+      uses: docker/setup-buildx-action@v1.7.0
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache-arm64
@@ -607,7 +607,7 @@ jobs:
       with:
         platforms: all
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1.6.0
+      uses: docker/setup-buildx-action@v1.7.0
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache-arm64
