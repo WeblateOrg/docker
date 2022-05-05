@@ -23,6 +23,11 @@ if [ -n "${WEBLATE_EMAIL_HOST_PASSWORD_FILE}" ]; then
   export WEBLATE_EMAIL_HOST_PASSWORD
 fi
 
+if [ -n "${WEBLATE_AUTH_LDAP_BIND_PASSWORD_FILE}" ]; then
+  WEBLATE_AUTH_LDAP_BIND_PASSWORD=$(cat "$WEBLATE_AUTH_LDAP_BIND_PASSWORD_FILE")
+  export WEBLATE_AUTH_LDAP_BIND_PASSWORD
+fi
+
 echo "Starting..."
 
 # Fix permissions on SSH private key.
