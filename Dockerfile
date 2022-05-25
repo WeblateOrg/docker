@@ -1,6 +1,7 @@
 FROM python:3.10.4-slim-bullseye
 ENV PYVERSION 3.10
 ENV VERSION 4.12.2
+ENV WEBLATE_EXTRAS all,MySQL,zxcvbn
 ARG TARGETARCH
 
 LABEL name="Weblate"
@@ -115,13 +116,13 @@ RUN \
         -r /usr/src/weblate/requirements.txt \
         "https://github.com/translate/translate/archive/master.zip" \
         "https://github.com/WeblateOrg/language-data/archive/main.zip" \
-        "https://github.com/WeblateOrg/weblate/archive/$WEBLATE_DOCKER_GIT_REVISION.zip#egg=Weblate[all,MySQL,zxcvbn]" \
+        "https://github.com/WeblateOrg/weblate/archive/$WEBLATE_DOCKER_GIT_REVISION.zip#egg=Weblate[$WEBLATE_EXTRAS]" \
         ;; \
     * ) \
       pip install \
         --no-cache-dir \
         -r /usr/src/weblate/requirements.txt \
-        "Weblate[all,MySQL,zxcvbn]==$VERSION" \
+        "Weblate[$WEBLATE_EXTRAS]==$VERSION" \
       ;; \
   esac \
   && python -c 'from phply.phpparse import make_parser; make_parser()' \
