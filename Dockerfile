@@ -121,7 +121,7 @@ RUN \
       pip install \
         --no-cache-dir \
         -r /usr/src/weblate/requirements.txt \
-        "Weblate[all,MySQL]==$VERSION" \
+        "Weblate[all,MySQL,zxcvbn]==$VERSION" \
       ;; \
   esac \
   && python -c 'from phply.phpparse import make_parser; make_parser()' \
