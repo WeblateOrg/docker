@@ -3,7 +3,7 @@ akismet==1.1
 argon2-cffi==21.3.0
 bleach==5.0.0
 borgbackup==1.2.0
-celery==5.2.6
+celery==5.2.7
 # For Argon2 and misaka
 cffi==1.15.0
 # For Azure Tenant auth
