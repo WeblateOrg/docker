@@ -10,6 +10,9 @@ on:
     - weblate
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Lint Code Base
