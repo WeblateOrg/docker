@@ -1,4 +1,4 @@
-FROM python:3.10.4-slim-bullseye
+FROM python:3.10.5-slim-bullseye
 ENV PYVERSION 3.10
 ENV VERSION 4.12.2
 ENV WEBLATE_EXTRAS all,MySQL,zxcvbn
