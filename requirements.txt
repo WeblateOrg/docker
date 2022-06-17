@@ -1,7 +1,7 @@
 aeidon==1.11
 argon2-cffi==21.3.0
 bleach==5.0.0
-borgbackup==1.2.0
+borgbackup==1.2.1
 celery==5.2.7
 # For Argon2 and misaka
 cffi==1.15.0
