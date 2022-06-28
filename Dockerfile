@@ -106,7 +106,6 @@ RUN \
   && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
   && source $HOME/.cargo/env \
   && pip install --no-cache-dir --upgrade $(grep -E '^(pip|wheel|setuptools)==' /usr/src/weblate/requirements.txt) \
-  && pip install --no-cache-dir $(grep -E '^pkgconfig==' /usr/src/weblate/requirements.txt) \
   && pip install --no-cache-dir --no-binary :all: $(grep -E '^(cffi|lxml)==' /usr/src/weblate/requirements.txt) \
   && case "$VERSION" in \
     *+* ) \
