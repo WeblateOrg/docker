@@ -4,7 +4,7 @@ bleach==5.0.1
 borgbackup==1.2.1
 celery==5.2.7
 # For Argon2 and misaka
-cffi==1.15.0
+cffi==1.15.1
 # For Azure Tenant auth
 cryptography==37.0.3
 Django==4.0.5
