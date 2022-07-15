@@ -4,7 +4,7 @@ ca-certificates
 curl
 gir1.2-pango-1.0
 libxmlsec1-openssl
-libjpeg62
+libjpeg62-turbo
 gettext
 git
 git-svn
@@ -28,7 +28,7 @@ libssl-dev
 libffi-dev
 libpq-dev
 zlib1g-dev
-libjpeg62-dev
+libjpeg62-turbo-dev
 libenchant-2-2
 libgirepository1.0-dev
 libcairo-gobject2
