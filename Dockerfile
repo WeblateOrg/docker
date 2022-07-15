@@ -46,54 +46,14 @@ ENV DJANGO_SETTINGS_MODULE=weblate.settings_docker
 # Avoid Python buffering stdout and delaying logs
 ENV PYTHONUNBUFFERED=1
 
-COPY requirements.txt patches /usr/src/weblate/
+COPY requirements.txt packages.txt patches /usr/src/weblate/
 
 # Install dependencies
 # hadolint ignore=DL3008,DL3013,SC2046
 RUN \
   export DEBIAN_FRONTEND=noninteractive \
   && apt-get update \
-  && apt-get install --no-install-recommends -y \
-    nginx \
-    openssh-client \
-    ca-certificates \
-    curl \
-    gir1.2-pango-1.0 \
-    libxmlsec1-openssl \
-    libjpeg62-turbo \
-    gettext \
-    git \
-    git-svn \
-    gnupg \
-    subversion \
-    pkg-config \
-    file \
-    make \
-    libcairo2-dev \
-    libxml2-dev \
-    libacl1-dev \
-    libmariadb3 \
-    libmariadb-dev \
-    libxmlsec1-dev \
-    libleptonica-dev \
-    libtesseract-dev \
-    libsasl2-dev \
-    libldap2-dev \
-    libldap-common \
-    libssl-dev \
-    libffi-dev \
-    libpq-dev \
-    zlib1g-dev \
-    libjpeg62-turbo-dev \
-    libenchant-2-2 \
-    libgirepository1.0-dev \
-    libcairo-gobject2 \
-    gcc \
-    g++ \
-    tesseract-ocr \
-    patch \
-    unzip \
-    xz-utils \
+  && apt-get install --no-install-recommends -y $(cat /usr/src/packages.txt) \
   && c_rehash \
   && echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
   && curl -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
