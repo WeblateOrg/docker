@@ -24,8 +24,8 @@ jobs:
         cache-dependency-path: requirements*.txt
     - name: Apt packages
       run: |
-        apt-get update
-        apt-get install --no-install-recommends -y $(cat packages.txt)
+        sudo apt-get update
+        sudo apt-get install --no-install-recommends -y $(cat packages.txt)
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip wheel
