@@ -28,7 +28,7 @@ libssl-dev
 libffi-dev
 libpq-dev
 zlib1g-dev
-libjpeg62-turbo-dev
+libjpeg62-dev
 libenchant-2-2
 libgirepository1.0-dev
 libcairo-gobject2
