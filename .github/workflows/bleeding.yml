@@ -450,6 +450,8 @@ jobs:
     needs:
     - bleeding
     - build
+    permissions:
+      security-events: write
     strategy:
       matrix:
         architecture: [linux/amd64]
@@ -495,6 +497,8 @@ jobs:
     needs:
     - bleeding
     - build
+    permissions:
+      security-events: write
     strategy:
       matrix:
         architecture: [linux/amd64]

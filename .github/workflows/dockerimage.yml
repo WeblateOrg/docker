@@ -409,7 +409,10 @@ jobs:
   anchore:
     runs-on: ubuntu-20.04
     name: Anchore Container Scan, ${{ matrix.architecture }}
-    needs: [build]
+    needs:
+    - build
+    permissions:
+      security-events: write
     strategy:
       matrix:
         architecture: [linux/amd64]
@@ -450,7 +453,10 @@ jobs:
   trivy:
     runs-on: ubuntu-20.04
     name: Trivy Container Scan, ${{ matrix.architecture }}
-    needs: [build]
+    needs:
+    - build
+    permissions:
+      security-events: write
     strategy:
       matrix:
         architecture: [linux/amd64]
