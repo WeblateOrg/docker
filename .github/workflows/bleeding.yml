@@ -593,6 +593,8 @@ jobs:
   push_github:
     runs-on: ubuntu-20.04
     name: Publish to GitHub, stable
+    permissions:
+      packages: write
     needs:
     - test
     - test-basic
