@@ -523,7 +523,7 @@ jobs:
     - name: Checkout the code
       uses: actions/checkout@v3
     - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@0.5.1
+      uses: aquasecurity/trivy-action@0.6.0
       with:
         image-ref: weblate/weblate:test
         format: template
