@@ -58,16 +58,9 @@ jobs:
       matrix:
         architecture:
         - linux/arm64
-        - linux/arm/v7
     env:
       MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
     steps:
-    - name: Run Docker on tmpfs
-      # Workaround for https://github.com/rust-lang/cargo/issues/8719
-      uses: JonasAlfredsson/docker-on-tmpfs@v1
-      with:
-        tmpfs_size: 10
-        swap_size: 10
     - uses: actions/checkout@v3
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2.1.0
@@ -571,12 +564,6 @@ jobs:
         key: ${{ runner.os }}-bleeding-${{ github.run_id }}-linux/arm64
     - name: Cache Docker layers
       uses: actions/cache@v3
-      id: cache-arm-v7
-      with:
-        path: /tmp/.buildx-cache/linux/arm/v7
-        key: ${{ runner.os }}-bleeding-${{ github.run_id }}-linux/arm/v7
-    - name: Cache Docker layers
-      uses: actions/cache@v3
       id: cache-amd64
       with:
         path: /tmp/.buildx-cache/linux/amd64
@@ -623,12 +610,6 @@ jobs:
       with:
         path: /tmp/.buildx-cache/linux/arm64
         key: ${{ runner.os }}-bleeding-${{ github.run_id }}-linux/arm64
-    - name: Cache Docker layers
-      uses: actions/cache@v3
-      id: cache-arm-v7
-      with:
-        path: /tmp/.buildx-cache/linux/arm/v7
-        key: ${{ runner.os }}-bleeding-${{ github.run_id }}-linux/arm/v7
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache-amd64
