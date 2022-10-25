@@ -103,8 +103,6 @@ RUN \
     else \
         apt-get install --no-install-recommends -y postgresql-client ; \
     fi \
-  && curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
-  && source $HOME/.cargo/env \
   && pip install --no-cache-dir --upgrade $(grep -E '^(pip|wheel|setuptools)==' /usr/src/weblate/requirements.txt) \
   && pip install --no-cache-dir --no-binary :all: $(grep -E '^(cffi|lxml)==' /usr/src/weblate/requirements.txt) \
   && case "$VERSION" in \
@@ -149,8 +147,7 @@ RUN \
     libjpeg62-turbo-dev \
   && apt-get -y purge --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && apt-get clean \
-  && rustup self uninstall -y \
-  && rm -rf /root/.cache /root/.cargo /tmp/* /var/lib/apt/lists/*
+  && rm -rf /root/.cache /tmp/* /var/lib/apt/lists/*
 
 # Apply hotfixes on Weblate
 RUN find /usr/src/weblate -name '*.patch' -print0 | sort -z | \
