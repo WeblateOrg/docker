@@ -1,5 +1,5 @@
-FROM python:3.10.7-slim-bullseye
-ENV PYVERSION 3.10
+FROM python:3.11.0-slim-bullseye
+ENV PYVERSION 3.11
 ENV VERSION 4.14.1
 ENV WEBLATE_EXTRAS all,MySQL,zxcvbn
 ARG TARGETARCH
