@@ -31,7 +31,7 @@ mercurial==6.2.3
 openpyxl==3.0.10
 phply==1.2.5
 pip==22.3
-psycopg2==2.9.4
+psycopg2==2.9.5
 Pygments==2.13.0
 python-akismet==0.4.3
 python-dateutil==2.8.2
