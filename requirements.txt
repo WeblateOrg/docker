@@ -37,7 +37,7 @@ python-akismet==0.4.3
 python-dateutil==2.8.2
 python3-saml==1.12.0
 pyuca==1.2
-rapidfuzz==2.13.1
+rapidfuzz==2.13.2
 raven
 redis==4.3.4
 responses
