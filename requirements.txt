@@ -52,6 +52,6 @@ translate-toolkit==3.7.4
 translation-finder==2.14
 weblate-fedora-messaging==0.4
 weblate-language-data==2022.8
-wheel==0.38.1
+wheel==0.38.2
 wllegal==2021.7
 zeep==4.2.0
