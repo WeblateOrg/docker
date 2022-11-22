@@ -50,7 +50,7 @@ supervisor==4.2.4
 tesserocr==2.5.2
 translate-toolkit==3.7.4
 translation-finder==2.14
-weblate-fedora-messaging==0.4
+weblate-fedora-messaging==0.5
 weblate-language-data==2022.8
 wheel==0.38.4
 wllegal==2021.7
