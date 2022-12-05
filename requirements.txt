@@ -35,7 +35,7 @@ psycopg2==2.9.5
 Pygments==2.13.0
 python-akismet==0.4.3
 python-dateutil==2.8.2
-python3-saml==1.12.0
+python3-saml==1.14.0
 pyuca==1.2
 rapidfuzz==2.13.3
 raven
