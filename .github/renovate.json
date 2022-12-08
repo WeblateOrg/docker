@@ -1,0 +1,54 @@
+{
+  "labels": [
+    "dependencies"
+  ],
+  "rangeStrategy": "widen",
+  "dependencyDashboard": false,
+  "automerge": true,
+  "automergeType": "pr",
+  "automergeStrategy": "rebase",
+  "platformAutomerge": true,
+  "git-submodules": {
+    "enabled": true
+  },
+  "pre-commit": {
+    "enabled": true
+  },
+  "packageRules": [
+    {
+      "matchDatasources": [
+        "git-refs"
+      ],
+      "automerge": false,
+      "schedule": "on the last day of the month"
+    },
+    {
+      "matchPaths": [
+        "**/package.json"
+      ],
+      "automerge": false
+    }
+  ],
+  "regexManagers": [
+    {
+      "fileMatch": [
+        "\\.pre-commit-config\\.yaml"
+      ],
+      "matchStrings": [
+        "(?<depName>[^'\" ]+)==(?<currentValue>[^'\" ,\\s]+)"
+      ],
+      "datasourceTemplate": "pypi",
+      "versioningTemplate": "pep440"
+    },
+    {
+      "fileMatch": [
+        "\\.pre-commit-config\\.yaml"
+      ],
+      "matchStrings": [
+        "(?<depName>[^'\" ]+)@(?<currentValue>[^'\" ,\\s]+)"
+      ],
+      "datasourceTemplate": "npm",
+      "versioningTemplate": "npm"
+    }
+  ]
+}
