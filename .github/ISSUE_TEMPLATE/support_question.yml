@@ -56,6 +56,8 @@ body:
       In case you observed server error or crash, please see
       [the debugging documentation](https://docs.weblate.org/en/latest/contributing/debugging.html)
       for information how to obtain that.
+
+      This will be rendered as Python traceback automatically.
     render: pytb
 - type: textarea
   id: additional
