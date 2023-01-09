@@ -126,7 +126,7 @@ fi
 # Wait for redis
 TIMEOUT=0
 until run_weblate shell -c 'from django.core.cache import cache; cache.has_key("ping")' > /dev/null ; do
-    >&2 echo "redis is unavailable - waiting $((30 - TIMEOUT))"
+    >&2 echo "redis at ${REDIS_HOST:-cache} is unavailable - retrying $((30 - TIMEOUT))"
     TIMEOUT=$((TIMEOUT + 1))
     if [ $TIMEOUT -gt 30 ] ; then
         run_weblate shell -c 'from django.core.cache import cache; cache.has_key("ping")'
@@ -145,7 +145,7 @@ fi
 # Wait for database to get available
 TIMEOUT=0
 until psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "$POSTGRES_DATABASE" -U "$POSTGRES_USER" -c 'SELECT 1' > /dev/null ; do
-    >&2 echo "Postgres is unavailable - waiting $((30 - TIMEOUT))"
+    >&2 echo "Postgres at ${POSTGRES_HOST:-db} is unavailable - retrying $((30 - TIMEOUT))"
     TIMEOUT=$((TIMEOUT + 1))
     if [ $TIMEOUT -gt 30 ] ; then
         psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "$POSTGRES_DATABASE" -U "$POSTGRES_USER" -c 'SELECT 1'
