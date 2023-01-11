@@ -39,7 +39,7 @@ python3-saml==1.15.0
 pyuca==1.2
 rapidfuzz==2.13.7
 raven
-redis==4.4.1
+redis==4.4.2
 responses
 rollbar
 ruamel.yaml==0.17.21
