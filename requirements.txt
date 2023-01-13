@@ -48,7 +48,7 @@ setuptools==65.7.0
 siphashc==2.1
 supervisor==4.2.5
 tesserocr==2.5.2
-translate-toolkit==3.8.0
+translate-toolkit==3.8.1
 translation-finder==2.14
 weblate-fedora-messaging==0.5
 weblate-language-data==2023.1
