@@ -44,7 +44,7 @@ responses
 rollbar
 ruamel.yaml==0.17.21
 selenium
-setuptools==65.7.0
+setuptools==66.0.0
 siphashc==2.1
 supervisor==4.2.5
 tesserocr==2.5.2
