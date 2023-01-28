@@ -1,4 +1,4 @@
-aeidon==1.11
+aeidon==1.12
 argon2-cffi==21.3.0
 bleach==5.0.1
 borgbackup==1.2.3
