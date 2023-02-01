@@ -7,7 +7,7 @@ celery==5.2.7
 cffi==1.15.1
 # For Azure Tenant auth
 cryptography==39.0.0
-Django==4.1.5
+Django==4.1.6
 django-appconf==1.0.5
 django-auth-ldap==4.1.0
 django-crispy-forms==1.14.0
