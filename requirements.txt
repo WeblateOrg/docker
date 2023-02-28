@@ -30,7 +30,7 @@ lxml==4.9.2
 mercurial==6.3.2
 openpyxl==3.0.10
 phply==1.2.6
-pip==23.0
+pip==23.0.1
 psycopg2==2.9.5
 Pygments==2.14.0
 python-akismet==0.4.3
