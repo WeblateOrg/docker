@@ -1,6 +1,5 @@
 aeidon==1.12
 argon2-cffi==21.3.0
-bleach==5.0.1
 borgbackup==1.2.3
 celery==5.2.7
 # For Argon2 and misaka
@@ -29,6 +28,7 @@ https://github.com/nijel/supervisor-stdout/archive/c909c1a1ddabaf679dc2eaecb3b8f
 iniparse==0.5
 lxml==4.9.2
 mercurial==6.3.2
+nh3==0.2.8
 openpyxl==3.1.1
 phply==1.2.6
 pip==23.0.1
