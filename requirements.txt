@@ -28,7 +28,7 @@ https://github.com/nijel/supervisor-stdout/archive/c909c1a1ddabaf679dc2eaecb3b8f
 iniparse==0.5
 lxml==4.9.2
 mercurial==6.3.2
-openpyxl==3.0.10
+openpyxl==3.1.1
 phply==1.2.6
 pip==23.0.1
 psycopg2==2.9.5
