@@ -54,5 +54,5 @@ translation-finder==2.15
 weblate-fedora-messaging==0.5
 weblate-language-data==2023.3
 wheel==0.38.4
-wllegal==2021.7
+wllegal==2023.1
 zeep==4.2.1
