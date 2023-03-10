@@ -46,15 +46,18 @@ ENV DJANGO_SETTINGS_MODULE=weblate.settings_docker
 # Avoid Python buffering stdout and delaying logs
 ENV PYTHONUNBUFFERED=1
 
-COPY requirements.txt patches /usr/src/weblate/
+COPY requirements.txt Gemfile patches /usr/src/weblate/
 
 # Install dependencies
-# hadolint ignore=DL3008,DL3013,SC2046
+# hadolint ignore=DL3008,DL3013,SC2046,DL3003
 RUN \
   export DEBIAN_FRONTEND=noninteractive \
   && apt-get update \
   && apt-get install --no-install-recommends -y \
     nginx \
+    bundler \
+    ruby-dev \
+    cmake \
     openssh-client \
     ca-certificates \
     curl \
@@ -103,6 +106,9 @@ RUN \
     else \
         apt-get install --no-install-recommends -y postgresql-client ; \
     fi \
+  && cd  /usr/src/weblate/ \
+  && bundle install \
+  && bundle clean --force \
   && pip install --no-cache-dir --upgrade $(grep -E '^(pip|wheel|setuptools)==' /usr/src/weblate/requirements.txt) \
   && pip install --no-cache-dir --no-binary :all: $(grep -E '^(cffi|lxml)==' /usr/src/weblate/requirements.txt) \
   && case "$VERSION" in \
@@ -125,6 +131,9 @@ RUN \
   && python -c 'from phply.phpparse import make_parser; make_parser()' \
   && ln -s /usr/local/share/weblate/examples/ /app/ \
   && apt-get -y purge \
+    bundler \
+    ruby-dev \
+    cmake \
     pkg-config \
     libleptonica-dev \
     libtesseract-dev \
