@@ -76,7 +76,7 @@ index 935c71fd44..0473c4684f 100644
  )
  
 +# Legal integartion
-+LEGAL_INTEGRATION = os.environment.get("WEBLATE_LEGAL_INTEGRATION")
++LEGAL_INTEGRATION = os.environ.get("WEBLATE_LEGAL_INTEGRATION")
 +if LEGAL_INTEGRATION:
 +    # Enable legal app
 +    INSTALLED_APPS.append("weblate.legal")
