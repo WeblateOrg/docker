@@ -9,18 +9,6 @@ These are mostly meant for Hosted Weblate servers integration.
  weblate/settings_docker.py    | 34 +++++++++++++++++++++++++++++++---
  2 files changed, 32 insertions(+), 3 deletions(-)
 
-diff --git docs/admin/install/docker.rst docs/admin/install/docker.rst
-index 03f7e5bc07..05f838bff7 100644
---- docs/admin/install/docker.rst
-+++ docs/admin/install/docker.rst
-@@ -1118,6 +1118,7 @@ setting following variables to any value.
- 
- .. envvar:: WEBLATE_SOCIAL_AUTH_FEDORA
- .. envvar:: WEBLATE_SOCIAL_AUTH_OPENSUSE
-+.. envvar:: WEBLATE_SOCIAL_AUTH_OPENINFRA
- .. envvar:: WEBLATE_SOCIAL_AUTH_UBUNTU
- 
- Slack
 diff --git weblate/settings_docker.py weblate/settings_docker.py
 index 935c71fd44..0473c4684f 100644
 --- weblate/settings_docker.py
