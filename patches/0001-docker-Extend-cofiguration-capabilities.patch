@@ -66,12 +66,12 @@ index 935c71fd44..0473c4684f 100644
 +# Legal integartion
 +LEGAL_INTEGRATION = os.environ.get("WEBLATE_LEGAL_INTEGRATION")
 +if LEGAL_INTEGRATION:
-+    # Enable legal app
-+    INSTALLED_APPS.append("weblate.legal")
-+
 +    # Hosted Weblate legal documents
 +    if LEGAL_INTEGRATION == "wllegal":
 +        INSTALLED_APPS.append("wllegal")
++
++    # Enable legal app
++    INSTALLED_APPS.append("weblate.legal")
 +
 +    # TOS confirmation enforcement
 +    if LEGAL_INTEGRATION in ("tos-confirm", "wllegal"):
