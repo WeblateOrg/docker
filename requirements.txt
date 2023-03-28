@@ -45,7 +45,7 @@ responses
 rollbar
 ruamel.yaml==0.17.21
 selenium
-setuptools==67.6.0
+setuptools==67.6.1
 siphashc==2.1
 social-auth-app-django==5.1.0
 social-auth-core==4.4.0
