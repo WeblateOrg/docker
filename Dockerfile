@@ -1,16 +1,16 @@
 FROM python:3.11.2-slim-bullseye
 ENV PYVERSION 3.11
-ENV VERSION 4.16.4
+ENV WEBLATE_VERSION 4.16.4
 ENV WEBLATE_EXTRAS all,MySQL,zxcvbn
 ARG TARGETARCH
 
 LABEL name="Weblate"
-LABEL version=$VERSION
+LABEL version=$WEBLATE_VERSION
 LABEL maintainer="Michal Čihař <michal@cihar.com>"
 LABEL org.opencontainers.image.url="https://weblate.org/"
 LABEL org.opencontainers.image.documentation="https://docs.weblate.org/en/latest/admin/install/docker.html"
 LABEL org.opencontainers.image.source="https://github.com/WeblateOrg/docker"
-LABEL org.opencontainers.image.version=$VERSION
+LABEL org.opencontainers.image.version=$WEBLATE_VERSION
 LABEL org.opencontainers.image.vendor="Michal Čihař"
 LABEL org.opencontainers.image.title="Weblate"
 LABEL org.opencontainers.image.description="A web-based continuous localization system with tight version control integration"
@@ -111,7 +111,7 @@ RUN \
   && bundle clean --force \
   && pip install --no-cache-dir --upgrade $(grep -E '^(pip|wheel|setuptools)==' /usr/src/weblate/requirements.txt) \
   && pip install --no-cache-dir --no-binary :all: $(grep -E '^(cffi|lxml)==' /usr/src/weblate/requirements.txt) \
-  && case "$VERSION" in \
+  && case "$WEBLATE_VERSION" in \
     *+* ) \
       sed -Ei '/^(translate-toolkit|aeidon)/D' /usr/src/weblate/requirements.txt; \
       pip install \
@@ -125,7 +125,7 @@ RUN \
       pip install \
         --no-cache-dir \
         -r /usr/src/weblate/requirements.txt \
-        "Weblate[$WEBLATE_EXTRAS]==$VERSION" \
+        "Weblate[$WEBLATE_EXTRAS]==$WEBLATE_VERSION" \
       ;; \
   esac \
   && python -c 'from phply.phpparse import make_parser; make_parser()' \
