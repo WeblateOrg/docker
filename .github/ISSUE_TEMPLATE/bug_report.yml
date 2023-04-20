@@ -33,7 +33,7 @@ body:
   id: reproducer
   attributes:
     label: Steps to reproduce the behavior
-    description: What did you do before the problem appeared?
+    description: What did you do before the problem has appeared?
     placeholder: |
       1. Go to '...'
       2. Scroll down to '...'
