@@ -56,6 +56,7 @@ RUN \
   && apt-get install --no-install-recommends -y \
     nginx \
     bundler \
+    ruby \
     ruby-dev \
     cmake \
     openssh-client \
