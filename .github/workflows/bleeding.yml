@@ -125,6 +125,11 @@ jobs:
       run: |
         cd docker-compose
         ./test-tests
+    - name: Display logs
+      if: always()
+      run: |
+        cd docker-compose
+        ./test-logs
     - name: Shutdown service
       run: |
         cd docker-compose
@@ -198,6 +203,15 @@ jobs:
       run: |
         cd docker-compose
         ./test-admin
+    - name: Test commands
+      run: |
+        cd docker-compose
+        ./test-commands
+    - name: Display logs
+      if: always()
+      run: |
+        cd docker-compose
+        ./test-logs
     - name: Shutdown service
       run: |
         cd docker-compose
@@ -277,6 +291,11 @@ jobs:
       run: |
         cd docker-compose
         ./test-saml
+    - name: Display logs
+      if: always()
+      run: |
+        cd docker-compose
+        ./test-logs
     - name: Shutdown service
       run: |
         cd docker-compose
@@ -351,6 +370,11 @@ jobs:
       run: |
         cd docker-compose
         ./test-admin
+    - name: Display logs
+      if: always()
+      run: |
+        cd docker-compose
+        ./test-logs
     - name: Shutdown service
       run: |
         cd docker-compose
@@ -432,6 +456,11 @@ jobs:
       run: |
         cd docker-compose
         ./test-admin
+    - name: Display logs
+      if: always()
+      run: |
+        cd docker-compose
+        ./test-logs
     - name: Shutdown service
       run: |
         cd docker-compose
