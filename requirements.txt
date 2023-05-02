@@ -43,7 +43,7 @@ raven
 redis==4.5.4
 responses
 rollbar
-ruamel.yaml==0.17.21
+ruamel.yaml==0.17.22
 selenium
 setuptools==67.7.2
 siphashc==2.1
