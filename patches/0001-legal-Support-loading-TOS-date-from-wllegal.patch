@@ -1,0 +1,36 @@
+From 79f529040e35060e5ca2da3504a5cdf929eadad5 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Fri, 5 May 2023 08:42:13 +0200
+Subject: [PATCH 1/1] legal: Support loading TOS date from wllegal
+
+This will allow nicer update of terms over all servers.
+---
+ weblate/legal/models.py | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git weblate/legal/models.py weblate/legal/models.py
+index 5b22f445fc..a7e0ee88ce 100644
+--- weblate/legal/models.py
++++ weblate/legal/models.py
+@@ -11,10 +11,17 @@ from django.db import models
+ from weblate.accounts.models import AuditLog
+ from weblate.utils.request import get_ip_address, get_user_agent
+ 
++if "wllegal" in settings.INSTALLED_APPS:
++    import wllegal.models
++
++    DEFAULT_TOS_DATE = wllegal.models.LEGAL_TOS_DATE
++else:
++    DEFAULT_TOS_DATE = date(2017, 7, 2)
++
+ 
+ class WeblateLegalConf(AppConf):
+     # Current TOS date
+-    LEGAL_TOS_DATE = date(2017, 7, 2)
++    LEGAL_TOS_DATE = DEFAULT_TOS_DATE
+ 
+     class Meta:
+         prefix = ""
+-- 
+2.32.0
+
