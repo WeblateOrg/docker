@@ -34,6 +34,10 @@ repos:
     - mdformat-gfm==0.3.5
     - mdformat-black==0.1.1
     - mdformat-shfmt==0.1.0
+- repo: https://github.com/hadolint/hadolint
+  rev: v2.12.0
+  hooks:
+  - id: hadolint-docker
 exclude: ^.*\.(patch)$
 
 ci:
