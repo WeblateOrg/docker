@@ -181,8 +181,8 @@ RUN rm -f /etc/localtime /etc/timezone && cp /usr/share/zoneinfo/Etc/UTC /etc/lo
   && sed -i '/pam_rootok.so/a auth requisite pam_deny.so' /etc/pam.d/su
 
 # Search path for custom modules
-RUN echo "/app/data/python" > "/usr/local/lib/python${PYVERSION}/site-packages/weblate-docker.pth"
 RUN \
+    echo "/app/data/python" > "/usr/local/lib/python${PYVERSION}/site-packages/weblate-docker.pth" \
     mkdir -p /app/data/python/customize && \
     touch /app/data/python/customize/__init__.py && \
     touch /app/data/python/customize/models.py && \
