@@ -47,7 +47,7 @@ ENV DJANGO_SETTINGS_MODULE=weblate.settings_docker
 # Avoid Python buffering stdout and delaying logs
 ENV PYTHONUNBUFFERED=1
 
-COPY requirements.txt Gemfile patches /usr/src/weblate/
+COPY requirements.txt Gemfile patches /app/src/
 
 # Install dependencies
 # hadolint ignore=DL3008,DL3013,SC2046,DL3003
@@ -108,17 +108,17 @@ RUN \
     else \
         apt-get install --no-install-recommends -y postgresql-client ; \
     fi \
-  && cd  /usr/src/weblate/ \
+  && cd  /app/src/ \
   && bundle install \
   && bundle clean --force \
-  && pip install --no-cache-dir --upgrade $(grep -E '^(pip|wheel|setuptools)==' /usr/src/weblate/requirements.txt) \
-  && pip install --no-cache-dir --no-binary :all: $(grep -E '^(cffi|lxml)==' /usr/src/weblate/requirements.txt) \
+  && pip install --no-cache-dir --upgrade $(grep -E '^(pip|wheel|setuptools)==' /app/src/requirements.txt) \
+  && pip install --no-cache-dir --no-binary :all: $(grep -E '^(cffi|lxml)==' /app/src/requirements.txt) \
   && case "$WEBLATE_VERSION" in \
     *+* ) \
-      sed -Ei '/^(translate-toolkit|aeidon)/D' /usr/src/weblate/requirements.txt; \
+      sed -Ei '/^(translate-toolkit|aeidon)/D' /app/src/requirements.txt; \
       pip install \
         --no-cache-dir \
-        -r /usr/src/weblate/requirements.txt \
+        -r /app/src/requirements.txt \
         "https://github.com/translate/translate/archive/master.zip" \
         "https://github.com/WeblateOrg/language-data/archive/main.zip" \
         "https://github.com/WeblateOrg/weblate/archive/$WEBLATE_DOCKER_GIT_REVISION.zip#egg=Weblate[$WEBLATE_EXTRAS]" \
@@ -126,7 +126,7 @@ RUN \
     * ) \
       pip install \
         --no-cache-dir \
-        -r /usr/src/weblate/requirements.txt \
+        -r /app/src/requirements.txt \
         "Weblate[$WEBLATE_EXTRAS]==$WEBLATE_VERSION" \
       ;; \
   esac \
@@ -161,7 +161,7 @@ RUN \
   && rm -rf /root/.cache /tmp/* /var/lib/apt/lists/*
 
 # Apply hotfixes on Weblate
-RUN find /usr/src/weblate -name '*.patch' -print0 | sort -z | \
+RUN find /app/src -name '*.patch' -print0 | sort -z | \
   xargs -n1 -0 -r patch -p0 -d "/usr/local/lib/python${PYVERSION}/site-packages/" -i
 
 # Configuration for Weblate, nginx and supervisor
