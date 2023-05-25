@@ -182,7 +182,7 @@ RUN rm -f /etc/localtime /etc/timezone && cp /usr/share/zoneinfo/Etc/UTC /etc/lo
 
 # Search path for custom modules
 RUN \
-    echo "/app/data/python" > "/usr/local/lib/python${PYVERSION}/site-packages/weblate-docker.pth" \
+    echo "/app/data/python" > "/usr/local/lib/python${PYVERSION}/site-packages/weblate-docker.pth" && \
     mkdir -p /app/data/python/customize && \
     touch /app/data/python/customize/__init__.py && \
     touch /app/data/python/customize/models.py && \
