@@ -189,8 +189,7 @@ RUN \
     chown -R weblate:weblate /app/data/python
 
 # Entrypoint
-COPY start health_check /app/bin/
-RUN chmod a+rx /app/bin/start
+COPY --chmod a+rx start health_check /app/bin/
 
 EXPOSE 8080
 VOLUME /app/data
