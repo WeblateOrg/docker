@@ -6,13 +6,14 @@ on:
 jobs:
   sync-readme:
     runs-on: ubuntu-20.04
-    if: ${{ github.repository == 'WeblateOrg/weblate'}}
+    if: ${{ github.repository == 'WeblateOrg/docker'}}
     steps:
     - name: Checkout
       uses: actions/checkout@v3
     - name: Docker Hub Description
       uses: peter-evans/dockerhub-description@v3
-      env:
-        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-        DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-        DOCKERHUB_REPOSITORY: weblate/weblate
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+        repository: weblate/weblate
+        short-description: ${{ github.event.repository.description }}
