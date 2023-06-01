@@ -174,9 +174,11 @@ COPY etc /etc/
 # - autorize passwd edition so we can fix weblate uid on startup
 # - log, run and home directories
 # - disable su for non root to avoid privilege escapation by chaging /etc/passwd
-RUN rm -f /etc/localtime /etc/timezone && cp /usr/share/zoneinfo/Etc/UTC /etc/localtime \
-  && chgrp -R 0 /var/log/nginx/ /var/lib/nginx /app/data /app/cache /run /home/weblate /etc/localtime /etc/supervisor/conf.d \
-  && chmod -R 770 /var/log/nginx/ /var/lib/nginx /app/data /app/cache /run /home /home/weblate /etc/localtime /etc/supervisor/conf.d \
+RUN rm -f /etc/localtime /etc/timezone \
+  && ln -s /tmp/localtime /etc/localtime \
+  && cp /usr/share/zoneinfo/Etc/UTC /tmp/localtime \
+  && chgrp -R 0 /var/log/nginx/ /var/lib/nginx /app/data /app/cache /run /home/weblate /tmp/localtime /etc/supervisor/conf.d \
+  && chmod -R 770 /var/log/nginx/ /var/lib/nginx /app/data /app/cache /run /home /home/weblate /tmp/localtime /etc/supervisor/conf.d \
   && rm -f /etc/nginx/sites-available/default \
   && ln -s /tmp/nginx-weblate-site.conf /etc/nginx/sites-available/default \
   && chmod 664 /etc/passwd /etc/group \
