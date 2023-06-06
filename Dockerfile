@@ -181,6 +181,9 @@ RUN rm -f /etc/localtime /etc/timezone \
   && chmod -R 770 /var/log/nginx/ /var/lib/nginx /app/data /app/cache /run /home /home/weblate /tmp/localtime /etc/supervisor/conf.d \
   && rm -f /etc/nginx/sites-available/default \
   && ln -s /tmp/nginx-weblate-site.conf /etc/nginx/sites-available/default \
+  && rm -f /var/log/nginx/access.log /var/log/nginx/error.log \
+  && ln -sf /dev/stdout /var/log/nginx/access.log \
+  && ln -sf /dev/stderr /var/log/nginx/error.log \
   && chmod 664 /etc/passwd /etc/group \
   && sed -i '/pam_rootok.so/a auth requisite pam_deny.so' /etc/pam.d/su
 

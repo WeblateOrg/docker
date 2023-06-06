@@ -223,11 +223,6 @@ if [ "$1" = "runserver" ] ; then
     mkdir -p /run/celery
     rm -f /run/celery/beat.pid
 
-    # Prepare nginx logs
-    rm -f /var/log/nginx/access.log /var/log/nginx/error.log
-    ln -sf "${NGINX_ACCESS_LOG:-/dev/stdout}" /var/log/nginx/access.log
-    ln -sf "${NGINX_ERROR_LOG:-/dev/stderr}" /var/log/nginx/error.log
-
     # Generate nginx configuration
     if [ -f /app/data/ssl/privkey.pem ] ; then
         template=/etc/nginx/ssl.tpl
