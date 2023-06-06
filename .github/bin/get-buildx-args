@@ -39,7 +39,12 @@ else
         # Generate tags
         case "$GITHUB_REF" in
             refs/tags/[0-9]*)
-                echo --tag "${DOCKER_IMAGE:-weblate/weblate}:${GITHUB_REF#refs/tags/}"
+                RELEASE="${GITHUB_REF#refs/tags/}"
+                MINOR="${RELEASE%.*.*}"
+                MAJOR="${MINOR%.*}"
+                echo --tag "${DOCKER_IMAGE:-weblate/weblate}:$RELEASE"
+                echo --tag "${DOCKER_IMAGE:-weblate/weblate}:$MINOR"
+                echo --tag "${DOCKER_IMAGE:-weblate/weblate}:$MAJOR"
                 echo --tag "${DOCKER_IMAGE:-weblate/weblate}:latest"
                 ;;
             refs/heads/main)
