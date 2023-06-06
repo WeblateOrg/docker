@@ -177,10 +177,11 @@ COPY etc /etc/
 RUN rm -f /etc/localtime /etc/timezone \
   && ln -s /tmp/localtime /etc/localtime \
   && cp /usr/share/zoneinfo/Etc/UTC /tmp/localtime \
-  && chgrp -R 0 /var/log/nginx/ /var/lib/nginx /app/data /app/cache /run /home/weblate /tmp/localtime /etc/supervisor/conf.d \
-  && chmod -R 770 /var/log/nginx/ /var/lib/nginx /app/data /app/cache /run /home /home/weblate /tmp/localtime /etc/supervisor/conf.d \
+  && mkdir /tmp/nginx \
+  && chgrp -R 0 /var/log/nginx/ /var/lib/nginx /app/data /app/cache /run /home/weblate /tmp/localtime /tmp/nginx /etc/supervisor/conf.d \
+  && chmod -R 770 /var/log/nginx/ /var/lib/nginx /app/data /app/cache /run /home /home/weblate /tmp/localtime /tmp/nginx /etc/supervisor/conf.d \
   && rm -f /etc/nginx/sites-available/default \
-  && ln -s /tmp/nginx-weblate-site.conf /etc/nginx/sites-available/default \
+  && ln -s /tmp/nginx/weblate-site.conf /etc/nginx/sites-available/default \
   && rm -f /var/log/nginx/access.log /var/log/nginx/error.log \
   && ln -sf /dev/stdout /var/log/nginx/access.log \
   && ln -sf /dev/stderr /var/log/nginx/error.log \

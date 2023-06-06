@@ -242,7 +242,7 @@ set_real_ip_from 0.0.0.0/0;
     esac
 
     export WEBLATE_REALIP
-    envsubst "\$WEBLATE_URL_PREFIX:\$WEBLATE_REALIP:\$CLIENT_MAX_BODY_SIZE" < $template > /tmp/nginx-weblate-site.conf
+    envsubst "\$WEBLATE_URL_PREFIX:\$WEBLATE_REALIP:\$CLIENT_MAX_BODY_SIZE" < $template > /tmp/nginx/weblate-site.conf
 
     # Calculate number of processes, at least 2, at most 4, depending on CPU cores
     if [ -z "$WEBLATE_WORKERS" ] ; then
