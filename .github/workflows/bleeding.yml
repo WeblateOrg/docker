@@ -336,8 +336,7 @@ jobs:
     - name: Generate configuration
       run: |
         cd docker-compose
-        ./test-generate 8080 http 1
-        mv docker-compose-split.yml docker-compose.yml
+        ./test-generate 8080 http split
     - name: Startup container
       run: |
         cd docker-compose
