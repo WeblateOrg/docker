@@ -55,7 +55,7 @@ RUN \
   export DEBIAN_FRONTEND=noninteractive \
   && apt-get update \
   && apt-get install --no-install-recommends -y \
-    nginx \
+    nginx-light \
     bundler \
     ruby \
     ruby-dev \
