@@ -217,6 +217,88 @@ jobs:
         cd docker-compose
         ./test-stop
 
+  test-novolume:
+    runs-on: ubuntu-20.04
+    name: Test novolume, bleeding, ${{ matrix.architecture }}
+    needs:
+    - bleeding
+    - build
+    strategy:
+      matrix:
+        architecture: [linux/amd64]
+    env:
+      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+      COMPOSE_PROJECT_NAME: wl
+      PYTHONUNBUFFERED: 1
+      TEST_CONTAINER: weblate/weblate:test
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2.6.0
+    - name: Cache Docker layers
+      uses: actions/cache@v3
+      id: cache
+      with:
+        path: /tmp/.buildx-cache/${{ matrix.architecture }}
+        key: ${{ runner.os }}-bleeding-${{ github.run_id }}-${{ matrix.architecture }}
+    - name: Adjust bleeding edge image
+      run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
+    - name: Build the Docker image
+      run: docker buildx build $(.github/bin/get-buildx-args load)
+    - name: List Docker images
+      run: docker image ls --all
+    - name: Generate configuration
+      run: |
+        cd docker-compose
+        ./test-generate 8080 http read-write
+    - name: Startup container
+      run: |
+        cd docker-compose
+        ./test-boot
+    - name: List Python packages
+      run: |
+        cd docker-compose
+        ./test-pip
+    - name: Inspect container
+      run: |
+        cd docker-compose
+        ./test-inspect
+    - name: Check service is running
+      run: |
+        cd docker-compose
+        ./test-online
+    - name: Check service health status
+      run: |
+        cd docker-compose
+        ./test-health
+    - name: Run Django Checks
+      run: |
+        cd docker-compose
+        ./test-checks
+    - name: Verify supervisor
+      run: |
+        cd docker-compose
+        ./test-supervisor
+    - name: Test admin creation
+      run: |
+        cd docker-compose
+        ./test-admin
+    - name: Test commands
+      run: |
+        cd docker-compose
+        ./test-commands
+    - name: Display logs
+      if: always()
+      run: |
+        cd docker-compose
+        ./test-logs
+    - name: Shutdown service
+      run: |
+        cd docker-compose
+        ./test-stop
+
   test-saml:
     runs-on: ubuntu-20.04
     name: Test SAML, bleeding, ${{ matrix.architecture }}
