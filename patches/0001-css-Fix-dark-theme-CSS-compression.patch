@@ -1,0 +1,26 @@
+From 0e0e687753259d7d8ce4cb18ee5d52448125dacb Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Thu, 15 Jun 2023 14:13:20 +0200
+Subject: [PATCH 1/1] css: Fix dark theme CSS compression
+
+Fixes WEBLATE-32Y
+---
+ weblate/templates/snippets/meta-css.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git weblate/templates/snippets/meta-css.html weblate/templates/snippets/meta-css.html
+index 8e8adef805..96cdc2ba81 100644
+--- weblate/templates/snippets/meta-css.html
++++ weblate/templates/snippets/meta-css.html
+@@ -14,7 +14,7 @@
+   <link rel="stylesheet" type="text/css" href="{% static 'style-bootstrap.css' %}{{ cache_param }}" />
+ {% if theme == "auto" %}
+   <link rel="stylesheet" type="text/css" href="{% static 'style-dark.css' %}{{ cache_param }}" media="(prefers-color-scheme: dark)" />
+-{% elif user.profile.theme == "dark" %}
++{% elif theme == "dark" %}
+   <link rel="stylesheet" type="text/css" href="{% static 'style-dark.css' %}{{ cache_param }}" />
+ {% endif %}
+ {% endcompress %}
+-- 
+2.32.0
+
