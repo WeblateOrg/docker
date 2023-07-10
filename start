@@ -46,7 +46,7 @@ if [ ! -w /app/data ] ; then
 fi
 
 # Generate secret
-if [ ! -f /app/data/secret ] ; then
+if [ ! -s /app/data/secret ] ; then
     echo "Generating Django secret..."
     # https://github.com/django/django/blob/1.10.2/django/utils/crypto.py#L54-L56
     python3 -c "from django.utils.crypto import get_random_string; print(get_random_string(50))" > /app/data/secret
