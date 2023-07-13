@@ -21,6 +21,6 @@ contact_links:
 - name: Read our clear, thorough and localized docs
   url: https://docs.weblate.org/
   about: Save your time! There is an instant solution for many issues in the docs appreciated by numerous users. And it might be in your preferred language.
-- name: Ask a question
+- name: Ask the community
   url: https://github.com/WeblateOrg/weblate/discussions
   about: Want to discuss something with a community? Do it in discussions!
