@@ -17,7 +17,7 @@ djangorestframework==3.14.0
 # Alernative Celery pool implementation
 gevent==23.7.0
 git-review==2.3.1
-gunicorn==21.1.0
+gunicorn==21.2.0
 hiredis==2.2.3
 httpretty==1.1.4
 # Patched supervisor-stdout with following fixes:
