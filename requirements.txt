@@ -31,7 +31,7 @@ mercurial==6.5
 nh3==0.2.14
 openpyxl==3.1.2
 phply==1.2.6
-pip==23.2
+pip==23.2.1
 psycopg2==2.9.6
 Pygments==2.15.1
 python-akismet==0.4.3
