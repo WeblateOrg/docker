@@ -17,6 +17,9 @@ sed -i \
     LABEL org.opencontainers.image.revision=\"$SHA\"" \
     Dockerfile
 
+# Weblate 5.0 change
+sed -i 's/^translate-toolkit==3.9.2/translate-toolkit==3.10.0/' requirements.txt
+
 # Consistent timestamp
 touch --date="$DATE" Dockerfile
 
