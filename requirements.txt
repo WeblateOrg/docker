@@ -54,6 +54,7 @@ supervisor==4.2.5
 tesserocr==2.6.0
 translate-toolkit==3.9.2
 translation-finder==2.15
+urllib3==1.26.16
 weblate-fedora-messaging==0.5
 weblate-language-data==2023.5
 wheel==0.41.0
