@@ -43,7 +43,7 @@ rapidfuzz==3.1.2
 raven
 redis==4.6.0
 # TODO: remove with Weblate 5.0
-responses==0.23.1
+responses==0.23.2
 rollbar==0.16.3
 ruamel.yaml==0.17.32
 # TODO: remove with Weblate 5.0
