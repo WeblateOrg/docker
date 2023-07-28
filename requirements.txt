@@ -44,7 +44,7 @@ raven
 redis==4.6.0
 # TODO: remove with Weblate 5.0
 responses==0.23.1
-rollbar
+rollbar==0.16.3
 ruamel.yaml==0.17.32
 # TODO: remove with Weblate 5.0
 selenium==4.10.0
