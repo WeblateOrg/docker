@@ -5,7 +5,7 @@ on:
     - main
 jobs:
   sync-readme:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     if: ${{ github.repository == 'WeblateOrg/docker'}}
     steps:
     - name: Checkout
