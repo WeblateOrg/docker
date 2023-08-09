@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   bleeding:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     outputs:
       weblate_sha: ${{ steps.get_sha.outputs.sha }}
       weblate_date: ${{ steps.get_date.outputs.date }}
@@ -23,7 +23,7 @@ jobs:
     - id: get_date
       run: echo "::set-output name=date::$(date --iso-8601=ns)"
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: Build, bleeding, ${{ matrix.architecture }}
     needs:
     - bleeding
@@ -50,7 +50,7 @@ jobs:
       run: docker buildx build $(.github/bin/get-buildx-args)
 
   buildx:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: Build, bleeding, ${{ matrix.architecture }}
     needs:
     - bleeding
@@ -82,7 +82,7 @@ jobs:
       run: docker buildx build $(.github/bin/get-buildx-args)
 
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: Test, bleeding, ${{ matrix.architecture }}
     needs:
     - bleeding
@@ -136,7 +136,7 @@ jobs:
         ./test-stop
 
   test-basic:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: Test basic, bleeding, ${{ matrix.architecture }}
     needs:
     - bleeding
@@ -218,7 +218,7 @@ jobs:
         ./test-stop
 
   test-novolume:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: Test novolume, bleeding, ${{ matrix.architecture }}
     needs:
     - bleeding
@@ -300,7 +300,7 @@ jobs:
         ./test-stop
 
   test-saml:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: Test SAML, bleeding, ${{ matrix.architecture }}
     needs:
     - bleeding
@@ -384,7 +384,7 @@ jobs:
         ./test-stop
 
   test-split:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: Test split, bleeding, ${{ matrix.architecture }}
     needs:
     - bleeding
@@ -462,7 +462,7 @@ jobs:
         ./test-stop
 
   test-ssl:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: Test SSL, bleeding, ${{ matrix.architecture }}
     needs:
     - bleeding
@@ -548,7 +548,7 @@ jobs:
         ./test-stop
 
   anchore:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: Anchore Container Scan, ${{ matrix.architecture }}
     needs:
     - bleeding
@@ -595,7 +595,7 @@ jobs:
         path: results.sarif
 
   trivy:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: Trivy Container Scan, ${{ matrix.architecture }}
     needs:
     - bleeding
@@ -644,7 +644,7 @@ jobs:
         path: trivy-results.sarif
 
   push_dockerhub:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: Publish to Docker Hub, stable
     needs:
     - test
@@ -688,7 +688,7 @@ jobs:
       run: docker buildx build $(.github/bin/get-buildx-args publish-bleeding)
 
   push_github:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     name: Publish to GitHub, stable
     permissions:
       packages: write
