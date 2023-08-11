@@ -21,6 +21,7 @@ sed -i \
 sed -i \
     -e 's/^translate-toolkit==3.9.2/translate-toolkit==3.10.0/' \
     -e 's/^pyparsing==3.0.9/pyparsing==3.1.1/' \
+    -e 's/^tesserocr==2.6.0/tesserocr==2.6.1/' \
     -e '/^responses==0.23.1/ D' \
     -e '/^selenium==4.10.0/ D' \
     requirements.txt
