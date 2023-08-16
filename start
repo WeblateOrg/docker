@@ -126,10 +126,6 @@ fail_dep() {
     exit 1
 }
 
-if [ -n "$MEMCACHED_HOST" ] ; then
-    >&2 echo "memcached is no longer supported, please configure redis"
-fi
-
 if ! run_weblate check ; then
     >&2 echo "Failed to load configuration, please see errors above."
     exit 1
