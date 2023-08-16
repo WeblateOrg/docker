@@ -179,16 +179,14 @@ fi
 # Migrate database to current version and collect static files
 if [ "$1" = "runserver" ] ; then
 
-    # Fail on migration to 3.0
-    failure=0
-    run_weblate showmigrations --plan > /tmp/migrations.txt || failure=1
-    if [ $failure -gt 0 ] ; then
+    # Fail on migration from unsupported version
+    if ! run_weblate showmigrations --plan > /dev/null ; then
         echo
         echo "Database migration has failed. Please check the error message above."
-        echo "In case you are upgrading from an 3.x version, please upgrade to 4.1.1-3 first."
+        echo "Note: Upgrading across major versions is not supported. In case you are upgrading"
+        echo "      from an 4.x version, please upgrade to 5.0 first."
         exit 1
     fi
-    rm /tmp/migrations.txt
 
     DO_MIGRATE=1
     if [ -n "$WEBLATE_SERVICE" ] ; then
