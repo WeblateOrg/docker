@@ -115,7 +115,6 @@ RUN \
   && pip install --no-cache-dir --no-binary :all: $(grep -E '^(cffi|lxml)==' /app/src/requirements.txt) \
   && case "$WEBLATE_VERSION" in \
     *+* ) \
-      sed -Ei '/^(translate-toolkit|aeidon)/D' /app/src/requirements.txt; \
       pip install \
         --no-cache-dir \
         -r /app/src/requirements.txt \

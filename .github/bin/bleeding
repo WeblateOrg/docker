@@ -17,13 +17,15 @@ sed -i \
     LABEL org.opencontainers.image.revision=\"$SHA\"" \
     Dockerfile
 
-# Weblate 5.0 change
+# Adjust requirements for bleeding by removing ones we install from Git
+# TODO: Drop in Weblate 5.0: pyparsing/tesserocr/selenium/responses
 sed -i \
-    -e 's/^translate-toolkit==3.9.2/translate-toolkit==3.10.0/' \
     -e 's/^pyparsing==3.0.9/pyparsing==3.1.1/' \
     -e 's/^tesserocr==2.6.0/tesserocr==2.6.1/' \
     -e '/^responses==0.23.1/ D' \
     -e '/^selenium==4.10.0/ D' \
+    -e '/^translate-toolkit==/ D' \
+    -e '/^weblate-language-data==/ D' \
     requirements.txt
 
 # Consistent timestamp
