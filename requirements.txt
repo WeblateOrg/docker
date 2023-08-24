@@ -43,12 +43,8 @@ pyuca==1.2
 rapidfuzz==3.2.0
 raven
 redis==5.0.0
-# TODO: remove with Weblate 5.0
-responses==0.23.3
 rollbar==0.16.3
 ruamel.yaml==0.17.32
-# TODO: remove with Weblate 5.0
-selenium==4.11.2
 sentry-sdk==1.29.2
 setuptools==68.1.2
 siphashc==2.1
