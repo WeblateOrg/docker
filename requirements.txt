@@ -42,7 +42,7 @@ python3-saml==1.15.0
 pyuca==1.2
 rapidfuzz==3.1.2
 raven
-redis==4.6.0
+redis==5.0.0
 # TODO: remove with Weblate 5.0
 responses==0.23.3
 rollbar==0.16.3
