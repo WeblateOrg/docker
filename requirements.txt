@@ -55,7 +55,7 @@ siphashc==2.1
 social-auth-app-django==5.2.0
 social-auth-core==4.4.2
 supervisor==4.2.5
-tesserocr==2.6.0
+tesserocr==2.6.1
 translate-toolkit==3.9.2
 translation-finder==2.15
 urllib3==1.26.16
