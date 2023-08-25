@@ -80,6 +80,8 @@ RUN \
     libmariadb3 \
     libmariadb-dev \
     libxmlsec1-dev \
+    libleptonica-dev \
+    libtesseract-dev \
     libsasl2-dev \
     libldap2-dev \
     libldap-common \
@@ -133,6 +135,8 @@ RUN \
     ruby-dev \
     cmake \
     pkg-config \
+    libleptonica-dev \
+    libtesseract-dev \
     libmariadb-dev \
     libgirepository1.0-dev \
     libxml2-dev \
