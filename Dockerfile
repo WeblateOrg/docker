@@ -50,6 +50,7 @@ ENV PYTHONUNBUFFERED=1
 COPY requirements.txt Gemfile patches /app/src/
 
 # Install dependencies
+# TODO: drop libtesseract4 once https://github.com/sirfz/tesserocr/issues/322 is fixed
 # hadolint ignore=DL3008,DL3013,SC2046,DL3003
 RUN \
   export DEBIAN_FRONTEND=noninteractive \
@@ -74,6 +75,7 @@ RUN \
     pkg-config \
     file \
     make \
+    libtesseract4 \
     libcairo2-dev \
     libxml2-dev \
     libacl1-dev \
