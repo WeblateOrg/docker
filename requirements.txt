@@ -42,7 +42,7 @@ python3-saml==1.15.0
 pyuca==1.2
 rapidfuzz==3.2.0
 raven
-redis==5.0.0
+redis==4.6.0
 rollbar==0.16.3
 ruamel.yaml==0.17.32
 sentry-sdk==1.30.0
