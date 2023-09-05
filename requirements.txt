@@ -52,7 +52,7 @@ social-auth-app-django==5.3.0
 social-auth-core==4.4.2
 supervisor==4.2.5
 tesserocr==2.6.1
-translate-toolkit==3.10.0
+translate-toolkit==3.10.1
 translation-finder==2.15
 urllib3==1.26.16
 weblate-fedora-messaging==0.5
