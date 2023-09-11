@@ -1,4 +1,5 @@
 aeidon==1.12
+ahocorasick-rs==0.17.1
 argon2-cffi==23.1.0
 borgbackup==1.2.6
 celery==5.3.4
