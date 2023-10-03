@@ -35,7 +35,7 @@ openpyxl==3.1.2
 phply==1.2.6
 Pillow==10.0.1
 pip==23.2.1
-psycopg2==2.9.8
+psycopg2==2.9.9
 Pygments==2.16.1
 pyparsing==3.1.1
 python-akismet==0.4.3
