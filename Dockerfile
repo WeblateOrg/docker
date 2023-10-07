@@ -17,7 +17,7 @@ LABEL org.opencontainers.image.description="A web-based continuous localization 
 LABEL org.opencontainers.image.licenses="GPL-3.0-or-later"
 
 # Increased start period for migrations run
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5m CMD /app/bin/health_check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5m CMD /weblate/app/bin/health_check
 
 SHELL ["/bin/bash", "-o", "pipefail", "-x", "-c"]
 
@@ -33,8 +33,8 @@ RUN \
   && chown -R weblate:weblate /home/weblate \
   && chmod 700 /home/weblate/.ssh \
   && install -d -o weblate -g weblate -m 755 "/usr/local/lib/python${PYVERSION}/site-packages/data-test" "/usr/local/lib/python${PYVERSION}/site-packages/test-images" \
-  && install -d -o weblate -g weblate -m 755 /app/data \
-  && install -d -o weblate -g weblate -m 755 /app/cache
+  && install -d -o weblate -g weblate -m 755 /weblate/app/data \
+  && install -d -o weblate -g weblate -m 755 /weblate/app/cache
 
 # Configure utf-8 locales to make sure Python
 # correctly handles unicode filenames, configure settings
@@ -47,7 +47,7 @@ ENV DJANGO_SETTINGS_MODULE=weblate.settings_docker
 # Avoid Python buffering stdout and delaying logs
 ENV PYTHONUNBUFFERED=1
 
-COPY requirements.txt Gemfile patches /app/src/
+COPY requirements.txt Gemfile patches /weblate/app/src/
 
 # Install dependencies
 # TODO: drop libtesseract4 once https://github.com/sirfz/tesserocr/issues/322 is fixed
@@ -109,16 +109,16 @@ RUN \
     else \
         apt-get install --no-install-recommends -y postgresql-client ; \
     fi \
-  && cd  /app/src/ \
+  && cd  /weblate/app/src/ \
   && bundle install \
   && bundle clean --force \
-  && pip install --no-cache-dir --upgrade $(grep -E '^(pip|wheel|setuptools)==' /app/src/requirements.txt) \
-  && pip install --no-cache-dir --no-binary :all: $(grep -E '^(cffi|lxml)==' /app/src/requirements.txt) \
+  && pip install --no-cache-dir --upgrade $(grep -E '^(pip|wheel|setuptools)==' /weblate/app/src/requirements.txt) \
+  && pip install --no-cache-dir --no-binary :all: $(grep -E '^(cffi|lxml)==' /weblate/app/src/requirements.txt) \
   && case "$WEBLATE_VERSION" in \
     *+* ) \
       pip install \
         --no-cache-dir \
-        -r /app/src/requirements.txt \
+        -r /weblate/app/src/requirements.txt \
         "https://github.com/translate/translate/archive/master.zip" \
         "https://github.com/WeblateOrg/language-data/archive/main.zip" \
         "https://github.com/WeblateOrg/weblate/archive/$WEBLATE_DOCKER_GIT_REVISION.zip#egg=Weblate[$WEBLATE_EXTRAS]" \
@@ -126,12 +126,12 @@ RUN \
     * ) \
       pip install \
         --no-cache-dir \
-        -r /app/src/requirements.txt \
+        -r /weblate/app/src/requirements.txt \
         "Weblate[$WEBLATE_EXTRAS]==$WEBLATE_VERSION" \
       ;; \
   esac \
   && python -c 'from phply.phpparse import make_parser; make_parser()' \
-  && ln -s /usr/local/share/weblate/examples/ /app/ \
+  && ln -s /usr/local/share/weblate/examples/ /weblate/app/ \
   && apt-get -y purge \
     bundler \
     ruby-dev \
@@ -158,10 +158,10 @@ RUN \
     libjpeg62-turbo-dev \
   && apt-get -y purge --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && apt-get clean \
-  && rm -rf /root/.cache /tmp/* /var/lib/apt/lists/*
+  && rm -rf /root/.cache /weblate/tmp/* /var/lib/apt/lists/*
 
 # Apply hotfixes on Weblate
-RUN find /app/src -name '*.patch' -print0 | sort -z | \
+RUN find /weblate/app/src -name '*.patch' -print0 | sort -z | \
   xargs -n1 -0 -r patch -p0 -d "/usr/local/lib/python${PYVERSION}/site-packages/" -i
 
 # Configuration for Weblate, nginx and supervisor
@@ -175,13 +175,13 @@ COPY etc /etc/
 # - log, run and home directories
 # - disable su for non root to avoid privilege escapation by chaging /etc/passwd
 RUN rm -f /etc/localtime /etc/timezone \
-  && ln -s /tmp/localtime /etc/localtime \
-  && cp /usr/share/zoneinfo/Etc/UTC /tmp/localtime \
-  && mkdir /tmp/nginx \
-  && chgrp -R 0 /var/log/nginx/ /var/lib/nginx /app/data /app/cache /run /home/weblate /tmp/localtime /tmp/nginx /etc/supervisor/conf.d \
-  && chmod -R 770 /var/log/nginx/ /var/lib/nginx /app/data /app/cache /run /home /home/weblate /tmp/localtime /tmp/nginx /etc/supervisor/conf.d \
+  && ln -s /weblate/tmp/localtime /etc/localtime \
+  && cp /usr/share/zoneinfo/Etc/UTC /weblate/tmp/localtime \
+  && mkdir /weblate/tmp/nginx \
+  && chgrp -R 0 /var/log/nginx/ /var/lib/nginx /weblate/app/data /weblate/app/cache /weblate/run /home/weblate /weblate/tmp/localtime /weblate/tmp/nginx /etc/supervisor/conf.d \
+  && chmod -R 770 /var/log/nginx/ /var/lib/nginx /weblate/app/data /weblate/app/cache /weblate/run /home /home/weblate /weblate/tmp/localtime /weblate/tmp/nginx /etc/supervisor/conf.d \
   && rm -f /etc/nginx/sites-available/default \
-  && ln -s /tmp/nginx/weblate-site.conf /etc/nginx/sites-available/default \
+  && ln -s /weblate/tmp/nginx/weblate-site.conf /etc/nginx/sites-available/default \
   && rm -f /var/log/nginx/access.log /var/log/nginx/error.log \
   && ln -sf /dev/stdout /var/log/nginx/access.log \
   && ln -sf /dev/stderr /var/log/nginx/error.log \
@@ -190,24 +190,24 @@ RUN rm -f /etc/localtime /etc/timezone \
 
 # Search path for custom modules
 RUN \
-    echo "/app/data/python" > "/usr/local/lib/python${PYVERSION}/site-packages/weblate-docker.pth" && \
-    mkdir -p /app/data/python/customize && \
-    touch /app/data/python/customize/__init__.py && \
-    touch /app/data/python/customize/models.py && \
-    chown -R weblate:weblate /app/data/python
+    echo "/weblate/app/data/python" > "/usr/local/lib/python${PYVERSION}/site-packages/weblate-docker.pth" && \
+    mkdir -p /weblate/app/data/python/customize && \
+    touch /weblate/app/data/python/customize/__init__.py && \
+    touch /weblate/app/data/python/customize/models.py && \
+    chown -R weblate:weblate /weblate/app/data/python
 
 # Entrypoint
-COPY --chmod=a+rx start health_check /app/bin/
+COPY --chmod=a+rx start health_check /weblate/app/bin/
 
 EXPOSE 8080
-VOLUME /app/data
-VOLUME /app/cache
-VOLUME /tmp
-VOLUME /run
+VOLUME /weblate/app/data
+VOLUME /weblate/app/cache
+VOLUME /weblate/tmp
+VOLUME /weblate/run
 
 # Numerical value is needed for OpenShift S2I, see
 # https://docs.openshift.com/container-platform/latest/openshift_images/create-images.html
 USER 1000
 
-ENTRYPOINT ["/app/bin/start"]
+ENTRYPOINT ["/weblate/app/bin/start"]
 CMD ["runserver"]
