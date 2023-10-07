@@ -1,8 +1,8 @@
 server {
     listen 4443 ssl;
 
-    ssl_certificate /app/data/ssl/fullchain.pem;
-    ssl_certificate_key /app/data/ssl/privkey.pem;
+    ssl_certificate /weblate/app/data/ssl/fullchain.pem;
+    ssl_certificate_key /weblate/app/data/ssl/privkey.pem;
 
     ssl_session_timeout 1d;
     ssl_session_cache shared:MozSSL:10m;  # about 40000 sessions
@@ -15,7 +15,7 @@ server {
 
     ssl_dhparam /etc/nginx/ffdhe2048.pem;
 
-    root /app/cache/static;
+    root /weblate/app/cache/static;
     client_max_body_size ${CLIENT_MAX_BODY_SIZE};
     server_tokens off;
 
@@ -23,19 +23,19 @@ server {
 
     location ~ ^/favicon.ico$ {
         # DATA_DIR/static/favicon.ico
-        alias /app/cache/static/favicon.ico;
+        alias /weblate/app/cache/static/favicon.ico;
         expires 30d;
     }
 
     location ${WEBLATE_URL_PREFIX}/static/ {
         # DATA_DIR/static/
-        alias /app/cache/static/;
+        alias /weblate/app/cache/static/;
         expires 30d;
     }
 
     location ${WEBLATE_URL_PREFIX}/media/ {
         # DATA_DIR/media/
-        alias /app/data/media/;
+        alias /weblate/app/data/media/;
         expires 30d;
     }
 
