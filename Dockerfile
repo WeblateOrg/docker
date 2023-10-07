@@ -200,10 +200,10 @@ RUN \
 COPY --chmod=a+rx start health_check /weblate/app/bin/
 
 EXPOSE 8080
-VOLUME /weblate/app/data
-VOLUME /weblate/app/cache
-VOLUME /weblate/tmp
-VOLUME /weblate/run
+# VOLUME /weblate/app/data
+# VOLUME /weblate/app/cache
+# VOLUME /weblate/tmp
+# VOLUME /weblate/run
 
 # Numerical value is needed for OpenShift S2I, see
 # https://docs.openshift.com/container-platform/latest/openshift_images/create-images.html
