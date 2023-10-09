@@ -1,4 +1,4 @@
-FROM python:3.11.5-slim-bullseye
+FROM python:3.11.5-slim-bookworm
 ENV PYVERSION 3.11
 ENV WEBLATE_VERSION 5.0.2
 ENV WEBLATE_EXTRAS all,MySQL,zxcvbn,test
@@ -50,7 +50,7 @@ ENV PYTHONUNBUFFERED=1
 COPY requirements.txt Gemfile patches /app/src/
 
 # Install dependencies
-# TODO: drop libtesseract4 once https://github.com/sirfz/tesserocr/issues/322 is fixed
+# TODO: drop libtesseract5 once https://github.com/sirfz/tesserocr/issues/322 is fixed
 # hadolint ignore=DL3008,DL3013,SC2046,DL3003
 RUN \
   export DEBIAN_FRONTEND=noninteractive \
@@ -75,7 +75,7 @@ RUN \
     pkg-config \
     file \
     make \
-    libtesseract4 \
+    libtesseract5 \
     libcairo2-dev \
     libxml2-dev \
     libacl1-dev \
@@ -101,7 +101,7 @@ RUN \
     unzip \
     xz-utils \
   && c_rehash \
-  && echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+  && echo "deb http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
   && curl -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
   && apt-get update \
   && apt-get install --no-install-recommends -y \
