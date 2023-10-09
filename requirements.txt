@@ -3,6 +3,7 @@ ahocorasick-rs==0.17.1
 argon2-cffi==23.1.0
 borgbackup==1.2.6
 celery==5.3.4
+certifi>=2023.7.22 # not directly required, pinned by Snyk to avoid a vulnerability
 # For Argon2 and misaka
 cffi==1.16.0
 # For Azure Tenant auth
@@ -45,6 +46,7 @@ pyuca==1.2
 rapidfuzz==3.3.1
 raven
 redis==4.6.0
+requests>=2.31.0 # not directly required, pinned by Snyk to avoid a vulnerability
 rollbar==0.16.3
 ruamel.yaml==0.17.35
 sentry-sdk==1.31.0
@@ -62,5 +64,3 @@ weblate-language-data==2023.5
 wheel==0.41.2
 wllegal==2023.4
 zeep==4.2.1
-certifi>=2023.7.22 # not directly required, pinned by Snyk to avoid a vulnerability
-requests>=2.31.0 # not directly required, pinned by Snyk to avoid a vulnerability
