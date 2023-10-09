@@ -50,7 +50,6 @@ ENV PYTHONUNBUFFERED=1
 COPY requirements.txt Gemfile patches /app/src/
 
 # Install dependencies
-# TODO: drop libtesseract5 once https://github.com/sirfz/tesserocr/issues/322 is fixed
 # hadolint ignore=DL3008,DL3013,SC2046,DL3003
 RUN \
   export DEBIAN_FRONTEND=noninteractive \
@@ -75,15 +74,12 @@ RUN \
     pkg-config \
     file \
     make \
-    libtesseract5 \
     libcairo2-dev \
     libxml2-dev \
     libacl1-dev \
     libmariadb3 \
     libmariadb-dev \
     libxmlsec1-dev \
-    libleptonica-dev \
-    libtesseract-dev \
     libsasl2-dev \
     libldap2-dev \
     libldap-common \
@@ -134,8 +130,6 @@ RUN \
     ruby-dev \
     cmake \
     pkg-config \
-    libleptonica-dev \
-    libtesseract-dev \
     libmariadb-dev \
     libgirepository1.0-dev \
     libxml2-dev \
