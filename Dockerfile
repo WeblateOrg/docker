@@ -54,8 +54,6 @@ COPY requirements.txt Gemfile patches /app/src/
 # hadolint ignore=DL3008,DL3013,SC2046,DL3003
 RUN \
   export DEBIAN_FRONTEND=noninteractive \
-  && echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
-  && curl -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
   && apt-get update \
   && apt-get install --no-install-recommends -y \
     nginx-light \
@@ -102,8 +100,12 @@ RUN \
     patch \
     unzip \
     xz-utils \
-    postgresql-client-16 \
   && c_rehash \
+  && echo "deb http://apt.postgresql.org/pub/repos/apt bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+  && curl -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+  && apt-get update \
+  && apt-get install --no-install-recommends -y \
+    postgresql-client-16 \
   && cd  /app/src/ \
   && bundle install \
   && bundle clean --force \
