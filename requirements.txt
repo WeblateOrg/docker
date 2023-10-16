@@ -1,4 +1,4 @@
-aeidon==1.12
+aeidon==1.13
 ahocorasick-rs==0.20.0
 argon2-cffi==23.1.0
 borgbackup==1.2.6
