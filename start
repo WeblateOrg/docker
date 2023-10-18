@@ -190,15 +190,6 @@ fi
 # Migrate database to current version and collect static files
 if [ "$1" = "runserver" ] ; then
 
-    # Fail on migration from unsupported version
-    if ! run_weblate showmigrations --plan > /dev/null ; then
-        echo
-        echo "Database migration has failed. Please check the error message above."
-        echo "Note: Upgrading across major versions is not supported. In case you are upgrading"
-        echo "      from an 4.x version, please upgrade to 5.0.2 first."
-        exit 1
-    fi
-
     DO_MIGRATE=1
     if [ -n "$WEBLATE_SERVICE" ] ; then
         if [ "$WEBLATE_SERVICE" != "celery-beat" ] ; then
@@ -209,7 +200,13 @@ if [ "$1" = "runserver" ] ; then
 
     if [ $DO_MIGRATE -eq 1 ] ; then
         echo "Starting database migration..."
-        run_weblate migrate
+        if ! run_weblate migrate ; then
+            echo
+            echo "Database migration has failed. Please check the error message above."
+            echo "Note: Upgrading across major versions is not supported. In case you are upgrading"
+            echo "      from an 4.x version, please upgrade to 5.0.2 first."
+            exit 1
+        fi
 
         # Create or update admin account
         if [ -n "$WEBLATE_ADMIN_PASSWORD" ] ; then
