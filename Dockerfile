@@ -1,4 +1,4 @@
-FROM python:3.11.5-slim-bookworm
+FROM python:3.12.0-slim-bookworm
 ENV PYVERSION 3.11
 ENV WEBLATE_VERSION 5.1
 ENV WEBLATE_EXTRAS all,MySQL,zxcvbn,test
