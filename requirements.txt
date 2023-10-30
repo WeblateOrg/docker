@@ -48,7 +48,7 @@ raven
 redis==4.6.0
 requests>=2.31.0 # not directly required, pinned by Snyk to avoid a vulnerability
 rollbar==0.16.3
-ruamel.yaml==0.17.40
+ruamel.yaml==0.18.3
 sentry-sdk==1.31.0
 setuptools==68.2.2
 siphashc==2.3

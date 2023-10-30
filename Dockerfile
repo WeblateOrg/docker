@@ -1,6 +1,6 @@
 FROM python:3.12.0-slim-bookworm
 ENV PYVERSION 3.12
-ENV WEBLATE_VERSION 5.1
+ENV WEBLATE_VERSION 5.1.1
 ENV WEBLATE_EXTRAS all,MySQL,zxcvbn,test
 ARG TARGETARCH
 
@@ -38,8 +38,8 @@ RUN \
 
 # Configure utf-8 locales to make sure Python
 # correctly handles unicode filenames, configure settings
-ENV LANG=C.UTF-8
-ENV LC_ALL=C.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
 # Home directory
 ENV HOME=/home/weblate
 # Use Docker specific settings
