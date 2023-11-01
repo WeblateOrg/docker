@@ -36,6 +36,9 @@ jobs:
     - uses: actions/checkout@v4
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.0.0
+      with:
+        # renovate: datasource=github depName=docker/buildx
+        version: v0.11.2
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache
@@ -68,6 +71,9 @@ jobs:
         platforms: ${{ matrix.architecture }}
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.0.0
+      with:
+        # renovate: datasource=github depName=docker/buildx
+        version: v0.11.2
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache
@@ -101,6 +107,9 @@ jobs:
         submodules: recursive
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.0.0
+      with:
+        # renovate: datasource=github depName=docker/buildx
+        version: v0.11.2
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache
@@ -155,6 +164,9 @@ jobs:
         submodules: recursive
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.0.0
+      with:
+        # renovate: datasource=github depName=docker/buildx
+        version: v0.11.2
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache
@@ -237,6 +249,9 @@ jobs:
         submodules: recursive
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.0.0
+      with:
+        # renovate: datasource=github depName=docker/buildx
+        version: v0.11.2
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache
@@ -319,6 +334,9 @@ jobs:
         submodules: recursive
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.0.0
+      with:
+        # renovate: datasource=github depName=docker/buildx
+        version: v0.11.2
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache
@@ -403,6 +421,9 @@ jobs:
         submodules: recursive
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.0.0
+      with:
+        # renovate: datasource=github depName=docker/buildx
+        version: v0.11.2
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache
@@ -481,6 +502,9 @@ jobs:
         submodules: recursive
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.0.0
+      with:
+        # renovate: datasource=github depName=docker/buildx
+        version: v0.11.2
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache
@@ -564,6 +588,9 @@ jobs:
     - uses: actions/checkout@v4
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.0.0
+      with:
+        # renovate: datasource=github depName=docker/buildx
+        version: v0.11.2
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache
@@ -610,6 +637,9 @@ jobs:
     - uses: actions/checkout@v4
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.0.0
+      with:
+        # renovate: datasource=github depName=docker/buildx
+        version: v0.11.2
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache
@@ -665,6 +695,9 @@ jobs:
         platforms: all
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.0.0
+      with:
+        # renovate: datasource=github depName=docker/buildx
+        version: v0.11.2
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache-arm64
@@ -713,6 +746,9 @@ jobs:
         platforms: all
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.0.0
+      with:
+        # renovate: datasource=github depName=docker/buildx
+        version: v0.11.2
     - name: Cache Docker layers
       uses: actions/cache@v3
       id: cache-arm64
