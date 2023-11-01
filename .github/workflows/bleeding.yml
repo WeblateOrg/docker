@@ -50,7 +50,7 @@ jobs:
     - name: Configure Docker build
       run: .github/bin/get-buildx-args
     - name: Build the Docker image
-      run: docker buildx build $(.github/bin/get-buildx-args)
+      run: .github/bin/docker-build
 
   buildx:
     runs-on: ubuntu-22.04
@@ -85,7 +85,7 @@ jobs:
     - name: Configure Docker build
       run: .github/bin/get-buildx-args
     - name: Build the Docker image
-      run: docker buildx build $(.github/bin/get-buildx-args)
+      run: .github/bin/docker-build
 
   test:
     runs-on: ubuntu-22.04
@@ -119,7 +119,7 @@ jobs:
     - name: Adjust bleeding edge image
       run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
     - name: Build the Docker image
-      run: docker buildx build $(.github/bin/get-buildx-args load)
+      run: .github/bin/docker-build load
     - name: List Docker images
       run: docker image ls --all
     - name: Generate configuration
@@ -176,7 +176,7 @@ jobs:
     - name: Adjust bleeding edge image
       run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
     - name: Build the Docker image
-      run: docker buildx build $(.github/bin/get-buildx-args load)
+      run: .github/bin/docker-build load
     - name: List Docker images
       run: docker image ls --all
     - name: Generate configuration
@@ -261,7 +261,7 @@ jobs:
     - name: Adjust bleeding edge image
       run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
     - name: Build the Docker image
-      run: docker buildx build $(.github/bin/get-buildx-args load)
+      run: .github/bin/docker-build load
     - name: List Docker images
       run: docker image ls --all
     - name: Generate configuration
@@ -346,7 +346,7 @@ jobs:
     - name: Adjust bleeding edge image
       run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
     - name: Build the Docker image
-      run: docker buildx build $(.github/bin/get-buildx-args load)
+      run: .github/bin/docker-build load
     - name: List Docker images
       run: docker image ls --all
     - name: Generate configuration
@@ -433,7 +433,7 @@ jobs:
     - name: Adjust bleeding edge image
       run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
     - name: Build the Docker image
-      run: docker buildx build $(.github/bin/get-buildx-args load)
+      run: .github/bin/docker-build load
     - name: List Docker images
       run: docker image ls --all
     - name: Generate configuration
@@ -514,7 +514,7 @@ jobs:
     - name: Adjust bleeding edge image
       run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
     - name: Build the Docker image
-      run: docker buildx build $(.github/bin/get-buildx-args load)
+      run: .github/bin/docker-build load
     - name: List Docker images
       run: docker image ls --all
     - name: Generate configuration
@@ -600,7 +600,7 @@ jobs:
     - name: Adjust bleeding edge image
       run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
     - name: Build the Docker image
-      run: docker buildx build $(.github/bin/get-buildx-args load)
+      run: .github/bin/docker-build load
     - name: List Docker images
       run: docker image ls --all
     - name: Checkout the code
@@ -649,7 +649,7 @@ jobs:
     - name: Adjust bleeding edge image
       run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
     - name: Build the Docker image
-      run: docker buildx build $(.github/bin/get-buildx-args load)
+      run: .github/bin/docker-build load
     - name: List Docker images
       run: docker image ls --all
     - name: Checkout the code
@@ -717,7 +717,7 @@ jobs:
     - name: Configure Docker build
       run: .github/bin/get-buildx-args publish-bleeding
     - name: Publish the Docker images
-      run: docker buildx build $(.github/bin/get-buildx-args publish-bleeding)
+      run: .github/bin/docker-build publish-bleeding
 
   push_github:
     runs-on: ubuntu-22.04
@@ -773,4 +773,4 @@ jobs:
     - name: Configure Docker build
       run: .github/bin/get-buildx-args publish-bleeding
     - name: Publish the Docker images
-      run: docker buildx build $(.github/bin/get-buildx-args publish-bleeding)
+      run: .github/bin/docker-build publish-bleeding

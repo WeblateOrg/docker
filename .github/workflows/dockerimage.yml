@@ -36,7 +36,7 @@ jobs:
     - name: Configure Docker build
       run: .github/bin/get-buildx-args
     - name: Build the Docker image
-      run: docker buildx build $(.github/bin/get-buildx-args)
+      run: .github/bin/docker-build
 
   buildx:
     runs-on: ubuntu-22.04
@@ -67,7 +67,7 @@ jobs:
     - name: Configure Docker build
       run: .github/bin/get-buildx-args
     - name: Build the Docker image
-      run: docker buildx build $(.github/bin/get-buildx-args)
+      run: .github/bin/docker-build
 
   test:
     runs-on: ubuntu-22.04
@@ -97,7 +97,7 @@ jobs:
         path: /tmp/.buildx-cache/${{ matrix.architecture }}
         key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
     - name: Build the Docker image
-      run: docker buildx build $(.github/bin/get-buildx-args load)
+      run: .github/bin/docker-build load
     - name: List Docker images
       run: docker image ls --all
     - name: Generate configuration
@@ -150,7 +150,7 @@ jobs:
         path: /tmp/.buildx-cache/${{ matrix.architecture }}
         key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
     - name: Build the Docker image
-      run: docker buildx build $(.github/bin/get-buildx-args load)
+      run: .github/bin/docker-build load
     - name: List Docker images
       run: docker image ls --all
     - name: Generate configuration
@@ -231,7 +231,7 @@ jobs:
         path: /tmp/.buildx-cache/${{ matrix.architecture }}
         key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
     - name: Build the Docker image
-      run: docker buildx build $(.github/bin/get-buildx-args load)
+      run: .github/bin/docker-build load
     - name: List Docker images
       run: docker image ls --all
     - name: Generate configuration
@@ -312,7 +312,7 @@ jobs:
         path: /tmp/.buildx-cache/${{ matrix.architecture }}
         key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
     - name: Build the Docker image
-      run: docker buildx build $(.github/bin/get-buildx-args load)
+      run: .github/bin/docker-build load
     - name: List Docker images
       run: docker image ls --all
     - name: Generate configuration
@@ -395,7 +395,7 @@ jobs:
         path: /tmp/.buildx-cache/${{ matrix.architecture }}
         key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
     - name: Build the Docker image
-      run: docker buildx build $(.github/bin/get-buildx-args load)
+      run: .github/bin/docker-build load
     - name: List Docker images
       run: docker image ls --all
     - name: Generate configuration
@@ -472,7 +472,7 @@ jobs:
         path: /tmp/.buildx-cache/${{ matrix.architecture }}
         key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
     - name: Build the Docker image
-      run: docker buildx build $(.github/bin/get-buildx-args load)
+      run: .github/bin/docker-build load
     - name: List Docker images
       run: docker image ls --all
     - name: Generate configuration
@@ -555,7 +555,7 @@ jobs:
         path: /tmp/.buildx-cache/${{ matrix.architecture }}
         key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
     - name: Build the Docker image
-      run: docker buildx build $(.github/bin/get-buildx-args load)
+      run: .github/bin/docker-build load
     - name: List Docker images
       run: docker image ls --all
     - name: Checkout the code
@@ -601,7 +601,7 @@ jobs:
         path: /tmp/.buildx-cache/${{ matrix.architecture }}
         key: ${{ runner.os }}-buildx-${{ github.sha }}-${{ matrix.architecture }}
     - name: Build the Docker image
-      run: docker buildx build $(.github/bin/get-buildx-args load)
+      run: .github/bin/docker-build load
     - name: List Docker images
       run: docker image ls --all
     - name: Checkout the code
@@ -666,7 +666,7 @@ jobs:
     - name: Configure Docker build
       run: .github/bin/get-buildx-args publish
     - name: Publish the Docker images
-      run: docker buildx build $(.github/bin/get-buildx-args publish)
+      run: .github/bin/docker-build publish
 
   push_github:
     runs-on: ubuntu-22.04
@@ -719,4 +719,4 @@ jobs:
     - name: Configure Docker build
       run: .github/bin/get-buildx-args publish
     - name: Publish the Docker images
-      run: docker buildx build $(.github/bin/get-buildx-args publish)
+      run: .github/bin/docker-build publish
