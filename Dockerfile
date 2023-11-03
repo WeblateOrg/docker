@@ -38,8 +38,8 @@ RUN \
 
 # Configure utf-8 locales to make sure Python
 # correctly handles unicode filenames, configure settings
-ENV LANG=C.UTF-8
-ENV LC_ALL=C.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
 # Home directory
 ENV HOME=/home/weblate
 # Use Docker specific settings
@@ -74,6 +74,7 @@ RUN \
     pkg-config \
     file \
     make \
+    locales \
     libcairo2-dev \
     libxml2-dev \
     libacl1-dev \
@@ -97,6 +98,8 @@ RUN \
     unzip \
     xz-utils \
   && c_rehash \
+  && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
+  && locale-gen \
   && echo "deb http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
   && curl -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
   && apt-get update \
