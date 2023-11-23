@@ -1,6 +1,10 @@
 #!/bin/sh
 
-# Generate command line options for docker buildx build
+# Copyright © Michal Čihař <michal@weblate.org>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+# Generate command-line options for docker buildx build
 
 # Load from local cache
 if [ -n "$MATRIX_ARCHITECTURE" ] ; then
