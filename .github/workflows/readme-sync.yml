@@ -1,9 +1,13 @@
+# Copyright © Michal Čihař <michal@weblate.org>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 name: Docker Hub Description
 on:
   push:
     branches:
     - main
-    files:
+    paths:
     - README.md
     - .github/workflows/readme-sync.yml
 jobs:
