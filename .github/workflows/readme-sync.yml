@@ -3,6 +3,9 @@ on:
   push:
     branches:
     - main
+    files:
+    - README.md
+    - .github/workflows/readme-sync.yml
 jobs:
   sync-readme:
     runs-on: ubuntu-22.04
