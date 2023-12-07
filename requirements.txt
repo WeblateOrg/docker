@@ -60,7 +60,7 @@ translate-toolkit==3.11.1
 translation-finder==2.15
 urllib3==2.0.7
 weblate-fedora-messaging==0.6
-weblate-language-data==2023.6
+weblate-language-data==2023.8
 wheel==0.42.0
 wllegal==2023.4
 zeep==4.2.1
