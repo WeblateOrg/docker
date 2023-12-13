@@ -567,7 +567,7 @@ jobs:
         fail-build: false
         severity-cutoff: high
     - name: Upload Anchore Scan Report
-      uses: github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: results.sarif
     - uses: actions/upload-artifact@v3
@@ -616,7 +616,7 @@ jobs:
         severity: CRITICAL,HIGH
 
     - name: Upload Trivy scan results to GitHub Security tab
-      uses: github/codeql-action/upload-sarif@v2
+      uses: github/codeql-action/upload-sarif@v3
       with:
         sarif_file: trivy-results.sarif
     - uses: actions/upload-artifact@v3
