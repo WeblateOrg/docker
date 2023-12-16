@@ -33,7 +33,7 @@ if [ -n "${WEBLATE_AUTH_LDAP_BIND_PASSWORD_FILE}" ]; then
   export WEBLATE_AUTH_LDAP_BIND_PASSWORD
 fi
 
-echo "Starting..."
+echo "Starting Weblate $WEBLATE_VERSION..."
 
 # Fix permissions on SSH private key.
 # Fails silently if the file doesn't exist yet.
