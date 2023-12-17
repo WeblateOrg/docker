@@ -35,7 +35,7 @@ nh3==0.2.15
 openpyxl==3.1.2
 phply==1.2.6
 Pillow==10.1.0
-pip==23.3.1
+pip==23.3.2
 psycopg[binary]==3.1.15
 Pygments==2.17.2
 pyparsing==3.1.1
