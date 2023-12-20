@@ -57,7 +57,7 @@ social-auth-core==4.5.1
 supervisor==4.2.5
 tesserocr==2.6.2
 translate-toolkit==3.11.1
-translation-finder==2.15
+translation-finder==2.16
 urllib3==2.0.7
 weblate-fedora-messaging==0.6
 weblate-language-data==2023.9
