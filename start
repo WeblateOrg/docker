@@ -205,6 +205,10 @@ if [ "$1" = "runserver" ] ; then
             echo "Database migration has failed. Please check the error message above."
             echo "Note: Upgrading across major versions is not supported. In case you are upgrading"
             echo "      from an 4.x version, please upgrade to 5.0.2 first."
+            echo
+            echo "      Using following for the docker-compose.yaml:"
+            echo
+            echo "          image: weblate/weblate:5.0.2.2"
             exit 1
         fi
 
