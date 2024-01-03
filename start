@@ -42,6 +42,9 @@ chmod 600 /app/data/ssh/id_rsa 2>/dev/null || true
 # Check whether data volume is writable
 if [ ! -w /app/data ] ; then
     echo "The /app/data volume is not writable, please adjust the permissions. Weblate is running as uid $(id -u)"
+    echo
+    echo "Please see https://github.com/WeblateOrg/docker/issues/2096 in case"
+    echo "the permissions on the volume are actually correct."
     exit 1
 fi
 
