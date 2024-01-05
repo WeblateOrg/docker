@@ -19,6 +19,7 @@ sed -i \
 
 # Adjust requirements for bleeding by removing ones we install from Git
 sed -i \
+    -e '/^lxml==4.9.4/ D' \
     -e '/^translate-toolkit==/ D' \
     -e '/^weblate-language-data==/ D' \
     requirements.txt
