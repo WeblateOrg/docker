@@ -40,7 +40,7 @@ jobs:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.12.1
     - name: Cache Docker layers
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache
       with:
         path: /tmp/.buildx-cache/${{ matrix.architecture }}
@@ -75,7 +75,7 @@ jobs:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.12.1
     - name: Cache Docker layers
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache
       with:
         path: /tmp/.buildx-cache/${{ matrix.architecture }}
@@ -111,7 +111,7 @@ jobs:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.12.1
     - name: Cache Docker layers
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache
       with:
         path: /tmp/.buildx-cache/${{ matrix.architecture }}
@@ -168,7 +168,7 @@ jobs:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.12.1
     - name: Cache Docker layers
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache
       with:
         path: /tmp/.buildx-cache/${{ matrix.architecture }}
@@ -253,7 +253,7 @@ jobs:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.12.1
     - name: Cache Docker layers
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache
       with:
         path: /tmp/.buildx-cache/${{ matrix.architecture }}
@@ -338,7 +338,7 @@ jobs:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.12.1
     - name: Cache Docker layers
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache
       with:
         path: /tmp/.buildx-cache/${{ matrix.architecture }}
@@ -425,7 +425,7 @@ jobs:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.12.1
     - name: Cache Docker layers
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache
       with:
         path: /tmp/.buildx-cache/${{ matrix.architecture }}
@@ -506,7 +506,7 @@ jobs:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.12.1
     - name: Cache Docker layers
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache
       with:
         path: /tmp/.buildx-cache/${{ matrix.architecture }}
@@ -592,7 +592,7 @@ jobs:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.12.1
     - name: Cache Docker layers
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache
       with:
         path: /tmp/.buildx-cache/${{ matrix.architecture }}
@@ -641,7 +641,7 @@ jobs:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.12.1
     - name: Cache Docker layers
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache
       with:
         path: /tmp/.buildx-cache/${{ matrix.architecture }}
@@ -699,13 +699,13 @@ jobs:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.12.1
     - name: Cache Docker layers
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache-arm64
       with:
         path: /tmp/.buildx-cache/linux/arm64
         key: ${{ runner.os }}-bleeding-${{ github.run_id }}-linux/arm64
     - name: Cache Docker layers
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache-amd64
       with:
         path: /tmp/.buildx-cache/linux/amd64
@@ -750,13 +750,13 @@ jobs:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.12.1
     - name: Cache Docker layers
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache-arm64
       with:
         path: /tmp/.buildx-cache/linux/arm64
         key: ${{ runner.os }}-bleeding-${{ github.run_id }}-linux/arm64
     - name: Cache Docker layers
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: cache-amd64
       with:
         path: /tmp/.buildx-cache/linux/amd64
