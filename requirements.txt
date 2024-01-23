@@ -34,7 +34,7 @@ mistletoe==1.2.1
 nh3==0.2.15
 openpyxl==3.1.2
 phply==1.2.6
-Pillow==10.1.0
+Pillow==10.2.0
 pip==23.3.2
 psycopg[binary]==3.1.17
 Pygments==2.17.2
