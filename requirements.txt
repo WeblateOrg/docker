@@ -1,7 +1,9 @@
 aeidon==1.13
 ahocorasick-rs==0.20.0
+aliyun-python-sdk-alimt==3.2.0
 argon2-cffi==23.1.0
 borgbackup==1.2.7
+boto3==1.28.62
 celery==5.3.6
 certifi>=2023.7.22 # not directly required, pinned by Snyk to avoid a vulnerability
 # For Argon2 and misaka
@@ -19,6 +21,7 @@ djangorestframework==3.14.0
 # Alernative Celery pool implementation
 gevent==23.9.1
 git-review==2.3.1
+google-cloud-translate==3.8.0
 gunicorn==21.2.0
 hiredis==2.2.3
 httpretty==1.1.4
@@ -32,12 +35,14 @@ lxml==4.9.4
 mercurial==6.6.2
 mistletoe==1.2.1
 nh3==0.2.15
+openai==1.3.0
 openpyxl==3.1.2
 phply==1.2.6
 Pillow==10.1.0
 pip==23.3.2
 psycopg[binary]==3.1.17
 Pygments==2.17.2
+pyOpenSSL==24.0.0
 pyparsing==3.1.1
 python-akismet==0.4.3
 python-dateutil==2.8.2
