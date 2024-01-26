@@ -58,7 +58,7 @@ sentry-sdk==1.39.2
 setuptools==69.0.3
 siphashc==2.3
 social-auth-app-django==5.4.0
-social-auth-core==4.5.1
+social-auth-core==4.5.2
 supervisor==4.2.5
 tesserocr==2.6.2
 translate-toolkit==3.11.1
