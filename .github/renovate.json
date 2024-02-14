@@ -48,6 +48,18 @@
     },
     {
       "matchPackageNames": [
+        "Django"
+      ],
+      "matchDatasources": [
+        "pypi"
+      ],
+      "separateMinorPatch": true,
+      "minor": {
+        "dependencyDashboardApproval": true
+      }
+    },
+    {
+      "matchPackageNames": [
         "python"
       ],
       "matchDatasources": [
