@@ -49,7 +49,7 @@ python-akismet==0.4.3
 python-dateutil==2.9.0.post0
 python3-saml==1.16.0
 pyuca==1.2
-rapidfuzz==3.6.1
+rapidfuzz==3.6.2
 raven
 redis==5.0.2
 requests>=2.31.0 # not directly required, pinned by Snyk to avoid a vulnerability
