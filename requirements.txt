@@ -67,6 +67,6 @@ translation-finder==2.16
 urllib3==2.0.7
 weblate-fedora-messaging==0.7
 weblate-language-data==2024.3
-wheel==0.42.0
+wheel==0.43.0
 wllegal==2023.5
 zeep==4.2.1
