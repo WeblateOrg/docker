@@ -174,7 +174,7 @@ esac
 
 if [ $VERSION_CHECK -eq 1 ] ; then
     # Fetch server version
-    PGVERSION=$(psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "$POSTGRES_DATABASE" -U "$POSTGRES_USER" -t -A -c 'SHOW server_version_num;')
+    PGVERSION=$(psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "${POSTGRES_DB:-$POSTGRES_DATABASE}" -U "$POSTGRES_USER" -t -A -c 'SHOW server_version_num;')
 
     unset PGPASSWORD
 
