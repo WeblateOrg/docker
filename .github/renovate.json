@@ -53,10 +53,7 @@
       "matchDatasources": [
         "pypi"
       ],
-      "separateMinorPatch": true,
-      "minor": {
-        "dependencyDashboardApproval": true
-      }
+      "separateMinorPatch": true
     },
     {
       "matchPackageNames": [
@@ -118,17 +115,6 @@
       "matchStrings": [
         "renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s+version: (?<currentValue>.*)\\s"
       ]
-    },
-    {
-      "fileMatch": [
-        "weblate_web/data.py"
-      ],
-      "matchStrings": [
-        "VERSION = \"(?<currentValue>.*?)\""
-      ],
-      "depNameTemplate": "Weblate",
-      "datasourceTemplate": "pypi",
-      "versioningTemplate": "pep440"
     }
   ]
 }
