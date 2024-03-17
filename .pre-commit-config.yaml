@@ -35,7 +35,7 @@ repos:
     - mdformat-black==0.1.1
     - mdformat-shfmt==0.1.0
 - repo: https://github.com/shellcheck-py/shellcheck-py
-  rev: v0.9.0.6
+  rev: v0.10.0.1
   hooks:
   - id: shellcheck
 exclude: ^.*\.(patch)$
