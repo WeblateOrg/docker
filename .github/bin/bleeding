@@ -21,6 +21,7 @@ sed -i \
 sed -i \
     -e '/^djangorestframework==3.14.0/ D' \
     -e '/^html2text==2020.1.16/ D' \
+    -e '/^Django==4.2.11/ D' \
     -e '/^translate-toolkit==/ D' \
     -e '/^weblate-language-data==/ D' \
     requirements.txt
