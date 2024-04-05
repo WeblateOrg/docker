@@ -26,14 +26,12 @@ SHELL ["/bin/bash", "-o", "pipefail", "-x", "-c"]
 # - the root group so it can run with any uid
 # - the tty group for /dev/std* access
 # - see https://github.com/WeblateOrg/docker/issues/326 and https://github.com/moby/moby/issues/31243#issuecomment-406879017
-# - create test and app data dirs to be able to run tests
 RUN \
   useradd --shell /bin/sh --user-group weblate --groups root,tty \
   && mkdir -p /home/weblate/.ssh \
   && touch /home/weblate/.ssh/authorized_keys \
   && chown -R weblate:weblate /home/weblate \
   && chmod 700 /home/weblate/.ssh \
-  && install -d -o weblate -g weblate -m 755 "/usr/local/lib/python${PYVERSION}/site-packages/data-test" "/usr/local/lib/python${PYVERSION}/site-packages/test-images" \
   && install -d -o weblate -g weblate -m 755 /app/data \
   && install -d -o weblate -g weblate -m 755 /app/cache
 
@@ -47,6 +45,8 @@ ENV HOME=/home/weblate
 ENV DJANGO_SETTINGS_MODULE=weblate.settings_docker
 # Avoid Python buffering stdout and delaying logs
 ENV PYTHONUNBUFFERED=1
+# Add virtualenv to path
+ENV PATH=/app/venv/bin/:/usr/local/bin:/usr/bin:/bin
 
 COPY requirements.txt Gemfile patches /app/src/
 
@@ -100,7 +100,7 @@ RUN \
     xz-utils \
   && c_rehash \
   && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
-  && locale-gen \
+  && /usr/sbin/locale-gen \
   && echo "deb http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
   && curl -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
   && apt-get update \
@@ -109,11 +109,13 @@ RUN \
   && cd  /app/src/ \
   && bundle install \
   && bundle clean --force \
-  && pip install --no-cache-dir --upgrade $(grep -E '^(pip|wheel|setuptools)==' /app/src/requirements.txt) \
-  && pip install --no-cache-dir --no-binary :all: $(grep -E '^(cffi|lxml)==' /app/src/requirements.txt) \
+  && pip install --no-cache-dir --upgrade $(grep -E '^(uv)==' /app/src/requirements.txt) \
+  && uv venv /app/venv \
+  && . /app/venv/bin/activate \
+  && uv pip install --no-cache-dir --no-binary :all: $(grep -E '^(cffi|lxml)==' /app/src/requirements.txt) \
   && case "$WEBLATE_VERSION" in \
     *+* ) \
-      pip install \
+      uv pip install \
         --no-cache-dir \
         -r /app/src/requirements.txt \
         "https://github.com/translate/translate/archive/master.zip" \
@@ -121,14 +123,14 @@ RUN \
         "https://github.com/WeblateOrg/weblate/archive/$WEBLATE_DOCKER_GIT_REVISION.zip#egg=Weblate[$WEBLATE_EXTRAS]" \
         ;; \
     * ) \
-      pip install \
+      uv pip install \
         --no-cache-dir \
         -r /app/src/requirements.txt \
         "Weblate[$WEBLATE_EXTRAS]==$WEBLATE_VERSION" \
       ;; \
   esac \
   && python -c 'from phply.phpparse import make_parser; make_parser()' \
-  && ln -s /usr/local/share/weblate/examples/ /app/ \
+  && ln -s /app/venv/share/weblate/examples/ /app/ \
   && apt-get -y purge \
     bundler \
     ruby-dev \
@@ -157,7 +159,7 @@ RUN \
 
 # Apply hotfixes on Weblate
 RUN find /app/src -name '*.patch' -print0 | sort -z | \
-  xargs -n1 -0 -r patch -p0 -d "/usr/local/lib/python${PYVERSION}/site-packages/" -i
+  xargs -n1 -0 -r patch -p0 -d "/app/venv/lib/python${PYVERSION}/site-packages/" -i
 
 # Configuration for Weblate, nginx and supervisor
 COPY etc /etc/
@@ -183,9 +185,12 @@ RUN rm -f /etc/localtime /etc/timezone \
   && chmod 664 /etc/passwd /etc/group \
   && sed -i '/pam_rootok.so/a auth requisite pam_deny.so' /etc/pam.d/su
 
-# Search path for custom modules
+# Customize Python:
+# - Search path for custom modules
+# - Create test and app data dirs to be able to run tests
 RUN \
-    echo "/app/data/python" > "/usr/local/lib/python${PYVERSION}/site-packages/weblate-docker.pth" && \
+    install -d -o weblate -g weblate -m 755 "/app/venv/lib/python${PYVERSION}/site-packages/data-test" "/app/venv/lib/python${PYVERSION}/site-packages/test-images" && \
+    echo "/app/data/python" > "/app/venv/lib/python${PYVERSION}/site-packages/weblate-docker.pth" && \
     mkdir -p /app/data/python/customize && \
     touch /app/data/python/customize/__init__.py && \
     touch /app/data/python/customize/models.py && \
