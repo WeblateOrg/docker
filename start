@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+# shellcheck disable=SC1091
+. /app/venv/bin/activate
+
 # Allow sensitive settings to be defined in a file
 # in order to support Docker secrets
 if [ -n "${POSTGRES_PASSWORD_FILE}" ]; then
@@ -87,7 +90,7 @@ if [ -z "$WEBLATE_SITE_DOMAIN" ] ; then
 fi
 
 # Export Weblate variables
-export WEBLATE_CMD="/usr/local/bin/weblate"
+export WEBLATE_CMD="/app/venv/bin/weblate"
 export WEBLATE_PY_PATH="/app/data/python/customize"
 
 # Provide sane default value
