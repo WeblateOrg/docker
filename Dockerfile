@@ -48,7 +48,7 @@ ENV PYTHONUNBUFFERED=1
 # Add virtualenv to path
 ENV PATH=/app/venv/bin/:/usr/local/bin:/usr/bin:/bin
 
-COPY requirements.txt Gemfile patches /app/src/
+COPY requirements.txt patches /app/src/
 
 # Install dependencies
 # hadolint ignore=DL3008,DL3013,SC2046,DL3003
@@ -57,10 +57,7 @@ RUN \
   && apt-get update \
   && apt-get install --no-install-recommends -y \
     nginx-light \
-    bundler \
-    ruby \
-    ruby-dev \
-    cmake \
+    ruby-licensee \
     openssh-client \
     ca-certificates \
     curl \
@@ -106,9 +103,6 @@ RUN \
   && apt-get update \
   && apt-get install --no-install-recommends -y \
     postgresql-client-16 \
-  && cd  /app/src/ \
-  && bundle install \
-  && bundle clean --force \
   && pip install --no-cache-dir --upgrade $(grep -E '^(uv)==' /app/src/requirements.txt) \
   && uv venv /app/venv \
   && . /app/venv/bin/activate \
@@ -132,9 +126,6 @@ RUN \
   && python -c 'from phply.phpparse import make_parser; make_parser()' \
   && ln -s /app/venv/share/weblate/examples/ /app/ \
   && apt-get -y purge \
-    bundler \
-    ruby-dev \
-    cmake \
     pkg-config \
     libmariadb-dev \
     libgirepository1.0-dev \
