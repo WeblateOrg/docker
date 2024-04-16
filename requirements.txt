@@ -68,3 +68,4 @@ weblate-fedora-messaging==0.7
 weblate-language-data==2024.3
 wllegal==2023.5
 zeep==4.2.1
+sqlparse>=0.5.0 # not directly required, pinned by Snyk to avoid a vulnerability
