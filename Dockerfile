@@ -107,7 +107,6 @@ RUN \
   && uv venv /app/venv \
   && . /app/venv/bin/activate \
   && uv pip install --no-cache-dir --no-binary :all: $(grep -E '^(cffi)==' /app/src/requirements.txt) \
-  && uv pip install --no-cache-dir https://github.com/xmlsec/python-xmlsec/releases/download/1.3.14/xmlsec-1.3.14-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl \
   && case "$WEBLATE_VERSION" in \
     *+* ) \
       uv pip install \
