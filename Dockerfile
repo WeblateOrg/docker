@@ -62,6 +62,7 @@ RUN \
     ca-certificates \
     curl \
     gir1.2-pango-1.0 \
+    gir1.2-rsvg-2.0 \
     libxmlsec1-openssl \
     libjpeg62-turbo \
     gettext \
