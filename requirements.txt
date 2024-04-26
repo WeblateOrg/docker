@@ -60,7 +60,7 @@ social-auth-app-django==5.4.1
 social-auth-core==4.5.4
 supervisor==4.2.5
 tesserocr==2.6.3
-translate-toolkit==3.12.2
+translate-toolkit==3.13.0
 translation-finder==2.16
 urllib3==2.2.1
 uv==0.1.38
