@@ -107,11 +107,16 @@ RUN \
   && pip install --no-cache-dir --upgrade $(grep -E '^(uv)==' /app/src/requirements.txt) \
   && uv venv /app/venv \
   && . /app/venv/bin/activate \
-  && uv pip install --no-cache-dir --no-binary :all: $(grep -E '^(cffi)==' /app/src/requirements.txt) \
+  && uv pip install \
+    --no-cache-dir \
+    --compile-bytecode \
+    --no-binary :all: \
+    $(grep -E '^(cffi)==' /app/src/requirements.txt) \
   && case "$WEBLATE_VERSION" in \
     *+* ) \
       uv pip install \
         --no-cache-dir \
+        --compile-bytecode \
         -r /app/src/requirements.txt \
         "https://github.com/translate/translate/archive/master.zip" \
         "https://github.com/WeblateOrg/language-data/archive/main.zip" \
@@ -120,6 +125,7 @@ RUN \
     * ) \
       uv pip install \
         --no-cache-dir \
+        --compile-bytecode \
         -r /app/src/requirements.txt \
         "Weblate[$WEBLATE_EXTRAS]==$WEBLATE_VERSION" \
       ;; \
