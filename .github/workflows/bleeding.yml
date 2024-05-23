@@ -659,7 +659,7 @@ jobs:
     - name: Checkout the code
       uses: actions/checkout@v4
     - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@0.20.0
+      uses: aquasecurity/trivy-action@0.21.0
       with:
         image-ref: weblate/weblate:test
         format: template
