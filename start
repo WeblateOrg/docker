@@ -273,7 +273,7 @@ set_real_ip_from 0.0.0.0/0;
     : "${CELERY_MAIN_OPTIONS:="--concurrency $WEBLATE_WORKERS"}"
     : "${CELERY_NOTIFY_OPTIONS:="--concurrency $WEBLATE_WORKERS"}"
     : "${CELERY_TRANSLATE_OPTIONS:="--concurrency $WEBLATE_WORKERS"}"
-    : "${CELERY_MEMORY_OPTIONS:="--concurrency $((WEBLATE_WORKERS / 2))"}"
+    : "${CELERY_MEMORY_OPTIONS:="--concurrency $(( WEBLATE_WORKERS == 1 ? 1 : WEBLATE_WORKERS / 2))"}"
     : "${CELERY_BACKUP_OPTIONS:="--concurrency 1"}"
     : "${CELERY_BEAT_OPTIONS:=""}"
     : "${WEB_WORKERS:="$((WEBLATE_WORKERS + 1))"}"
