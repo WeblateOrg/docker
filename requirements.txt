@@ -62,7 +62,7 @@ supervisor==4.2.5
 tesserocr==2.7.0
 translate-toolkit==3.13.0
 translation-finder==2.16
-urllib3==2.2.1
+urllib3==2.2.2
 uv==0.2.12
 weblate-fedora-messaging==0.7
 weblate-language-data==2024.5
