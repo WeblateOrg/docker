@@ -220,6 +220,7 @@ if [ "$1" = "runserver" ] ; then
 
         # Create or update admin account
         if [ -n "$WEBLATE_ADMIN_PASSWORD" ] ; then
+            echo "Updating admin user password (unset WEBLATE_ADMIN_PASSWORD to disable)..."
             run_weblate createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME"
         else
             run_weblate createadmin --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME" || true
