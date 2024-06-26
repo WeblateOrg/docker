@@ -41,6 +41,7 @@ echo "Starting Weblate $WEBLATE_VERSION..."
 # Fix permissions on SSH private key.
 # Fails silently if the file doesn't exist yet.
 chmod 600 /app/data/ssh/id_rsa 2>/dev/null || true
+chmod 600 /app/data/ssh/id_ed25519 2>/dev/null || true
 
 # Check whether data volume is writable
 if [ ! -w /app/data ] ; then
