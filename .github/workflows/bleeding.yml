@@ -106,7 +106,7 @@ jobs:
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v1
       with:
         submodules: recursive
     - name: Set up Docker Buildx
