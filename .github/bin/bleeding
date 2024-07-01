@@ -12,7 +12,7 @@ fi
 sed -i \
     -e "s/\\(ENV WEBLATE_VERSION=.*\\)/\\1+$( date --date "$DATE" -I )/" \
     -e "/ENV WEBLATE_VERSION/a \
-    ENV WEBLATE_DOCKER_GIT_REVISION $SHA" \
+    ENV WEBLATE_DOCKER_GIT_REVISION=$SHA" \
     -e "/LABEL org.opencontainers.image.version/a \
     LABEL org.opencontainers.image.revision=\"$SHA\"" \
     Dockerfile
