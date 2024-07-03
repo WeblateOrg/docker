@@ -70,7 +70,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3.0.0
+      uses: docker/setup-qemu-action@v3.1.0
       with:
         platforms: ${{ matrix.architecture }}
     - name: Set up Docker Buildx
@@ -694,7 +694,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3.0.0
+      uses: docker/setup-qemu-action@v3.1.0
       with:
         platforms: all
     - name: Set up Docker Buildx
@@ -745,7 +745,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3.0.0
+      uses: docker/setup-qemu-action@v3.1.0
       with:
         platforms: all
     - name: Set up Docker Buildx
