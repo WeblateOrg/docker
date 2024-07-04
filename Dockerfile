@@ -77,6 +77,9 @@ RUN \
     libcairo2-dev \
     libxml2-dev \
     libacl1-dev \
+    liblz4-dev \
+    libzstd-dev \
+    libxxhash-dev \
     libmariadb3 \
     libmariadb-dev \
     libxmlsec1-dev \
@@ -147,6 +150,9 @@ RUN \
     make \
     libsasl2-dev \
     libacl1-dev \
+    liblz4-dev \
+    libzstd-dev \
+    libxxhash-dev \
     libldap2-dev \
     libssl-dev \
     libz-dev   \
