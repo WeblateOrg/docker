@@ -3,7 +3,7 @@ ahocorasick-rs==0.22.0
 aliyun-python-sdk-alimt==3.2.0
 argon2-cffi==23.1.0
 borgbackup==1.2.8
-boto3==1.34.140
+boto3==1.34.141
 celery==5.4.0
 certifi>=2023.7.22 # not directly required, pinned by Snyk to avoid a vulnerability
 # For Argon2 and misaka
