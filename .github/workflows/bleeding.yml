@@ -42,7 +42,7 @@ jobs:
       uses: docker/setup-buildx-action@v3.5.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
+        version: v0.16.2
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache
@@ -77,7 +77,7 @@ jobs:
       uses: docker/setup-buildx-action@v3.5.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
+        version: v0.16.2
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache
@@ -113,7 +113,7 @@ jobs:
       uses: docker/setup-buildx-action@v3.5.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
+        version: v0.16.2
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache
@@ -170,7 +170,7 @@ jobs:
       uses: docker/setup-buildx-action@v3.5.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
+        version: v0.16.2
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache
@@ -255,7 +255,7 @@ jobs:
       uses: docker/setup-buildx-action@v3.5.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
+        version: v0.16.2
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache
@@ -340,7 +340,7 @@ jobs:
       uses: docker/setup-buildx-action@v3.5.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
+        version: v0.16.2
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache
@@ -427,7 +427,7 @@ jobs:
       uses: docker/setup-buildx-action@v3.5.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
+        version: v0.16.2
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache
@@ -508,7 +508,7 @@ jobs:
       uses: docker/setup-buildx-action@v3.5.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
+        version: v0.16.2
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache
@@ -594,7 +594,7 @@ jobs:
       uses: docker/setup-buildx-action@v3.5.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
+        version: v0.16.2
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache
@@ -643,7 +643,7 @@ jobs:
       uses: docker/setup-buildx-action@v3.5.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
+        version: v0.16.2
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache
@@ -701,7 +701,7 @@ jobs:
       uses: docker/setup-buildx-action@v3.5.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
+        version: v0.16.2
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache-arm64
@@ -752,7 +752,7 @@ jobs:
       uses: docker/setup-buildx-action@v3.5.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.16.1
+        version: v0.16.2
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache-arm64
