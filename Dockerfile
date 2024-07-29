@@ -48,7 +48,7 @@ ENV PYTHONUNBUFFERED=1
 # Add virtualenv to path
 ENV PATH=/app/venv/bin/:/usr/local/bin:/usr/bin:/bin
 
-COPY requirements.txt patches /app/src/
+COPY requirements.txt constraint.txt patches /app/src/
 
 # Install dependencies
 # hadolint ignore=DL3008,DL3013,SC2046,DL3003
@@ -120,6 +120,8 @@ RUN \
       uv pip install \
         --no-cache-dir \
         --compile-bytecode \
+        --constraint /app/src/constraint.txt \
+        --no-build-isolation \
         -r /app/src/requirements.txt \
         "https://github.com/translate/translate/archive/master.zip" \
         "https://github.com/WeblateOrg/language-data/archive/main.zip" \
@@ -129,6 +131,8 @@ RUN \
       uv pip install \
         --no-cache-dir \
         --compile-bytecode \
+        --constraint /app/src/constraint.txt \
+        --no-build-isolation \
         -r /app/src/requirements.txt \
         "Weblate[$WEBLATE_EXTRAS]==$WEBLATE_VERSION" \
       ;; \
