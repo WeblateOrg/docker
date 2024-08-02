@@ -198,11 +198,16 @@ fi
 if [ "$1" = "runserver" ] ; then
 
     DO_MIGRATE=1
+    # Select which services to run
+    SUPERVISOR_CONF=/var/run/supervisor.conf.d/
+    mkdir -p "$SUPERVISOR_CONF"
     if [ -n "$WEBLATE_SERVICE" ] ; then
         if [ "$WEBLATE_SERVICE" != "celery-beat" ] ; then
             DO_MIGRATE=0
         fi
-        find /etc/supervisor/conf.d/ -mindepth 1 -not -name "$WEBLATE_SERVICE.conf" -delete
+        ln -s "/etc/supervisor/conf.d/$WEBLATE_SERVICE.conf" "$SUPERVISOR_CONF"
+    else
+        ln -s /etc/supervisor/conf.d/*.conf "$SUPERVISOR_CONF"
     fi
 
     if [ $DO_MIGRATE -eq 1 ] ; then
