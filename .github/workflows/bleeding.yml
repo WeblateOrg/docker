@@ -528,7 +528,7 @@ jobs:
     - name: Generate SSL certificate
       run: |
         cd docker-compose
-        docker-compose up --no-start
+        docker compose up --no-start
         VOLUMEPATH=$(docker volume inspect -f '{{.Mountpoint}}' wl_weblate-data)
         sudo mkdir -p $VOLUMEPATH/ssl
         sudo openssl req -x509 -nodes -days 365 -subj "/CN=localhost" -newkey rsa:2048 -keyout $VOLUMEPATH/ssl/privkey.pem -out $VOLUMEPATH/ssl/fullchain.pem
