@@ -273,7 +273,7 @@ set_real_ip_from 0.0.0.0/0;
         # remove all celery-*.conf except celery-single.conf
         find /etc/supervisor/conf.d -type f -name 'celery-*.conf' ! -name 'celery-single.conf' -delete \;
     else
-        rm /etc/supervisor/conf.d/celery-single.conf
+        rm -f /etc/supervisor/conf.d/celery-single.conf
     fi
 
     # Calculate number of processes, at least 2, at most 4, depending on CPU cores
