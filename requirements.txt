@@ -14,7 +14,7 @@ Django==5.0.8
 django-appconf==1.0.6
 django-auth-ldap==4.8.0
 django-cors-headers==4.4.0
-django-crispy-forms==2.2
+django-crispy-forms==2.3
 django-otp==1.5.1
 django-otp-webauthn==0.3.0
 django-redis==5.4.0
