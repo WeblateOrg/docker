@@ -111,6 +111,7 @@ RUN \
   && uv venv /app/venv \
   && . /app/venv/bin/activate \
   && uv pip install \
+    --verbose \
     --no-cache-dir \
     --compile-bytecode \
     --no-binary :all: \
@@ -118,6 +119,7 @@ RUN \
   && case "$WEBLATE_VERSION" in \
     *+* ) \
       uv pip install \
+        --verbose \
         --no-cache-dir \
         --compile-bytecode \
         -r /app/src/requirements.txt \
@@ -127,6 +129,7 @@ RUN \
         ;; \
     * ) \
       uv pip install \
+        --verbose \
         --no-cache-dir \
         --compile-bytecode \
         -r /app/src/requirements.txt \
