@@ -207,7 +207,16 @@ if [ "$1" = "runserver" ] ; then
         fi
         ln -s "/etc/supervisor/conf.d/$WEBLATE_SERVICE.conf" "$SUPERVISOR_CONF"
     else
-        ln -s /etc/supervisor/conf.d/*.conf "$SUPERVISOR_CONF"
+        # Symlink all non-celery services
+        find /etc/supervisor/conf.d -type f ! -name 'celery-*.conf' -print0 | xargs -0 -I '{}' ln -s '{}' "$SUPERVISOR_CONF"
+
+        if [ "${CELERY_SINGLE_PROCESS:-0}" -eq 1 ] ; then
+            # Symlink single process service only
+            ln -s /etc/supervisor/conf.d/celery-signle.conf  "$SUPERVISOR_CONF"
+        else
+            # Symlink all celery services but the single process
+            find /etc/supervisor/conf.d -type f -name 'celery-*.conf' ! -name 'celery-single.conf' -print0 | xargs -0 -I '{}' ln -s '{}' "$SUPERVISOR_CONF"
+        fi
     fi
 
     if [ $DO_MIGRATE -eq 1 ] ; then
@@ -268,13 +277,6 @@ set_real_ip_from 0.0.0.0/0;
     export WEBLATE_REALIP
     mkdir -p /tmp/nginx
     envsubst "\$WEBLATE_URL_PREFIX:\$WEBLATE_REALIP:\$CLIENT_MAX_BODY_SIZE" < $template > /tmp/nginx/weblate-site.conf
-
-    if [ "${CELERY_SINGLE_PROCESS:-0}" -eq 1 ] ; then
-        # remove all celery-*.conf except celery-single.conf
-        find /etc/supervisor/conf.d -type f -name 'celery-*.conf' ! -name 'celery-single.conf' -delete \;
-    else
-        rm -f /etc/supervisor/conf.d/celery-single.conf
-    fi
 
     # Calculate number of processes, at least 2, at most 4, depending on CPU cores
     if [ -z "$WEBLATE_WORKERS" ] ; then
