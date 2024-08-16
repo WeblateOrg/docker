@@ -468,7 +468,7 @@ jobs:
       uses: docker/setup-buildx-action@v3.3.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.15.1
+        version: v0.16.2
     - name: Cache Docker layers
       uses: actions/cache@v4
       id: cache
