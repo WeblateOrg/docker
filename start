@@ -199,7 +199,7 @@ if [ "$1" = "runserver" ] ; then
 
     DO_MIGRATE=1
     # Select which services to run
-    SUPERVISOR_CONF=/var/run/supervisor.conf.d/
+    SUPERVISOR_CONF=/run/supervisor.conf.d/
     mkdir -p "$SUPERVISOR_CONF"
     if [ -n "$WEBLATE_SERVICE" ] ; then
         if [ "$WEBLATE_SERVICE" != "celery-beat" ] ; then
