@@ -705,6 +705,41 @@ jobs:
         name: Trivy scan SARIF
         path: trivy-results.sarif
 
+  merge:
+    runs-on: ubuntu-22.04
+    name: Merge images
+    needs:
+    - build
+    - buildx
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3.2.0
+      with:
+        platforms: all
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3.6.1
+      with:
+        # renovate: datasource=github-releases depName=docker/buildx
+        version: v0.16.2
+    - name: Cache Docker layers
+      uses: actions/cache@v4
+      id: cache-arm64
+      with:
+        path: /tmp/.buildx-cache/linux/arm64
+        key: ${{ runner.os }}-buildx-${{ github.sha }}-linux/arm64
+    - name: Cache Docker layers
+      uses: actions/cache@v4
+      id: cache-amd64
+      with:
+        path: /tmp/.buildx-cache/linux/amd64
+        key: ${{ runner.os }}-buildx-${{ github.sha }}-linux/amd64
+    - name: Configure Docker build
+      run: .github/bin/get-buildx-args
+    - name: Merge the Docker images
+      run: .github/bin/docker-build
+
   push_dockerhub:
     runs-on: ubuntu-22.04
     name: Publish to Docker Hub, stable
@@ -717,6 +752,7 @@ jobs:
     - buildx
     - anchore
     - trivy
+    - merge
     if: ${{ (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/main')) && github.repository == 'WeblateOrg/docker' }}
     steps:
     - name: Checkout
@@ -763,6 +799,7 @@ jobs:
     - buildx
     - anchore
     - trivy
+    - merge
     if: ${{ (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/main')) && github.repository == 'WeblateOrg/docker' }}
     env:
       DOCKER_IMAGE: ghcr.io/weblateorg/weblate
