@@ -212,6 +212,18 @@ jobs:
       run: |
         cd docker-compose
         ./test-logs
+    - name: Stop Weblate service
+      run: |
+        cd docker-compose
+        docker compose stop weblate
+    - name: Start Weblate service
+      run: |
+        cd docker-compose
+        docker compose start weblate
+    - name: Check service is running
+      run: |
+        cd docker-compose
+        ./test-online
     - name: Shutdown service
       run: |
         cd docker-compose
@@ -293,6 +305,18 @@ jobs:
       run: |
         cd docker-compose
         ./test-logs
+    - name: Stop Weblate service
+      run: |
+        cd docker-compose
+        docker compose stop weblate
+    - name: Start Weblate service
+      run: |
+        cd docker-compose
+        docker compose start weblate
+    - name: Check service is running
+      run: |
+        cd docker-compose
+        ./test-online
     - name: Shutdown service
       run: |
         cd docker-compose
