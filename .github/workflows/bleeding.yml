@@ -38,17 +38,13 @@ jobs:
       MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
     steps:
     - uses: actions/checkout@v4
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.16.2
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache
-      with:
-        path: /tmp/.buildx-cache/${{ matrix.architecture }}
-        key: ${{ runner.os }}-bleeding-${{ github.run_id }}-${{ matrix.architecture }}
     - name: Adjust bleeding edge image
       run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
     - name: Configure Docker build
@@ -73,17 +69,13 @@ jobs:
       uses: docker/setup-qemu-action@v3.2.0
       with:
         platforms: ${{ matrix.architecture }}
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.16.2
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache
-      with:
-        path: /tmp/.buildx-cache/${{ matrix.architecture }}
-        key: ${{ runner.os }}-bleeding-${{ github.run_id }}-${{ matrix.architecture }}
     - name: Adjust bleeding edge image
       run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
     - name: Configure Docker build
@@ -109,17 +101,13 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.16.2
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache
-      with:
-        path: /tmp/.buildx-cache/${{ matrix.architecture }}
-        key: ${{ runner.os }}-bleeding-${{ github.run_id }}-${{ matrix.architecture }}
     - name: Adjust bleeding edge image
       run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
     - name: Build the Docker image
@@ -166,17 +154,13 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.16.2
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache
-      with:
-        path: /tmp/.buildx-cache/${{ matrix.architecture }}
-        key: ${{ runner.os }}-bleeding-${{ github.run_id }}-${{ matrix.architecture }}
     - name: Adjust bleeding edge image
       run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
     - name: Build the Docker image
@@ -251,17 +235,13 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.16.2
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache
-      with:
-        path: /tmp/.buildx-cache/${{ matrix.architecture }}
-        key: ${{ runner.os }}-bleeding-${{ github.run_id }}-${{ matrix.architecture }}
     - name: Adjust bleeding edge image
       run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
     - name: Build the Docker image
@@ -336,17 +316,13 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.16.2
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache
-      with:
-        path: /tmp/.buildx-cache/${{ matrix.architecture }}
-        key: ${{ runner.os }}-bleeding-${{ github.run_id }}-${{ matrix.architecture }}
     - name: Adjust bleeding edge image
       run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
     - name: Build the Docker image
@@ -423,17 +399,13 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.16.2
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache
-      with:
-        path: /tmp/.buildx-cache/${{ matrix.architecture }}
-        key: ${{ runner.os }}-bleeding-${{ github.run_id }}-${{ matrix.architecture }}
     - name: Adjust bleeding edge image
       run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
     - name: Build the Docker image
@@ -504,17 +476,13 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.16.2
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache
-      with:
-        path: /tmp/.buildx-cache/${{ matrix.architecture }}
-        key: ${{ runner.os }}-bleeding-${{ github.run_id }}-${{ matrix.architecture }}
     - name: Adjust bleeding edge image
       run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
     - name: Build the Docker image
@@ -590,17 +558,13 @@ jobs:
       MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
     steps:
     - uses: actions/checkout@v4
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.16.2
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache
-      with:
-        path: /tmp/.buildx-cache/${{ matrix.architecture }}
-        key: ${{ runner.os }}-bleeding-${{ github.run_id }}-${{ matrix.architecture }}
     - name: Adjust bleeding edge image
       run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
     - name: Build the Docker image
@@ -639,17 +603,13 @@ jobs:
       MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
     steps:
     - uses: actions/checkout@v4
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.16.2
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache
-      with:
-        path: /tmp/.buildx-cache/${{ matrix.architecture }}
-        key: ${{ runner.os }}-bleeding-${{ github.run_id }}-${{ matrix.architecture }}
     - name: Adjust bleeding edge image
       run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
     - name: Build the Docker image
@@ -690,23 +650,13 @@ jobs:
       uses: docker/setup-qemu-action@v3.2.0
       with:
         platforms: all
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.16.2
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache-arm64
-      with:
-        path: /tmp/.buildx-cache/linux/arm64
-        key: ${{ runner.os }}-bleeding-${{ github.run_id }}-linux/arm64
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache-amd64
-      with:
-        path: /tmp/.buildx-cache/linux/amd64
-        key: ${{ runner.os }}-bleeding-${{ github.run_id }}-linux/amd64
     - name: Adjust bleeding edge image
       run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
     - name: Configure Docker build
@@ -736,23 +686,13 @@ jobs:
       uses: docker/setup-qemu-action@v3.2.0
       with:
         platforms: all
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.16.2
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache-arm64
-      with:
-        path: /tmp/.buildx-cache/linux/arm64
-        key: ${{ runner.os }}-bleeding-${{ github.run_id }}-linux/arm64
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache-amd64
-      with:
-        path: /tmp/.buildx-cache/linux/amd64
-        key: ${{ runner.os }}-bleeding-${{ github.run_id }}-linux/amd64
     - name: DockerHub login
       run: echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
     - name: Adjust bleeding edge image
@@ -788,23 +728,13 @@ jobs:
       uses: docker/setup-qemu-action@v3.2.0
       with:
         platforms: all
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3.6.1
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.16.2
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache-arm64
-      with:
-        path: /tmp/.buildx-cache/linux/arm64
-        key: ${{ runner.os }}-bleeding-${{ github.run_id }}-linux/arm64
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      id: cache-amd64
-      with:
-        path: /tmp/.buildx-cache/linux/amd64
-        key: ${{ runner.os }}-bleeding-${{ github.run_id }}-linux/amd64
     - name: Login to GitHub Container Registry
       if: ${{ github.event_name != 'pull_request'}}
       uses: docker/login-action@v3
