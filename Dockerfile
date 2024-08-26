@@ -48,7 +48,7 @@ ENV PYTHONUNBUFFERED=1
 # Add virtualenv to path
 ENV PATH=/app/venv/bin/:/usr/local/bin:/usr/bin:/bin
 
-COPY requirements.txt patches /app/src/
+COPY --link requirements.txt patches /app/src/
 
 # Install dependencies
 # hadolint ignore=DL3008,DL3013,SC2046,DL3003
@@ -169,7 +169,7 @@ RUN find /app/src -name '*.patch' -print0 | sort -z | \
   xargs -n1 -0 -r patch -p0 -d "/app/venv/lib/python${PYVERSION}/site-packages/" -i
 
 # Configuration for Weblate, nginx and supervisor
-COPY etc /etc/
+COPY --link etc /etc/
 
 # Fix permissions and adjust files to be able to edit them as user on start
 # - localtime is needed for setting system timezone based on environment
@@ -204,7 +204,7 @@ RUN \
     chown -R weblate:weblate /app/data/python
 
 # Entrypoint
-COPY --chmod=a+rx start health_check /app/bin/
+COPY --link --chmod=a+rx start health_check /app/bin/
 
 EXPOSE 8080
 VOLUME /app/data
