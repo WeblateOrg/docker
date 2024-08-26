@@ -23,9 +23,9 @@ jobs:
       weblate_date: ${{ steps.get_date.outputs.date }}
     steps:
     - id: get_sha
-      run: echo "::set-output name=sha::$(git ls-remote --quiet https://github.com/WeblateOrg/weblate.git HEAD | awk '{print $1}')"
+      run: echo "sha=$(git ls-remote --quiet https://github.com/WeblateOrg/weblate.git HEAD | awk '{print $1}')" >> $GITHUB_OUTPUT
     - id: get_date
-      run: echo "::set-output name=date::$(date --iso-8601=ns)"
+      run: echo "date=$(date --iso-8601=ns)" >> $GITHUB_OUTPUT
   build:
     runs-on: ubuntu-22.04
     name: Build, bleeding, ${{ matrix.architecture }}
