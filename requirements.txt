@@ -68,6 +68,6 @@ translation-finder==2.16
 urllib3==2.2.2
 uv==0.4.0
 weblate-fedora-messaging==0.8
-weblate-language-data==2024.5
+weblate-language-data==2024.6
 wllegal==2024.2
 zeep==4.2.1
