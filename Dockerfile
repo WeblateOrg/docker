@@ -110,12 +110,6 @@ RUN \
   && pip install --no-cache-dir --upgrade $(grep -E '^(uv)==' /app/src/requirements.txt) \
   && uv venv /app/venv \
   && . /app/venv/bin/activate \
-  && uv pip install \
-    --verbose \
-    --no-cache-dir \
-    --compile-bytecode \
-    --no-binary :all: \
-    $(grep -E '^(cffi)==' /app/src/requirements.txt) \
   && case "$WEBLATE_VERSION" in \
     *+* ) \
       uv pip install \
