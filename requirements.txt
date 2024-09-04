@@ -7,7 +7,7 @@ boto3==1.35.11
 celery==5.4.0
 certifi>=2023.7.22 # not directly required, pinned by Snyk to avoid a vulnerability
 # For Argon2 and misaka
-cffi==1.17.0
+cffi==1.17.1
 # For Azure Tenant auth
 cryptography==43.0.1
 Django==5.1.1
