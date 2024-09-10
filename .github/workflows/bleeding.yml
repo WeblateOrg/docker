@@ -28,6 +28,8 @@ jobs:
       run: echo "date=$(date --iso-8601=ns)" >> $GITHUB_OUTPUT
   build:
     runs-on: ubuntu-22.04
+    permissions:
+      packages: write
     name: Build, bleeding, ${{ matrix.architecture }}
     needs:
     - bleeding
@@ -54,6 +56,8 @@ jobs:
 
   buildx:
     runs-on: ubuntu-22.04
+    permissions:
+      packages: write
     name: Build, bleeding, ${{ matrix.architecture }}
     needs:
     - bleeding

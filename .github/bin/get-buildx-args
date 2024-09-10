@@ -64,6 +64,7 @@ else
         esac
     else
         echo --output "type=image,push=false"
+        echo --output "type=image,push=true,name=ghcr.io/weblateorg/weblate-ci:${GITHUB_RUN_ID}"
     fi
 fi
 

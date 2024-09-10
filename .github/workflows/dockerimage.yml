@@ -18,6 +18,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-22.04
+    permissions:
+      packages: write
     name: Build, stable, ${{ matrix.architecture }}
     strategy:
       matrix:
@@ -40,6 +42,8 @@ jobs:
 
   buildx:
     runs-on: ubuntu-22.04
+    permissions:
+      packages: write
     name: Build, stable, ${{ matrix.architecture }}
     strategy:
       matrix:
