@@ -19,7 +19,6 @@ sed -i \
 
 # Adjust requirements for bleeding by removing ones we install from Git
 sed -i \
-    -e '/^sentry-sdk==1.45.0/ D' \
     -e '/^translate-toolkit==/ D' \
     -e '/^weblate-language-data==/ D' \
     requirements.txt
