@@ -599,18 +599,14 @@ jobs:
       uses: actions/checkout@v4
     - name: Anchore scan action
       uses: anchore/scan-action@v4
+      id: scan
       with:
         image: weblate/weblate:test
         fail-build: false
-        severity-cutoff: high
     - name: Upload Anchore Scan Report
       uses: github/codeql-action/upload-sarif@v3
       with:
-        sarif_file: results.sarif
-    - uses: actions/upload-artifact@v4
-      with:
-        name: Anchore scan SARIF
-        path: results.sarif
+        sarif_file: ${{ steps.scan.outputs.sarif }}
 
   trivy:
     runs-on: ubuntu-22.04
