@@ -48,7 +48,8 @@ ENV PYTHONUNBUFFERED=1
 # Add virtualenv to path
 ENV PATH=/app/venv/bin/:/usr/local/bin:/usr/bin:/bin
 
-COPY --link requirements.txt patches /app/src/
+# Copy filesystem
+COPY --link root/ /
 
 # Install dependencies
 # hadolint ignore=DL3008,DL3013,SC2046,DL3003
@@ -160,9 +161,6 @@ RUN \
 RUN find /app/src -name '*.patch' -print0 | sort -z | \
   xargs -n1 -0 -r patch -p0 -d "/app/venv/lib/python${PYVERSION}/site-packages/" -i
 
-# Configuration for Weblate, nginx and supervisor
-COPY --link etc /etc/
-
 # Fix permissions and adjust files to be able to edit them as user on start
 # - localtime is needed for setting system timezone based on environment
 # - timezone is removed to avoid dpkg handling localtime updates
@@ -170,6 +168,7 @@ COPY --link etc /etc/
 # - autorize passwd edition so we can fix weblate uid on startup
 # - log, run and home directories
 # - disable su for non root to avoid privilege escapation by chaging /etc/passwd
+# - make sure entry points are executable
 RUN rm -f /etc/localtime /etc/timezone \
   && ln -s /tmp/localtime /etc/localtime \
   && cp /usr/share/zoneinfo/Etc/UTC /tmp/localtime \
@@ -181,7 +180,8 @@ RUN rm -f /etc/localtime /etc/timezone \
   && rm -f /var/log/nginx/access.log /var/log/nginx/error.log \
   && ln -sf /dev/stdout /var/log/nginx/access.log \
   && ln -sf /dev/stderr /var/log/nginx/error.log \
-  && chmod 664 /etc/passwd /etc/group \
+  && chmod 0664 /etc/passwd /etc/group \
+  && chmod 0755 /app/bin/* \
   && sed -i '/pam_rootok.so/a auth requisite pam_deny.so' /etc/pam.d/su
 
 # Customize Python:
@@ -194,9 +194,6 @@ RUN \
     touch /app/data/python/customize/__init__.py && \
     touch /app/data/python/customize/models.py && \
     chown -R weblate:weblate /app/data/python
-
-# Entrypoint
-COPY --link --chmod=0755 start health_check /app/bin/
 
 EXPOSE 8080
 VOLUME /app/data
