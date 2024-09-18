@@ -784,3 +784,16 @@ jobs:
       run: .github/bin/get-buildx-args publish
     - name: Publish the Docker images
       run: .github/bin/docker-build publish
+
+  release_github:
+    runs-on: ubuntu-22.04
+    name: Create release on GitHub
+    permissions:
+      contents: write
+    needs:
+    - push_github
+    if: ${{ (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/main')) && github.repository == 'WeblateOrg/docker' }}
+    steps:
+    - uses: ncipollo/release-action@v1
+      with:
+        generateReleaseNotes: true
