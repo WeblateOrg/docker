@@ -12,7 +12,7 @@ on:
     - .github/workflows/readme-sync.yml
 jobs:
   sync-readme:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: ${{ github.repository == 'WeblateOrg/docker'}}
     steps:
     - name: Checkout

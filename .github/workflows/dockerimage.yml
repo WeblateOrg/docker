@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Build, stable, ${{ matrix.architecture }}
     strategy:
       matrix:
@@ -39,7 +39,7 @@ jobs:
       run: .github/bin/docker-build
 
   buildx:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Build, stable, ${{ matrix.architecture }}
     strategy:
       matrix:
@@ -66,7 +66,7 @@ jobs:
       run: .github/bin/docker-build
 
   test:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Test, stable, ${{ matrix.architecture }}
     needs: [build]
     strategy:
@@ -115,7 +115,7 @@ jobs:
         ./test-stop
 
   test-basic:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Test basic, stable, ${{ matrix.architecture }}
     needs: [build]
     strategy:
@@ -204,7 +204,7 @@ jobs:
         ./test-stop
 
   test-novolume:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Test novolume, stable, ${{ matrix.architecture }}
     needs: [build]
     strategy:
@@ -293,7 +293,7 @@ jobs:
         ./test-stop
 
   test-saml:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Test SAML, stable, ${{ matrix.architecture }}
     needs: [build]
     strategy:
@@ -372,7 +372,7 @@ jobs:
         ./test-stop
 
   test-split:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Test split, stable, ${{ matrix.architecture }}
     needs: [build]
     strategy:
@@ -445,7 +445,7 @@ jobs:
         ./test-stop
 
   test-single-celery:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Test single celery process, stable, ${{ matrix.architecture }}
     needs: [build]
     strategy:
@@ -518,7 +518,7 @@ jobs:
         ./test-stop
 
   test-ssl:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Test SSL, stable, ${{ matrix.architecture }}
     needs: [build]
     strategy:
@@ -599,7 +599,7 @@ jobs:
         ./test-stop
 
   anchore:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Anchore Container Scan, ${{ matrix.architecture }}
     needs:
     - build
@@ -637,7 +637,7 @@ jobs:
         sarif_file: ${{ steps.scan.outputs.sarif }}
 
   trivy:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Trivy Container Scan, ${{ matrix.architecture }}
     needs:
     - build
@@ -682,7 +682,7 @@ jobs:
         path: trivy-results.sarif
 
   merge:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Merge images
     needs:
     - build
@@ -707,7 +707,7 @@ jobs:
       run: .github/bin/docker-build
 
   push_dockerhub:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Publish to Docker Hub, stable
     needs:
     - test
@@ -742,7 +742,7 @@ jobs:
       run: .github/bin/docker-build publish
 
   push_github:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Publish to GitHub, stable
     permissions:
       packages: write
@@ -786,7 +786,7 @@ jobs:
       run: .github/bin/docker-build publish
 
   release_github:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     name: Create release on GitHub
     permissions:
       contents: write
