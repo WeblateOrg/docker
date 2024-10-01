@@ -57,7 +57,7 @@ redis==5.0.8
 requests>=2.31.0 # not directly required, pinned by Snyk to avoid a vulnerability
 rollbar==1.0.0
 ruamel.yaml==0.18.6
-sentry-sdk==2.14.0
+sentry-sdk==2.15.0
 siphashc==2.5
 social-auth-app-django==5.4.2
 social-auth-core==4.5.4
