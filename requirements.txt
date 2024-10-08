@@ -1,5 +1,5 @@
 aeidon==1.15
-ahocorasick-rs==0.22.0
+ahocorasick-rs==0.22.1
 aliyun-python-sdk-alimt==3.2.0
 argon2-cffi==23.1.0
 borgbackup==1.4.0
