@@ -70,4 +70,3 @@ uv==0.4.20
 weblate-fedora-messaging==0.8
 weblate-language-data==2024.8
 wllegal==2024.2
-zeep==4.3.0
