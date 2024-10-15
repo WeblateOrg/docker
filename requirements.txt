@@ -12,7 +12,7 @@ cffi==1.17.1
 cryptography==43.0.1
 Django==5.1.2
 django-appconf==1.0.6
-django-auth-ldap==4.8.0
+django-auth-ldap==5.0.0
 django-cors-headers==4.5.0
 django-crispy-forms==2.3
 django-otp==1.5.4
