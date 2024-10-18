@@ -66,7 +66,7 @@ tesserocr==2.7.1
 translate-toolkit==3.14.1
 translation-finder==2.16
 urllib3==2.2.3
-uv==0.4.23
+uv==0.4.24
 weblate-fedora-messaging==0.8
 weblate-language-data==2024.9
 wllegal==2024.2
