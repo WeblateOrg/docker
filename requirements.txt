@@ -23,7 +23,7 @@ djangorestframework==3.15.2
 # Alernative Celery pool implementation
 gevent==24.10.3
 git-review==2.4.0
-google-cloud-translate==3.16.0
+google-cloud-translate==3.17.0
 gunicorn==23.0.0
 hiredis==3.0.0
 html2text==2024.2.26
