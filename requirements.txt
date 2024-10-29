@@ -35,7 +35,7 @@ httpretty==1.1.4
 https://github.com/nijel/supervisor-stdout/archive/c909c1a1ddabaf679dc2eaecb3b8f5ad6bef467a.zip
 iniparse==0.5
 lxml==5.3.0
-mercurial==6.8.1
+mercurial==6.8.2
 mistletoe==1.4.0
 nh3==0.2.18
 openai==1.52.2
