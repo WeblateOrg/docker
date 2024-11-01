@@ -85,15 +85,12 @@ jobs:
 
   test:
     runs-on: ubuntu-24.04
-    name: Test, bleeding, ${{ matrix.architecture }}
+    name: Test, bleeding
     needs:
     - bleeding
     - build
-    strategy:
-      matrix:
-        architecture: [linux/amd64]
     env:
-      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+      MATRIX_ARCHITECTURE: linux/amd64
       COMPOSE_PROJECT_NAME: wl
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
@@ -138,15 +135,12 @@ jobs:
 
   test-basic:
     runs-on: ubuntu-24.04
-    name: Test basic, bleeding, ${{ matrix.architecture }}
+    name: Test basic, bleeding
     needs:
     - bleeding
     - build
-    strategy:
-      matrix:
-        architecture: [linux/amd64]
     env:
-      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+      MATRIX_ARCHITECTURE: linux/amd64
       COMPOSE_PROJECT_NAME: wl
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
@@ -231,15 +225,13 @@ jobs:
 
   test-novolume:
     runs-on: ubuntu-24.04
-    name: Test novolume, bleeding, ${{ matrix.architecture }}
+    name: Test novolume, bleeding
     needs:
     - bleeding
     - build
-    strategy:
-      matrix:
-        architecture: [linux/amd64]
+    - test-basic
     env:
-      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+      MATRIX_ARCHITECTURE: linux/amd64
       COMPOSE_PROJECT_NAME: wl
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
@@ -324,15 +316,13 @@ jobs:
 
   test-saml:
     runs-on: ubuntu-24.04
-    name: Test SAML, bleeding, ${{ matrix.architecture }}
+    name: Test SAML, bleeding
     needs:
     - bleeding
     - build
-    strategy:
-      matrix:
-        architecture: [linux/amd64]
+    - test-basic
     env:
-      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+      MATRIX_ARCHITECTURE: linux/amd64
       COMPOSE_PROJECT_NAME: wl
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
@@ -407,15 +397,88 @@ jobs:
 
   test-split:
     runs-on: ubuntu-24.04
-    name: Test split, bleeding, ${{ matrix.architecture }}
+    name: Test split, bleeding
     needs:
     - bleeding
     - build
-    strategy:
-      matrix:
-        architecture: [linux/amd64]
+    - test-basic
     env:
-      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+      MATRIX_ARCHITECTURE: linux/amd64
+      COMPOSE_PROJECT_NAME: wl
+      PYTHONUNBUFFERED: 1
+      TEST_CONTAINER: weblate/weblate:test
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3.7.1
+      with:
+        # renovate: datasource=github-releases depName=docker/buildx
+        version: v0.18.0
+    - name: Adjust bleeding edge image
+      run: .github/bin/bleeding ${{needs.bleeding.outputs.weblate_sha}}  ${{needs.bleeding.outputs.weblate_date}}
+    - name: Build the Docker image
+      run: .github/bin/docker-build load
+    - name: List Docker images
+      run: docker image ls --all
+    - name: Generate configuration
+      run: |
+        cd docker-compose
+        ./test-generate 8080 http split
+    - name: Startup container
+      run: |
+        cd docker-compose
+        ./test-boot
+    - name: List Python packages
+      run: |
+        cd docker-compose
+        ./test-pip
+    - name: Inspect container
+      run: |
+        cd docker-compose
+        ./test-inspect
+    - name: Check service is running
+      run: |
+        cd docker-compose
+        ./test-online
+    - name: Check service health status
+      run: |
+        cd docker-compose
+        ./test-health
+    - name: Run Django Checks
+      run: |
+        cd docker-compose
+        ./test-checks
+    - name: Verify supervisor
+      run: |
+        cd docker-compose
+        ./test-supervisor
+    - name: Test admin creation
+      run: |
+        cd docker-compose
+        ./test-admin
+    - name: Display logs
+      if: always()
+      run: |
+        cd docker-compose
+        ./test-logs
+    - name: Shutdown service
+      run: |
+        cd docker-compose
+        ./test-stop
+
+  test-single-celery:
+    runs-on: ubuntu-24.04
+    name: Test single celery process, bleeding
+    needs:
+    - bleeding
+    - build
+    - test-basic
+    env:
+      MATRIX_ARCHITECTURE: linux/amd64
       COMPOSE_PROJECT_NAME: wl
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
@@ -484,15 +547,13 @@ jobs:
 
   test-ssl:
     runs-on: ubuntu-24.04
-    name: Test SSL, bleeding, ${{ matrix.architecture }}
+    name: Test SSL, bleeding
     needs:
     - bleeding
     - build
-    strategy:
-      matrix:
-        architecture: [linux/amd64]
+    - test-basic
     env:
-      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+      MATRIX_ARCHITECTURE: linux/amd64
       COMPOSE_PROJECT_NAME: wl
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
@@ -569,17 +630,14 @@ jobs:
 
   anchore:
     runs-on: ubuntu-24.04
-    name: Anchore Container Scan, ${{ matrix.architecture }}
+    name: Anchore Container Scan
     needs:
     - bleeding
     - build
     permissions:
       security-events: write
-    strategy:
-      matrix:
-        architecture: [linux/amd64]
     env:
-      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+      MATRIX_ARCHITECTURE: linux/amd64
     steps:
     - uses: actions/checkout@v4
     - name: Expose GitHub Runtime
@@ -610,17 +668,14 @@ jobs:
 
   trivy:
     runs-on: ubuntu-24.04
-    name: Trivy Container Scan, ${{ matrix.architecture }}
+    name: Trivy Container Scan
     needs:
     - bleeding
     - build
     permissions:
       security-events: write
-    strategy:
-      matrix:
-        architecture: [linux/amd64]
     env:
-      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+      MATRIX_ARCHITECTURE: linux/amd64
     steps:
     - uses: actions/checkout@v4
     - name: Expose GitHub Runtime
@@ -692,6 +747,8 @@ jobs:
     - test-basic
     - test-saml
     - test-split
+    - test-single-celery
+    - test-novolume
     - test-ssl
     - buildx
     - anchore
@@ -732,6 +789,8 @@ jobs:
     - test-basic
     - test-saml
     - test-split
+    - test-single-celery
+    - test-novolume
     - test-ssl
     - buildx
     - anchore
