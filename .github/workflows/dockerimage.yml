@@ -67,13 +67,11 @@ jobs:
 
   test:
     runs-on: ubuntu-24.04
-    name: Test, stable, ${{ matrix.architecture }}
-    needs: [build]
-    strategy:
-      matrix:
-        architecture: [linux/amd64]
+    name: Test, stable
+    needs:
+    - build
     env:
-      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+      MATRIX_ARCHITECTURE: linux/amd64
       COMPOSE_PROJECT_NAME: wl
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
@@ -116,13 +114,11 @@ jobs:
 
   test-basic:
     runs-on: ubuntu-24.04
-    name: Test basic, stable, ${{ matrix.architecture }}
-    needs: [build]
-    strategy:
-      matrix:
-        architecture: [linux/amd64]
+    name: Test basic, stable
+    needs:
+    - build
     env:
-      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+      MATRIX_ARCHITECTURE: linux/amd64
       COMPOSE_PROJECT_NAME: wl
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
@@ -205,13 +201,12 @@ jobs:
 
   test-novolume:
     runs-on: ubuntu-24.04
-    name: Test novolume, stable, ${{ matrix.architecture }}
-    needs: [build]
-    strategy:
-      matrix:
-        architecture: [linux/amd64]
+    name: Test novolume, stable
+    needs:
+    - build
+    - test-basic
     env:
-      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+      MATRIX_ARCHITECTURE: linux/amd64
       COMPOSE_PROJECT_NAME: wl
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
@@ -294,13 +289,12 @@ jobs:
 
   test-saml:
     runs-on: ubuntu-24.04
-    name: Test SAML, stable, ${{ matrix.architecture }}
-    needs: [build]
-    strategy:
-      matrix:
-        architecture: [linux/amd64]
+    name: Test SAML, stable
+    needs:
+    - build
+    - test-basic
     env:
-      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+      MATRIX_ARCHITECTURE: linux/amd64
       COMPOSE_PROJECT_NAME: wl
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
@@ -373,13 +367,12 @@ jobs:
 
   test-split:
     runs-on: ubuntu-24.04
-    name: Test split, stable, ${{ matrix.architecture }}
-    needs: [build]
-    strategy:
-      matrix:
-        architecture: [linux/amd64]
+    name: Test split, stable
+    needs:
+    - build
+    - test-basic
     env:
-      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+      MATRIX_ARCHITECTURE: linux/amd64
       COMPOSE_PROJECT_NAME: wl
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
@@ -446,13 +439,12 @@ jobs:
 
   test-single-celery:
     runs-on: ubuntu-24.04
-    name: Test single celery process, stable, ${{ matrix.architecture }}
-    needs: [build]
-    strategy:
-      matrix:
-        architecture: [linux/amd64]
+    name: Test single celery process, stable
+    needs:
+    - build
+    - test-basic
     env:
-      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+      MATRIX_ARCHITECTURE: linux/amd64
       COMPOSE_PROJECT_NAME: wl
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
@@ -519,13 +511,12 @@ jobs:
 
   test-ssl:
     runs-on: ubuntu-24.04
-    name: Test SSL, stable, ${{ matrix.architecture }}
-    needs: [build]
-    strategy:
-      matrix:
-        architecture: [linux/amd64]
+    name: Test SSL, stable
+    needs:
+    - build
+    - test-basic
     env:
-      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+      MATRIX_ARCHITECTURE: linux/amd64
       COMPOSE_PROJECT_NAME: wl
       PYTHONUNBUFFERED: 1
       TEST_CONTAINER: weblate/weblate:test
@@ -600,16 +591,13 @@ jobs:
 
   anchore:
     runs-on: ubuntu-24.04
-    name: Anchore Container Scan, ${{ matrix.architecture }}
+    name: Anchore Container Scan
     needs:
     - build
     permissions:
       security-events: write
-    strategy:
-      matrix:
-        architecture: [linux/amd64]
     env:
-      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+      MATRIX_ARCHITECTURE: linux/amd64
     steps:
     - uses: actions/checkout@v4
     - name: Expose GitHub Runtime
@@ -638,16 +626,13 @@ jobs:
 
   trivy:
     runs-on: ubuntu-24.04
-    name: Trivy Container Scan, ${{ matrix.architecture }}
+    name: Trivy Container Scan
     needs:
     - build
     permissions:
       security-events: write
-    strategy:
-      matrix:
-        architecture: [linux/amd64]
     env:
-      MATRIX_ARCHITECTURE: ${{ matrix.architecture }}
+      MATRIX_ARCHITECTURE: linux/amd64
     steps:
     - uses: actions/checkout@v4
     - name: Expose GitHub Runtime
@@ -714,6 +699,8 @@ jobs:
     - test-basic
     - test-saml
     - test-split
+    - test-single-celery
+    - test-novolume
     - test-ssl
     - buildx
     - anchore
@@ -751,6 +738,8 @@ jobs:
     - test-basic
     - test-saml
     - test-split
+    - test-single-celery
+    - test-novolume
     - test-ssl
     - buildx
     - anchore
