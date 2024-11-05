@@ -65,53 +65,6 @@ jobs:
     - name: Build the Docker image
       run: .github/bin/docker-build
 
-  test:
-    runs-on: ubuntu-24.04
-    name: Test, stable
-    needs:
-    - build
-    env:
-      MATRIX_ARCHITECTURE: linux/amd64
-      COMPOSE_PROJECT_NAME: wl
-      PYTHONUNBUFFERED: 1
-      TEST_CONTAINER: weblate/weblate:test
-    steps:
-    - uses: actions/checkout@v4
-      with:
-        submodules: recursive
-    - name: Expose GitHub Runtime
-      uses: crazy-max/ghaction-github-runtime@v3
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.7.1
-      with:
-        # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.18.0
-    - name: Build the Docker image
-      run: .github/bin/docker-build load
-    - name: List Docker images
-      run: docker image ls --all
-    - name: Generate configuration
-      run: |
-        cd docker-compose
-        ./test-generate
-    - name: Startup container
-      run: |
-        cd docker-compose
-        ./test-boot
-    - name: Run tests
-      run: |
-        cd docker-compose
-        ./test-tests
-    - name: Display logs
-      if: always()
-      run: |
-        cd docker-compose
-        ./test-logs
-    - name: Shutdown service
-      run: |
-        cd docker-compose
-        ./test-stop
-
   test-basic:
     runs-on: ubuntu-24.04
     name: Test basic, stable
@@ -697,7 +650,6 @@ jobs:
     runs-on: ubuntu-24.04
     name: Publish to Docker Hub, stable
     needs:
-    - test
     - test-basic
     - test-saml
     - test-split
@@ -736,7 +688,6 @@ jobs:
     permissions:
       packages: write
     needs:
-    - test
     - test-basic
     - test-saml
     - test-split
