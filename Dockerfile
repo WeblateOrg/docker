@@ -1,7 +1,7 @@
 FROM python:3.12.7-slim-bookworm
 ENV PYVERSION=3.12
 ENV WEBLATE_VERSION=5.8.2
-ENV WEBLATE_EXTRAS=all,MySQL,zxcvbn,test
+ENV WEBLATE_EXTRAS=all,MySQL,zxcvbn
 ARG TARGETARCH
 
 LABEL name="Weblate"
@@ -185,9 +185,7 @@ RUN rm -f /etc/localtime /etc/timezone \
 
 # Customize Python:
 # - Search path for custom modules
-# - Create test and app data dirs to be able to run tests
 RUN \
-    install -d -o weblate -g weblate -m 755 "/app/venv/lib/python${PYVERSION}/site-packages/data-test" "/app/venv/lib/python${PYVERSION}/site-packages/test-images" && \
     echo "/app/data/python" > "/app/venv/lib/python${PYVERSION}/site-packages/weblate-docker.pth" && \
     mkdir -p /app/data/python/customize && \
     touch /app/data/python/customize/__init__.py && \
