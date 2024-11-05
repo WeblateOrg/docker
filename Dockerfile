@@ -11,13 +11,13 @@ COPY --link requirements.txt patches /app/src/
 
 # Install dependencies
 # hadolint ignore=DL3008,DL3013,SC2046,DL3003
-RUN \
-  uv venv /app/venv \
+RUN --mount=type=cache,target=/.uv-cache \
+  export UV_CACHE_DIR=/.uv-cache UV_LINK_MODE=copy \
+  && uv venv /app/venv \
   && . /app/venv/bin/activate \
   && case "$WEBLATE_VERSION" in \
     *+* ) \
       uv pip install \
-        --no-cache-dir \
         --compile-bytecode \
         -r /app/src/requirements.txt \
         "https://github.com/translate/translate/archive/master.zip" \
@@ -26,12 +26,12 @@ RUN \
         ;; \
     * ) \
       uv pip install \
-        --no-cache-dir \
         --compile-bytecode \
         -r /app/src/requirements.txt \
         "Weblate[$WEBLATE_EXTRAS]==$WEBLATE_VERSION" \
       ;; \
-  esac
+  esac \
+  && uv cache prune --ci
 RUN /app/venv/bin/python -c 'from phply.phpparse import make_parser; make_parser()'
 RUN ln -s /app/venv/share/weblate/examples/ /app/
 
