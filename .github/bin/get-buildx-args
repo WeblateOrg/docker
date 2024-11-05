@@ -17,8 +17,8 @@ fi
 
 # Expose annotations
 if [ "$1" != "load" ] ; then
-    WEBLATE_VERSION=$(sed -n 's/^ENV WEBLATE_VERSION=\(.*\)/\1/p' Dockerfile)
-    sed -n "s/^LABEL \(org.opencontainers.image.*\)/--annotation index:\1/p" Dockerfile | sed -e "s/\\\$WEBLATE_VERSION/$WEBLATE_VERSION/"
+    WEBLATE_VERSION=$(sed -n 's/^ENV WEBLATE_VERSION=\(.*\)/\1/p' Dockerfile | head -n 1)
+    sed -n "s/^LABEL \(org.opencontainers.image.*\)/--annotation index:\1/p" Dockerfile | sed -e "s/\\\$WEBLATE_VERSION/${WEBLATE_VERSION}/"
 fi
 
 # Write to GitHub Actions cache unless publishing (not compatible with push)
