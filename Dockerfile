@@ -31,16 +31,16 @@ RUN \
         -r /app/src/requirements.txt \
         "Weblate[$WEBLATE_EXTRAS]==$WEBLATE_VERSION" \
       ;; \
-  esac \
-  && python -c 'from phply.phpparse import make_parser; make_parser()' \
-  && ln -s /app/venv/share/weblate/examples/ /app/
+  esac
+RUN /app/ven/python -c 'from phply.phpparse import make_parser; make_parser()'
+RUN ln -s /app/venv/share/weblate/examples/ /app/
 
 # Apply hotfixes on Weblate
 RUN find /app/src -name '*.patch' -print0 | sort -z | \
   xargs -n1 -0 -r patch -p0 -d "/app/venv/lib/python${PYVERSION}/site-packages/" -i
 
 
-FROM weblate/base:2024.45.4
+FROM weblate/base:2024.45.4 AS final
 
 ENV WEBLATE_VERSION=5.8.2
 
