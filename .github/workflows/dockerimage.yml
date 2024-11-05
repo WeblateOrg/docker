@@ -35,6 +35,20 @@ jobs:
         version: v0.18.0
     - name: Configure Docker build
       run: .github/bin/get-buildx-args
+    - name: Cache
+      uses: actions/cache@v3
+      id: cache
+      with:
+        path: uv-cache
+        key: uv-cache-${{ hashFiles('Dockerfile') }}-${{ matrix.architecture }}
+    - name: inject cache into docker
+      uses: reproducible-containers/buildkit-cache-dance@v3.1.0
+      with:
+        cache-map: |
+          {
+            "uv-cache": "/.uv-cache"
+          }
+        skip-extraction: ${{ steps.cache.outputs.cache-hit }}
     - name: Build the Docker image
       run: .github/bin/docker-build
 
@@ -62,6 +76,20 @@ jobs:
         version: v0.18.0
     - name: Configure Docker build
       run: .github/bin/get-buildx-args
+    - name: Cache
+      uses: actions/cache@v3
+      id: cache
+      with:
+        path: uv-cache
+        key: uv-cache-${{ hashFiles('Dockerfile') }}-${{ matrix.architecture }}
+    - name: inject cache into docker
+      uses: reproducible-containers/buildkit-cache-dance@v3.1.0
+      with:
+        cache-map: |
+          {
+            "uv-cache": "/.uv-cache"
+          }
+        skip-extraction: ${{ steps.cache.outputs.cache-hit }}
     - name: Build the Docker image
       run: .github/bin/docker-build
 
