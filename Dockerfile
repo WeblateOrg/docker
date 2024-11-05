@@ -32,7 +32,7 @@ RUN \
         "Weblate[$WEBLATE_EXTRAS]==$WEBLATE_VERSION" \
       ;; \
   esac
-RUN /app/ven/python -c 'from phply.phpparse import make_parser; make_parser()'
+RUN /app/venv/bin/python -c 'from phply.phpparse import make_parser; make_parser()'
 RUN ln -s /app/venv/share/weblate/examples/ /app/
 
 # Apply hotfixes on Weblate
