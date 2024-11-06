@@ -2,7 +2,7 @@ FROM weblate/dev:2024.45.4 AS build
 
 ARG TARGETARCH
 
-ENV WEBLATE_VERSION=5.8.2
+ENV WEBLATE_VERSION=5.8.3
 ENV WEBLATE_EXTRAS=all,MySQL,zxcvbn
 
 SHELL ["/bin/bash", "-o", "pipefail", "-x", "-c"]
@@ -42,7 +42,7 @@ RUN find /app/src -name '*.patch' -print0 | sort -z | \
 
 FROM weblate/base:2024.45.4 AS final
 
-ENV WEBLATE_VERSION=5.8.2
+ENV WEBLATE_VERSION=5.8.3
 
 LABEL name="Weblate"
 LABEL version=$WEBLATE_VERSION
