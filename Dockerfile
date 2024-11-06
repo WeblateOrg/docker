@@ -1,4 +1,4 @@
-FROM weblate/dev:2024.45.4 AS build
+FROM weblate/dev:2024.45.5 AS build
 
 ARG TARGETARCH
 
@@ -40,7 +40,7 @@ RUN find /app/src -name '*.patch' -print0 | sort -z | \
   xargs -n1 -0 -r patch -p0 -d "/app/venv/lib/python${PYVERSION}/site-packages/" -i
 
 
-FROM weblate/base:2024.45.4 AS final
+FROM weblate/base:2024.45.5 AS final
 
 ENV WEBLATE_VERSION=5.8.3
 

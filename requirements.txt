@@ -28,11 +28,6 @@ gunicorn==23.0.0
 hiredis==3.0.0
 html2text==2024.2.26
 httpretty==1.1.4
-# Patched supervisor-stdout with following fixes:
-# - https://github.com/coderanger/supervisor-stdout/pull/12
-# - https://github.com/coderanger/supervisor-stdout/pull/18
-# - https://github.com/coderanger/supervisor-stdout/pull/20
-https://github.com/nijel/supervisor-stdout/archive/c909c1a1ddabaf679dc2eaecb3b8f5ad6bef467a.zip
 iniparse==0.5
 lxml==5.3.0
 mercurial==6.8.2
@@ -61,7 +56,6 @@ sentry-sdk==2.18.0
 siphashc==2.5
 social-auth-app-django==5.4.2
 social-auth-core==4.5.4
-supervisor==4.2.5
 tesserocr==2.7.1
 translate-toolkit==3.14.1
 translation-finder==2.16
