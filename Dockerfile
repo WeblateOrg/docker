@@ -1,4 +1,4 @@
-FROM weblate/dev:2024.45.5 AS build
+FROM weblate/dev:2024.45.6 AS build
 
 ARG TARGETARCH
 
@@ -36,7 +36,7 @@ RUN /app/venv/bin/python -c 'from phply.phpparse import make_parser; make_parser
 RUN ln -s /app/venv/share/weblate/examples/ /app/
 
 
-FROM weblate/base:2024.45.5 AS final
+FROM weblate/base:2024.45.6 AS final
 
 ENV WEBLATE_VERSION=5.8.3
 
