@@ -1,6 +1,6 @@
 version = 1
 
 [[analyzers]]
-name = "python"
 enabled = true
+name = "python"
 runtime_version = "3.x.x"
