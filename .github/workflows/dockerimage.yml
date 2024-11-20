@@ -118,6 +118,8 @@ jobs:
       run: .github/bin/docker-build load
     - name: List Docker images
       run: docker image ls --all
+    - name: Test content
+      run: ./docker-compose/test-content
     - name: Generate configuration
       run: |
         cd docker-compose
