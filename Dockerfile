@@ -65,6 +65,15 @@ COPY --from=build /app /app
 # Configuration for Weblate, nginx and supervisor
 COPY --link etc /etc/
 
+# Customize Python:
+# - Search path for custom modules
+RUN \
+    echo "/app/data/python" > "/app/venv/lib/python${PYVERSION}/site-packages/weblate-docker.pth" && \
+    mkdir -p /app/data/python/customize && \
+    touch /app/data/python/customize/__init__.py && \
+    touch /app/data/python/customize/models.py && \
+    chown -R weblate:weblate /app/data/python
+
 # Fix permissions and adjust files to be able to edit them as user on start
 # - localtime is needed for setting system timezone based on environment
 # - timezone is removed to avoid dpkg handling localtime updates
@@ -74,26 +83,16 @@ COPY --link etc /etc/
 # - disable su for non root to avoid privilege escapation by chaging /etc/passwd
 RUN rm -f /etc/localtime /etc/timezone \
   && ln -s /tmp/localtime /etc/localtime \
-  && cp /usr/share/zoneinfo/Etc/UTC /tmp/localtime \
-  && mkdir /tmp/nginx \
-  && chgrp -R 0 /var/log/nginx/ /var/lib/nginx /app/data /app/cache /run /home/weblate /tmp/localtime /tmp/nginx /etc/supervisor/conf.d \
-  && chmod -R 770 /var/log/nginx/ /var/lib/nginx /app/data /app/cache /run /home /home/weblate /tmp/localtime /tmp/nginx /etc/supervisor/conf.d \
+  && chgrp -R 0 /var/log/nginx/ /var/lib/nginx /app/data /app/cache /run /home/weblate /etc/supervisor/conf.d \
+  && chmod -R 770 /var/log/nginx/ /var/lib/nginx /app/data /app/cache /run /home /home/weblate /etc/supervisor/conf.d \
   && rm -f /etc/nginx/sites-available/default \
   && ln -s /tmp/nginx/weblate-site.conf /etc/nginx/sites-available/default \
   && rm -f /var/log/nginx/access.log /var/log/nginx/error.log \
   && ln -sf /dev/stdout /var/log/nginx/access.log \
   && ln -sf /dev/stderr /var/log/nginx/error.log \
+  && rm -rf /run/* \
   && chmod 664 /etc/passwd /etc/group \
   && sed -i '/pam_rootok.so/a auth requisite pam_deny.so' /etc/pam.d/su
-
-# Customize Python:
-# - Search path for custom modules
-RUN \
-    echo "/app/data/python" > "/app/venv/lib/python${PYVERSION}/site-packages/weblate-docker.pth" && \
-    mkdir -p /app/data/python/customize && \
-    touch /app/data/python/customize/__init__.py && \
-    touch /app/data/python/customize/models.py && \
-    chown -R weblate:weblate /app/data/python
 
 # Entrypoint
 COPY --link --chmod=0755 start health_check /app/bin/
