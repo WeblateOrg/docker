@@ -1,0 +1,328 @@
+name: Docker container CI
+
+on:
+  workflow_call:
+    inputs:
+      variant:
+        required: true
+        type: string
+
+jobs:
+  revisions:
+    runs-on: ubuntu-24.04
+    outputs:
+      weblate_sha: ${{ steps.get_sha.outputs.sha }}
+      weblate_date: ${{ steps.get_date.outputs.date }}
+    steps:
+    - id: get_sha
+      run: echo "sha=$(git ls-remote --quiet https://github.com/WeblateOrg/weblate.git HEAD | awk '{print $1}')" >> $GITHUB_OUTPUT
+    - id: get_date
+      run: echo "date=$(date --iso-8601=ns)" >> $GITHUB_OUTPUT
+  build:
+    needs:
+    - revisions
+    uses: ./.github/workflows/container-build.yml
+    with:
+      variant: ${{ inputs.variant }}
+      architecture: linux/amd64
+      weblate_sha: ${{needs.revisions.outputs.weblate_sha}}
+      weblate_date: ${{needs.revisions.outputs.weblate_date}}
+
+  buildx:
+    needs:
+    - revisions
+    uses: ./.github/workflows/container-build.yml
+    with:
+      variant: ${{ inputs.variant }}
+      architecture: linux/arm64
+      weblate_sha: ${{needs.revisions.outputs.weblate_sha}}
+      weblate_date: ${{needs.revisions.outputs.weblate_date}}
+
+  test-basic:
+    needs:
+    - revisions
+    - build
+    uses: ./.github/workflows/container-test.yml
+    with:
+      variant: ${{ inputs.variant }}
+      test: basic
+      weblate_sha: ${{needs.revisions.outputs.weblate_sha}}
+      weblate_date: ${{needs.revisions.outputs.weblate_date}}
+
+  test-novolume:
+    needs:
+    - revisions
+    - test-basic
+    uses: ./.github/workflows/container-test.yml
+    with:
+      variant: ${{ inputs.variant }}
+      test: read-write
+      weblate_sha: ${{needs.revisions.outputs.weblate_sha}}
+      weblate_date: ${{needs.revisions.outputs.weblate_date}}
+
+  test-localtime:
+    needs:
+    - revisions
+    - test-basic
+    uses: ./.github/workflows/container-test.yml
+    with:
+      variant: ${{ inputs.variant }}
+      test: localtime
+      weblate_sha: ${{needs.revisions.outputs.weblate_sha}}
+      weblate_date: ${{needs.revisions.outputs.weblate_date}}
+
+  test-saml:
+    needs:
+    - revisions
+    - test-basic
+    uses: ./.github/workflows/container-test.yml
+    with:
+      variant: ${{ inputs.variant }}
+      test: saml
+      weblate_sha: ${{needs.revisions.outputs.weblate_sha}}
+      weblate_date: ${{needs.revisions.outputs.weblate_date}}
+
+  test-split:
+    needs:
+    - revisions
+    - test-basic
+    uses: ./.github/workflows/container-test.yml
+    with:
+      variant: ${{ inputs.variant }}
+      test: split
+      weblate_sha: ${{needs.revisions.outputs.weblate_sha}}
+      weblate_date: ${{needs.revisions.outputs.weblate_date}}
+
+  test-single-celery:
+    needs:
+    - revisions
+    - test-basic
+    uses: ./.github/workflows/container-test.yml
+    with:
+      variant: ${{ inputs.variant }}
+      test: celery-single
+      weblate_sha: ${{needs.revisions.outputs.weblate_sha}}
+      weblate_date: ${{needs.revisions.outputs.weblate_date}}
+
+  test-ssl:
+    needs:
+    - revisions
+    - test-basic
+    uses: ./.github/workflows/container-test.yml
+    with:
+      variant: ${{ inputs.variant }}
+      test: basic
+      port: 4443
+      protocol: https
+      weblate_sha: ${{needs.revisions.outputs.weblate_sha}}
+      weblate_date: ${{needs.revisions.outputs.weblate_date}}
+
+  anchore:
+    runs-on: ubuntu-24.04
+    name: Anchore Container Scan
+    needs:
+    - revisions
+    - build
+    permissions:
+      security-events: write
+    env:
+      MATRIX_ARCHITECTURE: linux/amd64
+    steps:
+    - uses: actions/checkout@v4
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3.7.1
+      with:
+        # renovate: datasource=github-releases depName=docker/buildx
+        version: v0.18.0
+    - name: Adjust bleeding edge image
+      if: inputs.variant == 'bleeding'
+      run: .github/bin/bleeding ${{needs.revisions.outputs.weblate_sha}}  ${{needs.revisions.outputs.weblate_date}}
+    - name: Build the Docker image
+      run: .github/bin/docker-build load
+    - name: List Docker images
+      run: docker image ls --all
+    - name: Checkout the code
+      uses: actions/checkout@v4
+    - name: Anchore scan action
+      uses: anchore/scan-action@v5
+      id: scan
+      with:
+        image: weblate/weblate:test
+        fail-build: false
+    - name: Upload Anchore Scan Report
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: ${{ steps.scan.outputs.sarif }}
+
+  trivy:
+    runs-on: ubuntu-24.04
+    name: Trivy Container Scan
+    needs:
+    - revisions
+    - build
+    permissions:
+      security-events: write
+    env:
+      MATRIX_ARCHITECTURE: linux/amd64
+    steps:
+    - uses: actions/checkout@v4
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3.7.1
+      with:
+        # renovate: datasource=github-releases depName=docker/buildx
+        version: v0.18.0
+    - name: Adjust bleeding edge image
+      if: inputs.variant == 'bleeding'
+      run: .github/bin/bleeding ${{needs.revisions.outputs.weblate_sha}}  ${{needs.revisions.outputs.weblate_date}}
+    - name: Build the Docker image
+      run: .github/bin/docker-build load
+    - name: List Docker images
+      run: docker image ls --all
+    - name: Checkout the code
+      uses: actions/checkout@v4
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@0.29.0
+      env:
+        TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
+      with:
+        image-ref: weblate/weblate:test
+        format: template
+        template: '@/contrib/sarif.tpl'
+        output: trivy-results.sarif
+        severity: CRITICAL,HIGH
+
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: trivy-results.sarif
+    - uses: actions/upload-artifact@v4
+      with:
+        name: Trivy scan SARIF
+        path: trivy-results.sarif
+
+  merge:
+    runs-on: ubuntu-24.04
+    name: Merge images, ${{ inputs.variant }}
+    needs:
+    - build
+    - buildx
+    - revisions
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3.2.0
+      with:
+        platforms: all
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3.7.1
+      with:
+        # renovate: datasource=github-releases depName=docker/buildx
+        version: v0.18.0
+    - name: Adjust bleeding edge image
+      if: inputs.variant == 'bleeding'
+      run: .github/bin/bleeding ${{needs.revisions.outputs.weblate_sha}}  ${{needs.revisions.outputs.weblate_date}}
+    - name: Configure Docker build
+      run: .github/bin/get-buildx-args
+    - name: Merge the Docker images
+      run: .github/bin/docker-build
+
+  tests-all:
+    runs-on: ubuntu-24.04
+    name: Tests, ${{ inputs.variant }}
+    needs:
+    - test-basic
+    - test-saml
+    - test-split
+    - test-single-celery
+    - test-novolume
+    - test-ssl
+    - test-localtime
+    steps:
+    # This is dependency only job to collect all test results
+    - run: echo
+
+  push_dockerhub:
+    runs-on: ubuntu-24.04
+    name: Publish to Docker Hub, ${{ inputs.variant }}
+    needs:
+    - tests-all
+    - buildx
+    - anchore
+    - trivy
+    - merge
+    - revisions
+    if: ${{ (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/main')) && github.repository == 'WeblateOrg/docker' }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3.2.0
+      with:
+        platforms: all
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3.7.1
+      with:
+        # renovate: datasource=github-releases depName=docker/buildx
+        version: v0.18.0
+    - name: DockerHub login
+      run: echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+    - name: Adjust bleeding edge image
+      if: inputs.variant == 'bleeding'
+      run: .github/bin/bleeding ${{needs.revisions.outputs.weblate_sha}}  ${{needs.revisions.outputs.weblate_date}}
+    - name: Configure Docker build
+      run: .github/bin/get-buildx-args publish-${{ inputs.variant }}
+    - name: Publish the Docker images
+      run: .github/bin/docker-build publish-${{ inputs.variant }}
+
+  push_github:
+    runs-on: ubuntu-24.04
+    name: Publish to GitHub, ${{ inputs.variant }}
+    permissions:
+      packages: write
+    needs:
+    - tests-all
+    - buildx
+    - anchore
+    - trivy
+    - merge
+    - revisions
+    if: ${{ (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/main')) && github.repository == 'WeblateOrg/docker' }}
+    env:
+      DOCKER_IMAGE: ghcr.io/weblateorg/weblate
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3.2.0
+      with:
+        platforms: all
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3.7.1
+      with:
+        # renovate: datasource=github-releases depName=docker/buildx
+        version: v0.18.0
+    - name: Login to GitHub Container Registry
+      if: ${{ github.event_name != 'pull_request'}}
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    - name: Adjust bleeding edge image
+      if: inputs.variant == 'bleeding'
+      run: .github/bin/bleeding ${{needs.revisions.outputs.weblate_sha}}  ${{needs.revisions.outputs.weblate_date}}
+    - name: Configure Docker build
+      run: .github/bin/get-buildx-args publish-${{ inputs.variant }}
+    - name: Publish the Docker images
+      run: .github/bin/docker-build publish-${{ inputs.variant }}
