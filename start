@@ -104,11 +104,13 @@ export PGPASSWORD="$POSTGRES_PASSWORD"
 export PGSSLMODE="$POSTGRES_SSL_MODE"
 
 # Update the time zone
-zonefile="/usr/share/zoneinfo/$WEBLATE_TIME_ZONE"
-if [ -n "$WEBLATE_TIME_ZONE" ] && [ -f "$zonefile" ] ; then
-    cat "$zonefile" > /tmp/localtime
-else
-    cat /usr/share/zoneinfo/Etc/UTC > /tmp/localtime
+if [ -w /tmp/localtime ] ; then
+    zonefile="/usr/share/zoneinfo/$WEBLATE_TIME_ZONE"
+    if [ -n "$WEBLATE_TIME_ZONE" ] && [ -f "$zonefile" ] ; then
+        cat "$zonefile" > /tmp/localtime
+    else
+        cat /usr/share/zoneinfo/Etc/UTC > /tmp/localtime
+    fi
 fi
 
 # Create fake Python app for customization
