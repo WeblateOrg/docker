@@ -42,7 +42,7 @@ else
         echo --output "type=image,push=true"
         echo --tag "${DOCKER_IMAGE:-weblate/weblate}:bleeding"
         echo --tag "${DOCKER_IMAGE:-weblate/weblate}:bleeding-$(cat .github/args-date)-$(cat .github/args-sha)"
-    elif [ "$1" = "publish" ] ; then
+    elif [ "$1" = "publish" ] || [ "$1" = "publish-stable" ] ; then
         # Publishing normal image
         echo --output "type=image,push=true"
 

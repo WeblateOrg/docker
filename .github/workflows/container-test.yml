@@ -1,0 +1,111 @@
+name: Docker container test
+
+on:
+  workflow_call:
+    inputs:
+      variant:
+        required: true
+        type: string
+      test:
+        required: true
+        type: string
+      weblate_sha:
+        required: false
+        type: string
+      weblate_date:
+        required: false
+        type: string
+      port:
+        required: false
+        type: number
+      protocol:
+        required: false
+        type: string
+
+jobs:
+  container-test:
+    runs-on: ubuntu-24.04
+    name: Test container ${{ inputs.test }}, ${{ inputs.variant }}
+    env:
+      MATRIX_ARCHITECTURE: linux/amd64
+      COMPOSE_PROJECT_NAME: wl
+      PYTHONUNBUFFERED: 1
+      TEST_CONTAINER: weblate/weblate:test
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Expose GitHub Runtime
+      uses: crazy-max/ghaction-github-runtime@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3.7.1
+      with:
+        # renovate: datasource=github-releases depName=docker/buildx
+        version: v0.18.0
+    - name: Adjust bleeding edge image
+      if: inputs.variant == 'bleeding'
+      run: .github/bin/bleeding ${{inputs.weblate_sha}}  ${{inputs.weblate_date}}
+    - name: Build the Docker image
+      run: .github/bin/docker-build load
+    - name: List Docker images
+      run: docker image ls --all
+    - name: Test content
+      run: ./docker-compose/test-content
+    - name: Generate configuration
+      working-directory: docker-compose
+      run: ./test-generate ${{ inputs.port || 8080 }} ${{ inputs.protocol || 'http' }} ${{ inputs.test }}
+    - name: Generate SSL certificate
+      if: inputs.protocol == 'https'
+      working-directory: docker-compose
+      run: |
+        docker compose up --no-start
+        VOLUMEPATH=$(docker volume inspect -f '{{.Mountpoint}}' wl_weblate-data)
+        sudo mkdir -p $VOLUMEPATH/ssl
+        sudo openssl req -x509 -nodes -days 365 -subj "/CN=localhost" -newkey rsa:2048 -keyout $VOLUMEPATH/ssl/privkey.pem -out $VOLUMEPATH/ssl/fullchain.pem
+        sudo chown -R 1000:1000 $VOLUMEPATH/ssl
+    - name: Startup container
+      working-directory: docker-compose
+      run: ./test-boot
+    - name: List Python packages
+      working-directory: docker-compose
+      run: ./test-pip
+    - name: Inspect container
+      working-directory: docker-compose
+      run: ./test-inspect
+    - name: Check service is running
+      working-directory: docker-compose
+      run: ./test-online
+    - name: Check service health status
+      working-directory: docker-compose
+      run: ./test-health
+    - name: Run Django Checks
+      working-directory: docker-compose
+      run: ./test-checks
+    - name: Verify supervisor
+      working-directory: docker-compose
+      run: ./test-supervisor
+    - name: Test admin creation
+      working-directory: docker-compose
+      run: ./test-admin
+    - name: Verify SAML certificate
+      working-directory: docker-compose
+      run: ./test-saml ${{ inputs.test }}
+    - name: Test commands
+      working-directory: docker-compose
+      run: ./test-commands
+    - name: Display logs
+      if: always()
+      working-directory: docker-compose
+      run: ./test-logs
+    - name: Stop Weblate service
+      working-directory: docker-compose
+      run: docker compose stop weblate
+    - name: Start Weblate service
+      working-directory: docker-compose
+      run: docker compose start weblate
+    - name: Check service is running
+      working-directory: docker-compose
+      run: ./test-online
+    - name: Shutdown service
+      working-directory: docker-compose
+      run: ./test-stop
