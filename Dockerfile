@@ -36,7 +36,7 @@ RUN /app/venv/bin/python -c 'from phply.phpparse import make_parser; make_parser
 RUN ln -s /app/venv/share/weblate/examples/ /app/
 
 
-FROM weblate/base:2024.49.0 AS final
+FROM weblate/base:2024.50.0 AS final
 
 ENV WEBLATE_VERSION=5.8.4
 
