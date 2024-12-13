@@ -57,7 +57,7 @@ siphashc==2.5
 social-auth-app-django==5.4.2
 social-auth-core==4.5.4
 tesserocr==2.7.1
-translate-toolkit==3.14.1
+translate-toolkit==3.14.2
 translation-finder==2.19
 urllib3==2.2.3
 weblate-fedora-messaging==0.8
