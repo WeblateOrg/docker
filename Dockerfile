@@ -2,7 +2,7 @@ FROM weblate/dev:2024.51.0 AS build
 
 ARG TARGETARCH
 
-ENV WEBLATE_VERSION=5.8.4
+ENV WEBLATE_VERSION=5.9.1
 ENV WEBLATE_EXTRAS=all,MySQL,zxcvbn
 
 SHELL ["/bin/bash", "-o", "pipefail", "-x", "-c"]
@@ -38,7 +38,7 @@ RUN ln -s /app/venv/share/weblate/examples/ /app/
 
 FROM weblate/base:2024.51.0 AS final
 
-ENV WEBLATE_VERSION=5.8.4
+ENV WEBLATE_VERSION=5.9.1
 
 LABEL name="Weblate"
 LABEL version=$WEBLATE_VERSION
