@@ -260,12 +260,7 @@ if [ "$1" = "runserver" ] ; then
     mkdir -p /run/celery
     rm -f /run/celery/beat.pid
 
-    # Generate nginx configuration
-    if [ -f /app/data/ssl/privkey.pem ] ; then
-        template=/etc/nginx/ssl.tpl
-    else
-        template=/etc/nginx/default.tpl
-    fi
+    # Parse upstream X-Forwarded-For
     case "$WEBLATE_IP_PROXY_HEADER" in
         HTTP_X_FORWARDED_FOR)
             WEBLATE_REALIP="
@@ -277,6 +272,16 @@ set_real_ip_from 0.0.0.0/0;
             WEBLATE_REALIP=""
             ;;
     esac
+    # Generate nginx configuration
+    if [ -f /app/data/ssl/privkey.pem ] ; then
+        template=/etc/nginx/ssl.tpl
+        if [ -z "$WEBLATE_IP_PROXY_HEADER" ] ; then
+            # Use X-Forwarded-For from the built-in nginx
+            export WEBLATE_IP_PROXY_HEADER=HTTP_X_FORWARDED_FOR
+        fi
+    else
+        template=/etc/nginx/default.tpl
+    fi
 
     export WEBLATE_REALIP
     mkdir -p /tmp/nginx
