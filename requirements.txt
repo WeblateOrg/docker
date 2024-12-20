@@ -62,4 +62,4 @@ translation-finder==2.19
 urllib3==2.2.3
 weblate-fedora-messaging==0.8
 weblate-language-data==2024.15
-wllegal==2024.8
+wllegal==2024.9
