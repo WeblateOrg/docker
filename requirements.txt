@@ -59,7 +59,7 @@ social-auth-core==4.5.4
 tesserocr==2.7.1
 translate-toolkit==3.14.4
 translation-finder==2.19
-urllib3==2.2.3
+urllib3==2.3.0
 weblate-fedora-messaging==0.8
 weblate-language-data==2024.16
 wllegal==2024.9
