@@ -50,7 +50,7 @@ rapidfuzz==3.11.0
 raven
 redis==5.2.1
 requests>=2.31.0 # not directly required, pinned by Snyk to avoid a vulnerability
-rollbar==1.1.0
+rollbar==1.1.1
 ruamel.yaml==0.18.10
 sentry-sdk==2.19.2
 siphashc==2.5
