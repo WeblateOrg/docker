@@ -18,14 +18,14 @@ on:
 
 jobs:
   container-build:
-    runs-on: ubuntu-24.04
+    runs-on: ${{ inputs.architecture == 'linux/arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
     name: Build, ${{ inputs.variant }}, ${{ inputs.architecture }}
     env:
       MATRIX_ARCHITECTURE: ${{ inputs.architecture }}
     steps:
     - uses: actions/checkout@v4
     - name: Set up QEMU
-      if: inputs.architecture != 'linux/amd64'
+      if: inputs.architecture != 'linux/amd64' && inputs.architecture != 'linux/arm64'
       uses: docker/setup-qemu-action@v3.3.0
       with:
         platforms: ${{ inputs.architecture }}
