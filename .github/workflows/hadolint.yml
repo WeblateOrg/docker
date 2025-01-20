@@ -1,0 +1,26 @@
+# Copyright © Michal Čihař <michal@weblate.org>
+#
+# SPDX-License-Identifier: CC0-1.0
+
+# This file is maintained in https://github.com/WeblateOrg/meta/
+name: Hadolint
+
+on:
+  push:
+    branches-ignore:
+    - deepsource-fix-**
+    - renovate/**
+    - weblate
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  hadolint:
+
+    runs-on: ubuntu-24.04
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: hadolint/hadolint-action@v3.1.0

@@ -10,7 +10,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-x", "-c"]
 COPY --link requirements.txt /app/src/
 
 # Install dependencies
-# hadolint ignore=DL3008,DL3013,SC2046,DL3003
+# hadolint ignore=DL3008,DL3013,SC2046,DL3003,SC1091
 RUN --mount=type=cache,target=/.uv-cache \
   export UV_CACHE_DIR=/.uv-cache UV_LINK_MODE=copy \
   && uv venv /app/venv \
@@ -31,9 +31,9 @@ RUN --mount=type=cache,target=/.uv-cache \
         "Weblate[$WEBLATE_EXTRAS]==$WEBLATE_VERSION" \
       ;; \
   esac \
-  && uv cache prune --ci
-RUN /app/venv/bin/python -c 'from phply.phpparse import make_parser; make_parser()'
-RUN ln -s /app/venv/share/weblate/examples/ /app/
+  && uv cache prune --ci \
+  && /app/venv/bin/python -c 'from phply.phpparse import make_parser; make_parser()' \
+  && ln -s /app/venv/share/weblate/examples/ /app/
 
 
 FROM weblate/base:2025.3.0 AS final
