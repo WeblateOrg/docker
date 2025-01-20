@@ -42,6 +42,10 @@ repos:
   rev: v0.10.0.1
   hooks:
   - id: shellcheck
+- repo: https://github.com/scop/pre-commit-shfmt
+  rev: v3.10.0-2
+  hooks:
+  - id: shfmt
 
 ci:
   autoupdate_schedule: quarterly
