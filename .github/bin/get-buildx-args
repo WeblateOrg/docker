@@ -7,26 +7,26 @@
 # Generate command-line options for docker buildx build
 
 # Load from GitHub Actions cache
-if [ -n "$MATRIX_ARCHITECTURE" ] ; then
+if [ -n "$MATRIX_ARCHITECTURE" ]; then
     echo --cache-from "type=gha,scope=$MATRIX_ARCHITECTURE"
 else
-    for arch in linux/amd64 linux/arm64 ; do
+    for arch in linux/amd64 linux/arm64; do
         echo --cache-from "type=gha,scope=$arch"
     done
 fi
 
 # Expose annotations
-if [ "$1" != "load" ] ; then
+if [ "$1" != "load" ]; then
     WEBLATE_VERSION=$(sed -n 's/^ENV WEBLATE_VERSION=\(.*\)/\1/p' Dockerfile | head -n 1)
     sed -n "s/^LABEL \(org.opencontainers.image.*\)/--annotation index:\1/p" Dockerfile | sed -e "s/\\\$WEBLATE_VERSION/${WEBLATE_VERSION}/"
 fi
 
 # Write to GitHub Actions cache unless publishing (not compatible with push)
-if [ "$1" != "publish" ] ; then
+if [ "$1" != "publish" ]; then
     echo --cache-to "type=gha,mode=max,scope=$MATRIX_ARCHITECTURE"
 fi
 
-if [ "$1" = "load" ] ; then
+if [ "$1" = "load" ]; then
     # Ommit list of platforms loading, see https://github.com/docker/buildx/issues/59
     echo --output=type=docker
     # Test tag, to avoid collistion with real ones
@@ -37,30 +37,30 @@ else
     # Enable more platforms in future:
     # linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/386,linux/ppc64le,linux/s390x
 
-    if [ "$1" = "publish-bleeding" ] ; then
+    if [ "$1" = "publish-bleeding" ]; then
         # Publishing bleeding edge image
         echo --output "type=image,push=true"
         echo --tag "${DOCKER_IMAGE:-weblate/weblate}:bleeding"
         echo --tag "${DOCKER_IMAGE:-weblate/weblate}:bleeding-$(cat .github/args-date)-$(cat .github/args-sha)"
-    elif [ "$1" = "publish" ] || [ "$1" = "publish-stable" ] ; then
+    elif [ "$1" = "publish" ] || [ "$1" = "publish-stable" ]; then
         # Publishing normal image
         echo --output "type=image,push=true"
 
         # Generate tags
         case "$GITHUB_REF" in
-            refs/tags/[0-9]*)
-                RELEASE="${GITHUB_REF#refs/tags/}"
-                MINOR="${RELEASE%.*.*}"
-                MAJOR="${MINOR%.*}"
-                echo --tag "${DOCKER_IMAGE:-weblate/weblate}:$RELEASE"
-                echo --tag "${DOCKER_IMAGE:-weblate/weblate}:$MINOR"
-                echo --tag "${DOCKER_IMAGE:-weblate/weblate}:$MAJOR"
-                echo --tag "${DOCKER_IMAGE:-weblate/weblate}:latest"
-                ;;
-            refs/heads/main)
-                echo --tag "${DOCKER_IMAGE:-weblate/weblate}:edge"
-                echo --tag "${DOCKER_IMAGE:-weblate/weblate}:edge-$(date -I)-${GITHUB_SHA}"
-                ;;
+        refs/tags/[0-9]*)
+            RELEASE="${GITHUB_REF#refs/tags/}"
+            MINOR="${RELEASE%.*.*}"
+            MAJOR="${MINOR%.*}"
+            echo --tag "${DOCKER_IMAGE:-weblate/weblate}:$RELEASE"
+            echo --tag "${DOCKER_IMAGE:-weblate/weblate}:$MINOR"
+            echo --tag "${DOCKER_IMAGE:-weblate/weblate}:$MAJOR"
+            echo --tag "${DOCKER_IMAGE:-weblate/weblate}:latest"
+            ;;
+        refs/heads/main)
+            echo --tag "${DOCKER_IMAGE:-weblate/weblate}:edge"
+            echo --tag "${DOCKER_IMAGE:-weblate/weblate}:edge-$(date -I)-${GITHUB_SHA}"
+            ;;
         esac
     else
         echo --output "type=image,push=false"
