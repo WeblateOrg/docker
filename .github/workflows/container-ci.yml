@@ -132,7 +132,7 @@ jobs:
     - name: Expose GitHub Runtime
       uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.8.0
+      uses: docker/setup-buildx-action@v3.9.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.20.1
@@ -171,7 +171,7 @@ jobs:
     - name: Expose GitHub Runtime
       uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.8.0
+      uses: docker/setup-buildx-action@v3.9.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.20.1
@@ -221,7 +221,7 @@ jobs:
     - name: Expose GitHub Runtime
       uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.8.0
+      uses: docker/setup-buildx-action@v3.9.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.20.1
@@ -269,7 +269,7 @@ jobs:
     - name: Expose GitHub Runtime
       uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.8.0
+      uses: docker/setup-buildx-action@v3.9.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.20.1
@@ -308,7 +308,7 @@ jobs:
     - name: Expose GitHub Runtime
       uses: crazy-max/ghaction-github-runtime@v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.8.0
+      uses: docker/setup-buildx-action@v3.9.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.20.1
