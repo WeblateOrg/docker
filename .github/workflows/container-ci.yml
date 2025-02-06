@@ -215,7 +215,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3.3.0
+      uses: docker/setup-qemu-action@v3.4.0
       with:
         platforms: all
     - name: Expose GitHub Runtime
@@ -263,7 +263,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3.3.0
+      uses: docker/setup-qemu-action@v3.4.0
       with:
         platforms: all
     - name: Expose GitHub Runtime
@@ -302,7 +302,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3.3.0
+      uses: docker/setup-qemu-action@v3.4.0
       with:
         platforms: all
     - name: Expose GitHub Runtime
