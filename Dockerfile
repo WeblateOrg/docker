@@ -19,6 +19,8 @@ RUN --mount=type=cache,target=/.uv-cache \
     *+* ) \
       uv pip install \
         --compile-bytecode \
+        --no-binary xmlsec \
+        --no-binary lxml \
         -r /app/src/requirements.txt \
         "https://github.com/translate/translate/archive/master.zip" \
         "https://github.com/WeblateOrg/language-data/archive/main.zip" \
@@ -27,6 +29,8 @@ RUN --mount=type=cache,target=/.uv-cache \
     * ) \
       uv pip install \
         --compile-bytecode \
+        --no-binary xmlsec \
+        --no-binary lxml \
         -r /app/src/requirements.txt \
         "Weblate[$WEBLATE_EXTRAS]==$WEBLATE_VERSION" \
       ;; \
