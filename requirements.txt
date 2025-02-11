@@ -13,7 +13,7 @@ cryptography==44.0.1
 Django==5.1.6
 django-appconf==1.0.6
 django-auth-ldap==5.1.0
-django-cors-headers==4.6.0
+django-cors-headers==4.7.0
 django-crispy-forms==2.3
 django-otp==1.5.4
 django-otp-webauthn==0.4.0
