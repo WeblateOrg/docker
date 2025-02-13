@@ -11,7 +11,7 @@ cffi==1.17.1
 # For Azure Tenant auth
 cryptography==44.0.1
 Django==5.1.6
-django-appconf==1.0.6
+django-appconf==1.1.0
 django-auth-ldap==5.1.0
 django-cors-headers==4.7.0
 django-crispy-forms==2.3
