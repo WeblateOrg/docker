@@ -109,3 +109,5 @@ jobs:
     - name: Shutdown service
       working-directory: docker-compose
       run: ./test-stop
+permissions:
+  contents: read

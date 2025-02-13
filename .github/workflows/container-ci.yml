@@ -326,3 +326,5 @@ jobs:
       run: .github/bin/get-buildx-args publish-${{ inputs.variant }}
     - name: Publish the Docker images
       run: .github/bin/docker-build publish-${{ inputs.variant }}
+permissions:
+  contents: read

@@ -24,3 +24,5 @@ jobs:
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
         repository: weblate/weblate
         short-description: ${{ github.event.repository.description }}
+permissions:
+  contents: read

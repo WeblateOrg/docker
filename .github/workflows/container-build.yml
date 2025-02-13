@@ -57,3 +57,5 @@ jobs:
         skip-extraction: ${{ steps.cache.outputs.cache-hit }}
     - name: Build the Docker image
       run: .github/bin/docker-build
+permissions:
+  contents: read
