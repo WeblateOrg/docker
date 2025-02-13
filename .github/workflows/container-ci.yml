@@ -7,6 +7,9 @@ on:
         required: true
         type: string
 
+permissions:
+  contents: read
+
 jobs:
   revisions:
     runs-on: ubuntu-24.04
@@ -326,5 +329,3 @@ jobs:
       run: .github/bin/get-buildx-args publish-${{ inputs.variant }}
     - name: Publish the Docker images
       run: .github/bin/docker-build publish-${{ inputs.variant }}
-permissions:
-  contents: read

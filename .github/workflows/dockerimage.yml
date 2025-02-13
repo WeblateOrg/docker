@@ -22,6 +22,7 @@ jobs:
     permissions:
       security-events: write
       packages: write
+      contents: read
     with:
       variant: stable
 
