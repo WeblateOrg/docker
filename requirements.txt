@@ -54,7 +54,7 @@ rollbar==1.1.2
 ruamel.yaml==0.18.10
 sentry-sdk==2.21.0
 siphashc==2.5
-social-auth-app-django==5.4.2
+social-auth-app-django==5.4.3
 social-auth-core==4.5.4
 tesserocr==2.8.0
 translate-toolkit==3.14.8
