@@ -59,10 +59,10 @@ jobs:
       working-directory: docker-compose
       run: |
         docker compose up --no-start
-        VOLUMEPATH=$(docker volume inspect -f '{{.Mountpoint}}' wl_weblate-data)
-        sudo mkdir -p $VOLUMEPATH/ssl
-        sudo openssl req -x509 -nodes -days 365 -subj "/CN=localhost" -newkey rsa:2048 -keyout $VOLUMEPATH/ssl/privkey.pem -out $VOLUMEPATH/ssl/fullchain.pem
-        sudo chown -R 1000:1000 $VOLUMEPATH/ssl
+        VOLUMEPATH="$(docker volume inspect -f '{{.Mountpoint}}' wl_weblate-data)"
+        sudo mkdir -p "$VOLUMEPATH/ssl"
+        sudo openssl req -x509 -nodes -days 365 -subj "/CN=localhost" -newkey rsa:2048 -keyout "$VOLUMEPATH/ssl/privkey.pem" -out "$VOLUMEPATH/ssl/fullchain.pem"
+        sudo chown -R 1000:1000 "$VOLUMEPATH/ssl"
     - name: Startup container
       working-directory: docker-compose
       run: ./test-boot
