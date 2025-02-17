@@ -17,7 +17,7 @@ if [ -n "${REDIS_PASSWORD_FILE}" ]; then
 fi
 
 if [ -z "$CLIENT_MAX_BODY_SIZE" ]; then
-    CLIENT_MAX_BODY_SIZE=200m
+    CLIENT_MAX_BODY_SIZE=1000m
     export CLIENT_MAX_BODY_SIZE
 fi
 
