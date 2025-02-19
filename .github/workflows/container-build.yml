@@ -23,16 +23,16 @@ jobs:
     env:
       MATRIX_ARCHITECTURE: ${{ inputs.architecture }}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
     - name: Set up QEMU
       if: inputs.architecture != 'linux/amd64' && inputs.architecture != 'linux/arm64'
-      uses: docker/setup-qemu-action@v3.4.0
+      uses: docker/setup-qemu-action@4574d27a4764455b42196d70a065bc6853246a25 # v3.4.0
       with:
         platforms: ${{ inputs.architecture }}
     - name: Expose GitHub Runtime
-      uses: crazy-max/ghaction-github-runtime@v3
+      uses: crazy-max/ghaction-github-runtime@b3a9207c0e1ef41f4cf215303c976869d0c2c1c4 # v3
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3.9.0
+      uses: docker/setup-buildx-action@f7ce87c1d6bead3e36075b2ce75da1f6cc28aaca # v3.9.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.20.1
@@ -42,13 +42,13 @@ jobs:
     - name: Configure Docker build
       run: .github/bin/get-buildx-args
     - name: Cache
-      uses: actions/cache@v4
+      uses: actions/cache@0c907a75c2c80ebcb7f088228285e798b750cf8f # v4
       id: cache
       with:
         path: uv-cache
         key: uv-cache-${{ hashFiles('Dockerfile') }}-${{ inputs.architecture }}
     - name: inject cache into docker
-      uses: reproducible-containers/buildkit-cache-dance@v3.1.2
+      uses: reproducible-containers/buildkit-cache-dance@5b6db76d1da5c8b307d5d2e0706d266521b710de # v3.1.2
       with:
         cache-map: |
           {
