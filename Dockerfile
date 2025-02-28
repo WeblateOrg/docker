@@ -1,4 +1,4 @@
-FROM weblate/dev:2025.9.0 AS build
+FROM weblate/dev:2025.9.1 AS build
 
 ARG TARGETARCH
 
