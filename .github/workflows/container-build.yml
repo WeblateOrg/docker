@@ -35,7 +35,7 @@ jobs:
       uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.21.1
+        version: v0.21.2
     - name: Adjust bleeding edge image
       if: inputs.variant == 'bleeding'
       run: .github/bin/bleeding ${{ inputs.weblate_sha }}  ${{ inputs.weblate_date }}
