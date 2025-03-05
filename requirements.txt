@@ -30,7 +30,7 @@ html2text==2024.2.26
 httpretty==1.1.4
 iniparse==0.5
 lxml==5.3.1
-mercurial==6.9.2
+mercurial==6.9.3
 mistletoe==1.4.0
 nh3==0.2.21
 openai==1.65.3
