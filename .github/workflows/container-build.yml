@@ -18,17 +18,17 @@ on:
 
 jobs:
   container-build:
-    runs-on: ${{ inputs.architecture == 'linux/arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
+    runs-on: ${{ inputs.architecture == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
     name: Build, ${{ inputs.variant }}, ${{ inputs.architecture }}
     env:
-      MATRIX_ARCHITECTURE: ${{ inputs.architecture }}
+      MATRIX_ARCHITECTURE: linux/${{ inputs.architecture }}
     steps:
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
     - name: Set up QEMU
-      if: inputs.architecture != 'linux/amd64' && inputs.architecture != 'linux/arm64'
+      if: inputs.architecture != 'amd64' && inputs.architecture != 'arm64'
       uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3.6.0
       with:
-        platforms: ${{ inputs.architecture }}
+        platforms: linux/${{ inputs.architecture }}
     - name: Expose GitHub Runtime
       uses: crazy-max/ghaction-github-runtime@b3a9207c0e1ef41f4cf215303c976869d0c2c1c4 # v3.0.0
     - name: Set up Docker Buildx
@@ -55,7 +55,13 @@ jobs:
             "uv-cache": "/.uv-cache"
           }
         skip-extraction: ${{ steps.cache.outputs.cache-hit }}
+    - run: mkdir -p "/tmp/.buildx-cache/$MATRIX_ARCHITECTURE"
     - name: Build the Docker image
       run: .github/bin/docker-build
+    - uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+      with:
+        name: Docker cache ${{ inputs.architecture }}
+        path: /tmp/.buildx-cache/linux/${{ inputs.architecture }}
+        retention-days: 1
 permissions:
   contents: read

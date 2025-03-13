@@ -6,12 +6,12 @@
 
 # Generate command-line options for docker buildx build
 
-# Load from GitHub Actions cache
+# Load from local cache
 if [ -n "$MATRIX_ARCHITECTURE" ]; then
-    echo --cache-from "type=gha,scope=$MATRIX_ARCHITECTURE"
+    echo --cache-from "type=local,src=/tmp/.buildx-cache/$MATRIX_ARCHITECTURE"
 else
     for arch in linux/amd64 linux/arm64; do
-        echo --cache-from "type=gha,scope=$arch"
+        echo --cache-from "type=local,src=/tmp/.buildx-cache/$arch"
     done
 fi
 
@@ -21,9 +21,9 @@ if [ "$1" != "load" ]; then
     sed -n "s/^LABEL \(org.opencontainers.image.*\)/--annotation index:\1/p" Dockerfile | sed -e "s/\\\$WEBLATE_VERSION/${WEBLATE_VERSION}/"
 fi
 
-# Write to GitHub Actions cache unless publishing (not compatible with push)
+# Write to local cache unless publishing (not compatible with push)
 if [ "$1" != "publish" ]; then
-    echo --cache-to "type=gha,mode=max,scope=$MATRIX_ARCHITECTURE"
+    echo --cache-to "type=local,dest=/tmp/.buildx-cache/$MATRIX_ARCHITECTURE,mode=max"
 fi
 
 if [ "$1" = "load" ]; then
