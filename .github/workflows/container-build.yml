@@ -41,7 +41,7 @@ jobs:
       run: .github/bin/bleeding ${{ inputs.weblate_sha }}  ${{ inputs.weblate_date }}
     - name: Configure Docker build
       run: .github/bin/get-buildx-args
-    - name: Cache
+    - name: uv cache
       uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
       id: cache
       with:

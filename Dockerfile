@@ -11,10 +11,12 @@ COPY --link requirements.txt /app/src/
 
 # Install dependencies
 # hadolint ignore=DL3008,DL3013,SC2046,DL3003,SC1091
-RUN --mount=type=cache,target=/.uv-cache \
+RUN --mount=type=cache,target=/.uv-cache,sharing=locked \
   export UV_CACHE_DIR=/.uv-cache UV_LINK_MODE=copy \
   && uv venv /app/venv \
   && . /app/venv/bin/activate \
+  && uv --version \
+  && python --version \
   && case "$WEBLATE_VERSION" in \
     *+* ) \
       uv pip install \
@@ -36,6 +38,7 @@ RUN --mount=type=cache,target=/.uv-cache \
       ;; \
   esac \
   && uv cache prune --ci \
+  && du -sh "$UV_CACHE_DIR" \
   && /app/venv/bin/python -c 'from phply.phpparse import make_parser; make_parser()' \
   && ln -s /app/venv/share/weblate/examples/ /app/
 
