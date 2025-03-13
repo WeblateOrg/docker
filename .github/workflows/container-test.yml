@@ -42,6 +42,10 @@ jobs:
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.21.2
+    - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+      with:
+        name: Docker cache amd64
+        path: /tmp/.buildx-cache/linux/amd64
     - name: Adjust bleeding edge image
       if: inputs.variant == 'bleeding'
       run: .github/bin/bleeding ${{inputs.weblate_sha}}  ${{inputs.weblate_date}}

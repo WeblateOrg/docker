@@ -27,7 +27,7 @@ jobs:
     uses: ./.github/workflows/container-build.yml
     with:
       variant: ${{ inputs.variant }}
-      architecture: linux/amd64
+      architecture: amd64
       weblate_sha: ${{needs.revisions.outputs.weblate_sha}}
       weblate_date: ${{needs.revisions.outputs.weblate_date}}
 
@@ -37,7 +37,7 @@ jobs:
     uses: ./.github/workflows/container-build.yml
     with:
       variant: ${{ inputs.variant }}
-      architecture: linux/arm64
+      architecture: arm64
       weblate_sha: ${{needs.revisions.outputs.weblate_sha}}
       weblate_date: ${{needs.revisions.outputs.weblate_date}}
 
@@ -139,6 +139,10 @@ jobs:
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.21.2
+    - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+      with:
+        name: Docker cache amd64
+        path: /tmp/.buildx-cache/linux/amd64
     - name: Adjust bleeding edge image
       if: inputs.variant == 'bleeding'
       run: .github/bin/bleeding ${{needs.revisions.outputs.weblate_sha}}  ${{needs.revisions.outputs.weblate_date}}
@@ -178,6 +182,10 @@ jobs:
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.21.2
+    - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+      with:
+        name: Docker cache amd64
+        path: /tmp/.buildx-cache/linux/amd64
     - name: Adjust bleeding edge image
       if: inputs.variant == 'bleeding'
       run: .github/bin/bleeding ${{needs.revisions.outputs.weblate_sha}}  ${{needs.revisions.outputs.weblate_date}}
@@ -228,6 +236,14 @@ jobs:
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.21.2
+    - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+      with:
+        name: Docker cache amd64
+        path: /tmp/.buildx-cache/linux/amd64
+    - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+      with:
+        name: Docker cache arm64
+        path: /tmp/.buildx-cache/linux/arm64
     - name: Adjust bleeding edge image
       if: inputs.variant == 'bleeding'
       run: .github/bin/bleeding ${{needs.revisions.outputs.weblate_sha}}  ${{needs.revisions.outputs.weblate_date}}
@@ -276,6 +292,14 @@ jobs:
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.21.2
+    - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+      with:
+        name: Docker cache amd64
+        path: /tmp/.buildx-cache/linux/amd64
+    - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+      with:
+        name: Docker cache arm64
+        path: /tmp/.buildx-cache/linux/arm64
     - name: DockerHub login
       run: echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
     - name: Adjust bleeding edge image
@@ -315,6 +339,14 @@ jobs:
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.21.2
+    - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+      with:
+        name: Docker cache amd64
+        path: /tmp/.buildx-cache/linux/amd64
+    - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+      with:
+        name: Docker cache arm64
+        path: /tmp/.buildx-cache/linux/arm64
     - name: Login to GitHub Container Registry
       if: ${{ github.event_name != 'pull_request'}}
       uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
