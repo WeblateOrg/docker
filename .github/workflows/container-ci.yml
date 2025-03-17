@@ -313,7 +313,6 @@ jobs:
       packages: write
     needs:
     - tests-all
-    - buildx
     - anchore
     - trivy
     - merge
