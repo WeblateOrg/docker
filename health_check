@@ -2,7 +2,7 @@
 set -e
 
 if [ -f /app/data/ssl/privkey.pem ]; then
-    curl --cacert /app/data/ssl/fullchain.pem https://localhost:4443/healthz/ || exit 1
+    curl --max-time 30 --cacert /app/data/ssl/fullchain.pem https://localhost:4443/healthz/ || exit 1
 else
-    curl http://localhost:8080/healthz/ || exit 1
+    curl --max-time 30 http://localhost:8080/healthz/ || exit 1
 fi
