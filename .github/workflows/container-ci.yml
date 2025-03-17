@@ -201,8 +201,7 @@ jobs:
         TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
       with:
         image-ref: weblate/weblate:test
-        format: template
-        template: '@/contrib/sarif.tpl'
+        format: sarif
         output: trivy-results.sarif
         severity: CRITICAL,HIGH
 
