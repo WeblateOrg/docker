@@ -264,13 +264,22 @@ jobs:
     # This is dependency only job to collect all test results
     - run: echo
 
+  lint-all:
+    runs-on: ubuntu-24.04
+    name: Lint, ${{ inputs.variant }}
+    needs:
+    - anchore
+    - trivy
+    steps:
+    # This is dependency only job to collect all lint results
+    - run: echo
+
   push_dockerhub:
     runs-on: ubuntu-24.04
     name: Publish to Docker Hub, ${{ inputs.variant }}
     needs:
     - tests-all
-    - anchore
-    - trivy
+    - lint-all
     - merge
     - revisions
     if: ${{ (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/main')) && github.repository == 'WeblateOrg/docker' }}
@@ -313,8 +322,7 @@ jobs:
       packages: write
     needs:
     - tests-all
-    - anchore
-    - trivy
+    - lint-all
     - merge
     - revisions
     if: ${{ (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/main')) && github.repository == 'WeblateOrg/docker' }}
