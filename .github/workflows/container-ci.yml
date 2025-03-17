@@ -272,7 +272,6 @@ jobs:
     name: Publish to Docker Hub, ${{ inputs.variant }}
     needs:
     - tests-all
-    - buildx
     - anchore
     - trivy
     - merge
