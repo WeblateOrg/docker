@@ -24,6 +24,12 @@ jobs:
       MATRIX_ARCHITECTURE: linux/${{ inputs.architecture }}
     steps:
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+    - name: uv cache
+      uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
+      id: cache
+      with:
+        path: uv-cache
+        key: uv-cache-${{ hashFiles('Dockerfile') }}-${{ inputs.architecture }}
     - name: Set up QEMU
       if: inputs.architecture != 'amd64' && inputs.architecture != 'arm64'
       uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3.6.0
@@ -41,12 +47,6 @@ jobs:
       run: .github/bin/bleeding ${{ inputs.weblate_sha }}  ${{ inputs.weblate_date }}
     - name: Configure Docker build
       run: .github/bin/get-buildx-args
-    - name: uv cache
-      uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
-      id: cache
-      with:
-        path: uv-cache
-        key: uv-cache-${{ hashFiles('Dockerfile') }}-${{ inputs.architecture }}
     - name: inject cache into docker
       uses: reproducible-containers/buildkit-cache-dance@5b6db76d1da5c8b307d5d2e0706d266521b710de # v3.1.2
       with:
