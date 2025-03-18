@@ -139,7 +139,7 @@ jobs:
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.21.3
-    - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+    - uses: actions/download-artifact@b14cf4c92620c250e1c074ab0a5800e37df86765 # v4.2.0
       with:
         name: Docker cache amd64
         path: /tmp/.buildx-cache/linux/amd64
@@ -182,7 +182,7 @@ jobs:
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.21.3
-    - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+    - uses: actions/download-artifact@b14cf4c92620c250e1c074ab0a5800e37df86765 # v4.2.0
       with:
         name: Docker cache amd64
         path: /tmp/.buildx-cache/linux/amd64
@@ -233,11 +233,11 @@ jobs:
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.21.3
-    - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+    - uses: actions/download-artifact@b14cf4c92620c250e1c074ab0a5800e37df86765 # v4.2.0
       with:
         name: Docker cache amd64
         path: /tmp/.buildx-cache/linux/amd64
-    - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+    - uses: actions/download-artifact@b14cf4c92620c250e1c074ab0a5800e37df86765 # v4.2.0
       with:
         name: Docker cache arm64
         path: /tmp/.buildx-cache/linux/arm64
@@ -297,11 +297,11 @@ jobs:
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.21.3
-    - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+    - uses: actions/download-artifact@b14cf4c92620c250e1c074ab0a5800e37df86765 # v4.2.0
       with:
         name: Docker cache amd64
         path: /tmp/.buildx-cache/linux/amd64
-    - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+    - uses: actions/download-artifact@b14cf4c92620c250e1c074ab0a5800e37df86765 # v4.2.0
       with:
         name: Docker cache arm64
         path: /tmp/.buildx-cache/linux/arm64
@@ -342,11 +342,11 @@ jobs:
       with:
         # renovate: datasource=github-releases depName=docker/buildx
         version: v0.21.3
-    - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+    - uses: actions/download-artifact@b14cf4c92620c250e1c074ab0a5800e37df86765 # v4.2.0
       with:
         name: Docker cache amd64
         path: /tmp/.buildx-cache/linux/amd64
-    - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
+    - uses: actions/download-artifact@b14cf4c92620c250e1c074ab0a5800e37df86765 # v4.2.0
       with:
         name: Docker cache arm64
         path: /tmp/.buildx-cache/linux/arm64
