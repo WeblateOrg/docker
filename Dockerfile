@@ -13,7 +13,7 @@ COPY --link requirements.txt /app/src/
 # hadolint ignore=DL3008,DL3013,SC2046,DL3003,SC1091
 RUN --mount=type=cache,target=/.uv-cache,sharing=locked \
   export UV_CACHE_DIR=/.uv-cache UV_LINK_MODE=copy \
-  && uv venv /app/venv \
+  && uv venv --python "python${PYVERSION}" /app/venv \
   && . /app/venv/bin/activate \
   && uv --version \
   && python --version \
