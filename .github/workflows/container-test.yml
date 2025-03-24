@@ -70,6 +70,9 @@ jobs:
     - name: Startup container
       working-directory: docker-compose
       run: ./test-boot
+    - name: Show versions
+      working-directory: docker-compose
+      run: docker compose run weblate list_versions
     - name: List Python packages
       working-directory: docker-compose
       run: ./test-pip
