@@ -40,7 +40,7 @@ Pillow==11.1.0
 psycopg[binary]==3.2.6
 Pygments==2.19.1
 pyOpenSSL==25.0.0
-pyparsing==3.2.1
+pyparsing==3.2.2
 python-akismet==0.4.3
 python-dateutil==2.9.0.post0
 python3-saml==1.16.0
