@@ -43,7 +43,7 @@ RUN --mount=type=cache,target=/.uv-cache,sharing=locked \
   && ln -s /app/venv/share/weblate/examples/ /app/
 
 
-FROM weblate/base:2025.14.0 AS final
+FROM weblate/base:2025.15.0 AS final
 
 ENV WEBLATE_VERSION=5.10.4
 
