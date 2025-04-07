@@ -37,6 +37,7 @@ RUN --mount=type=cache,target=/.uv-cache,sharing=locked \
         "Weblate[$WEBLATE_EXTRAS]==$WEBLATE_VERSION" \
       ;; \
   esac \
+  && rm -rf /app/venv/lib/python*/site-packages/slapdtest \
   && uv cache prune --ci \
   && du -sh "$UV_CACHE_DIR" \
   && /app/venv/bin/python -c 'from phply.phpparse import make_parser; make_parser()' \
