@@ -45,7 +45,7 @@ python-akismet==0.4.3
 python-dateutil==2.9.0.post0
 python3-saml==1.16.0
 pyuca==1.2
-qrcode==8.0
+qrcode==8.1
 rapidfuzz==3.13.0
 raven
 redis==5.2.1
