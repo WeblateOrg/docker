@@ -44,7 +44,10 @@ jobs:
         version: v0.22.0
     - name: Adjust bleeding edge image
       if: inputs.variant == 'bleeding'
-      run: .github/bin/bleeding ${{ inputs.weblate_sha }}  ${{ inputs.weblate_date }}
+      run: .github/bin/bleeding "$WEBLATE_SHA" "$WEBLATE_DATE"
+      env:
+        WEBLATE_SHA: ${{ inputs.weblate_sha }}
+        WEBLATE_DATE: ${{ inputs.weblate_date }}
     - name: Configure Docker build
       run: .github/bin/get-buildx-args
     - name: inject cache into docker
