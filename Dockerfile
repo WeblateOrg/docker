@@ -1,4 +1,4 @@
-FROM weblate/dev:2025.16.2 AS build
+FROM weblate/dev:2025.16.2@sha256:8404faafebe22c6df5732e1b3b4bdac9eef768901aa2dd89316cd4227b8bbd9a AS build
 
 ARG TARGETARCH
 
@@ -44,7 +44,7 @@ RUN --mount=type=cache,target=/.uv-cache,sharing=locked \
   && ln -s /app/venv/share/weblate/examples/ /app/
 
 
-FROM weblate/base:2025.16.1 AS final
+FROM weblate/base:2025.16.1@sha256:75d3215dad5435ffc78480ce2c49eba879445ff016bf7364cc84bfe8e0524888 AS final
 
 ENV WEBLATE_VERSION=5.11
 
