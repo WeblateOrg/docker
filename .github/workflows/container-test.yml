@@ -57,7 +57,11 @@ jobs:
       run: ./docker-compose/test-content
     - name: Generate configuration
       working-directory: docker-compose
-      run: ./test-generate ${{ inputs.port || 8080 }} ${{ inputs.protocol || 'http' }} ${{ inputs.test }}
+      run: ./test-generate "$WEBLATE_PORT" "$WEBLATE_PROTOCOL" "$WEBLATE_TEST"
+      env:
+        WEBLATE_PORT: ${{ inputs.port || 8080 }}
+        WEBLATE_PROTOCOL: ${{ inputs.protocol || 'http' }}
+        WEBLATE_TEST: ${{ inputs.test }}
     - name: Generate SSL certificate
       if: inputs.protocol == 'https'
       working-directory: docker-compose

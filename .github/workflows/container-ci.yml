@@ -311,9 +311,13 @@ jobs:
       if: inputs.variant == 'bleeding'
       run: .github/bin/bleeding ${{needs.revisions.outputs.weblate_sha}}  ${{needs.revisions.outputs.weblate_date}}
     - name: Configure Docker build
-      run: .github/bin/get-buildx-args publish-${{ inputs.variant }}
+      run: .github/bin/get-buildx-args "publish-$WEBLATE_VARIANT"
+      env:
+        WEBLATE_VARIANT: ${{ inputs.variant }}
     - name: Publish the Docker images
-      run: .github/bin/docker-build publish-${{ inputs.variant }}
+      run: .github/bin/docker-build "publish-$WEBLATE_VARIANT"
+      env:
+        WEBLATE_VARIANT: ${{ inputs.variant }}
 
   push_github:
     runs-on: ubuntu-24.04
@@ -361,6 +365,10 @@ jobs:
       if: inputs.variant == 'bleeding'
       run: .github/bin/bleeding ${{needs.revisions.outputs.weblate_sha}}  ${{needs.revisions.outputs.weblate_date}}
     - name: Configure Docker build
-      run: .github/bin/get-buildx-args publish-${{ inputs.variant }}
+      run: .github/bin/get-buildx-args "publish-$WEBLATE_VARIANT"
+      env:
+        WEBLATE_VARIANT: ${{ inputs.variant }}
     - name: Publish the Docker images
-      run: .github/bin/docker-build publish-${{ inputs.variant }}
+      run: .github/bin/docker-build "publish-$WEBLATE_VARIANT"
+      env:
+        WEBLATE_VARIANT: ${{ inputs.variant }}
