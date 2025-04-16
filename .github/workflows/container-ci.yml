@@ -138,7 +138,7 @@ jobs:
       uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.22.0
+        version: v0.23.0
     - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
       with:
         name: Docker cache amd64
@@ -181,7 +181,7 @@ jobs:
       uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.22.0
+        version: v0.23.0
     - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
       with:
         name: Docker cache amd64
@@ -232,7 +232,7 @@ jobs:
       uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.22.0
+        version: v0.23.0
     - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
       with:
         name: Docker cache amd64
@@ -296,7 +296,7 @@ jobs:
       uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.22.0
+        version: v0.23.0
     - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
       with:
         name: Docker cache amd64
@@ -345,7 +345,7 @@ jobs:
       uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
       with:
         # renovate: datasource=github-releases depName=docker/buildx
-        version: v0.22.0
+        version: v0.23.0
     - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
       with:
         name: Docker cache amd64
