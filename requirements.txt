@@ -13,7 +13,7 @@ cryptography==44.0.2
 Django==5.1.8
 django-appconf==1.1.0
 django-auth-ldap==5.1.0
-django-celery-beat==2.7.0
+django-celery-beat==2.8.0
 django-cors-headers==4.7.0
 django-crispy-forms==2.4
 django-otp==1.6.0
