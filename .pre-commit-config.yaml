@@ -55,5 +55,9 @@ repos:
   rev: 1.19.1
   hooks:
   - id: blacken-docs
+- repo: https://github.com/woodruffw/zizmor-pre-commit
+  rev: v1.6.0
+  hooks:
+  - id: zizmor
 ci:
   autoupdate_schedule: quarterly
