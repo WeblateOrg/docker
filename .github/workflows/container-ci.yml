@@ -11,8 +11,6 @@ on:
         description: Docker Hub access token
       DOCKERHUB_USERNAME:
         description: Docker Hub username
-      GITHUB_TOKEN:
-        description: GitHub token
 
 permissions:
   contents: read
