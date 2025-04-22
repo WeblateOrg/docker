@@ -49,7 +49,10 @@ jobs:
         path: /tmp/.buildx-cache/linux/amd64
     - name: Adjust bleeding edge image
       if: inputs.variant == 'bleeding'
-      run: .github/bin/bleeding ${{inputs.weblate_sha}}  ${{inputs.weblate_date}}
+      run: .github/bin/bleeding "$WEBLATE_SHA" "$WEBLATE_DATE"
+      env:
+        WEBLATE_SHA: ${{ inputs.weblate_sha }}
+        WEBLATE_DATE: ${{ inputs.weblate_date }}
     - name: Build the Docker image
       run: .github/bin/docker-build load
     - name: List Docker images
@@ -101,7 +104,9 @@ jobs:
       run: ./test-admin
     - name: Verify SAML certificate
       working-directory: docker-compose
-      run: ./test-saml ${{ inputs.test }}
+      run: ./test-saml "$WEBLATE_TEST"
+      env:
+        WEBLATE_TEST: ${{ inputs.test }}
     - name: Test commands
       working-directory: docker-compose
       run: ./test-commands
