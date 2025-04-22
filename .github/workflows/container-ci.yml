@@ -147,7 +147,10 @@ jobs:
         path: /tmp/.buildx-cache/linux/amd64
     - name: Adjust bleeding edge image
       if: inputs.variant == 'bleeding'
-      run: .github/bin/bleeding ${{needs.revisions.outputs.weblate_sha}}  ${{needs.revisions.outputs.weblate_date}}
+      run: .github/bin/bleeding "$WEBLATE_SHA" "$WEBLATE_DATE"
+      env:
+        WEBLATE_SHA: ${{ needs.revisions.outputs.weblate_sha }}
+        WEBLATE_DATE: ${{ needs.revisions.outputs.weblate_date }}
     - name: Build the Docker image
       run: .github/bin/docker-build load
     - name: List Docker images
@@ -194,7 +197,10 @@ jobs:
         path: /tmp/.buildx-cache/linux/amd64
     - name: Adjust bleeding edge image
       if: inputs.variant == 'bleeding'
-      run: .github/bin/bleeding ${{needs.revisions.outputs.weblate_sha}}  ${{needs.revisions.outputs.weblate_date}}
+      run: .github/bin/bleeding "$WEBLATE_SHA" "$WEBLATE_DATE"
+      env:
+        WEBLATE_SHA: ${{ needs.revisions.outputs.weblate_sha }}
+        WEBLATE_DATE: ${{ needs.revisions.outputs.weblate_date }}
     - name: Build the Docker image
       run: .github/bin/docker-build load
     - name: List Docker images
@@ -253,7 +259,10 @@ jobs:
         path: /tmp/.buildx-cache/linux/arm64
     - name: Adjust bleeding edge image
       if: inputs.variant == 'bleeding'
-      run: .github/bin/bleeding ${{needs.revisions.outputs.weblate_sha}}  ${{needs.revisions.outputs.weblate_date}}
+      run: .github/bin/bleeding "$WEBLATE_SHA" "$WEBLATE_DATE"
+      env:
+        WEBLATE_SHA: ${{ needs.revisions.outputs.weblate_sha }}
+        WEBLATE_DATE: ${{ needs.revisions.outputs.weblate_date }}
     - name: Configure Docker build
       run: .github/bin/get-buildx-args
     - name: Merge the Docker images
@@ -321,7 +330,10 @@ jobs:
       run: echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
     - name: Adjust bleeding edge image
       if: inputs.variant == 'bleeding'
-      run: .github/bin/bleeding ${{needs.revisions.outputs.weblate_sha}}  ${{needs.revisions.outputs.weblate_date}}
+      run: .github/bin/bleeding "$WEBLATE_SHA" "$WEBLATE_DATE"
+      env:
+        WEBLATE_SHA: ${{ needs.revisions.outputs.weblate_sha }}
+        WEBLATE_DATE: ${{ needs.revisions.outputs.weblate_date }}
     - name: Configure Docker build
       run: .github/bin/get-buildx-args "publish-$WEBLATE_VARIANT"
       env:
@@ -377,7 +389,10 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Adjust bleeding edge image
       if: inputs.variant == 'bleeding'
-      run: .github/bin/bleeding ${{needs.revisions.outputs.weblate_sha}}  ${{needs.revisions.outputs.weblate_date}}
+      run: .github/bin/bleeding "$WEBLATE_SHA" "$WEBLATE_DATE"
+      env:
+        WEBLATE_SHA: ${{ needs.revisions.outputs.weblate_sha }}
+        WEBLATE_DATE: ${{ needs.revisions.outputs.weblate_date }}
     - name: Configure Docker build
       run: .github/bin/get-buildx-args "publish-$WEBLATE_VARIANT"
       env:
