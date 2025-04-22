@@ -18,7 +18,10 @@ permissions:
 jobs:
   ci:
     uses: ./.github/workflows/container-ci.yml
-    secrets: inherit
+    secrets:
+      DOCKERHUB_ACCESS_TOKEN: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       security-events: write
       packages: write
