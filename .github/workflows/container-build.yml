@@ -1,4 +1,4 @@
-name: Docker container test
+name: Docker container build
 
 on:
   workflow_call:
