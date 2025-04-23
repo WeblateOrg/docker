@@ -1,8 +1,17 @@
 #!/bin/sh
-set -e
 
-if [ -f /app/data/ssl/privkey.pem ]; then
-    curl --max-time 30 --cacert /app/data/ssl/fullchain.pem https://localhost:4443/healthz/ || exit 1
-else
-    curl --max-time 30 http://localhost:8080/healthz/ || exit 1
+# Web health check if web is started in this container
+if [ -f /run/supervisor.conf.d/web.conf ]; then
+    if [ -f /app/data/ssl/privkey.pem ]; then
+        curl --silent --max-time 30 --cacert /app/data/ssl/fullchain.pem https://localhost:4443/healthz/ > /dev/null || exit 1
+    else
+        curl --silent --max-time 30 http://localhost:8080/healthz/ > /dev/null || exit 1
+    fi
+fi
+
+# Supervisor based health check
+failing="$(supervisorctl status | grep -v '^check *EXITED' | grep -v RUNNING)"
+if [ -n "$failing" ]; then
+    echo "$failing"
+    exit 1
 fi
