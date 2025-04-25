@@ -2,7 +2,7 @@ FROM weblate/dev:2025.17.0@sha256:5ea9704f39e9e3551ec14818186b55983a440104a555ee
 
 ARG TARGETARCH
 
-ENV WEBLATE_VERSION=5.11
+ENV WEBLATE_VERSION=5.11.1
 ENV WEBLATE_EXTRAS=all,MySQL,zxcvbn
 
 SHELL ["/bin/bash", "-o", "pipefail", "-x", "-c"]
@@ -46,7 +46,7 @@ RUN --mount=type=cache,target=/.uv-cache,sharing=locked \
 
 FROM weblate/base:2025.17.0@sha256:6be4634dccb3ca57d94997c4564c13313973c439902118930bf5a9ccf4a196ef AS final
 
-ENV WEBLATE_VERSION=5.11
+ENV WEBLATE_VERSION=5.11.1
 
 LABEL name="Weblate"
 LABEL version=$WEBLATE_VERSION
