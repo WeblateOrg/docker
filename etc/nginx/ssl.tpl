@@ -21,31 +21,12 @@ server {
 
     ${WEBLATE_REALIP}
 
-    location ~ ^/favicon.ico$ {
-        # DATA_DIR/static/favicon.ico
-        alias /app/cache/static/favicon.ico;
-        expires 30d;
-    }
-
-    location ${WEBLATE_URL_PREFIX}/static/ {
-        # DATA_DIR/static/
-        alias /app/cache/static/;
-        expires 30d;
-    }
-
-    location ${WEBLATE_URL_PREFIX}/media/ {
-        # DATA_DIR/media/
-        alias /app/data/media/;
-        expires 30d;
-    }
+    include snippets/weblate-static.conf;
 
     location / {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_set_header Host $http_host;
-        proxy_pass http://unix:/run/gunicorn/app/weblate/socket;
-        proxy_read_timeout 3600;
-        proxy_connect_timeout 3600;
+        include snippets/weblate-gunicorn.conf;
     }
 }
 
