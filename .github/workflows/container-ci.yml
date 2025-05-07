@@ -57,6 +57,17 @@ jobs:
       weblate_sha: ${{needs.revisions.outputs.weblate_sha}}
       weblate_date: ${{needs.revisions.outputs.weblate_date}}
 
+  test-anubis:
+    needs:
+    - revisions
+    - build
+    uses: ./.github/workflows/container-test.yml
+    with:
+      variant: ${{ inputs.variant }}
+      test: anubis
+      weblate_sha: ${{needs.revisions.outputs.weblate_sha}}
+      weblate_date: ${{needs.revisions.outputs.weblate_date}}
+
   test-novolume:
     needs:
     - revisions
@@ -269,6 +280,7 @@ jobs:
     name: Tests, ${{ inputs.variant }}
     needs:
     - test-basic
+    - test-anubis
     - test-saml
     - test-split
     - test-single-celery

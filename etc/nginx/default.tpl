@@ -25,6 +25,28 @@ server {
 
     {{ WEBLATE_REALIP }}
 
+{% if WEBLATE_ANUBIS_URL %}
+    location /.within.website/x/cmd/anubis/static/img/ {
+        alias /app/cache/static/anubis/;
+    }
+
+    location /.within.website/ {
+        proxy_pass {{ WEBLATE_ANUBIS_URL }};
+        auth_request off;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-Host $http_host;
+        proxy_pass_request_body off;
+        proxy_set_header content-length "";
+    }
+
+    location @redirectToAnubis {
+        return 307 /.within.website/?redir=$request_uri;
+        auth_request off;
+    }
+{% endif %}
+
     location ~ ^/favicon.ico$ {
         # DATA_DIR/static/favicon.ico
         alias /app/cache/static/favicon.ico;
@@ -44,6 +66,10 @@ server {
     }
 
     location / {
+{% if WEBLATE_ANUBIS_URL %}
+        auth_request /.within.website/x/cmd/anubis/api/check;
+        error_page 401 = @redirectToAnubis;
+{% endif %}
 {% if WEBLATE_BUILTIN_SSL %}
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
