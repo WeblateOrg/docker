@@ -43,7 +43,7 @@ server {
     }
 
     location @redirectToAnubis {
-        return 307 /.within.website/?redir=$request_uri;
+        return 307 {{ WEBLATE_SITE_URL }}/.within.website/?redir=$request_uri;
         auth_request off;
     }
 {% endif %}
