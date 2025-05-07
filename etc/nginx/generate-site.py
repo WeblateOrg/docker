@@ -10,6 +10,7 @@ from django.conf import settings
     WEBLATE_REALIP,
     CLIENT_MAX_BODY_SIZE,
     WEBLATE_BUILTIN_SSL,
+    WEBLATE_ANUBIS_URL,
 ) = sys.argv[1:]
 
 # Configure Django
@@ -33,6 +34,7 @@ print(
             "WEBLATE_REALIP": WEBLATE_REALIP,
             "CLIENT_MAX_BODY_SIZE": CLIENT_MAX_BODY_SIZE,
             "WEBLATE_BUILTIN_SSL": WEBLATE_BUILTIN_SSL,
+            "WEBLATE_ANUBIS_URL": WEBLATE_ANUBIS_URL,
         }
     )
 )
