@@ -45,6 +45,7 @@ server {
         proxy_set_header Host $http_host;
         proxy_pass http://unix:/run/gunicorn/app/weblate/socket;
         proxy_read_timeout 3600;
+        proxy_connect_timeout 3600;
     }
 }
 
