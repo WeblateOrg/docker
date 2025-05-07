@@ -11,7 +11,16 @@ from django.conf import settings
     CLIENT_MAX_BODY_SIZE,
     WEBLATE_BUILTIN_SSL,
     WEBLATE_ANUBIS_URL,
+    SITE_DOMAIN,
+    ENABLE_HTTPS,
 ) = sys.argv[1:]
+
+WEBLATE_SITE_URL = "{}://{}".format(
+    "https"
+    if ENABLE_HTTPS and ENABLE_HTTPS.lower() not in {"0", "false", "no", "off"}
+    else "http",
+    SITE_DOMAIN,
+)
 
 # Configure Django
 TEMPLATES = [
@@ -35,6 +44,7 @@ print(
             "CLIENT_MAX_BODY_SIZE": CLIENT_MAX_BODY_SIZE,
             "WEBLATE_BUILTIN_SSL": WEBLATE_BUILTIN_SSL,
             "WEBLATE_ANUBIS_URL": WEBLATE_ANUBIS_URL,
+            "WEBLATE_SITE_URL": WEBLATE_SITE_URL,
         }
     )
 )
