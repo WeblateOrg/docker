@@ -272,21 +272,21 @@ set_real_ip_from 0.0.0.0/0;
         WEBLATE_REALIP=""
         ;;
     esac
-    # Generate nginx configuration
+
+    # Detect SSL setup
     if [ -f /app/data/ssl/privkey.pem ]; then
-        template=/etc/nginx/ssl.tpl
+        WEBLATE_BUILTIN_SSL="1"
         if [ -z "$WEBLATE_IP_PROXY_HEADER" ]; then
             # Use X-Forwarded-For from the built-in nginx
             export WEBLATE_IP_PROXY_HEADER=HTTP_X_FORWARDED_FOR
         fi
     else
-        template=/etc/nginx/default.tpl
+        WEBLATE_BUILTIN_SSL=""
     fi
 
-    export WEBLATE_REALIP
+    # Generate nginx configuration
     mkdir -p /tmp/nginx
-    # shellcheck disable=SC2016
-    envsubst '$WEBLATE_URL_PREFIX:$WEBLATE_REALIP:$CLIENT_MAX_BODY_SIZE' < $template > /tmp/nginx/weblate-site.conf
+    /app/venv/bin/python /etc/nginx/generate-site.py /etc/nginx "$WEBLATE_URL_PREFIX" "$WEBLATE_REALIP" "$CLIENT_MAX_BODY_SIZE" "$WEBLATE_BUILTIN_SSL" > /tmp/nginx/weblate-site.conf
 
     # Calculate number of processes, at least 2, at most 4, depending on CPU cores
     if [ -z "$WEBLATE_WORKERS" ]; then
