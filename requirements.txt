@@ -38,7 +38,7 @@ openai==1.78.1
 openpyxl==3.1.5
 phply==1.2.6
 Pillow==11.2.1
-psycopg[binary]==3.2.8
+psycopg[binary]==3.2.9
 Pygments==2.19.1
 pyOpenSSL==25.0.0
 pyparsing==3.2.3
