@@ -75,7 +75,7 @@ server {
     proxy_connect_timeout 3600;
 
 {% if WEBLATE_ANUBIS_URL %}
-    location ~ ^{{ WEBLATE_URL_PREFIX }}(/widget/|/exports/rss/|/healthz/|/hooks/) {
+    location ~ ^{{ WEBLATE_URL_PREFIX }}(/widget/|/exports/rss/|/healthz/|/hooks/|/accounts/complete/) {
         proxy_pass http://unix:/run/gunicorn/app/weblate/socket;
     }
 {% endif %}
