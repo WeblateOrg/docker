@@ -66,19 +66,26 @@ server {
         expires 30d;
     }
 
-    location / {
+{% if WEBLATE_BUILTIN_SSL %}
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+{% endif %}
+    proxy_set_header Host $http_host;
+    proxy_read_timeout 3600;
+    proxy_connect_timeout 3600;
+
+{% if WEBLATE_ANUBIS_URL %}
+    location ~ ^{{ WEBLATE_URL_PREFIX }}(/widget/|/exports/rss/|/healthz/|/hooks/) {
+        proxy_pass http://unix:/run/gunicorn/app/weblate/socket;
+    }
+{% endif %}
+
+    location {{ WEBLATE_URL_PREFIX }}/ {
 {% if WEBLATE_ANUBIS_URL %}
         auth_request /.within.website/x/cmd/anubis/api/check;
         error_page 401 = @redirectToAnubis;
 {% endif %}
-{% if WEBLATE_BUILTIN_SSL %}
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-{% endif %}
-        proxy_set_header Host $http_host;
         proxy_pass http://unix:/run/gunicorn/app/weblate/socket;
-        proxy_read_timeout 3600;
-        proxy_connect_timeout 3600;
     }
 }
 
