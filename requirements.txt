@@ -1,7 +1,7 @@
 aeidon==1.15
 ahocorasick-rs==0.22.2
 aliyun-python-sdk-alimt==3.2.0
-altcha==0.1.19
+altcha==0.2.0
 argon2-cffi==25.1.0
 borgbackup==1.4.1
 boto3==1.38.35
