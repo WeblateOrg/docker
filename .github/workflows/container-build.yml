@@ -50,7 +50,7 @@ jobs:
     - name: Configure Docker build
       run: .github/bin/get-buildx-args
     - name: inject cache into docker
-      uses: reproducible-containers/buildkit-cache-dance@653a570f730e3b9460adc576db523788ba59a0d7 # v3.2.0
+      uses: reproducible-containers/buildkit-cache-dance@5b81f4d29dc8397a7d341dba3aeecc7ec54d6361 # v3.3.0
       with:
         cache-map: |
           {
