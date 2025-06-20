@@ -45,7 +45,7 @@ RUN --mount=type=cache,target=/.uv-cache,sharing=locked \
   && ln -s /app/venv/share/weblate/examples/ /app/
 
 
-FROM weblate/base:2025.25.0@sha256:60347ebe6b4dad15d95492013d72aa3bbdc3f02dfbfd82d66f970ca5d537c634 AS final
+FROM weblate/base:2025.25.1@sha256:9c46e7c637cf572bfa2edec832ec0adfcebdc8f89656c9f7d543fb811e443106 AS final
 
 # renovate: datasource=pypi depName=Weblate versioning=pep440
 ENV WEBLATE_VERSION=5.12.1
