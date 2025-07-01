@@ -37,7 +37,7 @@ nh3==0.2.21
 openai==1.93.0
 openpyxl==3.1.5
 phply==1.2.6
-Pillow==11.2.1
+Pillow==11.3.0
 psycopg[binary]==3.2.9
 Pygments==2.19.2
 pyOpenSSL==25.1.0
