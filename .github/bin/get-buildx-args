@@ -8,63 +8,63 @@
 
 # Load from local cache
 if [ -n "$MATRIX_ARCHITECTURE" ]; then
-    echo --cache-from "type=local,src=/tmp/.buildx-cache/$MATRIX_ARCHITECTURE"
+	echo --cache-from "type=local,src=/tmp/.buildx-cache/$MATRIX_ARCHITECTURE"
 else
-    for arch in linux/amd64 linux/arm64; do
-        echo --cache-from "type=local,src=/tmp/.buildx-cache/$arch"
-    done
+	for arch in linux/amd64 linux/arm64; do
+		echo --cache-from "type=local,src=/tmp/.buildx-cache/$arch"
+	done
 fi
 
 # Expose annotations
 if [ "$1" != "load" ]; then
-    WEBLATE_VERSION=$(sed -n 's/^ENV WEBLATE_VERSION=\(.*\)/\1/p' Dockerfile | head -n 1)
-    sed -n "s/^LABEL \(org.opencontainers.image.*\)/--annotation index:\1/p" Dockerfile | sed -e "s/\\\$WEBLATE_VERSION/${WEBLATE_VERSION}/"
+	WEBLATE_VERSION=$(sed -n 's/^ENV WEBLATE_VERSION=\(.*\)/\1/p' Dockerfile | head -n 1)
+	sed -n "s/^LABEL \(org.opencontainers.image.*\)/--annotation index:\1/p" Dockerfile | sed -e "s/\\\$WEBLATE_VERSION/${WEBLATE_VERSION}/"
 fi
 
 # Write to local cache when building (also not compatible with push)
 if [ "$1" != "publish" ] && [ "$1" != "load" ]; then
-    echo --cache-to "type=local,dest=/tmp/.buildx-cache/$MATRIX_ARCHITECTURE,mode=max"
+	echo --cache-to "type=local,dest=/tmp/.buildx-cache/$MATRIX_ARCHITECTURE,mode=max"
 fi
 
 if [ "$1" = "load" ]; then
-    # Ommit list of platforms loading, see https://github.com/docker/buildx/issues/59
-    echo --output=type=docker
-    # Test tag, to avoid collistion with real ones
-    echo --tag weblate/weblate:test
+	# Ommit list of platforms loading, see https://github.com/docker/buildx/issues/59
+	echo --output=type=docker
+	# Test tag, to avoid collistion with real ones
+	echo --tag weblate/weblate:test
 else
-    # List of platforms
-    echo --platform "${MATRIX_ARCHITECTURE:-linux/amd64,linux/arm64}"
-    # Enable more platforms in future:
-    # linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/386,linux/ppc64le,linux/s390x
+	# List of platforms
+	echo --platform "${MATRIX_ARCHITECTURE:-linux/amd64,linux/arm64}"
+	# Enable more platforms in future:
+	# linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/386,linux/ppc64le,linux/s390x
 
-    if [ "$1" = "publish-bleeding" ]; then
-        # Publishing bleeding edge image
-        echo --output "type=image,push=true"
-        echo --tag "${DOCKER_IMAGE:-weblate/weblate}:bleeding"
-        echo --tag "${DOCKER_IMAGE:-weblate/weblate}:bleeding-$(cat .github/args-date)-$(cat .github/args-sha)"
-    elif [ "$1" = "publish" ] || [ "$1" = "publish-stable" ]; then
-        # Publishing normal image
-        echo --output "type=image,push=true"
+	if [ "$1" = "publish-bleeding" ]; then
+		# Publishing bleeding edge image
+		echo --output "type=image,push=true"
+		echo --tag "${DOCKER_IMAGE:-weblate/weblate}:bleeding"
+		echo --tag "${DOCKER_IMAGE:-weblate/weblate}:bleeding-$(cat .github/args-date)-$(cat .github/args-sha)"
+	elif [ "$1" = "publish" ] || [ "$1" = "publish-stable" ]; then
+		# Publishing normal image
+		echo --output "type=image,push=true"
 
-        # Generate tags
-        case "$GITHUB_REF" in
-        refs/tags/[0-9]*)
-            RELEASE="${GITHUB_REF#refs/tags/}"
-            MINOR="${RELEASE%.*.*}"
-            MAJOR="${MINOR%.*}"
-            echo --tag "${DOCKER_IMAGE:-weblate/weblate}:$RELEASE"
-            echo --tag "${DOCKER_IMAGE:-weblate/weblate}:$MINOR"
-            echo --tag "${DOCKER_IMAGE:-weblate/weblate}:$MAJOR"
-            echo --tag "${DOCKER_IMAGE:-weblate/weblate}:latest"
-            ;;
-        refs/heads/main)
-            echo --tag "${DOCKER_IMAGE:-weblate/weblate}:edge"
-            echo --tag "${DOCKER_IMAGE:-weblate/weblate}:edge-$(date -I)-${GITHUB_SHA}"
-            ;;
-        esac
-    else
-        echo --output "type=image,push=false"
-    fi
+		# Generate tags
+		case "$GITHUB_REF" in
+		refs/tags/[0-9]*)
+			RELEASE="${GITHUB_REF#refs/tags/}"
+			MINOR="${RELEASE%.*.*}"
+			MAJOR="${MINOR%.*}"
+			echo --tag "${DOCKER_IMAGE:-weblate/weblate}:$RELEASE"
+			echo --tag "${DOCKER_IMAGE:-weblate/weblate}:$MINOR"
+			echo --tag "${DOCKER_IMAGE:-weblate/weblate}:$MAJOR"
+			echo --tag "${DOCKER_IMAGE:-weblate/weblate}:latest"
+			;;
+		refs/heads/main)
+			echo --tag "${DOCKER_IMAGE:-weblate/weblate}:edge"
+			echo --tag "${DOCKER_IMAGE:-weblate/weblate}:edge-$(date -I)-${GITHUB_SHA}"
+			;;
+		esac
+	else
+		echo --output "type=image,push=false"
+	fi
 fi
 
 # Location
