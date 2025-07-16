@@ -35,26 +35,22 @@ repos:
   - id: mdformat
     additional_dependencies:
     - mdformat-gfm==0.4.1
-    - mdformat-ruff==0.1.3
     - mdformat-shfmt==0.2.0
     - mdformat_tables==1.0.0
 - repo: https://github.com/shellcheck-py/shellcheck-py
   rev: v0.10.0.1
   hooks:
   - id: shellcheck
+    require_serial: true
 - repo: https://github.com/scop/pre-commit-shfmt
   rev: v3.12.0-1
   hooks:
   - id: shfmt
-
+    args: [--write]
 - repo: https://github.com/rhysd/actionlint
   rev: v1.7.7
   hooks:
   - id: actionlint
-- repo: https://github.com/adamchainz/blacken-docs
-  rev: 1.19.1
-  hooks:
-  - id: blacken-docs
 - repo: https://github.com/zizmorcore/zizmor-pre-commit
   rev: v1.11.0
   hooks:
@@ -73,5 +69,9 @@ repos:
   - id: djade
     args: [--target-version, '5.1']
     files: etc/nginx/default.tpl
+- repo: https://github.com/gitleaks/gitleaks
+  rev: v8.27.2
+  hooks:
+  - id: gitleaks-docker
 ci:
   autoupdate_schedule: quarterly
