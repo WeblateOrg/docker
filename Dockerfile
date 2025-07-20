@@ -47,7 +47,7 @@ RUN \
   && ln -s /app/venv/share/weblate/examples/ /app/
 
 
-FROM weblate/base:2025.29.0@sha256:eaa6607bbd22c70fe350323ee44909d6d2f4aee13077158de95d795d4786de96 AS final
+FROM weblate/base:2025.30.0@sha256:86a3cf49ebb8e66a49c3919b918db0ad664dc70703058981b0f140c4f521c3c3 AS final
 
 # renovate: datasource=pypi depName=Weblate versioning=pep440
 ENV WEBLATE_VERSION=5.12.2
