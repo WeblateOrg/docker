@@ -8,7 +8,7 @@ ENV WEBLATE_EXTRAS=all,MySQL,zxcvbn,saml
 
 SHELL ["/bin/bash", "-o", "pipefail", "-x", "-c"]
 
-COPY --link requirements.txt /app/src/
+COPY --link requirements.txt patches /app/src/
 
 # Install dependencies
 # hadolint ignore=DL3008,DL3013,SC2046,DL3003,SC1091
@@ -45,6 +45,10 @@ RUN \
   && du -sh "$UV_CACHE_DIR" \
   && /app/venv/bin/python -c 'from phply.phpparse import make_parser; make_parser()' \
   && ln -s /app/venv/share/weblate/examples/ /app/
+
+# Apply hotfixes on Weblate
+RUN find /app/src -name '*.patch' -print0 | sort -z | \
+  xargs -n1 -0 -r patch -p0 -d "/app/venv/lib/python${PYVERSION}/site-packages/" -i
 
 
 FROM weblate/base:2025.30.0@sha256:86a3cf49ebb8e66a49c3919b918db0ad664dc70703058981b0f140c4f521c3c3 AS final

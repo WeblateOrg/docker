@@ -31,3 +31,6 @@ echo "$SHA" > .github/args-sha
 echo "$DATE" | sed 's/T.*//' > .github/args-date
 
 cat Dockerfile
+
+# Remove patches
+find patches -name '*.patch' -delete
