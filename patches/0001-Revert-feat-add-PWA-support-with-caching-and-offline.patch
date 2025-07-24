@@ -1,0 +1,183 @@
+From c219fb3190cfb3e0f5a54987a2b7cbec5f7f8b70 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Wed, 25 Jun 2025 11:44:27 +0200
+Subject: [PATCH 1/1] Revert "feat: add PWA support with caching and offline
+ support (#14892)"
+
+This reverts commit 49fd27b9149499b93838117c7be91cebdafcfb99.
+
+This causes weird caching issues.
+---
+ weblate/static/loader-bootstrap.js     |  5 --
+ weblate/templates/base.html            |  7 ---
+ weblate/templates/js/service-worker.js | 64 --------------------------
+ weblate/templates/offline.html         | 10 ----
+ weblate/templates/site.webmanifest     |  1 -
+ weblate/urls.py                        | 17 -------
+ 6 files changed, 104 deletions(-)
+ delete mode 100644 weblate/templates/js/service-worker.js
+ delete mode 100644 weblate/templates/offline.html
+
+diff --git weblate/static/loader-bootstrap.js weblate/static/loader-bootstrap.js
+index a18f533b7b..5d2873a483 100644
+--- weblate/static/loader-bootstrap.js
++++ weblate/static/loader-bootstrap.js
+@@ -1609,11 +1609,6 @@ $(function () {
+     form.submit();
+   });
+ 
+-  // Register service worker of the PWA
+-  if ("serviceWorker" in navigator) {
+-    navigator.serviceWorker.register("/service-worker.js");
+-  }
+-
+   /* Warn users that they do not want to use developer console in most cases */
+   // biome-ignore lint/suspicious: It is intentional to log a warning
+   console.log(
+diff --git weblate/templates/base.html weblate/templates/base.html
+index c284f64bbf..6082475595 100644
+--- weblate/templates/base.html
++++ weblate/templates/base.html
+@@ -103,13 +103,6 @@
+           content="{% if title %}{{ title }}{% elif object %}{{ object }}{% elif page_user %}{{ page_user }}{% else %}{{ site_title }}{% endif %}" />
+     <meta property="og:description" content="{{ description }}" />
+ 
+-    <meta name="mobile-web-app-capable" content="yes">
+-    <meta name="application-name" content="{{ site_title }}">
+-
+-    <meta name="apple-mobile-web-app-capable" content="yes">
+-    <meta name="apple-mobile-web-app-title" content="{{ site_title }}">
+-    <meta name="apple-mobile-web-app-status-bar-style" content="#144d3f">
+-
+     {% block extra_meta %}{% endblock %}
+ 
+     {% block extra_styles %}{% endblock %}
+diff --git weblate/templates/js/service-worker.js weblate/templates/js/service-worker.js
+deleted file mode 100644
+index 86b4eea417..0000000000
+--- weblate/templates/js/service-worker.js
++++ /dev/null
+@@ -1,64 +0,0 @@
+-const APP_VERSION = "{{ version }}";
+-const staticCacheName = `weblate-pwa-cache-${APP_VERSION}`;
+-
+-const urlsToCache = [
+-  // Offline page
+-  "{% url 'pwa-offline' %}",
+-
+-  // Common static assets
+-  "/static/styles/main.css",
+-  "/static/loader-bootstrap.js",
+-  "/static/vendor/bootstrap/css/bootstrap.css",
+-  "/static/vendor/bootstrap/js/bootstrap.js",
+-  "/favicon.ico",
+-  "/static/weblate-192.png",
+-  "/css/custom.css",
+-  "/js/i18n/",
+-
+-  "/site.webmanifest",
+-
+-  // The service worker itself
+-  "/service-worker.js",
+-];
+-
+-// Install event: Pre-cache static assets
+-self.addEventListener("install", (event) => {
+-  this.skipWaiting();
+-  event.waitUntil(
+-    caches.open(staticCacheName).then((cache) => {
+-      return cache.addAll(urlsToCache);
+-    }),
+-  );
+-});
+-
+-// Fetch event: Network-first strategy that falls back to cache
+-self.addEventListener("fetch", (event) => {
+-  event.respondWith(
+-    fetch(event.request)
+-      .then((response) => {
+-        // Clone the response and store it in the cache
+-        const responseToCache = response.clone();
+-        caches.open(staticCacheName).then((cache) => {
+-          cache.put(event.request, responseToCache);
+-        });
+-        return response; // Return the network response
+-      })
+-      .catch(() => {
+-        // Fallback to offline page
+-        return caches.match("/pwa/offline/");
+-      }),
+-  );
+-});
+-
+-// Activate event: Clean up old caches
+-self.addEventListener("activate", (event) => {
+-  event.waitUntil(
+-    caches.keys().then((cacheNames) => {
+-      return Promise.all(
+-        cacheNames
+-          .filter((cacheName) => cacheName !== staticCacheName)
+-          .map((cacheName) => caches.delete(cacheName)),
+-      );
+-    }),
+-  );
+-});
+diff --git weblate/templates/offline.html weblate/templates/offline.html
+deleted file mode 100644
+index edf984b66d..0000000000
+--- weblate/templates/offline.html
++++ /dev/null
+@@ -1,10 +0,0 @@
+-{% extends "base.html" %}
+-
+-{% load i18n translations %}
+-
+-{% block content %}
+-
+-  {% translate "You are currently not connected to any networks." as msg %}
+-  {% show_message "error" msg %}
+-
+-{% endblock content %}
+diff --git weblate/templates/site.webmanifest weblate/templates/site.webmanifest
+index 1150fe55d4..464d96958d 100644
+--- weblate/templates/site.webmanifest
++++ weblate/templates/site.webmanifest
+@@ -2,7 +2,6 @@
+ {
+     "name": "{{ site_title }}",
+     "short_name": "{{ site_title }}",
+-    "start_url": "{% url 'home' %}",
+     "icons": [
+         {
+             "src": "{% static 'weblate-192.png' %}",
+diff --git weblate/urls.py weblate/urls.py
+index 3368f989fc..51f9f23950 100644
+--- weblate/urls.py
++++ weblate/urls.py
+@@ -908,23 +908,6 @@ real_patterns = [
+             )
+         ),
+     ),
+-    path(
+-        "service-worker.js",
+-        cache_control(max_age=86400)(
+-            TemplateView.as_view(
+-                template_name="js/service-worker.js",
+-                content_type="application/javascript",
+-            )
+-        ),
+-        name="service-worker",
+-    ),
+-    path(
+-        "pwa/offline/",
+-        cache_control(max_age=86400)(
+-            TemplateView.as_view(template_name="offline.html")
+-        ),
+-        name="pwa-offline",
+-    ),
+     # Redirects for .well-known
+     path(
+         ".well-known/change-password",
+-- 
+2.39.5
+
