@@ -120,6 +120,16 @@ jobs:
     - name: Check service is running
       working-directory: docker-compose
       run: ./test-online
+    - name: Repeated requests
+      run: |
+        . docker-compose/.test.env
+        set +e
+        for i in $( seq 40000 ) ; do
+          if ! curl --silent --show-error --fail-with-body --insecure --output /dev/null --max-time 1 "${URL}healthz/" ; then
+            echo "Failed after $i requests!"
+            exit 1
+          fi
+        done
     - name: Shutdown service
       working-directory: docker-compose
       run: ./test-stop
