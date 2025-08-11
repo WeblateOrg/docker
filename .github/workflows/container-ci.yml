@@ -147,7 +147,7 @@ jobs:
     env:
       MATRIX_ARCHITECTURE: linux/amd64
     steps:
-    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       with:
         persist-credentials: false
     - name: Expose GitHub Runtime
@@ -169,7 +169,7 @@ jobs:
     - name: List Docker images
       run: docker image ls --all
     - name: Checkout the code
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       with:
         persist-credentials: false
     - name: Anchore scan action
@@ -194,7 +194,7 @@ jobs:
     env:
       MATRIX_ARCHITECTURE: linux/amd64
     steps:
-    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       with:
         persist-credentials: false
     - name: Expose GitHub Runtime
@@ -216,7 +216,7 @@ jobs:
     - name: List Docker images
       run: docker image ls --all
     - name: Checkout the code
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       with:
         persist-credentials: false
     - name: Run Trivy vulnerability scanner
@@ -245,7 +245,7 @@ jobs:
     - revisions
     steps:
     - name: Checkout
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       with:
         persist-credentials: false
     - name: Set up QEMU
@@ -312,7 +312,7 @@ jobs:
     if: ${{ (startsWith(github.ref, 'refs/tags/') || (github.ref == 'refs/heads/main')) && github.repository == 'WeblateOrg/docker' }}
     steps:
     - name: Checkout
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       with:
         persist-credentials: false
     - name: Set up QEMU
@@ -363,7 +363,7 @@ jobs:
       DOCKER_IMAGE: ghcr.io/weblateorg/weblate
     steps:
     - name: Checkout
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       with:
         persist-credentials: false
     - name: Set up QEMU
