@@ -73,7 +73,7 @@ repos:
   rev: v8.28.0
   hooks:
   - id: gitleaks-docker
-exclude: ^.*\.(patch)$
+#exclude: ^.*\.(patch)$
 ci:
   autoupdate_schedule: quarterly
   skip:
