@@ -30,7 +30,7 @@ granian==2.5.0
 hiredis==3.2.1
 html2text==2025.4.15
 iniparse==0.5
-lxml==5.4.0
+lxml==6.0.0
 mercurial==7.1
 mistletoe==1.4.0
 nh3==0.3.0
