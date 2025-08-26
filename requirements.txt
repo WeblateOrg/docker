@@ -26,7 +26,7 @@ djangorestframework==3.16.1
 gevent==25.5.1
 git-review==2.5.0
 google-cloud-translate==3.21.1
-granian==2.5.0
+granian==2.5.1
 hiredis==3.2.1
 html2text==2025.4.15
 iniparse==0.5
