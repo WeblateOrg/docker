@@ -23,7 +23,7 @@ django-redis==6.0.0
 django_compressor==4.5.1
 djangorestframework==3.16.1
 # Alernative Celery pool implementation
-gevent==25.8.1
+gevent==25.8.2
 git-review==2.5.0
 google-cloud-translate==3.21.1
 granian==2.5.1
