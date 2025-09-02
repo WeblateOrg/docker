@@ -307,8 +307,7 @@ set_real_ip_from 0.0.0.0/0;
     : "${CELERY_BACKUP_OPTIONS:="--concurrency 1"}"
     : "${CELERY_BEAT_OPTIONS:=""}"
     : "${CELERY_SINGLE_OPTIONS:="--concurrency $WEBLATE_WORKERS"}"
-    : "${WEB_WORKERS:="$WEBLATE_WORKERS"}"
-    : "${WEB_RUNTIME_THREADS:="$((WEB_WORKERS == 1 ? 1 : WEB_WORKERS / 2))"}"
+    : "${WEB_WORKERS:="$((WEBLATE_WORKERS <= 3 ? 2 : WEBLATE_WORKERS / 2))"}"
     # This is for legacy configurations, should be removed in the future
     if [ -n "$UWSGI_WORKERS" ]; then
         echo "Configuration using UWSGI_WORKERS is deprecated, please use WEB_WORKERS instead!"
