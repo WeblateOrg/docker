@@ -4,7 +4,7 @@ aliyun-python-sdk-alimt==3.2.0
 altcha==0.2.0
 argon2-cffi==25.1.0
 borgbackup==1.4.1
-boto3==1.40.25
+boto3==1.40.26
 celery==5.5.3
 certifi>=2023.7.22 # not directly required, pinned by Snyk to avoid a vulnerability
 # For Argon2 and misaka
