@@ -40,7 +40,7 @@ phply==1.2.6
 Pillow==11.3.0
 psycopg[binary]==3.2.10
 Pygments==2.19.2
-pyOpenSSL==25.2.0
+pyOpenSSL==25.3.0
 pyparsing==3.2.4
 python-akismet==0.4.3
 python-dateutil==2.9.0.post0
