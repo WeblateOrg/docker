@@ -1,0 +1,27 @@
+From 20efb9c5f1d55487a41c5fd2e6e92f4702963373 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Michal=20=C4=8Ciha=C5=99?= <michal@cihar.com>
+Date: Fri, 12 Sep 2025 10:39:04 +0200
+Subject: [PATCH 1/1] fix: safer getting of request language
+
+There can be case differing variants.
+---
+ weblate/lang/models.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git weblate/lang/models.py weblate/lang/models.py
+index 84153dd4cd..d44ed51567 100644
+--- weblate/lang/models.py
++++ weblate/lang/models.py
+@@ -459,8 +459,8 @@ class LanguageQuerySet(models.QuerySet):
+                 return self.get(code__iexact=accept_lang)
+             except Language.DoesNotExist:
+                 try:
+-                    return self.get(code__iexact=accept_lang.replace("-", "_"))
+-                except Language.DoesNotExist:
++                    return self.filter(code__iexact=accept_lang.replace("-", "_"))[0]
++                except IndexError:
+                     continue
+         return None
+
+--
+2.39.5
