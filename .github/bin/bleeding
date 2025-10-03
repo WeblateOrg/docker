@@ -21,6 +21,7 @@ sed -i \
 sed -i \
     -e '/^translate-toolkit==/ D' \
     -e '/^weblate-language-data==/ D' \
+    -e '/^openai==/ D' \
     requirements.txt
 
 # Consistent timestamp
