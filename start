@@ -217,6 +217,7 @@ if [ "$1" = "runserver" ]; then
         if [ "${CELERY_SINGLE_PROCESS:-0}" -eq 1 ]; then
             # Symlink single process service only
             ln -s /etc/supervisor/conf.d/celery-single.conf "$SUPERVISOR_CONF"
+            ln -s /etc/supervisor/conf.d/celery-beat.conf "$SUPERVISOR_CONF"
         else
             # Symlink all celery services but the single process
             find /etc/supervisor/conf.d -type f -name 'celery-*.conf' ! -name 'celery-single.conf' -print0 | xargs -0 -I '{}' ln -s '{}' "$SUPERVISOR_CONF"
