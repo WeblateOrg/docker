@@ -69,6 +69,13 @@ repos:
   - id: djade
     args: [--target-version, '5.1']
     files: etc/nginx/default.tpl
+- repo: https://github.com/crate-ci/typos
+  rev: v1.38.1
+  hooks:
+  - id: typos
+    args: []
+    require_serial: true
+    pass_filenames: false
 - repo: https://github.com/gitleaks/gitleaks
   rev: v8.28.0
   hooks:
