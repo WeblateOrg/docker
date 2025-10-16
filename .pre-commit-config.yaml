@@ -35,8 +35,6 @@ repos:
   - id: mdformat
     additional_dependencies:
     - mdformat-gfm==1.0.0
-    - mdformat-shfmt==0.2.0
-    - mdformat_tables==1.0.0
 - repo: https://github.com/shellcheck-py/shellcheck-py
   rev: v0.11.0.1
   hooks:
