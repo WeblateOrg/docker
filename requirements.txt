@@ -18,7 +18,7 @@ django-celery-beat==2.8.1
 django-cors-headers==4.8.0
 django-crispy-forms==2.4
 django-otp==1.6.1
-django-otp-webauthn==0.6.0
+django-otp-webauthn==0.7.0
 django-redis==6.0.0
 django_compressor==4.5.1
 djangorestframework==3.16.1
