@@ -3,7 +3,7 @@ FROM weblate/dev:2025.43.0@sha256:12a1b1036219b0c8f91560d9f064b367230b00fb0d5488
 ARG TARGETARCH
 
 # renovate: datasource=pypi depName=Weblate versioning=pep440
-ENV WEBLATE_VERSION=5.13.3
+ENV WEBLATE_VERSION=5.14
 ENV WEBLATE_EXTRAS=all,MySQL,zxcvbn,saml
 
 SHELL ["/bin/bash", "-o", "pipefail", "-x", "-c"]
@@ -54,7 +54,7 @@ RUN find /app/src -name '*.patch' -print0 | sort -z | \
 FROM weblate/base:2025.42.0@sha256:6b65aca0c07f14de02e4e0a7508e894ef41b21687b26ac14469a5d0bfa0c070d AS final
 
 # renovate: datasource=pypi depName=Weblate versioning=pep440
-ENV WEBLATE_VERSION=5.13.3
+ENV WEBLATE_VERSION=5.14
 
 LABEL name="Weblate"
 LABEL version=$WEBLATE_VERSION
