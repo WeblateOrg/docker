@@ -75,7 +75,7 @@ server {
     proxy_connect_timeout 3600;
 
 {% if WEBLATE_ANUBIS_URL %}
-    location ~ ^{{ WEBLATE_URL_PREFIX }}(/widget/|/exports/rss/|/healthz/|/hooks/|/accounts/complete/) {
+    location ~ ^{{ WEBLATE_URL_PREFIX }}(/widget/|/exports/rss/|/healthz/|/hooks/|/accounts/complete/|/accounts/auth/) {
         proxy_pass http://127.0.0.1:8081;
     }
 {% endif %}
