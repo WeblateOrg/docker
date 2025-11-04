@@ -34,7 +34,7 @@ lxml==6.0.2
 mercurial==7.1.1
 mistletoe==1.5.0
 nh3==0.3.2
-openai==2.6.1
+openai==2.7.0
 openpyxl==3.1.5
 phply==1.2.6
 Pillow==12.0.0
