@@ -20,7 +20,7 @@ django-crispy-forms==2.5
 django-otp==1.6.3
 django-otp-webauthn==0.7.0
 django-redis==6.0.0
-django_compressor==4.5.1
+django_compressor==4.6.0
 djangorestframework==3.16.1
 # Alernative Celery pool implementation
 gevent==25.9.1
