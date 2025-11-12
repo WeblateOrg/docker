@@ -6,7 +6,7 @@ argon2-cffi==25.1.0
 borgbackup==1.4.2
 boto3==1.40.71
 celery==5.5.3
-certifi==2025.10.5
+certifi==2025.11.12
 # For Argon2 and misaka
 cffi==2.0.0
 # For Azure Tenant auth
