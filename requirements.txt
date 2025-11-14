@@ -31,7 +31,7 @@ hiredis==3.3.0
 html2text==2025.4.15
 iniparse==0.5
 lxml==6.0.2
-mercurial==7.1.1
+mercurial==7.1.2
 mistletoe==1.5.0
 nh3==0.3.2
 openai==2.8.0
