@@ -37,6 +37,7 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header Host $http_host;
+        proxy_set_header X-Original-URI $request_uri;
         proxy_set_header X-Forwarded-Host $http_host;
         proxy_pass_request_body off;
         proxy_set_header content-length "";
