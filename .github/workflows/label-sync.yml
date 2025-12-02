@@ -21,7 +21,7 @@ jobs:
     name: Sync labels
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+    - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       with:
         persist-credentials: false
     - uses: srealmoreno/label-sync-action@850ba5cef2b25e56c6c420c4feed0319294682fd # v2.0.0
