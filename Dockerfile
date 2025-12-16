@@ -48,7 +48,7 @@ RUN \
 
 # Apply hotfixes on Weblate
 RUN find /app/src -name '*.patch' -print0 | sort -z | \
-  xargs -n1 -0 -r patch -p0 -d "/app/venv/lib/python${PYVERSION}/site-packages/" -i
+  xargs -n1 -0 -r patch -p1 -d "/app/venv/lib/python${PYVERSION}/site-packages/" -i
 
 
 FROM weblate/base:2025.51.0@sha256:a4cb92d3c5759da2899fae7caaa8910ab6207b1f0da77ada5fb82ec68652220b AS final
