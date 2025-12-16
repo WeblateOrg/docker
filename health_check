@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 # Web health check if web is started in this container
 if [ -f /run/supervisor.conf.d/web.conf ]; then
     if [ -f /app/data/ssl/privkey.pem ]; then
@@ -10,7 +12,8 @@ if [ -f /run/supervisor.conf.d/web.conf ]; then
 fi
 
 # Supervisor based health check
-failing="$(supervisorctl status | grep -v '^check *EXITED' | grep -v RUNNING)"
+services="$(/app/venv/bin/supervisorctl status)"
+failing="$(echo "$services" | grep -v '^check *EXITED\|RUNNING' || true)"
 if [ -n "$failing" ]; then
     echo "$failing"
     exit 1
