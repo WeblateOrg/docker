@@ -1,7 +1,5 @@
 #!/bin/sh
 
-set -e
-
 # Web health check if web is started in this container
 if [ -f /run/supervisor.conf.d/web.conf ]; then
     if [ -f /app/data/ssl/privkey.pem ]; then
@@ -13,6 +11,14 @@ fi
 
 # Supervisor based health check
 services="$(/app/venv/bin/supervisorctl status)"
+status_code=$?
+# 3 is expected as there is a single stopped service (check)
+if [ $status_code -ne 0 ] && [ $status_code -ne 3 ]; then
+    echo "supervisorctl failed ($status_code)"
+    exit 1
+fi
+
+# Look for failed services
 failing="$(echo "$services" | grep -v '^check *EXITED\|RUNNING' || true)"
 if [ -n "$failing" ]; then
     echo "$failing"
