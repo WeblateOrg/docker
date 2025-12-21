@@ -12,7 +12,7 @@ if [ -f /run/supervisor.conf.d/web.conf ]; then
 fi
 
 # Supervisor based health check
-services="$(/app/venv/bin/supervisorctl status)"
+services="$(/app/venv/bin/supervisorctl status || true)"
 failing="$(echo "$services" | grep -v '^check *EXITED\|RUNNING' || true)"
 if [ -n "$failing" ]; then
     echo "$failing"
