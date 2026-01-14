@@ -63,5 +63,5 @@ translate-toolkit==3.17.5
 translation-finder==2.23
 unicode-segmentation-rs==0.2.1
 urllib3==2.6.3
-weblate-language-data==2025.10
+weblate-language-data==2026.1
 wllegal==2025.9
