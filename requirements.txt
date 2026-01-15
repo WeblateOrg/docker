@@ -4,7 +4,7 @@ aliyun-python-sdk-alimt==3.2.0
 altcha==1.0.0
 argon2-cffi==25.1.0
 borgbackup==1.4.3
-boto3==1.42.28
+boto3==1.42.29
 celery==5.6.2
 certifi==2026.1.4
 # For Argon2 and misaka
