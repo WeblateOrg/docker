@@ -74,10 +74,10 @@ repos:
     args: []
     require_serial: true
     pass_filenames: false
-- repo: https://github.com/gitleaks/gitleaks
-  rev: v8.30.0
+- repo: https://github.com/mongodb/kingfisher
+  rev: v1.77.0
   hooks:
-  - id: gitleaks
+  - id: kingfisher-auto
 ci:
   autoupdate_schedule: quarterly
   skip: []
