@@ -64,4 +64,4 @@ translation-finder==2.24
 unicode-segmentation-rs==0.2.1
 urllib3==2.6.3
 weblate-language-data==2026.2
-wllegal==2026.1
+wllegal==2026.2
