@@ -75,7 +75,7 @@ repos:
     require_serial: true
     pass_filenames: false
 - repo: https://github.com/mongodb/kingfisher
-  rev: v1.81.0
+  rev: v1.82.0
   hooks:
   - id: kingfisher-auto
 ci:
