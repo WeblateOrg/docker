@@ -33,7 +33,7 @@ iniparse==0.5
 lxml==6.0.2
 mercurial==7.1.2
 mistletoe==1.5.1
-nh3==0.3.2
+nh3==0.3.3
 openai==2.21.0
 openpyxl==3.1.5
 phply==1.2.6
