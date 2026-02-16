@@ -59,7 +59,7 @@ social-auth-core==4.8.5
 supervisor==4.3.0
 tesserocr==2.9.2
 tomlkit==0.14.0
-translate-toolkit==3.18.1
+translate-toolkit==3.19.0
 translation-finder==2.24
 unicode-segmentation-rs==0.2.1
 urllib3==2.6.3
