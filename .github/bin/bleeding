@@ -22,6 +22,8 @@ sed -i \
     -e '/^translate-toolkit==/ D' \
     -e '/^weblate-language-data==/ D' \
     -e '/^django-otp==/ D' \
+    -e '/^django-celery-beat==/ D' \
+    -e '/^Django==/ D' \
     requirements.txt
 
 # Consistent timestamp
