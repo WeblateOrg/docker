@@ -41,6 +41,7 @@ Pillow==12.1.1
 psycopg[binary]==3.3.3
 pyasn1==0.6.2
 Pygments==2.19.2
+PyJWT==2.12.1
 pyOpenSSL==26.0.0
 pyparsing==3.3.2
 python-dateutil==2.9.0.post0
