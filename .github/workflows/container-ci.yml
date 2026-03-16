@@ -332,7 +332,10 @@ jobs:
         name: Docker cache arm64
         path: /tmp/.buildx-cache/linux/arm64
     - name: DockerHub login
-      run: echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+      env:
+        DOCKERHUB_ACCESS_TOKEN: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }} # zizmor: ignore[secrets-outside-env]
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }} # zizmor: ignore[secrets-outside-env]
+      run: echo "$DOCKERHUB_ACCESS_TOKEN" | docker login --username "$DOCKERHUB_USERNAME" --password-stdin
     - name: Adjust bleeding edge image
       if: inputs.variant == 'bleeding'
       run: .github/bin/bleeding "$WEBLATE_SHA" "$WEBLATE_DATE"
