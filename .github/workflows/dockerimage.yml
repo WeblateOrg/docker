@@ -4,6 +4,7 @@ on:
   push:
     branches-ignore:
     - renovate/**
+    - dependabot/**
     tags:
     - '*'
   pull_request:
