@@ -39,7 +39,7 @@ openpyxl==3.1.5
 phply==1.2.6
 Pillow==12.1.1
 psycopg[binary]==3.3.3
-pyasn1==0.6.2
+pyasn1==0.6.3
 Pygments==2.19.2
 PyJWT==2.12.1
 pyOpenSSL==26.0.0
