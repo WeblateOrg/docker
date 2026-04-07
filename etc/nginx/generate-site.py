@@ -14,6 +14,7 @@ from django.conf import settings
     SITE_DOMAIN,
     ENABLE_HTTPS,
     GRANIAN_SOCKET,
+    ENABLE_IPV6,
 ) = sys.argv[1:]
 
 WEBLATE_SITE_URL = "{}://{}".format(
@@ -47,6 +48,7 @@ print(
             "WEBLATE_ANUBIS_URL": WEBLATE_ANUBIS_URL,
             "WEBLATE_SITE_URL": WEBLATE_SITE_URL,
             "GRANIAN_SOCKET": GRANIAN_SOCKET,
+            "ENABLE_IPV6": ENABLE_IPV6,
         }
     )
 )
