@@ -23,8 +23,25 @@ server {
     client_max_body_size {{ CLIENT_MAX_BODY_SIZE }};
     server_tokens off;
     port_in_redirect off;
+    proxy_intercept_errors off;
+    error_page 502 /__weblate_starting__.html;
+    error_page 504 /__weblate_timeout__.html;
 
     {{ WEBLATE_REALIP }}
+
+    location = /__weblate_starting__.html {
+        internal;
+        alias /etc/nginx/errors/weblate-starting.html;
+        default_type text/html;
+        add_header Cache-Control "no-store" always;
+    }
+
+    location = /__weblate_timeout__.html {
+        internal;
+        alias /etc/nginx/errors/weblate-timeout.html;
+        default_type text/html;
+        add_header Cache-Control "no-store" always;
+    }
 
 {% if WEBLATE_ANUBIS_URL %}
     location /.within.website/x/cmd/anubis/static/img/ {

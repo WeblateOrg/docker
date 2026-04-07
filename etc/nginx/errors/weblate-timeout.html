@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="description" content="Weblate timeout page.">
+    <meta name="theme-color" content="#144d3f">
+    <link rel="stylesheet" href="/static/weblate_fonts/source-sans-3.css">
+    <title>Weblate timed out</title>
+    <style>
+      html {
+        line-height: 1.15;
+        -webkit-text-size-adjust: 100%;
+      }
+
+      article,
+      aside,
+      details,
+      figcaption,
+      figure,
+      footer,
+      header,
+      main,
+      menu,
+      nav,
+      section {
+        display: block;
+      }
+
+      html,
+      body {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: inherit;
+      }
+
+      body {
+        font-family: "Source Sans 3", Arial, sans-serif;
+        color: #2a3744;
+        font-size: 16px;
+        letter-spacing: normal;
+        font-weight: 400;
+        overflow-x: hidden;
+        text-rendering: optimizeLegibility !important;
+        background: #fff;
+      }
+
+      :root {
+        --weblate-logo-width: 150px;
+      }
+
+      a {
+        background-color: transparent;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 300ms linear;
+        color: inherit;
+      }
+
+      p {
+        margin: 0;
+      }
+
+      header {
+        width: 100%;
+        position: absolute;
+        z-index: 333;
+        left: 0;
+        top: 0;
+        padding: 38px 0;
+      }
+
+      .row {
+        margin: 0 auto;
+        max-width: 1330px;
+        width: 100%;
+        padding: 0 20px;
+      }
+
+      footer .row {
+        position: relative;
+        min-height: 250px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      header .row {
+        position: relative;
+      }
+
+      .logo {
+        float: left;
+      }
+
+      .logo a,
+      .logo span {
+        background-image: url("/static/weblate.svg");
+        background-position: left center;
+        background-repeat: no-repeat;
+        background-size: var(--weblate-logo-width) auto;
+        color: #2a3744;
+        font-size: 30px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding-left: calc(var(--weblate-logo-width) + 20px);
+        height: 75px;
+        float: left;
+        line-height: 75px;
+        display: block;
+      }
+
+      .logo a:hover {
+        opacity: 0.7;
+      }
+
+      section {
+        width: 100%;
+        float: left;
+      }
+
+      section.content {
+        padding: 80px 0;
+      }
+
+      body.page section.content {
+        margin-top: 170px;
+        padding-bottom: 0;
+      }
+
+      div.wrap {
+        width: 100%;
+        float: left;
+        margin-bottom: 80px;
+      }
+
+      .section-title {
+        color: #2a3744;
+        font-size: 18px;
+        text-align: center;
+        font-weight: 300;
+        letter-spacing: 2px;
+        line-height: 23px;
+        margin: 0 0 35px;
+        text-transform: uppercase;
+      }
+
+      .wrap h1,
+      .wrap h2.section-title {
+        color: #2a3744;
+        font-size: 60px;
+        font-weight: 400;
+        letter-spacing: -1px;
+        line-height: 75px;
+        text-align: center;
+        margin: 0 auto 60px;
+        text-transform: none;
+        max-width: 850px;
+      }
+
+      .page-desc {
+        display: block;
+        margin: 0 auto 50px;
+        max-width: 850px;
+        text-align: center;
+        font-size: 20px;
+        letter-spacing: 0.5px;
+        line-height: 30px;
+      }
+
+      .page-desc p {
+        margin-bottom: 45px;
+      }
+
+      .page-desc p.small {
+        margin-bottom: 5px;
+      }
+
+      .page-desc p:last-child {
+        margin-bottom: 0;
+      }
+
+      .section-title.min-m {
+        margin-bottom: 40px;
+      }
+
+      footer {
+        background-color: #144d3f;
+        padding: 0;
+        width: 100%;
+        float: left;
+        color: #fff;
+        font-size: 18px;
+        position: relative;
+      }
+
+      footer::before {
+        height: 60px;
+        width: 100%;
+        opacity: 0.2;
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        background: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0) 100%);
+      }
+
+      footer .f-logo {
+        background-image: url("/static/weblate.svg");
+        background-repeat: no-repeat;
+        background-position: center top;
+        background-size: var(--weblate-logo-width) auto;
+        padding-top: 160px;
+        padding-bottom: 18px;
+        display: block;
+        width: 100%;
+        max-width: 360px;
+        margin: 0 auto;
+        text-align: center;
+        text-transform: uppercase;
+        position: relative;
+        z-index: 10;
+        top: 0;
+        color: #fff;
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: 1.73px;
+        line-height: 33px;
+      }
+
+      footer .footicons {
+        display: none;
+      }
+
+      @media (max-width: 890px) {
+        .wrap h1,
+        .wrap h2.section-title {
+          font-size: 50px;
+        }
+
+        div.wrap {
+          margin-bottom: 40px;
+        }
+      }
+
+      @media (max-width: 650px) {
+        .wrap h1,
+        .wrap h2.section-title {
+          font-size: 40px;
+          line-height: 44px;
+        }
+
+        .page-desc {
+          font-size: 18px;
+        }
+
+        section.content {
+          padding: 40px 0;
+        }
+
+        body.page section.content {
+          margin-top: 120px;
+        }
+
+        footer .row {
+          min-height: 220px;
+        }
+      }
+
+      @media (max-width: 550px) {
+        :root {
+          --weblate-logo-width: 54px;
+        }
+
+        header {
+          padding: 25px 0;
+        }
+
+        .logo a,
+        .logo span {
+          line-height: 25px;
+          height: 25px;
+          padding-left: calc(var(--weblate-logo-width) + 8px);
+          font-size: 20px;
+        }
+
+        footer .row {
+          min-height: 150px;
+        }
+
+        footer .f-logo {
+          padding-top: 78px;
+          padding-bottom: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body class="page light">
+    <header>
+      <div class="row">
+        <div class="logo">
+          <span>Weblate</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="content">
+      <div class="row">
+        <div class="wrap">
+          <h1 class="section-title min-m">Weblate took too long to respond</h1>
+          <div class="page-desc">
+            <p>The application did not respond before the proxy timeout expired.</p>
+            <p>This can happen while the container is still finishing startup, but it can also indicate a temporary backend problem.</p>
+            <p class="small">Try again in a little while. If the problem persists, check the backend service health.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="row">
+        <span class="f-logo">weblate</span>
+        <div class="footicons"></div>
+      </div>
+    </footer>
+  </body>
+</html>
