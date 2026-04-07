@@ -188,11 +188,11 @@ fi
 
 # Wait for redis
 TIMEOUT=0
-until run_weblate shell -c 'from django.core.cache import cache; cache.has_key("ping")' > /dev/null; do
+until run_weblate shell -c 'from django.core.cache import cache; "ping" in cache' > /dev/null; do
     >&2 echo "redis at ${REDIS_HOST:-cache} is unavailable - retrying $((30 - TIMEOUT))"
     TIMEOUT=$((TIMEOUT + 1))
     if [ $TIMEOUT -gt 30 ]; then
-        run_weblate shell -c 'from django.core.cache import cache; cache.has_key("ping")'
+        run_weblate shell -c 'from django.core.cache import cache; "ping" in cache'
         fail_dep redis
     fi
     sleep 1
@@ -212,7 +212,7 @@ until run_weblate shell -c 'from weblate.auth.models import User; User.objects.r
     TIMEOUT=$((TIMEOUT + 1))
     if [ $TIMEOUT -gt 30 ]; then
         run_weblate shell -c 'from weblate.auth.models import User; User.objects.exists()'
-        fail_dep PosgreSQL
+        fail_dep PostgreSQL
     fi
     sleep 1
 done
@@ -276,7 +276,7 @@ if [ "$1" = "runserver" ]; then
             echo
             echo "Database migration has failed. Please check the error message above."
             echo "Note: Upgrading across major versions is not supported. In case you are upgrading"
-            echo "      from an 4.x version, please upgrade to 5.0.2 first."
+            echo "      from a 4.x version, please upgrade to 5.0.2 first."
             echo
             echo "      Using following for the docker-compose.yaml:"
             echo
