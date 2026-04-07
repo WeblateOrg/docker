@@ -212,7 +212,7 @@ until run_weblate shell -c 'from weblate.auth.models import User; User.objects.r
     TIMEOUT=$((TIMEOUT + 1))
     if [ $TIMEOUT -gt 30 ]; then
         run_weblate shell -c 'from weblate.auth.models import User; User.objects.exists()'
-        fail_dep PosgreSQL
+        fail_dep PostgreSQL
     fi
     sleep 1
 done
