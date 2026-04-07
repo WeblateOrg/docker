@@ -93,6 +93,28 @@ find_nss_wrapper() {
     return 1
 }
 
+ipv6_available() {
+    WEBLATE_NGINX_IPV6_VALUE=$(printf '%s' "${WEBLATE_NGINX_IPV6:-auto}" | tr '[:upper:]' '[:lower:]')
+
+    if [ "$WEBLATE_NGINX_IPV6_VALUE" = "0" ] || [ "$WEBLATE_NGINX_IPV6_VALUE" = "false" ] || [ "$WEBLATE_NGINX_IPV6_VALUE" = "no" ] || [ "$WEBLATE_NGINX_IPV6_VALUE" = "off" ]; then
+        return 1
+    fi
+
+    if [ "$WEBLATE_NGINX_IPV6_VALUE" = "1" ] || [ "$WEBLATE_NGINX_IPV6_VALUE" = "true" ] || [ "$WEBLATE_NGINX_IPV6_VALUE" = "yes" ] || [ "$WEBLATE_NGINX_IPV6_VALUE" = "on" ]; then
+        return 0
+    fi
+
+    if [ ! -f /proc/net/if_inet6 ]; then
+        return 1
+    fi
+
+    if [ -r /proc/sys/net/ipv6/conf/all/disable_ipv6 ] && [ "$(cat /proc/sys/net/ipv6/conf/all/disable_ipv6)" = "1" ]; then
+        return 1
+    fi
+
+    return 0
+}
+
 # Support OpenShift and other arbitrary-UID deployments without modifying
 # the system passwd database. Keep the legacy /etc/passwd append only as a
 # compatibility fallback for derived images that still make it writable.
@@ -315,6 +337,7 @@ if [ "$1" = "runserver" ]; then
         WEBLATE_REALIP="
 real_ip_header X-Forwarded-For;
 set_real_ip_from 0.0.0.0/0;
+set_real_ip_from ::/0;
 "
         ;;
     *)
@@ -336,10 +359,27 @@ set_real_ip_from 0.0.0.0/0;
     # Make sure WEBLATE_ANUBIS_URL is set
     : "${WEBLATE_ANUBIS_URL:=""}"
     : "${WEBLATE_ENABLE_HTTPS:=""}"
+    if ipv6_available; then
+        WEBLATE_ENABLE_IPV6=1
+    else
+        WEBLATE_ENABLE_IPV6=
+    fi
 
     # Generate nginx configuration
     mkdir -p /tmp/nginx
-    /app/venv/bin/python /etc/nginx/generate-site.py /etc/nginx "$WEBLATE_URL_PREFIX" "$WEBLATE_REALIP" "$CLIENT_MAX_BODY_SIZE" "$WEBLATE_BUILTIN_SSL" "$WEBLATE_ANUBIS_URL" "$WEBLATE_SITE_DOMAIN" "$WEBLATE_ENABLE_HTTPS" "$GRANIAN_SOCKET" > /tmp/nginx/weblate-site.conf
+    /app/venv/bin/python \
+        /etc/nginx/generate-site.py \
+        /etc/nginx \
+        "$WEBLATE_URL_PREFIX" \
+        "$WEBLATE_REALIP" \
+        "$CLIENT_MAX_BODY_SIZE" \
+        "$WEBLATE_BUILTIN_SSL" \
+        "$WEBLATE_ANUBIS_URL" \
+        "$WEBLATE_SITE_DOMAIN" \
+        "$WEBLATE_ENABLE_HTTPS" \
+        "$GRANIAN_SOCKET" \
+        "$WEBLATE_ENABLE_IPV6" \
+        > /tmp/nginx/weblate-site.conf
 
     # Calculate number of processes, at least 2, at most 4, depending on CPU cores
     if [ -z "$WEBLATE_WORKERS" ]; then

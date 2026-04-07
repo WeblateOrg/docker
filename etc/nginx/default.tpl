@@ -1,6 +1,9 @@
 server {
 {% if WEBLATE_BUILTIN_SSL %}
     listen 4443 ssl;
+{% if ENABLE_IPV6 %}
+    listen [::]:4443 ssl;
+{% endif %}
 
     ssl_certificate /app/data/ssl/fullchain.pem;
     ssl_certificate_key /app/data/ssl/privkey.pem;
@@ -18,6 +21,9 @@ server {
     ssl_dhparam /etc/nginx/ffdhe2048.pem;
 {% else %}
     listen 8080 default_server;
+{% if ENABLE_IPV6 %}
+    listen [::]:8080 default_server;
+{% endif %}
 {% endif %}
     root /app/cache/static;
     client_max_body_size {{ CLIENT_MAX_BODY_SIZE }};
@@ -110,6 +116,9 @@ server {
 {% if WEBLATE_BUILTIN_SSL %}
 server {
     listen 8080 default_server;
+{% if ENABLE_IPV6 %}
+    listen [::]:8080 default_server;
+{% endif %}
     server_tokens off;
     return 301 https://$host$request_uri;
 }
