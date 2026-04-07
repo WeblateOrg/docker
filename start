@@ -77,11 +77,57 @@ if [ -n "$WEBLATE_SAML_IDP_URL" ]; then
     fi
 fi
 
-# For openshift, create an account in /etc/passwd
-# @see https://docs.okd.io/latest/creating_images/guidelines.html
+find_nss_wrapper() {
+    for candidate in \
+        /usr/lib/*/libnss_wrapper.so \
+        /usr/lib/libnss_wrapper.so \
+        /lib/*/libnss_wrapper.so \
+        /lib/libnss_wrapper.so; do
+        for path in $candidate; do
+            if [ -f "$path" ]; then
+                echo "$path"
+                return 0
+            fi
+        done
+    done
+    return 1
+}
+
+# Support OpenShift and other arbitrary-UID deployments without modifying
+# the system passwd database. Keep the legacy /etc/passwd append only as a
+# compatibility fallback for derived images that still make it writable.
 if ! whoami > /dev/null 2>&1; then
-    if [ -w /etc/passwd ]; then
-        echo "${USER_NAME:-weblate}:x:$(id -u):0:${USER_NAME:-weblate} user:${HOME}:/sbin/nologin" >> /etc/passwd
+    case "${USER_NAME:-weblate}" in
+    *[!A-Za-z0-9._-]* | "")
+        echo "Ignoring invalid USER_NAME value; using fallback username 'weblate'."
+        NSS_WRAPPER_USER_NAME=weblate
+        ;;
+    *)
+        NSS_WRAPPER_USER_NAME=${USER_NAME:-weblate}
+        ;;
+    esac
+
+    if NSS_WRAPPER_LIB=$(find_nss_wrapper); then
+        NSS_WRAPPER_PASSWD=/tmp/passwd.nss_wrapper
+        NSS_WRAPPER_GROUP=/tmp/group.nss_wrapper
+
+        cp /etc/passwd "$NSS_WRAPPER_PASSWD"
+        cp /etc/group "$NSS_WRAPPER_GROUP"
+
+        echo "$NSS_WRAPPER_USER_NAME:x:$(id -u):$(id -g):$NSS_WRAPPER_USER_NAME user:${HOME}:/sbin/nologin" >> "$NSS_WRAPPER_PASSWD"
+        if ! grep -q "^[^:]*:[^:]*:$(id -g):" "$NSS_WRAPPER_GROUP"; then
+            echo "$NSS_WRAPPER_USER_NAME:x:$(id -g):" >> "$NSS_WRAPPER_GROUP"
+        fi
+
+        export LD_PRELOAD="$NSS_WRAPPER_LIB${LD_PRELOAD:+ $LD_PRELOAD}"
+        export NSS_WRAPPER_PASSWD
+        export NSS_WRAPPER_GROUP
+    elif [ -w /etc/passwd ]; then
+        echo "$NSS_WRAPPER_USER_NAME:x:$(id -u):$(id -g):$NSS_WRAPPER_USER_NAME user:${HOME}:/sbin/nologin" >> /etc/passwd
+    else
+        echo "Current uid $(id -u) has no passwd entry and no writable fallback is available."
+        echo "Install libnss-wrapper or provide a passwd entry for the runtime uid."
+        exit 1
     fi
 fi
 
