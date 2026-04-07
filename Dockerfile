@@ -94,9 +94,9 @@ RUN \
 # - localtime is needed for setting system timezone based on environment
 # - timezone is removed to avoid dpkg handling localtime updates
 # - we generate nginx configuration based on environment
-# - authorize passwd edition so we can fix weblate uid on startup
 # - log, run and home directories
-# - disable su for non root to avoid privilege escapation by changing /etc/passwd
+# - disable su for non root to avoid privilege escalation in case a derived image
+#   intentionally re-enables passwd edits
 RUN rm -f /etc/localtime /etc/timezone \
   && ln -s /tmp/localtime /etc/localtime \
   && chgrp -R 0 /var/log/nginx/ /var/lib/nginx /app/data /app/cache /run /home/weblate /etc/supervisor/conf.d \
@@ -107,7 +107,6 @@ RUN rm -f /etc/localtime /etc/timezone \
   && ln -sf /dev/stdout /var/log/nginx/access.log \
   && ln -sf /dev/stderr /var/log/nginx/error.log \
   && rm -rf /run/* \
-  && chmod 664 /etc/passwd /etc/group \
   && sed -i '/pam_rootok.so/a auth requisite pam_deny.so' /etc/pam.d/su
 
 # Entrypoint
