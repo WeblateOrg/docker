@@ -13,6 +13,7 @@ from django.conf import settings
     WEBLATE_ANUBIS_URL,
     SITE_DOMAIN,
     ENABLE_HTTPS,
+    GRANIAN_SOCKET,
 ) = sys.argv[1:]
 
 WEBLATE_SITE_URL = "{}://{}".format(
@@ -45,6 +46,7 @@ print(
             "WEBLATE_BUILTIN_SSL": WEBLATE_BUILTIN_SSL,
             "WEBLATE_ANUBIS_URL": WEBLATE_ANUBIS_URL,
             "WEBLATE_SITE_URL": WEBLATE_SITE_URL,
+            "GRANIAN_SOCKET": GRANIAN_SOCKET,
         }
     )
 )
