@@ -94,7 +94,7 @@ server {
 
 {% if WEBLATE_ANUBIS_URL %}
     location ~ ^{{ WEBLATE_URL_PREFIX }}(/widgets?/|/idp/|/exports/rss/|/healthz/|/hooks/|/accounts/complete/|/accounts/auth/) {
-        proxy_pass http://127.0.0.1:8081;
+        proxy_pass http://unix:{{ GRANIAN_SOCKET }}:;
     }
 {% endif %}
 
@@ -103,7 +103,7 @@ server {
         auth_request /.within.website/x/cmd/anubis/api/check;
         error_page 401 = @redirectToAnubis;
 {% endif %}
-        proxy_pass http://127.0.0.1:8081;
+        proxy_pass http://unix:{{ GRANIAN_SOCKET }}:;
     }
 }
 

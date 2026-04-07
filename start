@@ -300,8 +300,10 @@ if [ "$1" = "runserver" ]; then
     # Compress js and css
     run_weblate compress --force --traceback
 
-    # wsgi socket dir
+    # WSGI socket dir
     mkdir -p /run/granian/
+    GRANIAN_SOCKET=/run/granian/granian.sock
+    rm -f "$GRANIAN_SOCKET"
 
     # Celery pid, remove possible stale PID file
     mkdir -p /run/celery
@@ -337,7 +339,7 @@ set_real_ip_from 0.0.0.0/0;
 
     # Generate nginx configuration
     mkdir -p /tmp/nginx
-    /app/venv/bin/python /etc/nginx/generate-site.py /etc/nginx "$WEBLATE_URL_PREFIX" "$WEBLATE_REALIP" "$CLIENT_MAX_BODY_SIZE" "$WEBLATE_BUILTIN_SSL" "$WEBLATE_ANUBIS_URL" "$WEBLATE_SITE_DOMAIN" "$WEBLATE_ENABLE_HTTPS" > /tmp/nginx/weblate-site.conf
+    /app/venv/bin/python /etc/nginx/generate-site.py /etc/nginx "$WEBLATE_URL_PREFIX" "$WEBLATE_REALIP" "$CLIENT_MAX_BODY_SIZE" "$WEBLATE_BUILTIN_SSL" "$WEBLATE_ANUBIS_URL" "$WEBLATE_SITE_DOMAIN" "$WEBLATE_ENABLE_HTTPS" "$GRANIAN_SOCKET" > /tmp/nginx/weblate-site.conf
 
     # Calculate number of processes, at least 2, at most 4, depending on CPU cores
     if [ -z "$WEBLATE_WORKERS" ]; then
@@ -367,6 +369,7 @@ set_real_ip_from 0.0.0.0/0;
     export CELERY_SINGLE_OPTIONS
     export WEB_WORKERS
     export WEB_BLOCKING_THREADS
+    export GRANIAN_SOCKET
     export GRANIAN_ARGS
 
     #  Execute supervisor
