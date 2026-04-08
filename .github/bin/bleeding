@@ -25,6 +25,7 @@ sed -i \
     -e '/^django-celery-beat==/ D' \
     -e '/^Django==/ D' \
     -e '/^requests==/ D' \
+    -e '/^altcha==/ D' \
     requirements.txt
 
 # Consistent timestamp
