@@ -7,11 +7,19 @@ set -e
 # Allow sensitive settings to be defined in a file
 # in order to support Docker secrets
 if [ -n "${POSTGRES_PASSWORD_FILE}" ]; then
+    if [ ! -r "$POSTGRES_PASSWORD_FILE" ]; then
+        echo "Error: Password file '$POSTGRES_PASSWORD_FILE' not found or not readable" >&2
+        exit 1
+    fi
     POSTGRES_PASSWORD=$(cat "$POSTGRES_PASSWORD_FILE")
     export POSTGRES_PASSWORD
 fi
 
 if [ -n "${REDIS_PASSWORD_FILE}" ]; then
+    if [ ! -r "$REDIS_PASSWORD_FILE" ]; then
+        echo "Error: Password file '$REDIS_PASSWORD_FILE' not found or not readable" >&2
+        exit 1
+    fi
     REDIS_PASSWORD=$(cat "$REDIS_PASSWORD_FILE")
     export REDIS_PASSWORD
 fi
@@ -22,16 +30,28 @@ if [ -z "$CLIENT_MAX_BODY_SIZE" ]; then
 fi
 
 if [ -n "${WEBLATE_ADMIN_PASSWORD_FILE}" ]; then
+    if [ ! -r "$WEBLATE_ADMIN_PASSWORD_FILE" ]; then
+        echo "Error: Password file '$WEBLATE_ADMIN_PASSWORD_FILE' not found or not readable" >&2
+        exit 1
+    fi
     WEBLATE_ADMIN_PASSWORD=$(cat "$WEBLATE_ADMIN_PASSWORD_FILE")
     export WEBLATE_ADMIN_PASSWORD
 fi
 
 if [ -n "${WEBLATE_EMAIL_HOST_PASSWORD_FILE}" ]; then
+    if [ ! -r "$WEBLATE_EMAIL_HOST_PASSWORD_FILE" ]; then
+        echo "Error: Password file '$WEBLATE_EMAIL_HOST_PASSWORD_FILE' not found or not readable" >&2
+        exit 1
+    fi
     WEBLATE_EMAIL_HOST_PASSWORD=$(cat "$WEBLATE_EMAIL_HOST_PASSWORD_FILE")
     export WEBLATE_EMAIL_HOST_PASSWORD
 fi
 
 if [ -n "${WEBLATE_AUTH_LDAP_BIND_PASSWORD_FILE}" ]; then
+    if [ ! -r "$WEBLATE_AUTH_LDAP_BIND_PASSWORD_FILE" ]; then
+        echo "Error: Password file '$WEBLATE_AUTH_LDAP_BIND_PASSWORD_FILE' not found or not readable" >&2
+        exit 1
+    fi
     WEBLATE_AUTH_LDAP_BIND_PASSWORD=$(cat "$WEBLATE_AUTH_LDAP_BIND_PASSWORD_FILE")
     export WEBLATE_AUTH_LDAP_BIND_PASSWORD
 fi
