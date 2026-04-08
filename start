@@ -384,7 +384,13 @@ set_real_ip_from ::/0;
     # Calculate number of processes, at least 2, at most 4, depending on CPU cores
     if [ -z "$WEBLATE_WORKERS" ]; then
         PROCESSORS=$(nproc)
-        WEBLATE_WORKERS=$((PROCESSORS < 2 ? 2 : PROCESSORS > 4 ? 4 : PROCESSORS))
+        if [ "$PROCESSORS" -lt 2 ]; then
+            WEBLATE_WORKERS=2
+        elif [ "$PROCESSORS" -gt 4 ]; then
+            WEBLATE_WORKERS=4
+        else
+            WEBLATE_WORKERS="$PROCESSORS"
+        fi
         echo "Auto-scaled to $WEBLATE_WORKERS processes, adjust by setting WEBLATE_WORKERS"
     fi
 
