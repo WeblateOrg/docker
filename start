@@ -268,7 +268,10 @@ esac
 
 if [ $VERSION_CHECK -eq 1 ]; then
     # Fetch server version
-    PGVERSION=$(psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "${POSTGRES_DB:-$POSTGRES_DATABASE}" -U "$POSTGRES_USER" -t -A -c 'SHOW server_version_num;') || { >&2 echo "Failed to connect to PostgreSQL to determine server version"; exit 1; }
+    PGVERSION=$(psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "${POSTGRES_DB:-$POSTGRES_DATABASE}" -U "$POSTGRES_USER" -t -A -c 'SHOW server_version_num;') || {
+        >&2 echo "Failed to connect to PostgreSQL to determine server version"
+        exit 1
+    }
 
     unset PGPASSWORD
 
