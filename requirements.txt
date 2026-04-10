@@ -62,7 +62,7 @@ tesserocr==2.10.0
 tomlkit==0.14.0
 translate-toolkit==3.19.4
 translation-finder==2.24
-unicode-segmentation-rs==0.2.2
+unicode-segmentation-rs==0.2.4
 urllib3==2.6.3
 weblate-language-data==2026.7
 wllegal==2026.3
