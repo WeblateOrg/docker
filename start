@@ -47,6 +47,14 @@ run_weblate() {
     "$WEBLATE_CMD" "$@"
 }
 
+runserver_has_web_service() {
+    local weblate_service=${WEBLATE_SERVICE:-}
+    [[ -z $weblate_service || $weblate_service == "web" ]]
+}
+
+EARLY_NGINX_PID_FILE=/run/nginx-early.pid
+EARLY_NGINX_CONF_FILE=/tmp/nginx/nginx-early.conf
+
 fail_dep() {
     >&2 echo "$1 not running!"
     >&2 echo
@@ -384,10 +392,19 @@ run_startup_maintenance() {
         run_weblate ensure_stats
     fi
 
-    # Run with --clear to ensure all files are up to date.
-    run_weblate collectstatic --noinput --clear
+    collect_web_static_assets
     # Compress js and css.
     run_weblate compress --force --traceback
+}
+
+collect_web_static_assets() {
+    if [[ ${EARLY_COLLECTSTATIC_DONE:-0} == 1 ]]; then
+        return 0
+    fi
+
+    # Run with --clear to ensure all files are up to date.
+    run_weblate collectstatic --noinput --clear
+    EARLY_COLLECTSTATIC_DONE=1
 }
 
 prepare_runtime_sockets_and_pids() {
@@ -460,6 +477,113 @@ generate_nginx_config() {
         > /tmp/nginx/weblate-site.conf
 }
 
+prepare_early_nginx_main_config() {
+    sed "s#^pid /run/nginx.pid;\$#pid $EARLY_NGINX_PID_FILE;#" /etc/nginx/nginx.conf > "$EARLY_NGINX_CONF_FILE"
+
+    if ! grep -q "^pid $EARLY_NGINX_PID_FILE;\$" "$EARLY_NGINX_CONF_FILE"; then
+        echo "Failed to prepare early nginx configuration"
+        exit 1
+    fi
+}
+
+start_early_nginx() {
+    local early_nginx_pid
+    local start_retries=5
+    local timeout=0
+
+    if ! runserver_has_web_service; then
+        return 0
+    fi
+
+    collect_web_static_assets
+    prepare_runtime_sockets_and_pids
+    generate_nginx_config
+    prepare_early_nginx_main_config
+    rm -f "$EARLY_NGINX_PID_FILE"
+
+    echo "Starting nginx early to serve the startup page..."
+    /usr/sbin/nginx -c "$EARLY_NGINX_CONF_FILE"
+
+    while ((timeout < start_retries)); do
+        if [[ -s $EARLY_NGINX_PID_FILE ]]; then
+            early_nginx_pid=$(cat "$EARLY_NGINX_PID_FILE")
+            if kill -0 "$early_nginx_pid" 2> /dev/null; then
+                EARLY_NGINX_STARTED=1
+                return 0
+            fi
+        fi
+        ((timeout += 1))
+        sleep 1
+    done
+
+    echo "Early nginx did not start cleanly"
+    exit 1
+}
+
+stop_early_nginx() {
+    local early_nginx_pid
+    local graceful_retries=5
+    local term_retries=5
+    local final_retries=5
+    local timeout=0
+
+    if [[ ${EARLY_NGINX_STARTED:-0} != 1 ]]; then
+        return 0
+    fi
+
+    if [[ ! -s $EARLY_NGINX_PID_FILE ]]; then
+        EARLY_NGINX_STARTED=0
+        return 0
+    fi
+
+    early_nginx_pid=$(cat "$EARLY_NGINX_PID_FILE")
+    if ! kill -0 "$early_nginx_pid" 2> /dev/null; then
+        rm -f "$EARLY_NGINX_PID_FILE"
+        EARLY_NGINX_STARTED=0
+        return 0
+    fi
+
+    kill -QUIT "$early_nginx_pid" 2> /dev/null || true
+
+    while kill -0 "$early_nginx_pid" 2> /dev/null; do
+        ((timeout += 1))
+        if ((timeout > graceful_retries)); then
+            echo "Timed out draining early nginx, sending TERM..."
+            kill -TERM "$early_nginx_pid" 2> /dev/null || true
+            timeout=0
+            break
+        fi
+        sleep 1
+    done
+
+    if kill -0 "$early_nginx_pid" 2> /dev/null; then
+        while kill -0 "$early_nginx_pid" 2> /dev/null; do
+            ((timeout += 1))
+            if ((timeout > term_retries)); then
+                echo "Early nginx did not stop after TERM, forcing shutdown..."
+                break
+            fi
+            sleep 1
+        done
+    fi
+
+    if kill -0 "$early_nginx_pid" 2> /dev/null; then
+        kill -KILL "$early_nginx_pid" 2> /dev/null || true
+        timeout=0
+        while kill -0 "$early_nginx_pid" 2> /dev/null; do
+            ((timeout += 1))
+            if ((timeout > final_retries)); then
+                echo "Early nginx did not stop after forced shutdown; leaving pid file in place." >&2
+                return 1
+            fi
+            sleep 1
+        done
+    fi
+
+    rm -f "$EARLY_NGINX_PID_FILE"
+    EARLY_NGINX_STARTED=0
+}
+
 calculate_worker_defaults() {
     local processors
 
@@ -515,6 +639,7 @@ runserver_main() {
     prepare_runtime_sockets_and_pids
     generate_nginx_config
     calculate_worker_defaults
+    stop_early_nginx
     start_supervisord
 }
 
@@ -531,6 +656,9 @@ main() {
     configure_timezone
     ensure_customize_app
     check_weblate_config
+    if [[ ${1:-} == "runserver" ]]; then
+        start_early_nginx
+    fi
     wait_for_redis
     set_postgres_connection_defaults
     wait_for_database
