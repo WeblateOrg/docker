@@ -1,101 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 # shellcheck disable=SC1091
 . /app/venv/bin/activate
-
-# Allow sensitive settings to be defined in a file
-# in order to support Docker secrets
-if [ -n "${POSTGRES_PASSWORD_FILE}" ]; then
-    if [ ! -r "$POSTGRES_PASSWORD_FILE" ]; then
-        echo "Error: Password file '$POSTGRES_PASSWORD_FILE' not found or not readable" >&2
-        exit 1
-    fi
-    POSTGRES_PASSWORD=$(cat "$POSTGRES_PASSWORD_FILE")
-    export POSTGRES_PASSWORD
-fi
-
-if [ -n "${REDIS_PASSWORD_FILE}" ]; then
-    if [ ! -r "$REDIS_PASSWORD_FILE" ]; then
-        echo "Error: Password file '$REDIS_PASSWORD_FILE' not found or not readable" >&2
-        exit 1
-    fi
-    REDIS_PASSWORD=$(cat "$REDIS_PASSWORD_FILE")
-    export REDIS_PASSWORD
-fi
-
-if [ -z "$CLIENT_MAX_BODY_SIZE" ]; then
-    CLIENT_MAX_BODY_SIZE=1000m
-    export CLIENT_MAX_BODY_SIZE
-fi
-
-if [ -n "${WEBLATE_ADMIN_PASSWORD_FILE}" ]; then
-    if [ ! -r "$WEBLATE_ADMIN_PASSWORD_FILE" ]; then
-        echo "Error: Password file '$WEBLATE_ADMIN_PASSWORD_FILE' not found or not readable" >&2
-        exit 1
-    fi
-    WEBLATE_ADMIN_PASSWORD=$(cat "$WEBLATE_ADMIN_PASSWORD_FILE")
-    export WEBLATE_ADMIN_PASSWORD
-fi
-
-if [ -n "${WEBLATE_EMAIL_HOST_PASSWORD_FILE}" ]; then
-    if [ ! -r "$WEBLATE_EMAIL_HOST_PASSWORD_FILE" ]; then
-        echo "Error: Password file '$WEBLATE_EMAIL_HOST_PASSWORD_FILE' not found or not readable" >&2
-        exit 1
-    fi
-    WEBLATE_EMAIL_HOST_PASSWORD=$(cat "$WEBLATE_EMAIL_HOST_PASSWORD_FILE")
-    export WEBLATE_EMAIL_HOST_PASSWORD
-fi
-
-if [ -n "${WEBLATE_AUTH_LDAP_BIND_PASSWORD_FILE}" ]; then
-    if [ ! -r "$WEBLATE_AUTH_LDAP_BIND_PASSWORD_FILE" ]; then
-        echo "Error: Password file '$WEBLATE_AUTH_LDAP_BIND_PASSWORD_FILE' not found or not readable" >&2
-        exit 1
-    fi
-    WEBLATE_AUTH_LDAP_BIND_PASSWORD=$(cat "$WEBLATE_AUTH_LDAP_BIND_PASSWORD_FILE")
-    export WEBLATE_AUTH_LDAP_BIND_PASSWORD
-fi
-
-echo "Starting Weblate $WEBLATE_VERSION..."
-
-# Fix permissions on SSH private key.
-# Fails silently if the file doesn't exist yet.
-chmod 600 /app/data/ssh/id_rsa 2> /dev/null || true
-chmod 600 /app/data/ssh/id_ed25519 2> /dev/null || true
-
-# Check whether data volume is writable
-if [ ! -w /app/data ]; then
-    echo "The /app/data volume is not writable, please adjust the permissions. Weblate is running as uid $(id -u)"
-    echo
-    echo "Please see https://github.com/WeblateOrg/docker/issues/2096 in case"
-    echo "the permissions on the volume are actually correct."
-    exit 1
-fi
-
-# Generate secret
-if [ ! -s /app/data/secret ]; then
-    echo "Generating Django secret..."
-    # https://github.com/django/django/blob/1.10.2/django/utils/crypto.py#L54-L56
-    /app/venv/bin/python -c "from django.utils.crypto import get_random_string; print(get_random_string(50))" > /app/data/secret
-fi
-
-# Generate self-signed SAML key
-# This has to be done early as it is used from the settings_docker.py
-if [ -n "$WEBLATE_SAML_IDP_URL" ]; then
-    if [ ! -f /app/data/ssl/saml.key ] || [ ! -f /app/data/ssl/saml.crt ]; then
-        echo "Generating self-signed certificate for SAML..."
-        mkdir -p /app/data/ssl
-        openssl req \
-            -new \
-            -newkey rsa:4096 \
-            -x509 \
-            -days 3652 \
-            -nodes \
-            -subj "/OU=Weblate/CN=$WEBLATE_SITE_DOMAIN/emailAddress=$WEBLATE_ADMIN_EMAIL" \
-            -out /app/data/ssl/saml.crt \
-            -keyout /app/data/ssl/saml.key
-    fi
-fi
 
 find_nss_wrapper() {
     for candidate in \
@@ -114,100 +21,27 @@ find_nss_wrapper() {
 }
 
 ipv6_available() {
-    WEBLATE_NGINX_IPV6_VALUE=$(printf '%s' "${WEBLATE_NGINX_IPV6:-auto}" | tr '[:upper:]' '[:lower:]')
+    local weblate_nginx_ipv6_value=${WEBLATE_NGINX_IPV6:-auto}
+    weblate_nginx_ipv6_value=${weblate_nginx_ipv6_value,,}
 
-    if [ "$WEBLATE_NGINX_IPV6_VALUE" = "0" ] || [ "$WEBLATE_NGINX_IPV6_VALUE" = "false" ] || [ "$WEBLATE_NGINX_IPV6_VALUE" = "no" ] || [ "$WEBLATE_NGINX_IPV6_VALUE" = "off" ]; then
+    if [[ $weblate_nginx_ipv6_value == "0" || $weblate_nginx_ipv6_value == "false" || $weblate_nginx_ipv6_value == "no" || $weblate_nginx_ipv6_value == "off" ]]; then
         return 1
     fi
 
-    if [ "$WEBLATE_NGINX_IPV6_VALUE" = "1" ] || [ "$WEBLATE_NGINX_IPV6_VALUE" = "true" ] || [ "$WEBLATE_NGINX_IPV6_VALUE" = "yes" ] || [ "$WEBLATE_NGINX_IPV6_VALUE" = "on" ]; then
+    if [[ $weblate_nginx_ipv6_value == "1" || $weblate_nginx_ipv6_value == "true" || $weblate_nginx_ipv6_value == "yes" || $weblate_nginx_ipv6_value == "on" ]]; then
         return 0
     fi
 
-    if [ ! -f /proc/net/if_inet6 ]; then
+    if [[ ! -f /proc/net/if_inet6 ]]; then
         return 1
     fi
 
-    if [ -r /proc/sys/net/ipv6/conf/all/disable_ipv6 ] && [ "$(cat /proc/sys/net/ipv6/conf/all/disable_ipv6)" = "1" ]; then
+    if [[ -r /proc/sys/net/ipv6/conf/all/disable_ipv6 ]] && [[ $(cat /proc/sys/net/ipv6/conf/all/disable_ipv6) == "1" ]]; then
         return 1
     fi
 
     return 0
 }
-
-# Support OpenShift and other arbitrary-UID deployments without modifying
-# the system passwd database. Keep the legacy /etc/passwd append only as a
-# compatibility fallback for derived images that still make it writable.
-if ! whoami > /dev/null 2>&1; then
-    case "${USER_NAME:-weblate}" in
-    *[!A-Za-z0-9._-]* | "")
-        echo "Ignoring invalid USER_NAME value; using fallback username 'weblate'."
-        NSS_WRAPPER_USER_NAME=weblate
-        ;;
-    *)
-        NSS_WRAPPER_USER_NAME=${USER_NAME:-weblate}
-        ;;
-    esac
-
-    if NSS_WRAPPER_LIB=$(find_nss_wrapper); then
-        NSS_WRAPPER_PASSWD=/tmp/passwd.nss_wrapper
-        NSS_WRAPPER_GROUP=/tmp/group.nss_wrapper
-
-        cp /etc/passwd "$NSS_WRAPPER_PASSWD"
-        cp /etc/group "$NSS_WRAPPER_GROUP"
-
-        echo "$NSS_WRAPPER_USER_NAME:x:$(id -u):$(id -g):$NSS_WRAPPER_USER_NAME user:${HOME}:/sbin/nologin" >> "$NSS_WRAPPER_PASSWD"
-        if ! grep -q "^[^:]*:[^:]*:$(id -g):" "$NSS_WRAPPER_GROUP"; then
-            echo "$NSS_WRAPPER_USER_NAME:x:$(id -g):" >> "$NSS_WRAPPER_GROUP"
-        fi
-
-        export LD_PRELOAD="$NSS_WRAPPER_LIB${LD_PRELOAD:+ $LD_PRELOAD}"
-        export NSS_WRAPPER_PASSWD
-        export NSS_WRAPPER_GROUP
-    elif [ -w /etc/passwd ]; then
-        echo "$NSS_WRAPPER_USER_NAME:x:$(id -u):$(id -g):$NSS_WRAPPER_USER_NAME user:${HOME}:/sbin/nologin" >> /etc/passwd
-    else
-        echo "Current uid $(id -u) has no passwd entry and no writable fallback is available."
-        echo "Install libnss-wrapper or provide a passwd entry for the runtime uid."
-        exit 1
-    fi
-fi
-
-if [ -z "$WEBLATE_SITE_DOMAIN" ]; then
-    echo "Missing WEBLATE_SITE_DOMAIN, please configure it"
-    exit 1
-fi
-
-# Export Weblate variables
-export WEBLATE_CMD="/app/venv/bin/weblate"
-export WEBLATE_PY_PATH="/app/data/python/customize"
-
-# Provide sane default value
-if [ -z "$POSTGRES_SSL_MODE" ]; then
-    export POSTGRES_SSL_MODE="prefer"
-fi
-
-# Export variables for psql use
-export PGPASSWORD="$POSTGRES_PASSWORD"
-export PGSSLMODE="$POSTGRES_SSL_MODE"
-
-# Update the time zone
-if [ -w /tmp/localtime ]; then
-    zonefile="/usr/share/zoneinfo/$WEBLATE_TIME_ZONE"
-    if [ -n "$WEBLATE_TIME_ZONE" ] && [ -f "$zonefile" ]; then
-        cat "$zonefile" > /tmp/localtime
-    else
-        cat /usr/share/zoneinfo/Etc/UTC > /tmp/localtime
-    fi
-fi
-
-# Create fake Python app for customization
-if [ ! -d "$WEBLATE_PY_PATH" ]; then
-    echo "Creating $WEBLATE_PY_PATH"
-    mkdir -p "$WEBLATE_PY_PATH/static"
-    touch "$WEBLATE_PY_PATH/__init__.py"
-    touch "$WEBLATE_PY_PATH/models.py"
-fi
 
 run_weblate() {
     "$WEBLATE_CMD" "$@"
@@ -223,99 +57,308 @@ fail_dep() {
     exit 1
 }
 
-if ! run_weblate check; then
-    >&2 echo "Failed to load configuration, please see errors above."
+load_secret_from_file() {
+    local secret_name=$1
+    local file_var="${secret_name}_FILE"
+    local file_path="${!file_var:-}"
+    local secret_value
+
+    if [[ -z $file_path ]]; then
+        return 0
+    fi
+
+    if [[ ! -r $file_path ]]; then
+        echo "Error: Password file '$file_path' not found or not readable" >&2
+        exit 1
+    fi
+
+    # Command substitution strips trailing LF; drop a leftover CR from CRLF files.
+    secret_value=$(cat "$file_path")
+    secret_value=${secret_value%$'\r'}
+    declare -gx "$secret_name=$secret_value"
+}
+
+# Allow sensitive settings to be defined in files
+# in order to support Docker secrets.
+load_secret_env_files() {
+    load_secret_from_file POSTGRES_PASSWORD
+    load_secret_from_file REDIS_PASSWORD
+    load_secret_from_file WEBLATE_ADMIN_PASSWORD
+    load_secret_from_file WEBLATE_EMAIL_HOST_PASSWORD
+    load_secret_from_file WEBLATE_AUTH_LDAP_BIND_PASSWORD
+}
+
+initialize_env_defaults() {
+    : "${CLIENT_MAX_BODY_SIZE:=1000m}"
+    export CLIENT_MAX_BODY_SIZE
+}
+
+ensure_data_volume_writable() {
+    if [[ ! -w /app/data ]]; then
+        echo "The /app/data volume is not writable, please adjust the permissions. Weblate is running as uid $(id -u)"
+        echo
+        echo "Please see https://github.com/WeblateOrg/docker/issues/2096 in case"
+        echo "the permissions on the volume are actually correct."
+        exit 1
+    fi
+}
+
+prepare_ssh_keys() {
+    # Fix permissions on SSH private key.
+    # Fails silently if the file doesn't exist yet.
+    chmod 600 /app/data/ssh/id_rsa 2> /dev/null || true
+    chmod 600 /app/data/ssh/id_ed25519 2> /dev/null || true
+}
+
+ensure_django_secret() {
+    if [[ ! -s /app/data/secret ]]; then
+        echo "Generating Django secret..."
+        # https://github.com/django/django/blob/1.10.2/django/utils/crypto.py#L54-L56
+        /app/venv/bin/python -c "from django.utils.crypto import get_random_string; print(get_random_string(50))" > /app/data/secret
+    fi
+}
+
+ensure_saml_certificate() {
+    # This has to be done early as it is used from the settings_docker.py
+    if [[ -n $WEBLATE_SAML_IDP_URL && (! -f /app/data/ssl/saml.key || ! -f /app/data/ssl/saml.crt) ]]; then
+        echo "Generating self-signed certificate for SAML..."
+        mkdir -p /app/data/ssl
+        openssl req \
+            -new \
+            -newkey rsa:4096 \
+            -x509 \
+            -days 3652 \
+            -nodes \
+            -subj "/OU=Weblate/CN=$WEBLATE_SITE_DOMAIN/emailAddress=$WEBLATE_ADMIN_EMAIL" \
+            -out /app/data/ssl/saml.crt \
+            -keyout /app/data/ssl/saml.key
+    fi
+}
+
+prepare_runtime_files() {
+    prepare_ssh_keys
+    ensure_data_volume_writable
+    ensure_django_secret
+    ensure_saml_certificate
+}
+
+ensure_runtime_user() {
+    local nss_wrapper_user_name
+    local nss_wrapper_lib
+
+    # Support OpenShift and other arbitrary-UID deployments without modifying
+    # the system passwd database. Keep the legacy /etc/passwd append only as a
+    # compatibility fallback for derived images that still make it writable.
+    if whoami > /dev/null 2>&1; then
+        return 0
+    fi
+
+    case "${USER_NAME:-weblate}" in
+    *[!A-Za-z0-9._-]* | "")
+        echo "Ignoring invalid USER_NAME value; using fallback username 'weblate'."
+        nss_wrapper_user_name=weblate
+        ;;
+    *)
+        nss_wrapper_user_name=${USER_NAME:-weblate}
+        ;;
+    esac
+
+    if nss_wrapper_lib=$(find_nss_wrapper); then
+        NSS_WRAPPER_PASSWD=/tmp/passwd.nss_wrapper
+        NSS_WRAPPER_GROUP=/tmp/group.nss_wrapper
+
+        cp /etc/passwd "$NSS_WRAPPER_PASSWD"
+        cp /etc/group "$NSS_WRAPPER_GROUP"
+
+        echo "$nss_wrapper_user_name:x:$(id -u):$(id -g):$nss_wrapper_user_name user:${HOME}:/sbin/nologin" >> "$NSS_WRAPPER_PASSWD"
+        if ! grep -q "^[^:]*:[^:]*:$(id -g):" "$NSS_WRAPPER_GROUP"; then
+            echo "$nss_wrapper_user_name:x:$(id -g):" >> "$NSS_WRAPPER_GROUP"
+        fi
+
+        export LD_PRELOAD="$nss_wrapper_lib${LD_PRELOAD:+ $LD_PRELOAD}"
+        export NSS_WRAPPER_PASSWD
+        export NSS_WRAPPER_GROUP
+        return 0
+    fi
+
+    if [[ -w /etc/passwd ]]; then
+        echo "$nss_wrapper_user_name:x:$(id -u):$(id -g):$nss_wrapper_user_name user:${HOME}:/sbin/nologin" >> /etc/passwd
+        return 0
+    fi
+
+    echo "Current uid $(id -u) has no passwd entry and no writable fallback is available."
+    echo "Install libnss-wrapper or provide a passwd entry for the runtime uid."
     exit 1
-fi
+}
 
-# Wait for redis
-TIMEOUT=0
-until run_weblate shell -c 'from django.core.cache import cache; "ping" in cache' > /dev/null; do
-    >&2 echo "redis at ${REDIS_HOST:-cache} is unavailable - retrying $((30 - TIMEOUT))"
-    TIMEOUT=$((TIMEOUT + 1))
-    if [ $TIMEOUT -gt 30 ]; then
-        run_weblate shell -c 'from django.core.cache import cache; "ping" in cache'
-        fail_dep redis
+require_site_domain() {
+    if [[ -z $WEBLATE_SITE_DOMAIN ]]; then
+        echo "Missing WEBLATE_SITE_DOMAIN, please configure it"
+        exit 1
     fi
-    sleep 1
-done
+}
 
-if [ -z "$POSTGRES_HOST" ]; then
-    export POSTGRES_HOST=database
-fi
-if [ -z "$POSTGRES_PORT" ]; then
-    export POSTGRES_PORT=
-fi
+export_runtime_env() {
+    # Export Weblate variables.
+    export WEBLATE_CMD="/app/venv/bin/weblate"
+    export WEBLATE_PY_PATH="/app/data/python/customize"
 
-# Wait for database to get available
-TIMEOUT=0
-until run_weblate shell -c 'from weblate.auth.models import User; User.objects.raw("SELECT 1")' > /dev/null; do
-    >&2 echo "Database server at ${POSTGRES_HOST:-db} is unavailable - retrying $((30 - TIMEOUT))"
-    TIMEOUT=$((TIMEOUT + 1))
-    if [ $TIMEOUT -gt 30 ]; then
-        run_weblate shell -c 'from weblate.auth.models import User; User.objects.exists()'
-        fail_dep PostgreSQL
+    # Provide sane default value.
+    : "${POSTGRES_SSL_MODE:=prefer}"
+    export POSTGRES_SSL_MODE
+
+    # Export variables for psql use.
+    export PGPASSWORD="$POSTGRES_PASSWORD"
+    export PGSSLMODE="$POSTGRES_SSL_MODE"
+}
+
+configure_timezone() {
+    local zonefile
+
+    # Update the time zone.
+    if [[ ! -w /tmp/localtime ]]; then
+        return 0
     fi
-    sleep 1
-done
 
-VERSION_CHECK=1
-case $WEBLATE_DATABASES in
-0 | [fF][aA][lL][sS][eE] | [nN][oO])
-    VERSION_CHECK=0
-    ;;
-esac
+    zonefile="/usr/share/zoneinfo/$WEBLATE_TIME_ZONE"
+    if [[ -n $WEBLATE_TIME_ZONE && -f $zonefile ]]; then
+        cat "$zonefile" > /tmp/localtime
+    else
+        cat /usr/share/zoneinfo/Etc/UTC > /tmp/localtime
+    fi
+}
 
-if [ $VERSION_CHECK -eq 1 ]; then
-    # Fetch server version
-    PGVERSION=$(psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "${POSTGRES_DB:-$POSTGRES_DATABASE}" -U "$POSTGRES_USER" -t -A -c 'SHOW server_version_num;') || {
+ensure_customize_app() {
+    # Create fake Python app for customization.
+    if [[ ! -d $WEBLATE_PY_PATH ]]; then
+        echo "Creating $WEBLATE_PY_PATH"
+        mkdir -p "$WEBLATE_PY_PATH/static"
+        touch "$WEBLATE_PY_PATH/__init__.py"
+        touch "$WEBLATE_PY_PATH/models.py"
+    fi
+}
+
+check_weblate_config() {
+    if ! run_weblate check; then
+        >&2 echo "Failed to load configuration, please see errors above."
+        exit 1
+    fi
+}
+
+wait_for_shell_dependency() {
+    local wait_label=$1
+    local failure_label=$2
+    local dependency_location=$3
+    local dependency_check=$4
+    local dependency_failure_check=$5
+    local max_retries=30
+    local timeout=0
+
+    until run_weblate shell -c "$dependency_check" > /dev/null; do
+        >&2 echo "$wait_label at $dependency_location is unavailable - retrying $((max_retries - timeout))"
+        ((timeout += 1))
+        if ((timeout > max_retries)); then
+            run_weblate shell -c "$dependency_failure_check"
+            fail_dep "$failure_label"
+        fi
+        sleep 1
+    done
+}
+
+wait_for_redis() {
+    wait_for_shell_dependency \
+        redis \
+        redis \
+        "${REDIS_HOST:-cache}" \
+        'from django.core.cache import cache; "ping" in cache' \
+        'from django.core.cache import cache; "ping" in cache'
+}
+
+set_postgres_connection_defaults() {
+    : "${POSTGRES_HOST:=database}"
+    : "${POSTGRES_PORT:=}"
+    export POSTGRES_HOST
+    export POSTGRES_PORT
+}
+
+wait_for_database() {
+    wait_for_shell_dependency \
+        "Database server" \
+        PostgreSQL \
+        "${POSTGRES_HOST:-db}" \
+        'from weblate.auth.models import User; User.objects.raw("SELECT 1")' \
+        'from weblate.auth.models import User; User.objects.exists()'
+}
+
+database_version_check_enabled() {
+    case $WEBLATE_DATABASES in
+    0 | [fF][aA][lL][sS][eE] | [nN][oO])
+        return 1
+        ;;
+    *)
+        return 0
+        ;;
+    esac
+}
+
+check_postgres_version() {
+    local pgversion
+
+    if ! database_version_check_enabled; then
+        >&2 echo "Database is up"
+        return 0
+    fi
+
+    # Fetch server version.
+    pgversion=$(psql -h "$POSTGRES_HOST" -p "$POSTGRES_PORT" -d "${POSTGRES_DB:-$POSTGRES_DATABASE}" -U "$POSTGRES_USER" -t -A -c 'SHOW server_version_num;') || {
         >&2 echo "Failed to connect to PostgreSQL to determine server version"
         exit 1
     }
 
     unset PGPASSWORD
 
-    >&2 echo "Postgres $PGVERSION is up"
+    >&2 echo "Postgres $pgversion is up"
 
-    # Check if supported PostgreSQL version is used
-    if [ "$PGVERSION" -lt 120000 ]; then
+    # Check if supported PostgreSQL version is used.
+    if ((pgversion < 120000)); then
         >&2 echo "PostgreSQL 12 or newer is required to run Weblate"
         >&2 echo "See https://docs.weblate.org/en/latest/admin/install/docker.html#upgrading-postgresql-container"
         exit 1
     fi
-else
-    >&2 echo "Database is up"
-fi
+}
 
-# Migrate database to current version and collect static files
-if [ "$1" = "runserver" ]; then
-
+prepare_supervisor_services() {
     DO_MIGRATE=1
-    # Select which services to run
     SUPERVISOR_CONF=/run/supervisor.conf.d/
+
+    # Select which services to run.
     mkdir -p "$SUPERVISOR_CONF"
-    # Remove possible stale files from previous start
+    # Remove possible stale files from previous start.
     rm -f "$SUPERVISOR_CONF"/*
-    if [ -n "$WEBLATE_SERVICE" ]; then
-        if [ "$WEBLATE_SERVICE" != "celery-beat" ]; then
+
+    if [[ -n $WEBLATE_SERVICE ]]; then
+        if [[ $WEBLATE_SERVICE != "celery-beat" ]]; then
             DO_MIGRATE=0
         fi
         ln -s "/etc/supervisor/conf.d/$WEBLATE_SERVICE.conf" "$SUPERVISOR_CONF"
-    else
-        # Symlink all non-celery services
-        find /etc/supervisor/conf.d -type f ! -name 'celery-*.conf' -print0 | xargs -0 -I '{}' ln -s '{}' "$SUPERVISOR_CONF"
-
-        if [ "${CELERY_SINGLE_PROCESS:-0}" -eq 1 ]; then
-            # Symlink single process service only
-            ln -s /etc/supervisor/conf.d/celery-single.conf "$SUPERVISOR_CONF"
-            ln -s /etc/supervisor/conf.d/celery-beat.conf "$SUPERVISOR_CONF"
-        else
-            # Symlink all celery services but the single process
-            find /etc/supervisor/conf.d -type f -name 'celery-*.conf' ! -name 'celery-single.conf' -print0 | xargs -0 -I '{}' ln -s '{}' "$SUPERVISOR_CONF"
-        fi
+        return 0
     fi
 
-    if [ $DO_MIGRATE -eq 1 ]; then
+    # Symlink all non-celery services.
+    find /etc/supervisor/conf.d -type f ! -name 'celery-*.conf' -exec ln -s -t "$SUPERVISOR_CONF" {} +
+
+    if ((${CELERY_SINGLE_PROCESS:-0} == 1)); then
+        # Symlink single process service only.
+        ln -s /etc/supervisor/conf.d/celery-single.conf "$SUPERVISOR_CONF"
+        ln -s /etc/supervisor/conf.d/celery-beat.conf "$SUPERVISOR_CONF"
+    else
+        # Symlink all celery services but the single process.
+        find /etc/supervisor/conf.d -type f -name 'celery-*.conf' ! -name 'celery-single.conf' -exec ln -s -t "$SUPERVISOR_CONF" {} +
+    fi
+}
+
+run_startup_maintenance() {
+    if ((DO_MIGRATE == 1)); then
         echo "Starting database migration..."
         if ! run_weblate migrate; then
             echo
@@ -329,8 +372,8 @@ if [ "$1" = "runserver" ]; then
             exit 1
         fi
 
-        # Create or update admin account
-        if [ -n "$WEBLATE_ADMIN_PASSWORD" ]; then
+        # Create or update admin account.
+        if [[ -n $WEBLATE_ADMIN_PASSWORD ]]; then
             echo "Updating admin user password (unset WEBLATE_ADMIN_PASSWORD to disable)..."
             run_weblate createadmin --password="$WEBLATE_ADMIN_PASSWORD" --update --email="$WEBLATE_ADMIN_EMAIL" --name="$WEBLATE_ADMIN_NAME"
         else
@@ -340,21 +383,26 @@ if [ "$1" = "runserver" ]; then
         echo "Refreshing stats..."
         run_weblate ensure_stats
     fi
-    # Run with --clear to ensure all files are up to date
-    run_weblate collectstatic --noinput --clear
-    # Compress js and css
-    run_weblate compress --force --traceback
 
-    # WSGI socket dir
+    # Run with --clear to ensure all files are up to date.
+    run_weblate collectstatic --noinput --clear
+    # Compress js and css.
+    run_weblate compress --force --traceback
+}
+
+prepare_runtime_sockets_and_pids() {
+    # WSGI socket dir.
     mkdir -p /run/granian/
     GRANIAN_SOCKET=/run/granian/granian.sock
     rm -f "$GRANIAN_SOCKET"
 
-    # Celery pid, remove possible stale PID file
+    # Celery pid, remove possible stale PID file.
     mkdir -p /run/celery
     rm -f /run/celery/beat.pid
+}
 
-    # Parse upstream X-Forwarded-For
+configure_real_ip() {
+    # Parse upstream X-Forwarded-For.
     case "$WEBLATE_IP_PROXY_HEADER" in
     HTTP_X_FORWARDED_FOR)
         WEBLATE_REALIP="
@@ -364,31 +412,38 @@ set_real_ip_from ::/0;
 "
         ;;
     *)
-        WEBLATE_REALIP=""
+        WEBLATE_REALIP=
         ;;
     esac
+}
 
-    # Detect SSL setup
-    if [ -f /app/data/ssl/privkey.pem ]; then
-        WEBLATE_BUILTIN_SSL="1"
-        if [ -z "$WEBLATE_IP_PROXY_HEADER" ]; then
+detect_builtin_ssl() {
+    # Detect SSL setup.
+    if [[ -f /app/data/ssl/privkey.pem ]]; then
+        WEBLATE_BUILTIN_SSL=1
+        if [[ -z $WEBLATE_IP_PROXY_HEADER ]]; then
             # Use X-Forwarded-For from the built-in nginx
             export WEBLATE_IP_PROXY_HEADER=HTTP_X_FORWARDED_FOR
         fi
     else
-        WEBLATE_BUILTIN_SSL=""
+        WEBLATE_BUILTIN_SSL=
     fi
+}
 
-    # Make sure WEBLATE_ANUBIS_URL is set
-    : "${WEBLATE_ANUBIS_URL:=""}"
-    : "${WEBLATE_ENABLE_HTTPS:=""}"
+generate_nginx_config() {
+    configure_real_ip
+    detect_builtin_ssl
+
+    # Make sure WEBLATE_ANUBIS_URL is set.
+    : "${WEBLATE_ANUBIS_URL:=}"
+    : "${WEBLATE_ENABLE_HTTPS:=}"
     if ipv6_available; then
         WEBLATE_ENABLE_IPV6=1
     else
         WEBLATE_ENABLE_IPV6=
     fi
 
-    # Generate nginx configuration
+    # Generate nginx configuration.
     mkdir -p /tmp/nginx
     /app/venv/bin/python \
         /etc/nginx/generate-site.py \
@@ -403,31 +458,35 @@ set_real_ip_from ::/0;
         "$GRANIAN_SOCKET" \
         "$WEBLATE_ENABLE_IPV6" \
         > /tmp/nginx/weblate-site.conf
+}
 
-    # Calculate number of processes, at least 2, at most 4, depending on CPU cores
-    if [ -z "$WEBLATE_WORKERS" ]; then
-        PROCESSORS=$(nproc)
-        if [ "$PROCESSORS" -lt 2 ]; then
+calculate_worker_defaults() {
+    local processors
+
+    # Calculate number of processes, at least 2, at most 4, depending on CPU cores.
+    if [[ -z $WEBLATE_WORKERS ]]; then
+        processors=$(nproc)
+        if ((processors < 2)); then
             WEBLATE_WORKERS=2
-        elif [ "$PROCESSORS" -gt 4 ]; then
+        elif ((processors > 4)); then
             WEBLATE_WORKERS=4
         else
-            WEBLATE_WORKERS="$PROCESSORS"
+            WEBLATE_WORKERS=$processors
         fi
         echo "Auto-scaled to $WEBLATE_WORKERS processes, adjust by setting WEBLATE_WORKERS"
     fi
 
-    # default values for celery options
+    # Default values for celery options.
     : "${CELERY_MAIN_OPTIONS:="--concurrency $WEBLATE_WORKERS"}"
     : "${CELERY_NOTIFY_OPTIONS:="--concurrency $WEBLATE_WORKERS"}"
     : "${CELERY_TRANSLATE_OPTIONS:="--concurrency $WEBLATE_WORKERS"}"
     : "${CELERY_MEMORY_OPTIONS:="--concurrency $((WEBLATE_WORKERS == 1 ? 1 : WEBLATE_WORKERS / 2))"}"
     : "${CELERY_BACKUP_OPTIONS:="--concurrency 1"}"
-    : "${CELERY_BEAT_OPTIONS:=""}"
-    : "${CELERY_SINGLE_OPTIONS:=""}"
+    : "${CELERY_BEAT_OPTIONS:=}"
+    : "${CELERY_SINGLE_OPTIONS:=}"
     : "${WEB_WORKERS:="$((WEBLATE_WORKERS <= 3 ? 2 : WEBLATE_WORKERS / 2))"}"
     : "${WEB_BLOCKING_THREADS:="$((WEBLATE_WORKERS * 2))"}"
-    : "${GRANIAN_ARGS:=""}"
+    : "${GRANIAN_ARGS:=}"
 
     export CELERY_MAIN_OPTIONS
     export CELERY_NOTIFY_OPTIONS
@@ -440,13 +499,49 @@ set_real_ip_from ::/0;
     export WEB_BLOCKING_THREADS
     export GRANIAN_SOCKET
     export GRANIAN_ARGS
+}
 
-    #  Execute supervisor
+start_supervisord() {
+    # Execute supervisor.
     exec /app/venv/bin/supervisord \
         --loglevel="${SUPERVISOR_LOGLEVEL:-info}" \
         --logfile="${SUPERVISOR_LOGFILE:-/dev/null}" \
         --configuration=/etc/supervisor/supervisord.conf
-fi
+}
 
-# Start the management command
-run_weblate "$@"
+runserver_main() {
+    prepare_supervisor_services
+    run_startup_maintenance
+    prepare_runtime_sockets_and_pids
+    generate_nginx_config
+    calculate_worker_defaults
+    start_supervisord
+}
+
+main() {
+    load_secret_env_files
+    initialize_env_defaults
+
+    echo "Starting Weblate $WEBLATE_VERSION..."
+
+    prepare_runtime_files
+    ensure_runtime_user
+    require_site_domain
+    export_runtime_env
+    configure_timezone
+    ensure_customize_app
+    check_weblate_config
+    wait_for_redis
+    set_postgres_connection_defaults
+    wait_for_database
+    check_postgres_version
+
+    if [[ ${1:-} == "runserver" ]]; then
+        runserver_main
+    fi
+
+    # Start the management command.
+    run_weblate "$@"
+}
+
+main "$@"
