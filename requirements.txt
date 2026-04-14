@@ -1,4 +1,4 @@
-aeidon==1.15
+aeidon==1.16
 ahocorasick-rs==1.0.3
 aliyun-python-sdk-alimt==3.2.0
 altcha==1.0.0
