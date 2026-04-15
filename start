@@ -258,7 +258,6 @@ wait_for_shell_dependency() {
     local failure_label=$2
     local dependency_location=$3
     local dependency_check=$4
-    local dependency_failure_check=$5
     local max_retries=30
     local timeout=0
 
@@ -266,7 +265,7 @@ wait_for_shell_dependency() {
         >&2 echo "$wait_label at $dependency_location is unavailable - retrying $((max_retries - timeout))"
         ((timeout += 1))
         if ((timeout > max_retries)); then
-            run_weblate shell -c "$dependency_failure_check"
+            run_weblate shell -c "$dependency_check"
             fail_dep "$failure_label"
         fi
         sleep 1
@@ -278,8 +277,7 @@ wait_for_redis() {
         redis \
         redis \
         "${REDIS_HOST:-cache}" \
-        'from django.core.cache import cache; "ping" in cache' \
-        'from django.core.cache import cache; "ping" in cache'
+        'from django.core.cache import cache; cache.get("ping")'
 }
 
 set_postgres_connection_defaults() {
@@ -294,8 +292,7 @@ wait_for_database() {
         "Database server" \
         PostgreSQL \
         "${POSTGRES_HOST:-db}" \
-        'from weblate.auth.models import User; User.objects.raw("SELECT 1")' \
-        'from weblate.auth.models import User; User.objects.exists()'
+        'from weblate.auth.models import User; User.objects.raw("SELECT 1")'
 }
 
 database_version_check_enabled() {
