@@ -29,12 +29,11 @@ repos:
     args: [--autofix, --indent, '2']
   - id: pretty-format-toml
     args: [--autofix]
-- repo: https://github.com/executablebooks/mdformat
-  rev: 1.0.0
+- repo: https://github.com/rvben/rumdl-pre-commit
+  rev: v0.1.62
   hooks:
-  - id: mdformat
-    additional_dependencies:
-    - mdformat-gfm==1.0.0
+  - id: rumdl
+  - id: rumdl-fmt
 - repo: https://github.com/shellcheck-py/shellcheck-py
   rev: v0.11.0.1
   hooks:
