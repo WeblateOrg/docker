@@ -42,7 +42,7 @@ psycopg[binary]==3.3.3
 pyasn1==0.6.3
 Pygments==2.20.0
 PyJWT==2.12.1
-pyOpenSSL==26.0.0
+pyOpenSSL==26.1.0
 pyparsing==3.3.2
 python-dateutil==2.9.0.post0
 python3-saml==1.16.0
