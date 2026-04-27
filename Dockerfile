@@ -1,4 +1,4 @@
-FROM weblate/dev:2026.17.0@sha256:b8356a4f2d009fac8c5775d9adaa22453c410cfb092ca7848bacb9e6a6a5fd27 AS build
+FROM weblate/dev:2026.18.0@sha256:4c3b3536b8c97b1a562a0cfe6c09782e9f905655478885356b713463ed633b4d AS build
 
 ARG TARGETARCH
 
@@ -51,7 +51,7 @@ RUN find /app/src -name '*.patch' -print0 | sort -z | \
   xargs -n1 -0 -r patch -p1 -d "/app/venv/lib/python${PYVERSION}/site-packages/" -i
 
 
-FROM weblate/base:2026.17.0@sha256:56229dac904380683b723e2633a79d9ee5a37b94e5294ecc86bcbddcbb3cff72 AS final
+FROM weblate/base:2026.18.0@sha256:deb1c1ff2bfcbf8d7dfab3a819b60b2b84ec0e66b27fee487db3485ab2e6a2ae AS final
 
 # renovate: datasource=pypi depName=Weblate versioning=pep440
 ENV WEBLATE_VERSION=5.17
