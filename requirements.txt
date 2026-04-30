@@ -56,7 +56,7 @@ ruamel.yaml==0.19.1
 sentry-sdk==2.58.0
 siphashc==2.7
 social-auth-app-django==5.9.0
-social-auth-core==4.9.0
+social-auth-core==4.9.1
 supervisor==4.3.0
 tesserocr==2.10.0
 tomlkit==0.14.0
