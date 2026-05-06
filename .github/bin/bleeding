@@ -17,17 +17,6 @@ sed -i \
     LABEL org.opencontainers.image.revision=\"$SHA\"" \
     Dockerfile
 
-# Adjust requirements for bleeding by removing ones we install from Git
-sed -i \
-    -e '/^translate-toolkit==/ D' \
-    -e '/^weblate-language-data==/ D' \
-    -e '/^django-otp==/ D' \
-    -e '/^django-celery-beat==/ D' \
-    -e '/^Django==/ D' \
-    -e '/^requests==/ D' \
-    -e '/^altcha==/ D' \
-    requirements.txt
-
 # Consistent timestamp
 touch --date="$DATE" Dockerfile
 
