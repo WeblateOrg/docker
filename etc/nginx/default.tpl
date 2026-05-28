@@ -108,6 +108,8 @@ server {
 {% if WEBLATE_ANUBIS_URL %}
         auth_request /.within.website/x/cmd/anubis/api/check;
         error_page 401 = @redirectToAnubis;
+        error_page 502 /__weblate_starting__.html;
+        error_page 504 /__weblate_timeout__.html;
 {% endif %}
         proxy_pass http://unix:{{ GRANIAN_SOCKET }}:;
     }
