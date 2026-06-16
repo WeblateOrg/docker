@@ -1,0 +1,43 @@
+#!/bin/sh
+
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+# Generate image tags for publishing. Keep this in sync with get-buildx-args
+# consumers by calling it from both the build and signing paths.
+
+set -eu
+
+mode=${1:-}
+image=${DOCKER_IMAGE:-weblate/weblate}
+
+case "$mode" in
+publish-bleeding)
+    args_date=$(cat .github/args-date)
+    args_sha=$(cat .github/args-sha)
+    printf '%s\n' "$image:bleeding" "$image:bleeding-$args_date-$args_sha"
+    ;;
+publish | publish-stable)
+    case "${GITHUB_REF:-}" in
+    refs/tags/[0-9]*)
+        release="${GITHUB_REF#refs/tags/}"
+        minor="${release%.*.*}"
+        major="${minor%.*}"
+        printf '%s\n' "$image:$release" "$image:$minor" "$image:$major" "$image:latest"
+        ;;
+    refs/heads/main)
+        printf '%s\n' "$image:edge" "$image:edge-$(date -I)-${GITHUB_SHA:?GITHUB_SHA is required}"
+        ;;
+    *)
+        echo "Unsupported GITHUB_REF for publishing: ${GITHUB_REF:-}" >&2
+        exit 1
+        ;;
+    esac
+    ;;
+"")
+    echo "Usage: $0 MODE" >&2
+    exit 1
+    ;;
+*)
+    exit 0
+    ;;
+esac
