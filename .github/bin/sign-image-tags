@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+set -eu
+
+mode=${1:?Usage: sign-image-tags MODE}
+metadata_file=${BUILDX_METADATA_FILE:-/tmp/buildx-metadata.json}
+digest=$(jq --raw-output '."containerimage.digest" // empty' "$metadata_file")
+
+if [ -z "$digest" ]; then
+    echo "Unable to find containerimage.digest in $metadata_file" >&2
+    exit 1
+fi
+
+tags=$(.github/bin/get-image-tags "$mode")
+signed_repositories=
+
+for tag in $tags; do
+    repository=${tag%:*}
+    case " $signed_repositories " in
+    *" $repository "*)
+        continue
+        ;;
+    esac
+    cosign sign --yes "$repository@$digest"
+    signed_repositories="$signed_repositories $repository"
+done

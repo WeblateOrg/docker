@@ -6,6 +6,17 @@
 
 # Generate command-line options for docker buildx build
 
+is_publish() {
+    case "$1" in
+    publish | publish-stable | publish-bleeding)
+        return 0
+        ;;
+    *)
+        return 1
+        ;;
+    esac
+}
+
 # Load from local cache
 if [ -n "$MATRIX_ARCHITECTURE" ]; then
     echo --cache-from "type=local,src=/tmp/.buildx-cache/$MATRIX_ARCHITECTURE"
@@ -37,31 +48,16 @@ else
     # Enable more platforms in future:
     # linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/386,linux/ppc64le,linux/s390x
 
-    if [ "$1" = "publish-bleeding" ]; then
-        # Publishing bleeding edge image
+    if is_publish "$1"; then
+        # Publishing image with supply-chain metadata
         echo --output "type=image,push=true"
-        echo --tag "${DOCKER_IMAGE:-weblate/weblate}:bleeding"
-        echo --tag "${DOCKER_IMAGE:-weblate/weblate}:bleeding-$(cat .github/args-date)-$(cat .github/args-sha)"
-    elif [ "$1" = "publish" ] || [ "$1" = "publish-stable" ]; then
-        # Publishing normal image
-        echo --output "type=image,push=true"
-
-        # Generate tags
-        case "$GITHUB_REF" in
-        refs/tags/[0-9]*)
-            RELEASE="${GITHUB_REF#refs/tags/}"
-            MINOR="${RELEASE%.*.*}"
-            MAJOR="${MINOR%.*}"
-            echo --tag "${DOCKER_IMAGE:-weblate/weblate}:$RELEASE"
-            echo --tag "${DOCKER_IMAGE:-weblate/weblate}:$MINOR"
-            echo --tag "${DOCKER_IMAGE:-weblate/weblate}:$MAJOR"
-            echo --tag "${DOCKER_IMAGE:-weblate/weblate}:latest"
-            ;;
-        refs/heads/main)
-            echo --tag "${DOCKER_IMAGE:-weblate/weblate}:edge"
-            echo --tag "${DOCKER_IMAGE:-weblate/weblate}:edge-$(date -I)-${GITHUB_SHA}"
-            ;;
-        esac
+        tags=$(.github/bin/get-image-tags "$1") || exit 1
+        for tag in $tags; do
+            echo --tag "$tag"
+        done
+        echo --metadata-file "${BUILDX_METADATA_FILE:-/tmp/buildx-metadata.json}"
+        echo --attest type=sbom
+        echo --attest type=provenance,mode=max
     else
         echo --output "type=image,push=false"
     fi

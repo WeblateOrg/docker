@@ -25,6 +25,7 @@ jobs:
     permissions:
       security-events: write
       packages: write
+      id-token: write
       contents: read
     with:
       variant: stable
