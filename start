@@ -47,6 +47,11 @@ run_weblate() {
     "$WEBLATE_CMD" "$@"
 }
 
+# Compatibility with older Weblate releases, remove in 2026.8.
+weblate_has_compress() {
+    run_weblate help --commands | grep -qx compress
+}
+
 runserver_has_web_service() {
     local weblate_service=${WEBLATE_SERVICE:-}
     [[ -z $weblate_service || $weblate_service == "web" ]]
@@ -390,8 +395,10 @@ run_startup_maintenance() {
     fi
 
     collect_web_static_assets
-    # Compress js and css.
-    run_weblate compress --force --traceback
+    if weblate_has_compress; then
+        # Compress js and css.
+        run_weblate compress --force --traceback
+    fi
 }
 
 collect_web_static_assets() {
@@ -399,8 +406,12 @@ collect_web_static_assets() {
         return 0
     fi
 
-    # Run with --clear to ensure all files are up to date.
-    run_weblate collectstatic --noinput --clear
+    if weblate_has_compress; then
+        # Run with --clear to ensure all files are up to date.
+        run_weblate collectstatic --noinput --clear
+    else
+        run_weblate collectstatic --noinput
+    fi
     EARLY_COLLECTSTATIC_DONE=1
 }
 
