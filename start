@@ -594,6 +594,7 @@ stop_early_nginx() {
 
 calculate_worker_defaults() {
     local processors
+    local prefork_workers
 
     # Calculate number of processes, at least 2, at most 4, depending on CPU cores.
     if [[ -z $WEBLATE_WORKERS ]]; then
@@ -608,11 +609,15 @@ calculate_worker_defaults() {
         echo "Auto-scaled to $WEBLATE_WORKERS processes, adjust by setting WEBLATE_WORKERS"
     fi
 
+    # Prefork workers provide more effective parallelism than threads. Keep the
+    # notification workers at full concurrency, but limit the heavier queues.
+    prefork_workers=$(((WEBLATE_WORKERS + 1) / 2))
+
     # Default values for celery options.
-    : "${CELERY_MAIN_OPTIONS:="--concurrency $WEBLATE_WORKERS"}"
+    : "${CELERY_MAIN_OPTIONS:="--concurrency $prefork_workers"}"
     : "${CELERY_NOTIFY_OPTIONS:="--concurrency $WEBLATE_WORKERS"}"
-    : "${CELERY_TRANSLATE_OPTIONS:="--concurrency $WEBLATE_WORKERS"}"
-    : "${CELERY_MEMORY_OPTIONS:="--concurrency $((WEBLATE_WORKERS == 1 ? 1 : WEBLATE_WORKERS / 2))"}"
+    : "${CELERY_TRANSLATE_OPTIONS:="--concurrency $prefork_workers"}"
+    : "${CELERY_MEMORY_OPTIONS:="--concurrency 1"}"
     : "${CELERY_BACKUP_OPTIONS:="--concurrency 1"}"
     : "${CELERY_BEAT_OPTIONS:=}"
     : "${CELERY_SINGLE_OPTIONS:=}"
