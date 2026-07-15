@@ -96,6 +96,11 @@ jobs:
     - name: Verify supervisor
       working-directory: docker-compose
       run: ./test-supervisor
+    - name: Verify Celery workers
+      working-directory: docker-compose
+      run: python3 ../.github/bin/test-celery.py "$WEBLATE_TEST"
+      env:
+        WEBLATE_TEST: ${{ inputs.test }}
     - name: Test admin creation
       working-directory: docker-compose
       run: ./test-admin
