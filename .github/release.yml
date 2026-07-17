@@ -20,3 +20,4 @@ changelog:
   - title: Translation updates
     authors:
     - weblate
+    - hosted-weblate[bot]
