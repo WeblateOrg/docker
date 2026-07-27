@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-import django
 import sys
+
+import django
 from django.conf import settings
 
 # Parse args
@@ -35,7 +36,7 @@ settings.configure(TEMPLATES=TEMPLATES)
 django.setup()
 
 # Now we can use templates
-from django.template.loader import get_template  # noqa: E402
+from django.template.loader import get_template
 
 template = get_template("default.tpl")
 print(
