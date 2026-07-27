@@ -611,6 +611,16 @@ calculate_worker_defaults() {
     : "${WEB_BLOCKING_THREADS:="$((WEBLATE_WORKERS * 2))"}"
     : "${GRANIAN_ARGS:=}"
 
+    if ((${WEBLATE_ASGI:-0} == 1)); then
+        GRANIAN_INTERFACE=asginl
+        GRANIAN_MODE_ARGS=
+        GRANIAN_APPLICATION=weblate.asgi:application
+    else
+        GRANIAN_INTERFACE=wsgi
+        GRANIAN_MODE_ARGS="--runtime-threads 2 --blocking-threads $WEB_BLOCKING_THREADS"
+        GRANIAN_APPLICATION=weblate.wsgi:application
+    fi
+
     export CELERY_MAIN_OPTIONS
     export CELERY_NOTIFY_OPTIONS
     export CELERY_TRANSLATE_OPTIONS
@@ -621,6 +631,9 @@ calculate_worker_defaults() {
     export WEB_WORKERS
     export WEB_BLOCKING_THREADS
     export GRANIAN_SOCKET
+    export GRANIAN_INTERFACE
+    export GRANIAN_MODE_ARGS
+    export GRANIAN_APPLICATION
     export GRANIAN_ARGS
 }
 
