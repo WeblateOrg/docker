@@ -5,6 +5,10 @@
 # This file is maintained in https://github.com/WeblateOrg/meta/
 
 changelog:
+  exclude:
+    authors:
+    - weblate
+    - hosted-weblate[bot]
   categories:
   - title: Changes and improvements
     labels:
@@ -12,12 +16,6 @@ changelog:
     exclude:
       labels:
       - dependencies
-      authors:
-      - weblate
   - title: Dependency updates
     labels:
     - dependencies
-  - title: Translation updates
-    authors:
-    - weblate
-    - hosted-weblate[bot]
