@@ -70,7 +70,7 @@ LABEL org.opencontainers.image.description="A web-based continuous localization 
 LABEL org.opencontainers.image.licenses="GPL-3.0-or-later"
 
 # Increased start period for migrations run
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5m CMD /app/bin/health_check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5m CMD ["/app/bin/health_check"]
 
 # Use Docker specific settings
 ENV DJANGO_SETTINGS_MODULE=weblate.settings_docker
