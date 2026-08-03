@@ -190,7 +190,7 @@ jobs:
         image: weblate/weblate:test
         fail-build: false
     - name: Upload Anchore Scan Report
-      uses: github/codeql-action/upload-sarif@f205ea1c3313d32999d8d6a48b4f6530d4437b38 # v4.37.4
+      uses: github/codeql-action/upload-sarif@d1ba80a13dd99fba24a470575428917156a28b43 # v4.37.5
       with:
         sarif_file: ${{ steps.scan.outputs.sarif }}
 
@@ -239,7 +239,7 @@ jobs:
         severity: CRITICAL,HIGH
 
     - name: Upload Trivy scan results to GitHub Security tab
-      uses: github/codeql-action/upload-sarif@f205ea1c3313d32999d8d6a48b4f6530d4437b38 # v4.37.4
+      uses: github/codeql-action/upload-sarif@d1ba80a13dd99fba24a470575428917156a28b43 # v4.37.5
       with:
         sarif_file: trivy-results.sarif
     - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
