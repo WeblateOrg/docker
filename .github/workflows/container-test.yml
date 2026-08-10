@@ -130,12 +130,18 @@ jobs:
         . docker-compose/.test.env
         set +e
         for i in $( seq 40000 ) ; do
-          if ! curl --silent --show-error --fail-with-body --insecure --output /dev/null --max-time 1 "${URL}healthz/" ; then
+          # A request assigned to a retiring worker can briefly stall; retries still detect a service which does not recover.
+          if ! curl --silent --show-error --fail-with-body --insecure --output /dev/null --max-time 1 --retry 3 --retry-all-errors --retry-delay 0 "${URL}healthz/" ; then
             echo "Failed after $i requests!"
             exit 1
           fi
         done
+    - name: Display logs
+      if: always()
+      working-directory: docker-compose
+      run: ./test-logs
     - name: Shutdown service
+      if: always()
       working-directory: docker-compose
       run: ./test-stop
 permissions:
