@@ -116,12 +116,9 @@ jobs:
       if: always()
       working-directory: docker-compose
       run: ./test-logs
-    - name: Stop Weblate service
+    - name: Restart Weblate service
       working-directory: docker-compose
-      run: docker compose stop weblate
-    - name: Start Weblate service
-      working-directory: docker-compose
-      run: docker compose start weblate
+      run: docker compose restart --timeout 60 weblate
     - name: Check service is running
       working-directory: docker-compose
       run: ./test-online
