@@ -412,22 +412,6 @@ prepare_runtime_sockets_and_pids() {
     rm -f /run/celery/beat.pid
 }
 
-configure_real_ip() {
-    # Parse upstream X-Forwarded-For.
-    case "$WEBLATE_IP_PROXY_HEADER" in
-    HTTP_X_FORWARDED_FOR)
-        WEBLATE_REALIP="
-real_ip_header X-Forwarded-For;
-set_real_ip_from 0.0.0.0/0;
-set_real_ip_from ::/0;
-"
-        ;;
-    *)
-        WEBLATE_REALIP=
-        ;;
-    esac
-}
-
 detect_builtin_ssl() {
     # Detect SSL setup.
     if [[ -f /app/data/ssl/privkey.pem ]]; then
@@ -441,13 +425,24 @@ detect_builtin_ssl() {
     fi
 }
 
-generate_nginx_config() {
-    configure_real_ip
+configure_forwarded_for() {
     detect_builtin_ssl
 
+    if [[ $WEBLATE_IP_PROXY_HEADER != "HTTP_X_FORWARDED_FOR" ]]; then
+        return 0
+    fi
+
+    if [[ -n ${WEBLATE_IP_PROXY_OFFSET:-} && $WEBLATE_IP_PROXY_OFFSET != 0 ]]; then
+        echo "Ignoring WEBLATE_IP_PROXY_OFFSET=$WEBLATE_IP_PROXY_OFFSET: the built-in nginx normalizes X-Forwarded-For to one address."
+    fi
+    export WEBLATE_IP_PROXY_OFFSET=0
+}
+
+generate_nginx_config() {
     # Make sure WEBLATE_ANUBIS_URL is set.
     : "${WEBLATE_ANUBIS_URL:=}"
     : "${WEBLATE_ENABLE_HTTPS:=}"
+    : "${WEBLATE_TRUSTED_PROXY_ADDRESSES:=}"
     if ipv6_available; then
         WEBLATE_ENABLE_IPV6=1
     else
@@ -460,7 +455,8 @@ generate_nginx_config() {
         /etc/nginx/generate-site.py \
         /etc/nginx \
         "$WEBLATE_URL_PREFIX" \
-        "$WEBLATE_REALIP" \
+        "$WEBLATE_IP_PROXY_HEADER" \
+        "$WEBLATE_TRUSTED_PROXY_ADDRESSES" \
         "$CLIENT_MAX_BODY_SIZE" \
         "$WEBLATE_BUILTIN_SSL" \
         "$WEBLATE_ANUBIS_URL" \
@@ -667,6 +663,9 @@ main() {
     export_runtime_env
     configure_timezone
     ensure_customize_app
+    if [[ ${1:-} == "runserver" ]]; then
+        configure_forwarded_for
+    fi
     check_weblate_config
     if [[ ${1:-} == "runserver" ]]; then
         start_early_nginx

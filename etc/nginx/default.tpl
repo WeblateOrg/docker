@@ -33,7 +33,13 @@ server {
     error_page 502 /__weblate_starting__.html;
     error_page 504 /__weblate_timeout__.html;
 
-    {{ WEBLATE_REALIP }}
+{% if USE_X_FORWARDED_FOR %}
+    real_ip_header X-Forwarded-For;
+    real_ip_recursive on;
+{% for address in TRUSTED_PROXY_ADDRESSES %}
+    set_real_ip_from {{ address }};
+{% endfor %}
+{% endif %}
 
     location = /__weblate_starting__.html {
         internal;
@@ -58,7 +64,11 @@ server {
         proxy_pass {{ WEBLATE_ANUBIS_URL }};
         auth_request off;
         proxy_set_header X-Real-IP $remote_addr;
+{% if USE_X_FORWARDED_FOR %}
+        proxy_set_header X-Forwarded-For $remote_addr;
+{% else %}
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+{% endif %}
         proxy_set_header Host $http_host;
         proxy_set_header X-Original-URI $request_uri;
         proxy_set_header X-Forwarded-Host $http_host;
@@ -90,8 +100,12 @@ server {
         expires 30d;
     }
 
-{% if WEBLATE_BUILTIN_SSL %}
+{% if USE_X_FORWARDED_FOR %}
+    proxy_set_header X-Forwarded-For $remote_addr;
+{% elif WEBLATE_BUILTIN_SSL %}
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+{% endif %}
+{% if WEBLATE_BUILTIN_SSL %}
     proxy_set_header X-Forwarded-Proto $scheme;
 {% endif %}
     proxy_set_header Host $http_host;
