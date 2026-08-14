@@ -20,6 +20,16 @@ used by over 2500 libre projects and companies in more than 165 countries.**
 
 The webserver is running on the port 8080.
 
+## Reverse proxy addresses
+
+When `WEBLATE_IP_PROXY_HEADER=HTTP_X_FORWARDED_FOR` is enabled, configure
+`WEBLATE_TRUSTED_PROXY_ADDRESSES` with a whitespace-separated list of the IP
+addresses, networks, or hostnames of reverse proxies allowed to supply client
+addresses. The built-in nginx uses the resolved address both in its logs and
+when forwarding the request to Weblate. With an empty list, it uses the
+immediate TCP peer. Because nginx forwards a single normalized address, the
+container uses an effective `WEBLATE_IP_PROXY_OFFSET` of `0` in this mode.
+
 ## Documentation
 
 Detailed documentation is available in [Weblate documentation][doc].
