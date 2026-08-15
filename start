@@ -52,6 +52,11 @@ runserver_has_web_service() {
     [[ -z $weblate_service || $weblate_service == "web" ]]
 }
 
+service_runs_migrations() {
+    local weblate_service=${WEBLATE_SERVICE:-}
+    [[ -z $weblate_service || $weblate_service == "celery-beat" ]]
+}
+
 EARLY_NGINX_PID_FILE=/run/nginx-early.pid
 EARLY_NGINX_CONF_FILE=/tmp/nginx/nginx-early.conf
 
@@ -119,11 +124,56 @@ prepare_ssh_keys() {
 }
 
 ensure_django_secret() {
-    if [[ ! -s /app/data/secret ]]; then
-        echo "Generating Django secret..."
-        # https://github.com/django/django/blob/1.10.2/django/utils/crypto.py#L54-L56
-        /app/venv/bin/python -c "from django.utils.crypto import get_random_string; print(get_random_string(50))" > /app/data/secret
-    fi
+    local secret_file=/app/data/secret
+    local secret_tmp
+
+    (
+        umask 077
+        exec 9> /app/data/.django-secret.lock
+        flock -x 9
+
+        if [[ ! -s $secret_file ]]; then
+            echo "Generating Django secret..."
+            secret_tmp=$(mktemp /app/data/.django-secret.XXXXXX)
+            trap 'rm -f "$secret_tmp"' EXIT
+            # https://github.com/django/django/blob/1.10.2/django/utils/crypto.py#L54-L56
+            /app/venv/bin/python -c "from django.utils.crypto import get_random_string; print(get_random_string(50))" > "$secret_tmp"
+            if [[ ! -s $secret_tmp ]]; then
+                echo "Failed to generate a non-empty Django secret." >&2
+                exit 1
+            fi
+            chmod 600 "$secret_tmp"
+            mv -f -- "$secret_tmp" "$secret_file"
+            secret_tmp=
+            trap - EXIT
+        fi
+
+        # Repair secrets created by older container versions or copied into the volume.
+        chmod 600 "$secret_file"
+    )
+}
+
+django_secret_ready() {
+    [[ -s /app/data/secret && -r /app/data/secret ]] || return 1
+    [[ $(stat -c %a /app/data/secret 2> /dev/null) == "600" ]]
+}
+
+wait_for_django_secret() {
+    local max_retries=30
+    local timeout=0
+
+    until django_secret_ready; do
+        if ((timeout >= max_retries)); then
+            echo "Django secret was not created by the migration service within $max_retries seconds." >&2
+            echo "Ensure exactly one container runs migrations and that /app/data is shared with the same uid." >&2
+            exit 1
+        fi
+        if ((timeout == 0)); then
+            echo "Waiting for the migration service to create the Django secret..."
+        fi
+        sleep 1
+        ((timeout += 1))
+    done
 }
 
 ensure_saml_certificate() {
@@ -146,7 +196,11 @@ ensure_saml_certificate() {
 prepare_runtime_files() {
     prepare_ssh_keys
     ensure_data_volume_writable
-    ensure_django_secret
+    if service_runs_migrations; then
+        ensure_django_secret
+    else
+        wait_for_django_secret
+    fi
     ensure_saml_certificate
 }
 
@@ -333,7 +387,11 @@ check_postgres_version() {
 }
 
 prepare_supervisor_services() {
-    DO_MIGRATE=1
+    if service_runs_migrations; then
+        DO_MIGRATE=1
+    else
+        DO_MIGRATE=0
+    fi
     SUPERVISOR_CONF=/run/supervisor.conf.d/
 
     # Select which services to run.
@@ -342,9 +400,6 @@ prepare_supervisor_services() {
     rm -f "$SUPERVISOR_CONF"/*
 
     if [[ -n $WEBLATE_SERVICE ]]; then
-        if [[ $WEBLATE_SERVICE != "celery-beat" ]]; then
-            DO_MIGRATE=0
-        fi
         ln -s "/etc/supervisor/conf.d/$WEBLATE_SERVICE.conf" "$SUPERVISOR_CONF"
         return 0
     fi
