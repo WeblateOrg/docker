@@ -289,6 +289,7 @@ jobs:
   tests-all:
     runs-on: ubuntu-24.04
     name: Tests, ${{ inputs.variant }}
+    if: ${{ always() }}
     needs:
     - test-basic
     - test-asgi
@@ -300,8 +301,12 @@ jobs:
     - test-ssl
     - test-localtime
     steps:
-    # This is dependency only job to collect all test results
-    - run: echo
+    - name: Verify all tests passed
+      env:
+        RESULTS: ${{ toJSON(needs) }}
+      run: |
+        printf '%s\n' "$RESULTS" |
+          jq --exit-status 'all(.[]; .result == "success")'
 
   lint-all:
     runs-on: ubuntu-24.04

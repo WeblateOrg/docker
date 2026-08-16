@@ -1,0 +1,3 @@
+#!/bin/sh
+CONTAINER=$(docker compose ps | grep -e "-weblate-[0-9]" | sed 's/[[:space:]].*//')
+docker inspect "$CONTAINER"

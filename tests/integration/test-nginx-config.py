@@ -5,7 +5,7 @@ from pathlib import Path
 
 IMAGE = os.environ.get("TEST_CONTAINER", "weblate/weblate:test")
 LOCAL_PYTHON = os.environ.get("GENERATE_SITE_PYTHON")
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 
 
 def generate_config(

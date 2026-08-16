@@ -1,0 +1,8 @@
+#!/bin/sh
+docker compose exec -T weblate supervisorctl status all
+RET=$?
+# The 3 happens with EXITED check and supervisor 4
+if [ $RET -ne 0 ] && [ $RET -ne 3 ]; then
+    docker compose logs
+    exit 1
+fi
