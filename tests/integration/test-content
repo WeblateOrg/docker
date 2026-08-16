@@ -1,0 +1,23 @@
+#!/bin/sh
+
+STORAGE=$(mktemp)
+cleanup() {
+    rm "$STORAGE"
+}
+trap cleanup EXIT
+
+echo "Creating container..."
+docker create --name="tmp_$$" "${TEST_CONTAINER:-weblate/weblate:edge}"
+echo "Listing content container..."
+docker export tmp_$$ | tar t > "$STORAGE"
+echo "Removing container..."
+docker rm tmp_$$
+echo "Checking content..."
+
+# /app/data is not checked because it contains stub for customization
+if grep -E '^(app/cache|tmp|run)/.+' "$STORAGE"; then
+    echo "Volumes contain files!"
+    exit 1
+fi
+
+echo "$STORAGE"

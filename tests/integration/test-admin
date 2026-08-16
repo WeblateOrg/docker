@@ -1,0 +1,2 @@
+#!/bin/sh
+docker compose exec -T --user weblate weblate weblate createadmin --update || exit 1

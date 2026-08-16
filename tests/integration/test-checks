@@ -1,0 +1,4 @@
+#!/bin/sh
+docker compose exec -T \
+    --user weblate \
+    weblate weblate check --deploy --fail-level WARNING

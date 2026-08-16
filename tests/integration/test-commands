@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+docker compose exec -T \
+    --user weblate \
+    weblate git --version
+docker compose exec -T \
+    --user weblate \
+    weblate hg --version
+docker compose exec -T \
+    --user weblate \
+    weblate ssh -V
+docker compose exec -T \
+    --user weblate \
+    weblate uv python list
