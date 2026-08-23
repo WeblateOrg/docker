@@ -51,7 +51,7 @@ RUN find /app/src -name '*.patch' -print0 | sort -z | \
   xargs -n1 -0 -r patch -p1 -d "/app/venv/lib/python${PYVERSION}/site-packages/" -i
 
 
-FROM weblate/base:2026.34.0@sha256:433bcf285e06d2a078f77b1cb46d2697a66982d3eba8c7e9b65acf6b3533a6c6 AS final
+FROM weblate/base:2026.35.0@sha256:9f01c0d04e0ec1113cd5b397ccccb8ae01ee16ce7603a8276957916df23b7ba1 AS final
 
 # renovate: datasource=pypi depName=Weblate versioning=pep440
 ENV WEBLATE_VERSION=2026.8.1
