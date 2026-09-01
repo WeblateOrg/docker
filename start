@@ -523,9 +523,13 @@ generate_nginx_config() {
 }
 
 prepare_early_nginx_main_config() {
-    sed "s#^pid /run/nginx.pid;\$#pid $EARLY_NGINX_PID_FILE;#" /etc/nginx/nginx.conf > "$EARLY_NGINX_CONF_FILE"
+    sed \
+        -e "s#^pid /run/nginx.pid;\$#pid $EARLY_NGINX_PID_FILE;#" \
+        -e 's#^\([[:space:]]*\)access_log .*;$#\1access_log off;#' \
+        /etc/nginx/nginx.conf > "$EARLY_NGINX_CONF_FILE"
 
-    if ! grep -q "^pid $EARLY_NGINX_PID_FILE;\$" "$EARLY_NGINX_CONF_FILE"; then
+    if ! grep -q "^pid $EARLY_NGINX_PID_FILE;\$" "$EARLY_NGINX_CONF_FILE" ||
+        ! grep -q '^[[:space:]]*access_log off;$' "$EARLY_NGINX_CONF_FILE"; then
         echo "Failed to prepare early nginx configuration"
         exit 1
     fi
