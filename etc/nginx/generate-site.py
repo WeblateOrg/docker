@@ -19,6 +19,7 @@ from django.conf import settings
     ENABLE_HTTPS,
     GRANIAN_SOCKET,
     ENABLE_IPV6,
+    EARLY_NGINX,
 ) = sys.argv[1:]
 
 
@@ -89,6 +90,7 @@ print(
             "WEBLATE_SITE_URL": WEBLATE_SITE_URL,
             "GRANIAN_SOCKET": GRANIAN_SOCKET,
             "ENABLE_IPV6": ENABLE_IPV6,
+            "EARLY_NGINX": EARLY_NGINX,
         }
     )
 )

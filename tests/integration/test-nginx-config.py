@@ -9,7 +9,10 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def generate_config(
-    proxy_header: str = "", trusted_proxy_addresses: str = ""
+    proxy_header: str = "",
+    trusted_proxy_addresses: str = "",
+    early_nginx: bool = False,
+    anubis_url: str = "",
 ) -> subprocess.CompletedProcess[str]:
     if LOCAL_PYTHON:
         command = [
@@ -36,11 +39,12 @@ def generate_config(
             trusted_proxy_addresses,
             "100m",
             "",
-            "",
+            anubis_url,
             "test.example.com",
             "",
             "/run/granian/granian.sock",
             "",
+            "1" if early_nginx else "",
         ],
         check=False,
         capture_output=True,
@@ -49,10 +53,21 @@ def generate_config(
 
 
 class NginxConfigTest(unittest.TestCase):
+    def test_early_nginx_does_not_use_application_server(self) -> None:
+        result = generate_config(
+            early_nginx=True, anubis_url="http://anubis.example.com"
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("access_log off;", result.stdout)
+        self.assertIn("return 502;", result.stdout)
+        self.assertNotIn("proxy_pass http://unix:", result.stdout)
+
     def test_forwarded_for_disabled(self) -> None:
         result = generate_config()
 
         self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn("access_log off;", result.stdout)
         self.assertNotIn("real_ip_header", result.stdout)
         self.assertNotIn("set_real_ip_from", result.stdout)
 
