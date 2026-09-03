@@ -57,8 +57,7 @@ service_runs_migrations() {
     [[ -z $weblate_service || $weblate_service == "celery-beat" ]]
 }
 
-EARLY_NGINX_PID_FILE=/run/nginx-early.pid
-EARLY_NGINX_CONF_FILE=/tmp/nginx/nginx-early.conf
+NGINX_PID_FILE=/run/nginx.pid
 
 fail_dep() {
     >&2 echo "$1 not running!"
@@ -494,6 +493,8 @@ configure_forwarded_for() {
 }
 
 generate_nginx_config() {
+    local early_nginx=${1:-}
+
     # Make sure WEBLATE_ANUBIS_URL is set.
     : "${WEBLATE_ANUBIS_URL:=}"
     : "${WEBLATE_ENABLE_HTTPS:=}"
@@ -519,20 +520,8 @@ generate_nginx_config() {
         "$WEBLATE_ENABLE_HTTPS" \
         "$GRANIAN_SOCKET" \
         "$WEBLATE_ENABLE_IPV6" \
+        "$early_nginx" \
         > /tmp/nginx/weblate-site.conf
-}
-
-prepare_early_nginx_main_config() {
-    sed \
-        -e "s#^pid /run/nginx.pid;\$#pid $EARLY_NGINX_PID_FILE;#" \
-        -e 's#^\([[:space:]]*\)access_log .*;$#\1access_log off;#' \
-        /etc/nginx/nginx.conf > "$EARLY_NGINX_CONF_FILE"
-
-    if ! grep -q "^pid $EARLY_NGINX_PID_FILE;\$" "$EARLY_NGINX_CONF_FILE" ||
-        ! grep -q '^[[:space:]]*access_log off;$' "$EARLY_NGINX_CONF_FILE"; then
-        echo "Failed to prepare early nginx configuration"
-        exit 1
-    fi
 }
 
 start_early_nginx() {
@@ -546,16 +535,15 @@ start_early_nginx() {
 
     collect_web_static_assets
     prepare_runtime_sockets_and_pids
-    generate_nginx_config
-    prepare_early_nginx_main_config
-    rm -f "$EARLY_NGINX_PID_FILE"
+    generate_nginx_config 1
+    rm -f "$NGINX_PID_FILE"
 
     echo "Starting nginx early to serve the startup page..."
-    /usr/sbin/nginx -c "$EARLY_NGINX_CONF_FILE"
+    /usr/sbin/nginx
 
     while ((timeout < start_retries)); do
-        if [[ -s $EARLY_NGINX_PID_FILE ]]; then
-            early_nginx_pid=$(cat "$EARLY_NGINX_PID_FILE")
+        if [[ -s $NGINX_PID_FILE ]]; then
+            early_nginx_pid=$(cat "$NGINX_PID_FILE")
             if kill -0 "$early_nginx_pid" 2> /dev/null; then
                 EARLY_NGINX_STARTED=1
                 return 0
@@ -580,14 +568,14 @@ stop_early_nginx() {
         return 0
     fi
 
-    if [[ ! -s $EARLY_NGINX_PID_FILE ]]; then
+    if [[ ! -s $NGINX_PID_FILE ]]; then
         EARLY_NGINX_STARTED=0
         return 0
     fi
 
-    early_nginx_pid=$(cat "$EARLY_NGINX_PID_FILE")
+    early_nginx_pid=$(cat "$NGINX_PID_FILE")
     if ! kill -0 "$early_nginx_pid" 2> /dev/null; then
-        rm -f "$EARLY_NGINX_PID_FILE"
+        rm -f "$NGINX_PID_FILE"
         EARLY_NGINX_STARTED=0
         return 0
     fi
@@ -629,7 +617,7 @@ stop_early_nginx() {
         done
     fi
 
-    rm -f "$EARLY_NGINX_PID_FILE"
+    rm -f "$NGINX_PID_FILE"
     EARLY_NGINX_STARTED=0
 }
 

@@ -1,4 +1,7 @@
 server {
+{% if EARLY_NGINX %}
+    access_log off;
+{% endif %}
 {% if WEBLATE_BUILTIN_SSL %}
     listen 4443 ssl;
 {% if ENABLE_IPV6 %}
@@ -113,12 +116,17 @@ server {
     proxy_connect_timeout 3600;
 
 {% if WEBLATE_ANUBIS_URL %}
+{% if not EARLY_NGINX %}
     location ~ ^{{ WEBLATE_URL_PREFIX }}(/widgets?/|/idp/|/exports/rss/|/healthz/|/hooks/|/accounts/complete/|/accounts/auth/) {
         proxy_pass http://unix:{{ GRANIAN_SOCKET }}:;
     }
 {% endif %}
+{% endif %}
 
     location {{ WEBLATE_URL_PREFIX }}/ {
+{% if EARLY_NGINX %}
+        return 502;
+{% else %}
 {% if WEBLATE_ANUBIS_URL %}
         auth_request /.within.website/x/cmd/anubis/api/check;
         error_page 401 = @redirectToAnubis;
@@ -126,11 +134,15 @@ server {
         error_page 504 /__weblate_timeout__.html;
 {% endif %}
         proxy_pass http://unix:{{ GRANIAN_SOCKET }}:;
+{% endif %}
     }
 }
 
 {% if WEBLATE_BUILTIN_SSL %}
 server {
+{% if EARLY_NGINX %}
+    access_log off;
+{% endif %}
     listen 8080 default_server;
 {% if ENABLE_IPV6 %}
     listen [::]:8080 default_server;
