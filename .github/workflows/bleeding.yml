@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   ci:
-    uses: ./.github/workflows/container-ci.yml
+    uses: $/.github/workflows/container-ci.yml
     secrets:
       DOCKERHUB_ACCESS_TOKEN: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
