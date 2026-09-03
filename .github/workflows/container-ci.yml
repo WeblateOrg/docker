@@ -29,7 +29,7 @@ jobs:
   build:
     needs:
     - revisions
-    uses: ./.github/workflows/container-build.yml
+    uses: $/.github/workflows/container-build.yml
     with:
       variant: ${{ inputs.variant }}
       architecture: amd64
@@ -39,7 +39,7 @@ jobs:
   buildx:
     needs:
     - revisions
-    uses: ./.github/workflows/container-build.yml
+    uses: $/.github/workflows/container-build.yml
     with:
       variant: ${{ inputs.variant }}
       architecture: arm64
@@ -50,7 +50,7 @@ jobs:
     needs:
     - revisions
     - build
-    uses: ./.github/workflows/container-test.yml
+    uses: $/.github/workflows/container-test.yml
     with:
       variant: ${{ inputs.variant }}
       test: basic
@@ -61,7 +61,7 @@ jobs:
     needs:
     - revisions
     - build
-    uses: ./.github/workflows/container-test.yml
+    uses: $/.github/workflows/container-test.yml
     with:
       variant: ${{ inputs.variant }}
       test: asgi
@@ -72,7 +72,7 @@ jobs:
     needs:
     - revisions
     - build
-    uses: ./.github/workflows/container-test.yml
+    uses: $/.github/workflows/container-test.yml
     with:
       variant: ${{ inputs.variant }}
       test: anubis
@@ -83,7 +83,7 @@ jobs:
     needs:
     - revisions
     - build
-    uses: ./.github/workflows/container-test.yml
+    uses: $/.github/workflows/container-test.yml
     with:
       variant: ${{ inputs.variant }}
       test: read-write
@@ -94,7 +94,7 @@ jobs:
     needs:
     - revisions
     - build
-    uses: ./.github/workflows/container-test.yml
+    uses: $/.github/workflows/container-test.yml
     with:
       variant: ${{ inputs.variant }}
       test: localtime
@@ -105,7 +105,7 @@ jobs:
     needs:
     - revisions
     - build
-    uses: ./.github/workflows/container-test.yml
+    uses: $/.github/workflows/container-test.yml
     with:
       variant: ${{ inputs.variant }}
       test: saml
@@ -116,7 +116,7 @@ jobs:
     needs:
     - revisions
     - build
-    uses: ./.github/workflows/container-test.yml
+    uses: $/.github/workflows/container-test.yml
     with:
       variant: ${{ inputs.variant }}
       test: split
@@ -127,7 +127,7 @@ jobs:
     needs:
     - revisions
     - build
-    uses: ./.github/workflows/container-test.yml
+    uses: $/.github/workflows/container-test.yml
     with:
       variant: ${{ inputs.variant }}
       test: celery-single
@@ -138,7 +138,7 @@ jobs:
     needs:
     - revisions
     - build
-    uses: ./.github/workflows/container-test.yml
+    uses: $/.github/workflows/container-test.yml
     with:
       variant: ${{ inputs.variant }}
       test: basic
