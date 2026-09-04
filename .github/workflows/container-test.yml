@@ -59,6 +59,8 @@ jobs:
     - name: Test Celery worker mode validation
       if: inputs.test == 'celery-single'
       run: python3 tests/integration/test-celery-mode.py
+    - name: Test startup warning heartbeat
+      run: ./tests/integration/test-warning-heartbeat
     - name: Test content
       run: ./tests/integration/test-content
     - name: Generate configuration
@@ -96,7 +98,9 @@ jobs:
       run: ../tests/integration/test-inspect
     - name: Run Django Checks
       working-directory: docker-compose
-      run: ../tests/integration/test-checks
+      run: ../tests/integration/test-checks "$WEBLATE_TEST"
+      env:
+        WEBLATE_TEST: ${{ inputs.test }}
     - name: Verify supervisor
       working-directory: docker-compose
       run: ../tests/integration/test-supervisor

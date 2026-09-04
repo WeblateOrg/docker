@@ -1,0 +1,61 @@
+#!/bin/sh
+set -eu
+
+SCRIPT_DIR=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
+DOCKER_ROOT=$(CDPATH='' cd -- "$SCRIPT_DIR/../.." && pwd)
+TEST_ROOT=$(mktemp -d)
+REPORT="$TEST_ROOT/report"
+
+run_heartbeat() {
+    WEBLATE_DOCKER_WARNING_HOSTNAME=test-host \
+        WEBLATE_DOCKER_WARNING_MESSAGES="Test warning" \
+        WEBLATE_DOCKER_WARNING_REPORT="$REPORT" \
+        WEBLATE_DOCKER_WARNING_SERVICE=test-service \
+        "$DOCKER_ROOT/docker_warning_heartbeat" &
+    HEARTBEAT_PID=$!
+}
+
+wait_for_heartbeat() {
+    ATTEMPTS=0
+    while [ ! -f "$REPORT/heartbeat" ]; do
+        if ! kill -0 "$HEARTBEAT_PID" 2> /dev/null; then
+            wait "$HEARTBEAT_PID"
+            echo "Docker startup warning heartbeat exited before initialization" >&2
+            exit 1
+        fi
+        ATTEMPTS=$((ATTEMPTS + 1))
+        if [ "$ATTEMPTS" -ge 50 ]; then
+            kill -TERM "$HEARTBEAT_PID"
+            wait "$HEARTBEAT_PID"
+            echo "Docker startup warning heartbeat was not initialized" >&2
+            exit 1
+        fi
+        sleep 0.1
+    done
+}
+
+stop_heartbeat() {
+    kill -TERM "$HEARTBEAT_PID"
+    wait "$HEARTBEAT_PID"
+}
+
+assert_report_removed() {
+    if [ -d "$REPORT" ]; then
+        echo "Docker startup warning report was not removed on shutdown" >&2
+        exit 1
+    fi
+}
+
+run_heartbeat
+wait_for_heartbeat
+grep -Fx "Test warning" "$REPORT/warnings"
+stop_heartbeat
+assert_report_removed
+
+# Supervisord can restart the heartbeat helper without rerunning the entrypoint.
+run_heartbeat
+wait_for_heartbeat
+grep -Fx "Test warning" "$REPORT/warnings"
+stop_heartbeat
+assert_report_removed
+rmdir "$TEST_ROOT"

@@ -74,6 +74,7 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5m CMD ["/app/bin/health_
 
 # Use Docker specific settings
 ENV DJANGO_SETTINGS_MODULE=weblate.settings_docker
+ENV WEBLATE_DOCKER_CONTAINER=1
 
 # Copy built environment
 COPY --from=build /app /app
@@ -110,7 +111,7 @@ RUN rm -f /etc/localtime /etc/timezone \
   && sed -i '/pam_rootok.so/a auth requisite pam_deny.so' /etc/pam.d/su
 
 # Entrypoint
-COPY --link --chmod=0755 start health_check /app/bin/
+COPY --link --chmod=0755 start health_check docker_warning_heartbeat /app/bin/
 
 EXPOSE 8080
 VOLUME /app/data

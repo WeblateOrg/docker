@@ -1,0 +1,47 @@
+#!/bin/sh
+set -eu
+
+report=${WEBLATE_DOCKER_WARNING_REPORT:-}
+hostname=${WEBLATE_DOCKER_WARNING_HOSTNAME:-unknown}
+service=${WEBLATE_DOCKER_WARNING_SERVICE:-all}
+warnings=${WEBLATE_DOCKER_WARNING_MESSAGES:-}
+sleep_pid=
+if [ -z "$report" ]; then
+    exit 0
+fi
+
+initialize_report() {
+    mkdir -p "$report"
+    printf '%s\n' "$hostname" > "$report/hostname"
+    printf '%s\n' "$service" > "$report/service"
+    printf '%s' "$warnings" > "$report/warnings"
+    touch "$report/heartbeat" "$report"
+}
+
+cleanup_report() {
+    if [ -n "$sleep_pid" ]; then
+        kill "$sleep_pid" 2> /dev/null || true
+    fi
+    rm -f -- \
+        "$report/heartbeat" \
+        "$report/hostname" \
+        "$report/service" \
+        "$report/warnings" || true
+    rmdir -- "$report" 2> /dev/null || true
+}
+
+shutdown() {
+    cleanup_report
+    exit 0
+}
+
+trap shutdown HUP INT TERM
+initialize_report
+
+while :; do
+    touch "$report/heartbeat" "$report"
+    sleep 60 &
+    sleep_pid=$!
+    wait "$sleep_pid"
+    sleep_pid=
+done
