@@ -134,6 +134,28 @@ jobs:
       weblate_sha: ${{needs.revisions.outputs.weblate_sha}}
       weblate_date: ${{needs.revisions.outputs.weblate_date}}
 
+  test-single-celery-legacy:
+    needs:
+    - revisions
+    - build
+    uses: $/.github/workflows/container-test.yml
+    with:
+      variant: ${{ inputs.variant }}
+      test: celery-single-legacy
+      weblate_sha: ${{needs.revisions.outputs.weblate_sha}}
+      weblate_date: ${{needs.revisions.outputs.weblate_date}}
+
+  test-combined-celery-options:
+    needs:
+    - revisions
+    - build
+    uses: $/.github/workflows/container-test.yml
+    with:
+      variant: ${{ inputs.variant }}
+      test: celery-combined-options
+      weblate_sha: ${{needs.revisions.outputs.weblate_sha}}
+      weblate_date: ${{needs.revisions.outputs.weblate_date}}
+
   test-ssl:
     needs:
     - revisions
@@ -297,6 +319,8 @@ jobs:
     - test-saml
     - test-split
     - test-single-celery
+    - test-single-celery-legacy
+    - test-combined-celery-options
     - test-novolume
     - test-ssl
     - test-localtime

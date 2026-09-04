@@ -56,6 +56,9 @@ jobs:
       run: docker image ls --all
     - name: Test nginx configuration generation
       run: python3 tests/integration/test-nginx-config.py
+    - name: Test Celery worker mode validation
+      if: inputs.test == 'celery-single'
+      run: python3 tests/integration/test-celery-mode.py
     - name: Test content
       run: ./tests/integration/test-content
     - name: Generate configuration

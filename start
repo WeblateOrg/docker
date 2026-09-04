@@ -385,6 +385,51 @@ check_postgres_version() {
     fi
 }
 
+resolve_celery_worker_mode() {
+    local mode_options
+    local split_option
+    local -a split_options=()
+
+    if [[ -z ${CELERY_WORKER_MODE:-} ]]; then
+        if [[ ${CELERY_SINGLE_PROCESS:-0} == 1 ]]; then
+            CELERY_WORKER_MODE=single
+            >&2 echo "Warning: CELERY_SINGLE_PROCESS is deprecated; use CELERY_WORKER_MODE=single instead."
+        else
+            CELERY_WORKER_MODE=combined
+        fi
+    elif [[ ${CELERY_SINGLE_PROCESS:-0} == 1 ]]; then
+        >&2 echo "Warning: CELERY_SINGLE_PROCESS is deprecated and ignored because CELERY_WORKER_MODE is set; remove CELERY_SINGLE_PROCESS."
+    fi
+
+    case $CELERY_WORKER_MODE in
+    combined | split | single) ;;
+    *)
+        >&2 echo "Invalid CELERY_WORKER_MODE '$CELERY_WORKER_MODE'; expected combined, split, or single."
+        exit 1
+        ;;
+    esac
+
+    if [[ $CELERY_WORKER_MODE != split ]]; then
+        for split_option in \
+            CELERY_MAIN_OPTIONS \
+            CELERY_NOTIFY_OPTIONS \
+            CELERY_MEMORY_OPTIONS \
+            CELERY_TRANSLATE_OPTIONS \
+            CELERY_BACKUP_OPTIONS; do
+            if [[ -n ${!split_option:-} ]]; then
+                split_options+=("$split_option")
+            fi
+        done
+    fi
+
+    if ((${#split_options[@]})); then
+        mode_options="CELERY_${CELERY_WORKER_MODE^^}_OPTIONS"
+        >&2 echo "Warning: CELERY_WORKER_MODE=$CELERY_WORKER_MODE ignores split worker options: ${split_options[*]}; use $mode_options or CELERY_WORKER_MODE=split."
+    fi
+
+    export CELERY_WORKER_MODE
+}
+
 prepare_supervisor_services() {
     if service_runs_migrations; then
         DO_MIGRATE=1
@@ -406,14 +451,22 @@ prepare_supervisor_services() {
     # Symlink all non-celery services.
     find /etc/supervisor/conf.d -type f ! -name 'celery-*.conf' -exec ln -s -t "$SUPERVISOR_CONF" {} +
 
-    if ((${CELERY_SINGLE_PROCESS:-0} == 1)); then
-        # Symlink single process service only.
+    case $CELERY_WORKER_MODE in
+    combined)
+        # Symlink the combined worker and scheduler.
+        ln -s /etc/supervisor/conf.d/celery-combined.conf "$SUPERVISOR_CONF"
+        ln -s /etc/supervisor/conf.d/celery-beat.conf "$SUPERVISOR_CONF"
+        ;;
+    single)
+        # Symlink single process service and scheduler only.
         ln -s /etc/supervisor/conf.d/celery-single.conf "$SUPERVISOR_CONF"
         ln -s /etc/supervisor/conf.d/celery-beat.conf "$SUPERVISOR_CONF"
-    else
-        # Symlink all celery services but the single process.
-        find /etc/supervisor/conf.d -type f -name 'celery-*.conf' ! -name 'celery-single.conf' -exec ln -s -t "$SUPERVISOR_CONF" {} +
-    fi
+        ;;
+    split)
+        # Symlink the scheduler and all queue-specific workers.
+        find /etc/supervisor/conf.d -type f -name 'celery-*.conf' ! -name 'celery-combined.conf' ! -name 'celery-single.conf' -exec ln -s -t "$SUPERVISOR_CONF" {} +
+        ;;
+    esac
 }
 
 run_startup_maintenance() {
@@ -622,6 +675,7 @@ stop_early_nginx() {
 }
 
 calculate_worker_defaults() {
+    local combined_workers
     local processors
     local prefork_workers
 
@@ -641,8 +695,10 @@ calculate_worker_defaults() {
     # Prefork workers provide more effective parallelism than threads. Keep the
     # notification workers at full concurrency, but limit the heavier queues.
     prefork_workers=$(((WEBLATE_WORKERS + 1) / 2))
+    combined_workers=$((WEBLATE_WORKERS * 3))
 
     # Default values for celery options.
+    : "${CELERY_COMBINED_OPTIONS:="--concurrency $combined_workers"}"
     : "${CELERY_MAIN_OPTIONS:="--concurrency $prefork_workers"}"
     : "${CELERY_NOTIFY_OPTIONS:="--concurrency $WEBLATE_WORKERS"}"
     : "${CELERY_TRANSLATE_OPTIONS:="--concurrency $prefork_workers"}"
@@ -664,6 +720,7 @@ calculate_worker_defaults() {
         GRANIAN_APPLICATION=weblate.wsgi:application
     fi
 
+    export CELERY_COMBINED_OPTIONS
     export CELERY_MAIN_OPTIONS
     export CELERY_NOTIFY_OPTIONS
     export CELERY_TRANSLATE_OPTIONS
@@ -701,6 +758,9 @@ runserver_main() {
 main() {
     load_secret_env_files
     initialize_env_defaults
+    if [[ ${1:-} == "runserver" && -z ${WEBLATE_SERVICE:-} ]]; then
+        resolve_celery_worker_mode
+    fi
 
     echo "Starting Weblate $WEBLATE_VERSION..."
 
