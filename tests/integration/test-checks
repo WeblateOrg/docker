@@ -1,4 +1,32 @@
 #!/bin/sh
-docker compose exec -T \
+
+OUTPUT=$(docker compose exec -T \
     --user weblate \
-    weblate weblate check --deploy --fail-level WARNING
+    weblate weblate check --deploy --fail-level WARNING 2>&1)
+RESULT=$?
+
+SUPPORTS_DOCKER_WARNINGS=0
+if docker compose exec -T \
+    --user weblate \
+    weblate /app/venv/bin/python -c \
+    'from weblate.utils.checks import DOC_LINKS; raise SystemExit("weblate.W049" not in DOC_LINKS)'; then
+    SUPPORTS_DOCKER_WARNINGS=1
+fi
+
+if [ "${1:-}" = "celery-single-legacy" ] && [ "$SUPPORTS_DOCKER_WARNINGS" -eq 1 ]; then
+    if [ "$RESULT" -eq 0 ]; then
+        echo "Docker startup warning did not affect the deployment check" >&2
+        exit 1
+    fi
+    if ! echo "$OUTPUT" | grep -F "weblate.W049" > /dev/null; then
+        echo "$OUTPUT" >&2
+        exit 1
+    fi
+    if ! echo "$OUTPUT" | grep -F "CELERY_SINGLE_PROCESS is deprecated" > /dev/null; then
+        echo "$OUTPUT" >&2
+        exit 1
+    fi
+elif [ "$RESULT" -ne 0 ]; then
+    echo "$OUTPUT" >&2
+    exit "$RESULT"
+fi

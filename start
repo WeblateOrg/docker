@@ -105,6 +105,88 @@ initialize_env_defaults() {
     export CLIENT_MAX_BODY_SIZE
 }
 
+startup_warning() {
+    local message=$1
+
+    message=${message//$'\n'/ }
+    message=${message//$'\r'/ }
+    >&2 echo "Warning: $message"
+    if [[ -n ${WEBLATE_DOCKER_WARNING_MESSAGES:-} ]]; then
+        WEBLATE_DOCKER_WARNING_MESSAGES+=$'\n'
+    fi
+    WEBLATE_DOCKER_WARNING_MESSAGES+="$message"
+    export WEBLATE_DOCKER_WARNING_MESSAGES
+    if [[ -n ${WEBLATE_DOCKER_WARNING_REPORT:-} ]]; then
+        printf '%s\n' "$message" >> "$WEBLATE_DOCKER_WARNING_REPORT/warnings" || true
+    fi
+}
+
+cleanup_startup_warning_report() {
+    local report=${WEBLATE_DOCKER_WARNING_REPORT:-}
+
+    if [[ -z $report ]]; then
+        return 0
+    fi
+    rm -f -- \
+        "$report/heartbeat" \
+        "$report/hostname" \
+        "$report/service" \
+        "$report/warnings" || true
+    rmdir -- "$report" 2> /dev/null || true
+    WEBLATE_DOCKER_WARNING_REPORT=
+}
+
+initialize_startup_warning_report() {
+    local command=${1:-}
+    local data_dir=${WEBLATE_DATA_DIR:-/app/data}
+    local report_id
+    local warning_root="$data_dir/.docker-startup-warnings"
+
+    if [[ ${WEBLATE_DOCKER_CONTAINER:-} != 1 || $command != "runserver" ]]; then
+        return 0
+    fi
+
+    report_id=$(cat /proc/sys/kernel/random/uuid)
+    WEBLATE_DOCKER_WARNING_REPORT="$warning_root/$report_id"
+    WEBLATE_DOCKER_WARNING_HOSTNAME=${HOSTNAME:-unknown}
+    WEBLATE_DOCKER_WARNING_SERVICE=${WEBLATE_SERVICE:-all}
+    WEBLATE_DOCKER_WARNING_MESSAGES=
+    if ! mkdir -p "$WEBLATE_DOCKER_WARNING_REPORT"; then
+        >&2 echo "Could not initialize Docker startup warning report."
+        WEBLATE_DOCKER_WARNING_REPORT=
+        return 0
+    fi
+    printf '%s\n' \
+        "Signature: 8a477f597d28d172789f06886806bc55d" \
+        "# Docker startup warning reports are ephemeral." \
+        > "$warning_root/CACHEDIR.TAG" || true
+    if ! {
+        printf '%s\n' "$WEBLATE_DOCKER_WARNING_HOSTNAME" > "$WEBLATE_DOCKER_WARNING_REPORT/hostname" &&
+            printf '%s\n' "$WEBLATE_DOCKER_WARNING_SERVICE" > "$WEBLATE_DOCKER_WARNING_REPORT/service" &&
+            : > "$WEBLATE_DOCKER_WARNING_REPORT/warnings" &&
+            touch "$WEBLATE_DOCKER_WARNING_REPORT/heartbeat" "$WEBLATE_DOCKER_WARNING_REPORT"
+    }; then
+        >&2 echo "Could not write Docker startup warning report."
+        cleanup_startup_warning_report
+        return 0
+    fi
+    export \
+        WEBLATE_DOCKER_WARNING_HOSTNAME \
+        WEBLATE_DOCKER_WARNING_MESSAGES \
+        WEBLATE_DOCKER_WARNING_REPORT \
+        WEBLATE_DOCKER_WARNING_SERVICE
+    trap cleanup_startup_warning_report EXIT
+
+    # Reports stop being displayed after five minutes. Remove expired ones
+    # here to keep the shared data directory bounded after abrupt shutdowns.
+    find "$warning_root" \
+        -mindepth 1 \
+        -maxdepth 1 \
+        -type d \
+        -mmin +5 \
+        -exec rm -rf -- {} + 2> /dev/null || true
+}
+
 ensure_data_volume_writable() {
     if [[ ! -w /app/data ]]; then
         echo "The /app/data volume is not writable, please adjust the permissions. Weblate is running as uid $(id -u)"
@@ -216,7 +298,7 @@ ensure_runtime_user() {
 
     case "${USER_NAME:-weblate}" in
     *[!A-Za-z0-9._-]* | "")
-        echo "Ignoring invalid USER_NAME value; using fallback username 'weblate'."
+        startup_warning "Ignoring invalid USER_NAME value; using fallback username 'weblate'."
         nss_wrapper_user_name=weblate
         ;;
     *)
@@ -393,12 +475,12 @@ resolve_celery_worker_mode() {
     if [[ -z ${CELERY_WORKER_MODE:-} ]]; then
         if [[ ${CELERY_SINGLE_PROCESS:-0} == 1 ]]; then
             CELERY_WORKER_MODE=single
-            >&2 echo "Warning: CELERY_SINGLE_PROCESS is deprecated; use CELERY_WORKER_MODE=single instead."
+            startup_warning "CELERY_SINGLE_PROCESS is deprecated; use CELERY_WORKER_MODE=single instead."
         else
             CELERY_WORKER_MODE=combined
         fi
     elif [[ ${CELERY_SINGLE_PROCESS:-0} == 1 ]]; then
-        >&2 echo "Warning: CELERY_SINGLE_PROCESS is deprecated and ignored because CELERY_WORKER_MODE is set; remove CELERY_SINGLE_PROCESS."
+        startup_warning "CELERY_SINGLE_PROCESS is deprecated and ignored because CELERY_WORKER_MODE is set; remove CELERY_SINGLE_PROCESS."
     fi
 
     case $CELERY_WORKER_MODE in
@@ -424,7 +506,7 @@ resolve_celery_worker_mode() {
 
     if ((${#split_options[@]})); then
         mode_options="CELERY_${CELERY_WORKER_MODE^^}_OPTIONS"
-        >&2 echo "Warning: CELERY_WORKER_MODE=$CELERY_WORKER_MODE ignores split worker options: ${split_options[*]}; use $mode_options or CELERY_WORKER_MODE=split."
+        startup_warning "CELERY_WORKER_MODE=$CELERY_WORKER_MODE ignores split worker options: ${split_options[*]}; use $mode_options or CELERY_WORKER_MODE=split."
     fi
 
     export CELERY_WORKER_MODE
@@ -443,13 +525,21 @@ prepare_supervisor_services() {
     # Remove possible stale files from previous start.
     rm -f "$SUPERVISOR_CONF"/*
 
+    if [[ -n ${WEBLATE_DOCKER_WARNING_REPORT:-} ]]; then
+        ln -s /etc/supervisor/conf.d/docker-warning-heartbeat.conf "$SUPERVISOR_CONF"
+    fi
+
     if [[ -n $WEBLATE_SERVICE ]]; then
         ln -s "/etc/supervisor/conf.d/$WEBLATE_SERVICE.conf" "$SUPERVISOR_CONF"
         return 0
     fi
 
     # Symlink all non-celery services.
-    find /etc/supervisor/conf.d -type f ! -name 'celery-*.conf' -exec ln -s -t "$SUPERVISOR_CONF" {} +
+    find /etc/supervisor/conf.d \
+        -type f \
+        ! -name 'celery-*.conf' \
+        ! -name 'docker-warning-heartbeat.conf' \
+        -exec ln -s -t "$SUPERVISOR_CONF" {} +
 
     case $CELERY_WORKER_MODE in
     combined)
@@ -540,7 +630,7 @@ configure_forwarded_for() {
     fi
 
     if [[ -n ${WEBLATE_IP_PROXY_OFFSET:-} && $WEBLATE_IP_PROXY_OFFSET != 0 ]]; then
-        echo "Ignoring WEBLATE_IP_PROXY_OFFSET=$WEBLATE_IP_PROXY_OFFSET: the built-in nginx normalizes X-Forwarded-For to one address."
+        startup_warning "Ignoring WEBLATE_IP_PROXY_OFFSET=$WEBLATE_IP_PROXY_OFFSET: the built-in nginx normalizes X-Forwarded-For to one address."
     fi
     export WEBLATE_IP_PROXY_OFFSET=0
 }
@@ -758,13 +848,14 @@ runserver_main() {
 main() {
     load_secret_env_files
     initialize_env_defaults
-    if [[ ${1:-} == "runserver" && -z ${WEBLATE_SERVICE:-} ]]; then
-        resolve_celery_worker_mode
-    fi
 
     echo "Starting Weblate $WEBLATE_VERSION..."
 
     prepare_runtime_files
+    initialize_startup_warning_report "$@"
+    if [[ ${1:-} == "runserver" && -z ${WEBLATE_SERVICE:-} ]]; then
+        resolve_celery_worker_mode
+    fi
     ensure_runtime_user
     require_site_domain
     export_runtime_env
