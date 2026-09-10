@@ -1,2 +1,13 @@
 #!/bin/sh
-eval "docker buildx build $(.github/bin/get-buildx-args "$@" | sed 's/$/ /' | tr -d \\n)"
+
+# get-buildx-args emits exactly one argument per line. Split only on newlines and
+# disable pathname expansion so Dockerfile metadata is never interpreted as
+# shell syntax.
+buildx_args=$(.github/bin/get-buildx-args "$@") || exit 1
+IFS='
+'
+set -f
+# shellcheck disable=SC2086 # Intentional newline-only splitting into arguments.
+set -- $buildx_args
+
+exec docker buildx build "$@"

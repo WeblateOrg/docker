@@ -6,6 +6,41 @@
 
 # Generate command-line options for docker buildx build
 
+expand_weblate_version() {
+    value=$1
+    expanded=
+    placeholder=\$WEBLATE_VERSION
+
+    while [ "${value#*"$placeholder"}" != "$value" ]; do
+        prefix=${value%%"$placeholder"*}
+        expanded=$expanded$prefix$WEBLATE_VERSION
+        value=${value#*"$placeholder"}
+    done
+    printf '%s' "$expanded$value"
+}
+
+annotations() {
+    WEBLATE_VERSION=$(sed -n 's/^ENV WEBLATE_VERSION=\(.*\)/\1/p' Dockerfile | head -n 1)
+
+    sed -n 's/^LABEL \(org\.opencontainers\.image.*\)/\1/p' Dockerfile |
+        while IFS= read -r annotation; do
+            key=${annotation%%=*}
+            value=${annotation#*=}
+
+            # Remove Dockerfile string delimiters. The value itself remains
+            # data and is never evaluated by the shell.
+            case "$value" in
+            \"*\")
+                value=${value#\"}
+                value=${value%\"}
+                ;;
+            esac
+
+            value=$(expand_weblate_version "$value")
+            printf '%s\n' "--annotation=index:$key=$value"
+        done
+}
+
 is_publish() {
     case "$1" in
     publish | publish-stable | publish-bleeding)
@@ -19,49 +54,48 @@ is_publish() {
 
 # Load from local cache
 if [ -n "$MATRIX_ARCHITECTURE" ]; then
-    echo --cache-from "type=local,src=/tmp/.buildx-cache/$MATRIX_ARCHITECTURE"
+    printf '%s\n' "--cache-from=type=local,src=/tmp/.buildx-cache/$MATRIX_ARCHITECTURE"
 else
     for arch in linux/amd64 linux/arm64; do
-        echo --cache-from "type=local,src=/tmp/.buildx-cache/$arch"
+        printf '%s\n' "--cache-from=type=local,src=/tmp/.buildx-cache/$arch"
     done
 fi
 
 # Expose annotations
 if [ "$1" != "load" ]; then
-    WEBLATE_VERSION=$(sed -n 's/^ENV WEBLATE_VERSION=\(.*\)/\1/p' Dockerfile | head -n 1)
-    sed -n "s/^LABEL \(org.opencontainers.image.*\)/--annotation index:\1/p" Dockerfile | sed -e "s/\\\$WEBLATE_VERSION/${WEBLATE_VERSION}/"
+    annotations
 fi
 
 # Write to local cache when building (also not compatible with push)
 if [ "$1" != "publish" ] && [ "$1" != "load" ]; then
-    echo --cache-to "type=local,dest=/tmp/.buildx-cache/$MATRIX_ARCHITECTURE,mode=max"
+    printf '%s\n' "--cache-to=type=local,dest=/tmp/.buildx-cache/$MATRIX_ARCHITECTURE,mode=max"
 fi
 
 if [ "$1" = "load" ]; then
     # Ommit list of platforms loading, see https://github.com/docker/buildx/issues/59
-    echo --output=type=docker
+    printf '%s\n' --output=type=docker
     # Test tag, to avoid collistion with real ones
-    echo --tag weblate/weblate:test
+    printf '%s\n' --tag=weblate/weblate:test
 else
     # List of platforms
-    echo --platform "${MATRIX_ARCHITECTURE:-linux/amd64,linux/arm64}"
+    printf '%s\n' "--platform=${MATRIX_ARCHITECTURE:-linux/amd64,linux/arm64}"
     # Enable more platforms in future:
     # linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/386,linux/ppc64le,linux/s390x
 
     if is_publish "$1"; then
         # Publishing image with supply-chain metadata
-        echo --output "type=image,push=true"
+        printf '%s\n' --output=type=image,push=true
         tags=$(.github/bin/get-image-tags "$1") || exit 1
         for tag in $tags; do
-            echo --tag "$tag"
+            printf '%s\n' "--tag=$tag"
         done
-        echo --metadata-file "${BUILDX_METADATA_FILE:-/tmp/buildx-metadata.json}"
-        echo --attest type=sbom
-        echo --attest type=provenance,mode=max
+        printf '%s\n' "--metadata-file=${BUILDX_METADATA_FILE:-/tmp/buildx-metadata.json}"
+        printf '%s\n' --attest=type=sbom
+        printf '%s\n' --attest=type=provenance,mode=max
     else
-        echo --output "type=image,push=false"
+        printf '%s\n' --output=type=image,push=false
     fi
 fi
 
 # Location
-echo --file ./Dockerfile .
+printf '%s\n' --file=./Dockerfile .

@@ -79,6 +79,14 @@ repos:
   rev: v1.15.1
   hooks:
   - id: actionlint
+- repo: local
+  hooks:
+  - id: docker-build-arguments
+    name: Validate Docker build arguments
+    entry: tests/test-docker-build-arguments
+    language: script
+    files: ^(Dockerfile|\.github/bin/(docker-build|get-buildx-args)|tests/test-docker-build-arguments)$
+    pass_filenames: false
 ci:
   autoupdate_schedule: quarterly
   skip:
