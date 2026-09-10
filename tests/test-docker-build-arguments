@@ -1,0 +1,52 @@
+#!/bin/sh
+# shellcheck disable=SC2016
+# The payloads and assertions intentionally contain literal shell expressions.
+
+set -eu
+
+test_dir=$(mktemp -d)
+trap 'rm -rf "$test_dir"' EXIT HUP INT TERM
+
+mkdir -p "$test_dir/.github/bin" "$test_dir/bin" "$test_dir/markers"
+cp .github/bin/docker-build .github/bin/get-buildx-args "$test_dir/.github/bin/"
+
+cat > "$test_dir/Dockerfile" << 'EOF'
+FROM scratch AS build
+ENV WEBLATE_VERSION=2026.9.1
+
+LABEL org.opencontainers.image.description="$(printf dollar > "$MARKER_DIR/dollar")"
+LABEL org.opencontainers.image.title="`printf backtick > "$MARKER_DIR/backtick"`"
+LABEL org.opencontainers.image.vendor="safe"; printf semicolon > "$MARKER_DIR/semicolon"
+LABEL org.opencontainers.image.source="safe | printf pipe > $MARKER_DIR/pipe"
+LABEL org.opencontainers.image.url="safe > $MARKER_DIR/redirect"
+LABEL org.opencontainers.image.version=$WEBLATE_VERSION
+EOF
+
+cat > "$test_dir/bin/docker" << 'EOF'
+#!/bin/sh
+printf '%s\n' "$@" >"$ARGUMENT_LOG"
+EOF
+chmod +x "$test_dir/bin/docker"
+
+ARGUMENT_LOG=$test_dir/arguments
+MARKER_DIR=$test_dir/markers
+export ARGUMENT_LOG MARKER_DIR
+
+(
+    cd "$test_dir"
+    PATH="$test_dir/bin:$PATH" /bin/sh .github/bin/docker-build
+)
+
+if find "$MARKER_DIR" -type f | grep -q .; then
+    echo "Dockerfile metadata was executed as shell code" >&2
+    exit 1
+fi
+
+grep -Fqx 'buildx' "$ARGUMENT_LOG"
+grep -Fqx 'build' "$ARGUMENT_LOG"
+grep -Fqx -- '--annotation=index:org.opencontainers.image.description=$(printf dollar > "$MARKER_DIR/dollar")' "$ARGUMENT_LOG"
+grep -Fqx -- '--annotation=index:org.opencontainers.image.title=`printf backtick > "$MARKER_DIR/backtick"`' "$ARGUMENT_LOG"
+grep -Fqx -- '--annotation=index:org.opencontainers.image.vendor=safe"; printf semicolon > "$MARKER_DIR/semicolon' "$ARGUMENT_LOG"
+grep -Fqx -- '--annotation=index:org.opencontainers.image.source=safe | printf pipe > $MARKER_DIR/pipe' "$ARGUMENT_LOG"
+grep -Fqx -- '--annotation=index:org.opencontainers.image.url=safe > $MARKER_DIR/redirect' "$ARGUMENT_LOG"
+grep -Fqx -- '--annotation=index:org.opencontainers.image.version=2026.9.1' "$ARGUMENT_LOG"
