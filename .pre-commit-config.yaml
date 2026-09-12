@@ -65,11 +65,11 @@ repos:
     require_serial: true
     pass_filenames: false
 - repo: https://github.com/mongodb/kingfisher
-  rev: v2.1.0
+  rev: v2.2.0
   hooks:
   - id: kingfisher-auto
     env:
-      KINGFISHER_VERSION: v2.1.0
+      KINGFISHER_VERSION: v2.2.0
 - repo: https://github.com/rvben/rumdl-pre-commit
   rev: v0.2.73
   hooks:
