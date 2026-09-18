@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   revisions:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     outputs:
       weblate_sha: ${{ steps.get_sha.outputs.sha }}
       weblate_date: ${{ steps.get_date.outputs.date }}
@@ -170,7 +170,7 @@ jobs:
       weblate_date: ${{needs.revisions.outputs.weblate_date}}
 
   anchore:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     name: Anchore Container Scan
     needs:
     - revisions
@@ -217,7 +217,7 @@ jobs:
         sarif_file: ${{ steps.scan.outputs.sarif }}
 
   trivy:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     name: Trivy Container Scan
     needs:
     - revisions
@@ -270,7 +270,7 @@ jobs:
         path: trivy-results.sarif
 
   merge:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     name: Merge images, ${{ inputs.variant }}
     needs:
     - build
@@ -309,7 +309,7 @@ jobs:
       run: .github/bin/docker-build
 
   tests-all:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     name: Tests, ${{ inputs.variant }}
     if: ${{ always() }}
     needs:
@@ -333,7 +333,7 @@ jobs:
           jq --exit-status 'all(.[]; .result == "success")'
 
   lint-all:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     name: Lint, ${{ inputs.variant }}
     needs:
     - anchore
@@ -343,7 +343,7 @@ jobs:
     - run: echo
 
   push_dockerhub:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     name: Publish to Docker Hub, ${{ inputs.variant }}
     permissions:
       contents: read
@@ -402,7 +402,7 @@ jobs:
         WEBLATE_VARIANT: ${{ inputs.variant }}
 
   push_github:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     name: Publish to GitHub, ${{ inputs.variant }}
     permissions:
       contents: read
