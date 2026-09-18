@@ -24,7 +24,7 @@ on:
 
 jobs:
   container-test:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     name: Test container ${{ inputs.test }}, ${{ inputs.variant }}
     env:
       MATRIX_ARCHITECTURE: linux/amd64

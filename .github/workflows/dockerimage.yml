@@ -31,7 +31,7 @@ jobs:
       variant: stable
 
   release_github:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     name: Create release on GitHub
     permissions:
       contents: write
