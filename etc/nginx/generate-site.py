@@ -55,7 +55,13 @@ try:
 except ValueError as error:
     sys.exit(str(error))
 
-USE_X_FORWARDED_FOR = WEBLATE_IP_PROXY_HEADER == "HTTP_X_FORWARDED_FOR"
+if WEBLATE_IP_PROXY_HEADER and not re.fullmatch(
+    r"HTTP_[A-Za-z0-9_-]+", WEBLATE_IP_PROXY_HEADER
+):
+    sys.exit(f"Invalid proxy header: {WEBLATE_IP_PROXY_HEADER!r}")
+IP_PROXY_HEADER = (
+    WEBLATE_IP_PROXY_HEADER.removeprefix("HTTP_").replace("_", "-").title()
+)
 
 WEBLATE_SITE_URL = "{}://{}".format(
     "https"
@@ -82,7 +88,7 @@ print(
     template.render(
         {
             "WEBLATE_URL_PREFIX": WEBLATE_URL_PREFIX,
-            "USE_X_FORWARDED_FOR": USE_X_FORWARDED_FOR,
+            "IP_PROXY_HEADER": IP_PROXY_HEADER,
             "TRUSTED_PROXY_ADDRESSES": TRUSTED_PROXY_ADDRESSES,
             "CLIENT_MAX_BODY_SIZE": CLIENT_MAX_BODY_SIZE,
             "WEBLATE_BUILTIN_SSL": WEBLATE_BUILTIN_SSL,
