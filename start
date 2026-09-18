@@ -625,12 +625,12 @@ detect_builtin_ssl() {
 configure_forwarded_for() {
     detect_builtin_ssl
 
-    if [[ $WEBLATE_IP_PROXY_HEADER != "HTTP_X_FORWARDED_FOR" ]]; then
+    if [[ -z $WEBLATE_IP_PROXY_HEADER ]]; then
         return 0
     fi
 
     if [[ -n ${WEBLATE_IP_PROXY_OFFSET:-} && $WEBLATE_IP_PROXY_OFFSET != 0 ]]; then
-        startup_warning "Ignoring WEBLATE_IP_PROXY_OFFSET=$WEBLATE_IP_PROXY_OFFSET: the built-in nginx normalizes X-Forwarded-For to one address."
+        startup_warning "Ignoring WEBLATE_IP_PROXY_OFFSET=$WEBLATE_IP_PROXY_OFFSET: the built-in nginx normalizes $WEBLATE_IP_PROXY_HEADER to one address."
     fi
     export WEBLATE_IP_PROXY_OFFSET=0
 }

@@ -22,13 +22,18 @@ The webserver is running on the port 8080.
 
 ## Reverse proxy addresses
 
-When `WEBLATE_IP_PROXY_HEADER=HTTP_X_FORWARDED_FOR` is enabled, configure
+When `WEBLATE_IP_PROXY_HEADER` is enabled, configure
 `WEBLATE_TRUSTED_PROXY_ADDRESSES` with a whitespace-separated list of the IP
 addresses, networks, or hostnames of reverse proxies allowed to supply client
 addresses. The built-in nginx uses the resolved address both in its logs and
 when forwarding the request to Weblate. With an empty list, it uses the
 immediate TCP peer. Because nginx forwards a single normalized address, the
 container uses an effective `WEBLATE_IP_PROXY_OFFSET` of `0` in this mode.
+
+Specify the header using Django's request metadata format, for example
+`HTTP_X_FORWARDED_FOR`, `HTTP_X_REAL_IP`, or `HTTP_CF_CONNECTING_IP`. nginx
+converts this to the corresponding HTTP header name and forwards the normalized
+client address in that header.
 
 ## Documentation
 
