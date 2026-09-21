@@ -766,6 +766,8 @@ stop_early_nginx() {
 
 calculate_worker_defaults() {
     local combined_workers
+    local memory_mib
+    local memory_workers
     local processors
     local prefork_workers
 
@@ -786,6 +788,20 @@ calculate_worker_defaults() {
     # notification workers at full concurrency, but limit the heavier queues.
     prefork_workers=$(((WEBLATE_WORKERS + 1) / 2))
     combined_workers=$((WEBLATE_WORKERS * 3))
+
+    if [[ -z ${CELERY_COMBINED_OPTIONS:-} && ${CELERY_WORKER_MODE:-combined} == combined && (-z ${WEBLATE_SERVICE:-} || $WEBLATE_SERVICE == celery-combined) ]]; then
+        memory_mib=$(python /app/bin/memory_limit.py)
+        if [[ $memory_mib =~ ^[0-9]+$ ]]; then
+            # Reserve half the capacity for web workers and other services, and
+            # budget 512 MiB per child. This is a heuristic, not a hard limit.
+            memory_workers=$((memory_mib / 1024))
+            ((memory_workers > 0)) || memory_workers=1
+            if ((combined_workers > memory_workers)); then
+                combined_workers=$memory_workers
+                echo "Memory-capped Celery concurrency to $combined_workers ($memory_mib MiB RAM); override with CELERY_COMBINED_OPTIONS"
+            fi
+        fi
+    fi
 
     # Default values for celery options.
     : "${CELERY_COMBINED_OPTIONS:="--concurrency $combined_workers"}"

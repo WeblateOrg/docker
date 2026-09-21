@@ -81,6 +81,12 @@ repos:
   - id: actionlint
 - repo: local
   hooks:
+  - id: worker-sizing
+    name: Validate worker sizing
+    entry: python3 tests/test-worker-sizing.py
+    language: system
+    files: ^(start|memory_limit\.py|tests/test-worker-sizing\.py)$
+    pass_filenames: false
   - id: docker-build-arguments
     name: Validate Docker build arguments
     entry: tests/test-docker-build-arguments

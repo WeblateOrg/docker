@@ -66,9 +66,9 @@ def validate_workers(stats, active_queues, variant):
                 raise AssertionError(
                     f"expected overridden concurrency 5, got {concurrency}"
                 )
-        elif concurrency not in {6, 9, 12}:
+        elif not 1 <= concurrency <= 12:
             raise AssertionError(
-                f"expected three times auto-scaled concurrency, got {concurrency}"
+                f"expected memory-capped concurrency from 1 to 12, got {concurrency}"
             )
         if worker["prefetch_count"] != concurrency:
             raise AssertionError(

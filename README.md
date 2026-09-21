@@ -35,6 +35,26 @@ Specify the header using Django's request metadata format, for example
 converts this to the corresponding HTTP header name and forwards the normalized
 client address in that header.
 
+## Celery worker sizing
+
+The default combined Celery pool targets three times `WEBLATE_WORKERS`, capped
+by effective RAM capacity. Capacity is the smaller of host RAM and visible
+cgroup memory limits (v1 or v2, including ancestors). Unlimited cgroups do not
+increase the host capacity. This uses total capacity rather than fluctuating
+free memory at startup, and excludes swap.
+
+The cap reserves half the RAM for web workers and other services and budgets
+512 MiB per Celery child, with a minimum concurrency of one. For example, with
+two CPUs and a 4 GiB container limit, concurrency is four instead of six. A
+nominal 4 GiB host can report slightly less usable RAM and select three.
+This is a startup sizing heuristic, not protection against an unusually large
+task or memory consumption by other applications.
+
+Set `CELERY_COMBINED_OPTIONS`, for example `--concurrency 2`, to override this
+calculation. `WEBLATE_WORKERS` still controls the CPU-based target but does not
+bypass the memory cap. Split and single worker modes keep their existing
+defaults. If memory information is unavailable, the CPU-based target is used.
+
 ## Documentation
 
 Detailed documentation is available in [Weblate documentation][doc].
