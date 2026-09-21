@@ -111,7 +111,7 @@ RUN rm -f /etc/localtime /etc/timezone \
   && sed -i '/pam_rootok.so/a auth requisite pam_deny.so' /etc/pam.d/su
 
 # Entrypoint
-COPY --link --chmod=0755 start health_check docker_warning_heartbeat /app/bin/
+COPY --link --chmod=0755 start health_check docker_warning_heartbeat memory_limit.py /app/bin/
 
 EXPOSE 8080
 VOLUME /app/data
