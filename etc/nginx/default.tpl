@@ -100,12 +100,6 @@ server {
         expires 30d;
     }
 
-    location {{ WEBLATE_URL_PREFIX }}/media/ {
-        # DATA_DIR/media/
-        alias /app/data/media/;
-        expires 30d;
-    }
-
 {% if IP_PROXY_HEADER %}
     proxy_set_header {{ IP_PROXY_HEADER }} $remote_addr;
 {% elif WEBLATE_BUILTIN_SSL %}

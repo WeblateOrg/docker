@@ -175,6 +175,16 @@ class NginxConfigTest(unittest.TestCase):
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertIn(f"location {prefix}/static/ {{", result.stdout)
 
+    def test_media_is_not_served_by_nginx(self) -> None:
+        for prefix in ("", "/weblate"):
+            with self.subTest(prefix=prefix):
+                result = generate_config(url_prefix=prefix)
+
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn(f"location {prefix}/static/ {{", result.stdout)
+                self.assertNotIn(f"location {prefix}/media/ {{", result.stdout)
+                self.assertNotIn("alias /app/data/media/;", result.stdout)
+
     def test_invalid_url_prefix(self) -> None:
         for prefix in (
             "weblate",
