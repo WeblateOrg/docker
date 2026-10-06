@@ -30,7 +30,7 @@ repos:
   - id: pretty-format-toml
     args: [--autofix]
 - repo: https://github.com/shellcheck-py/shellcheck-py
-  rev: v0.11.0.1
+  rev: v0.11.0.1-1
   hooks:
   - id: shellcheck
     require_serial: true
@@ -65,7 +65,7 @@ repos:
     require_serial: true
     pass_filenames: false
 - repo: https://github.com/mongodb/kingfisher
-  rev: v2.9.1
+  rev: v2.10.0
   hooks:
   - id: kingfisher-auto
     env:
@@ -76,7 +76,7 @@ repos:
   - id: rumdl
   - id: rumdl-fmt
 - repo: https://github.com/kjanat/actionlint
-  rev: v1.17
+  rev: v1.17.0
   hooks:
   - id: actionlint
 - repo: local
