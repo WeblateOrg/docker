@@ -150,16 +150,40 @@ class NginxConfigTest(unittest.TestCase):
                 )
 
                 self.assertEqual(result.returncode, 0, result.stderr)
-                location = result.stdout.split("location /.within.website/ {", 1)[1]
-                location = location.split("}", 1)[0].lower()
                 name = header.removeprefix("HTTP_").replace("_", "-").lower()
-                self.assertEqual(
-                    location.count(f"proxy_set_header {name} $remote_addr;"), 1
-                )
-                self.assertIn(
-                    "proxy_set_header x-forwarded-for $remote_addr;", location
-                )
+                for path in (
+                    "/.within.website/",
+                    "= /.within.website/x/cmd/anubis/api/check",
+                ):
+                    location = result.stdout.split(f"location {path} {{", 1)[1]
+                    location = location.split("}", 1)[0].lower()
+                    self.assertEqual(
+                        location.count(f"proxy_set_header {name} $remote_addr;"), 1
+                    )
+                    self.assertIn(
+                        "proxy_set_header x-forwarded-for $remote_addr;", location
+                    )
                 self.assertNotIn("$proxy_add_x_forwarded_for", result.stdout)
+
+    def test_anubis_request_bodies(self) -> None:
+        result = generate_config(anubis_url="http://anubis.example.com")
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        auth = result.stdout.split(
+            "location = /.within.website/x/cmd/anubis/api/check {", 1
+        )[1].split("}", 1)[0]
+        self.assertIn("proxy_pass_request_body off;", auth)
+        self.assertIn('proxy_set_header Content-Length "";', auth)
+        self.assertIn('proxy_set_header Content-Type "";', auth)
+        self.assertIn("proxy_set_header X-Original-URI $request_uri;", auth)
+        self.assertIn("auth_request off;", auth)
+
+        challenge = result.stdout.split("location /.within.website/ {", 1)[1].split(
+            "}", 1
+        )[0]
+        self.assertNotIn("proxy_pass_request_body off;", challenge)
+        self.assertNotIn('proxy_set_header Content-Length "";', challenge)
+        self.assertNotIn('proxy_set_header Content-Type "";', challenge)
 
     def test_url_prefix(self) -> None:
         for prefix in (
