@@ -78,8 +78,26 @@ server {
         proxy_set_header Host $http_host;
         proxy_set_header X-Original-URI $request_uri;
         proxy_set_header X-Forwarded-Host $http_host;
+    }
+
+    location = /.within.website/x/cmd/anubis/api/check {
+        proxy_pass {{ WEBLATE_ANUBIS_URL }};
+        auth_request off;
+        proxy_set_header X-Real-IP $remote_addr;
+{% if IP_PROXY_HEADER %}
+        proxy_set_header X-Forwarded-For $remote_addr;
+{% if IP_PROXY_HEADER != "X-Forwarded-For" and IP_PROXY_HEADER != "X-Real-Ip" %}
+        proxy_set_header {{ IP_PROXY_HEADER }} $remote_addr;
+{% endif %}
+{% else %}
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+{% endif %}
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Original-URI $request_uri;
+        proxy_set_header X-Forwarded-Host $http_host;
         proxy_pass_request_body off;
-        proxy_set_header content-length "";
+        proxy_set_header Content-Length "";
+        proxy_set_header Content-Type "";
     }
 
     location @redirectToAnubis {
