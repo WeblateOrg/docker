@@ -4,7 +4,7 @@ ARG TARGETARCH
 
 # renovate: datasource=pypi depName=Weblate versioning=pep440
 ENV WEBLATE_VERSION=2026.10.1
-ENV WEBLATE_EXTRAS=all,zxcvbn,saml,wsgi,wllegal
+ENV WEBLATE_EXTRAS=all,zxcvbn,saml,wsgi,wllegal,oidc
 
 SHELL ["/bin/bash", "-o", "pipefail", "-x", "-c"]
 
