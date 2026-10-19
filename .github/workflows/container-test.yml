@@ -56,6 +56,10 @@ jobs:
       run: docker image ls --all
     - name: Test nginx configuration generation
       run: python3 tests/integration/test-nginx-config.py
+    - name: Test PostgreSQL version validation
+      run: |
+        bash -n start
+        python3 tests/integration/test-postgres-version.py
     - name: Test Celery worker mode validation
       if: inputs.test == 'celery-single'
       run: python3 tests/integration/test-celery-mode.py

@@ -457,10 +457,15 @@ check_postgres_version() {
 
     unset PGPASSWORD
 
+    if [[ ! $pgversion =~ ^[0-9]+$ ]]; then
+        >&2 echo "Invalid PostgreSQL server version: expected decimal digits"
+        exit 1
+    fi
+
     >&2 echo "Postgres $pgversion is up"
 
     # Check if supported PostgreSQL version is used.
-    if ((pgversion < 120000)); then
+    if ((10#$pgversion < 120000)); then
         >&2 echo "PostgreSQL 12 or newer is required to run Weblate"
         >&2 echo "See https://docs.weblate.org/en/latest/admin/install/docker.html#upgrading-postgresql-container"
         exit 1
