@@ -93,7 +93,14 @@ repos:
     language: script
     files: ^(Dockerfile|\.github/bin/(docker-build|get-buildx-args)|tests/test-docker-build-arguments)$
     pass_filenames: false
+  - id: sign-image-tags
+    name: Validate image signing
+    entry: tests/test-sign-image-tags
+    language: script
+    files: ^(\.github/bin/(sign-image-tags|get-image-tags)|tests/test-sign-image-tags)$
+    pass_filenames: false
 ci:
   autoupdate_schedule: quarterly
   skip:
   - kingfisher-auto
+  - sign-image-tags

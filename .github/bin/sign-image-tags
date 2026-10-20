@@ -5,6 +5,7 @@
 set -eu
 
 mode=${1:?Usage: sign-image-tags MODE}
+workflow_ref=${GITHUB_WORKFLOW_REF:?GITHUB_WORKFLOW_REF is required}
 metadata_file=${BUILDX_METADATA_FILE:-/tmp/buildx-metadata.json}
 digest=$(jq --raw-output '."containerimage.digest" // empty' "$metadata_file")
 
@@ -23,6 +24,14 @@ for tag in $tags; do
         continue
         ;;
     esac
-    cosign sign --yes "$repository@$digest"
+    image="$repository@$digest"
+    if cosign verify \
+        --certificate-identity "https://github.com/$workflow_ref" \
+        --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+        "$image" > /dev/null 2>&1; then
+        echo "Already signed: $image"
+    else
+        cosign sign --yes "$image"
+    fi
     signed_repositories="$signed_repositories $repository"
 done
