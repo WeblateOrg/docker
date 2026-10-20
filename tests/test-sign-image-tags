@@ -1,0 +1,73 @@
+#!/bin/sh
+
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+set -eu
+
+test_dir=$(mktemp -d)
+trap 'rm -rf "$test_dir"' EXIT HUP INT TERM
+
+mkdir -p "$test_dir/.github/bin" "$test_dir/bin"
+cp .github/bin/sign-image-tags .github/bin/get-image-tags "$test_dir/.github/bin/"
+printf '%s\n' '{"containerimage.digest":"sha256:abc123"}' > "$test_dir/metadata.json"
+
+cat > "$test_dir/bin/cosign" << 'EOF'
+#!/bin/sh
+printf '%s\n' "$*" >>"$COSIGN_LOG"
+case "$1" in
+verify) exit "$VERIFY_STATUS" ;;
+sign) exit "$SIGN_STATUS" ;;
+esac
+exit 1
+EOF
+chmod +x "$test_dir/bin/cosign"
+
+COSIGN_LOG=$test_dir/cosign.log
+BUILDX_METADATA_FILE=$test_dir/metadata.json
+GITHUB_WORKFLOW_REF=WeblateOrg/docker/.github/workflows/dockerimage.yml@refs/tags/2026.10.1
+GITHUB_REF=refs/tags/2026.10.1
+PATH=$test_dir/bin:$PATH
+export COSIGN_LOG BUILDX_METADATA_FILE GITHUB_WORKFLOW_REF GITHUB_REF PATH
+
+run_signing() (
+    cd "$test_dir"
+    .github/bin/sign-image-tags publish-stable
+)
+
+VERIFY_STATUS=0 SIGN_STATUS=0
+export VERIFY_STATUS SIGN_STATUS
+run_signing
+test "$(wc -l < "$COSIGN_LOG")" -eq 1
+grep -Fxq 'verify --certificate-identity https://github.com/WeblateOrg/docker/.github/workflows/dockerimage.yml@refs/tags/2026.10.1 --certificate-oidc-issuer https://token.actions.githubusercontent.com weblate/weblate@sha256:abc123' "$COSIGN_LOG"
+
+: > "$COSIGN_LOG"
+VERIFY_STATUS=1
+export VERIFY_STATUS
+run_signing
+test "$(wc -l < "$COSIGN_LOG")" -eq 2
+grep -Fxq 'sign --yes weblate/weblate@sha256:abc123' "$COSIGN_LOG"
+
+: > "$COSIGN_LOG"
+DOCKER_IMAGE=ghcr.io/weblateorg/weblate
+SIGN_STATUS=1
+export DOCKER_IMAGE SIGN_STATUS
+if run_signing; then
+    echo 'Signing failure was ignored' >&2
+    exit 1
+fi
+test "$(wc -l < "$COSIGN_LOG")" -eq 2
+grep -Fxq 'sign --yes ghcr.io/weblateorg/weblate@sha256:abc123' "$COSIGN_LOG"
+
+: > "$COSIGN_LOG"
+printf '%s\n' 2026-10-20 > "$test_dir/.github/args-date"
+printf '%s\n' abcdef > "$test_dir/.github/args-sha"
+GITHUB_WORKFLOW_REF=WeblateOrg/docker/.github/workflows/bleeding.yml@refs/heads/main
+GITHUB_REF=refs/heads/main
+VERIFY_STATUS=0
+export GITHUB_WORKFLOW_REF GITHUB_REF VERIFY_STATUS
+(
+    cd "$test_dir"
+    .github/bin/sign-image-tags publish-bleeding
+)
+test "$(wc -l < "$COSIGN_LOG")" -eq 1
+grep -Fxq 'verify --certificate-identity https://github.com/WeblateOrg/docker/.github/workflows/bleeding.yml@refs/heads/main --certificate-oidc-issuer https://token.actions.githubusercontent.com ghcr.io/weblateorg/weblate@sha256:abc123' "$COSIGN_LOG"
