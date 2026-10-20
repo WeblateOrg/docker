@@ -5,7 +5,8 @@
 set -eu
 
 mode=${1:?Usage: sign-image-tags MODE}
-workflow_ref=${GITHUB_WORKFLOW_REF:?GITHUB_WORKFLOW_REF is required}
+# Fulcio records the reusable job workflow in the certificate SAN.
+workflow_identity=https://github.com/${GITHUB_REPOSITORY:?GITHUB_REPOSITORY is required}/.github/workflows/container-ci.yml@${GITHUB_REF:?GITHUB_REF is required}
 metadata_file=${BUILDX_METADATA_FILE:-/tmp/buildx-metadata.json}
 digest=$(jq --raw-output '."containerimage.digest" // empty' "$metadata_file")
 
@@ -26,7 +27,7 @@ for tag in $tags; do
     esac
     image="$repository@$digest"
     if cosign verify \
-        --certificate-identity "https://github.com/$workflow_ref" \
+        --certificate-identity "$workflow_identity" \
         --certificate-oidc-issuer https://token.actions.githubusercontent.com \
         "$image" > /dev/null 2>&1; then
         echo "Already signed: $image"

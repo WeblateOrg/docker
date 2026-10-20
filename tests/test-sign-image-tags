@@ -25,9 +25,10 @@ chmod +x "$test_dir/bin/cosign"
 COSIGN_LOG=$test_dir/cosign.log
 BUILDX_METADATA_FILE=$test_dir/metadata.json
 GITHUB_WORKFLOW_REF=WeblateOrg/docker/.github/workflows/dockerimage.yml@refs/tags/2026.10.1
+GITHUB_REPOSITORY=WeblateOrg/docker
 GITHUB_REF=refs/tags/2026.10.1
 PATH=$test_dir/bin:$PATH
-export COSIGN_LOG BUILDX_METADATA_FILE GITHUB_WORKFLOW_REF GITHUB_REF PATH
+export COSIGN_LOG BUILDX_METADATA_FILE GITHUB_WORKFLOW_REF GITHUB_REPOSITORY GITHUB_REF PATH
 
 run_signing() (
     cd "$test_dir"
@@ -38,7 +39,7 @@ VERIFY_STATUS=0 SIGN_STATUS=0
 export VERIFY_STATUS SIGN_STATUS
 run_signing
 test "$(wc -l < "$COSIGN_LOG")" -eq 1
-grep -Fxq 'verify --certificate-identity https://github.com/WeblateOrg/docker/.github/workflows/dockerimage.yml@refs/tags/2026.10.1 --certificate-oidc-issuer https://token.actions.githubusercontent.com weblate/weblate@sha256:abc123' "$COSIGN_LOG"
+grep -Fxq 'verify --certificate-identity https://github.com/WeblateOrg/docker/.github/workflows/container-ci.yml@refs/tags/2026.10.1 --certificate-oidc-issuer https://token.actions.githubusercontent.com weblate/weblate@sha256:abc123' "$COSIGN_LOG"
 
 : > "$COSIGN_LOG"
 VERIFY_STATUS=1
@@ -70,4 +71,4 @@ export GITHUB_WORKFLOW_REF GITHUB_REF VERIFY_STATUS
     .github/bin/sign-image-tags publish-bleeding
 )
 test "$(wc -l < "$COSIGN_LOG")" -eq 1
-grep -Fxq 'verify --certificate-identity https://github.com/WeblateOrg/docker/.github/workflows/bleeding.yml@refs/heads/main --certificate-oidc-issuer https://token.actions.githubusercontent.com ghcr.io/weblateorg/weblate@sha256:abc123' "$COSIGN_LOG"
+grep -Fxq 'verify --certificate-identity https://github.com/WeblateOrg/docker/.github/workflows/container-ci.yml@refs/heads/main --certificate-oidc-issuer https://token.actions.githubusercontent.com ghcr.io/weblateorg/weblate@sha256:abc123' "$COSIGN_LOG"
