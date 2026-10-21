@@ -78,7 +78,7 @@ class MemoryCapacityTest(unittest.TestCase):
 
 
 class WorkerSizingTest(unittest.TestCase):
-    def calculate(self, memory, cpus=2, **overrides):
+    def calculate_result(self, memory, cpus=2, **overrides):
         source = (ROOT / "start").read_text()
         function = source.split("calculate_worker_defaults() {", 1)[1].split(
             "\nstart_supervisord() {", 1
@@ -88,9 +88,12 @@ class WorkerSizingTest(unittest.TestCase):
             + function
             + '\nnproc() { echo "$TEST_CPUS"; }\n'
             + 'python() { echo "$TEST_MEMORY"; }\n'
-            + 'calculate_worker_defaults\nprintf "%s\\n" "$CELERY_COMBINED_OPTIONS"'
+            + "calculate_worker_defaults\n"
+            + 'printf "INTERFACE=%s\\nNOTIFY=%s\\n%s\\n" '
+            + '"$GRANIAN_INTERFACE" "$CELERY_NOTIFY_OPTIONS" '
+            + '"$CELERY_COMBINED_OPTIONS"'
         )
-        result = subprocess.run(
+        return subprocess.run(
             ["bash", "-c", script],
             env={
                 "PATH": os.defpath,
@@ -100,8 +103,12 @@ class WorkerSizingTest(unittest.TestCase):
             },
             capture_output=True,
             text=True,
-            check=True,
+            check=False,
         )
+
+    def calculate(self, memory, cpus=2, **overrides):
+        result = self.calculate_result(memory, cpus, **overrides)
+        self.assertEqual(result.returncode, 0, result.stderr)
         return result.stdout.splitlines()[-1]
 
     def test_memory_cap(self):
@@ -123,6 +130,44 @@ class WorkerSizingTest(unittest.TestCase):
 
     def test_worker_target_still_capped(self):
         self.assertEqual(self.calculate(4096, WEBLATE_WORKERS="8"), "--concurrency 4")
+
+    def test_worker_count_is_decimal_and_normalized(self):
+        result = self.calculate_result(32768, WEBLATE_WORKERS="0008")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("NOTIFY=--concurrency 8", result.stdout)
+        self.assertEqual(result.stdout.splitlines()[-1], "--concurrency 24")
+
+    def test_invalid_worker_count_is_rejected_without_execution(self):
+        for value in (
+            "0",
+            "-1",
+            "+2",
+            "2abc",
+            "1000000000000000000",
+            "a[$(printf WORKER_MARKER >&2)0]",
+        ):
+            with self.subTest(value=value):
+                result = self.calculate_result(32768, WEBLATE_WORKERS=value)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("Invalid WEBLATE_WORKERS", result.stderr)
+                self.assertNotIn("WORKER_MARKER", result.stderr)
+                self.assertNotIn("INTERFACE=", result.stdout)
+
+    def test_asgi_modes(self):
+        for value, interface in (("0", "wsgi"), ("1", "asginl"), ("", "wsgi")):
+            with self.subTest(value=value):
+                result = self.calculate_result(32768, WEBLATE_ASGI=value)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn(f"INTERFACE={interface}", result.stdout)
+
+    def test_invalid_asgi_is_rejected_without_execution(self):
+        for value in ("2", "01", "true", "a[$(printf ASGI_MARKER >&2)0]"):
+            with self.subTest(value=value):
+                result = self.calculate_result(32768, WEBLATE_ASGI=value)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("Invalid WEBLATE_ASGI", result.stderr)
+                self.assertNotIn("ASGI_MARKER", result.stderr)
+                self.assertNotIn("INTERFACE=", result.stdout)
 
     def test_dedicated_combined_service(self):
         self.assertEqual(
