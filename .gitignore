@@ -1,3 +1,5 @@
 /docker-compose.override.yml
 /.venv
 /.codex
+__pycache__/
+*.py[cod]

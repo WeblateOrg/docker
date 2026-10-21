@@ -62,6 +62,11 @@ calculation. `WEBLATE_WORKERS` still controls the CPU-based target but does not
 bypass the memory cap. Split and single worker modes keep their existing
 defaults. If memory information is unavailable, the CPU-based target is used.
 
+`WEBLATE_WORKERS` must be a positive decimal integer with at most 18 significant
+digits; leading zeros are accepted. An unset or empty value uses automatic
+sizing. `WEBLATE_ASGI` accepts `0` (the default) or `1`; an empty value also
+uses the default. Other values cause startup to fail with an error.
+
 ## Testing
 
 Run `./tests/run` to test worker sizing, Docker build arguments, and image
