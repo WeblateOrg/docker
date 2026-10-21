@@ -62,6 +62,14 @@ calculation. `WEBLATE_WORKERS` still controls the CPU-based target but does not
 bypass the memory cap. Split and single worker modes keep their existing
 defaults. If memory information is unavailable, the CPU-based target is used.
 
+## Testing
+
+Run `./tests/run` to test worker sizing, Docker build arguments, and image
+signing. The suite requires Python 3, Bash, jq, and standard Unix utilities.
+Docker and cosign are mocked, so no container build or credentials are needed.
+The suite runs in CI for both stable and bleeding images and must pass before
+publishing.
+
 ## Documentation
 
 Detailed documentation is available in [Weblate documentation][doc].

@@ -16,6 +16,24 @@ permissions:
   contents: read
 
 jobs:
+  script-tests:
+    runs-on: ubuntu-26.04
+    name: Script tests, ${{ inputs.variant }}
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
+    - name: Setup Python
+      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      with:
+        python-version: '3.15'
+    - name: Install test dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install --yes jq
+    - name: Run script tests
+      run: ./tests/run
+
   revisions:
     runs-on: ubuntu-26.04
     outputs:
@@ -313,6 +331,7 @@ jobs:
     name: Tests, ${{ inputs.variant }}
     if: ${{ always() }}
     needs:
+    - script-tests
     - test-basic
     - test-asgi
     - test-anubis

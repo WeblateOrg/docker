@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+set -eu
+
+cd "$(dirname "$0")/.."
+
+echo 'Running worker sizing tests'
+python3 tests/test-worker-sizing.py
+
+echo 'Running Docker build arguments tests'
+./tests/test-docker-build-arguments
+
+echo 'Running image signing tests'
+./tests/test-sign-image-tags

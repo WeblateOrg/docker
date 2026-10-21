@@ -79,28 +79,7 @@ repos:
   rev: v1.17.0
   hooks:
   - id: actionlint
-- repo: local
-  hooks:
-  - id: worker-sizing
-    name: Validate worker sizing
-    entry: python3 tests/test-worker-sizing.py
-    language: system
-    files: ^(start|memory_limit\.py|tests/test-worker-sizing\.py)$
-    pass_filenames: false
-  - id: docker-build-arguments
-    name: Validate Docker build arguments
-    entry: tests/test-docker-build-arguments
-    language: script
-    files: ^(Dockerfile|\.github/bin/(docker-build|get-buildx-args)|tests/test-docker-build-arguments)$
-    pass_filenames: false
-  - id: sign-image-tags
-    name: Validate image signing
-    entry: tests/test-sign-image-tags
-    language: script
-    files: ^(\.github/bin/(sign-image-tags|get-image-tags)|tests/test-sign-image-tags)$
-    pass_filenames: false
 ci:
   autoupdate_schedule: quarterly
   skip:
   - kingfisher-auto
-  - sign-image-tags
