@@ -58,6 +58,9 @@ service_runs_migrations() {
 }
 
 NGINX_PID_FILE=/run/nginx.pid
+CUSTOM_CA_CERTS_DIR=/app/data/ssl/ca-certificates
+SYSTEM_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+CUSTOM_CA_BUNDLE=/tmp/custom-ca-certificates.crt
 
 fail_dep() {
     >&2 echo "$1 not running!"
@@ -274,6 +277,31 @@ ensure_saml_certificate() {
     fi
 }
 
+install_custom_ca_certificates() {
+    # Build a combined CA bundle (system certificates plus user-provided
+    # ones from the data volume) in a runtime-writable location, then point
+    # Python (requests), OpenSSL, libcurl and git at it. The system trust
+    # store is not writable for the container's unprivileged user, and the
+    # bundle is rebuilt from scratch on every start, so stale certificates
+    # never linger.
+    local certs=()
+    if [[ -d $CUSTOM_CA_CERTS_DIR ]]; then
+        shopt -s nullglob
+        certs=("$CUSTOM_CA_CERTS_DIR"/*.crt)
+        shopt -u nullglob
+    fi
+    if ((${#certs[@]} == 0)); then
+        return 0
+    fi
+    echo "Adding ${#certs[@]} custom CA certificate(s) from $CUSTOM_CA_CERTS_DIR to the runtime CA bundle..."
+    cat "$SYSTEM_CA_BUNDLE" "${certs[@]}" > "$CUSTOM_CA_BUNDLE"
+    chmod 0644 "$CUSTOM_CA_BUNDLE"
+    export REQUESTS_CA_BUNDLE="$CUSTOM_CA_BUNDLE"
+    export SSL_CERT_FILE="$CUSTOM_CA_BUNDLE"
+    export CURL_CA_BUNDLE="$CUSTOM_CA_BUNDLE"
+    export GIT_SSL_CAINFO="$CUSTOM_CA_BUNDLE"
+}
+
 prepare_runtime_files() {
     prepare_ssh_keys
     ensure_data_volume_writable
@@ -283,6 +311,7 @@ prepare_runtime_files() {
         wait_for_django_secret
     fi
     ensure_saml_certificate
+    install_custom_ca_certificates
 }
 
 ensure_runtime_user() {

@@ -14,3 +14,6 @@ echo 'Running Docker build arguments tests'
 
 echo 'Running image signing tests'
 ./tests/test-sign-image-tags
+
+echo 'Running custom CA certificate tests'
+./tests/test-custom-ca-certificates
