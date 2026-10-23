@@ -55,8 +55,18 @@ touch "$test_dir/src2/ignored.pem"
 rm -f "$test_dir/bundle.crt"
 out=$(run_case "$test_dir/src2")
 check 'two certs: exports point at bundle' "exports: $test_dir/bundle.crt $test_dir/bundle.crt $test_dir/bundle.crt $test_dir/bundle.crt" "$out"
-check 'two certs: bundle = system + custom' 'system-ca cert-a cert-b' "$(tr '\n' ' ' < "$test_dir/bundle.crt" | sed 's/ $//')"
+check 'two certs: bundle = system + custom' 'system-ca cert-a cert-b' "$(tr '\n' ' ' < "$test_dir/bundle.crt" | tr -s ' ' | sed 's/ $//')"
 check 'two certs: bundle is world-readable' '644' "$(stat -c '%a' "$test_dir/bundle.crt")"
+
+# Case 4: a certificate without a trailing newline must not glue PEM blocks.
+mkdir -p "$test_dir/src4"
+printf 'cert-no-newline' > "$test_dir/src4/internal-a.crt"
+printf 'cert-after\n' > "$test_dir/src4/internal-b.crt"
+rm -f "$test_dir/bundle.crt"
+run_case "$test_dir/src4" > /dev/null
+check 'no trailing newline: first cert on its own line' '1' "$(grep -xc 'cert-no-newline' "$test_dir/bundle.crt"; true)"
+check 'no trailing newline: second cert on its own line' '1' "$(grep -xc 'cert-after' "$test_dir/bundle.crt"; true)"
+check 'no trailing newline: no glued content' '0' "$(grep -c 'cert-no-newlinecert-after' "$test_dir/bundle.crt" || true)"
 
 # Case 3: empty source directory -> no-op.
 mkdir -p "$test_dir/src3"

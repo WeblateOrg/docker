@@ -285,6 +285,7 @@ install_custom_ca_certificates() {
     # bundle is rebuilt from scratch on every start, so stale certificates
     # never linger.
     local certs=()
+    local cert
     if [[ -d $CUSTOM_CA_CERTS_DIR ]]; then
         shopt -s nullglob
         certs=("$CUSTOM_CA_CERTS_DIR"/*.crt)
@@ -294,7 +295,17 @@ install_custom_ca_certificates() {
         return 0
     fi
     echo "Adding ${#certs[@]} custom CA certificate(s) from $CUSTOM_CA_CERTS_DIR to the runtime CA bundle..."
-    cat "$SYSTEM_CA_BUNDLE" "${certs[@]}" > "$CUSTOM_CA_BUNDLE"
+    # Separate inputs with newlines: a source file without a trailing newline
+    # would otherwise glue PEM blocks together (e.g. "-----END CERTIFICATE----------BEGIN CERTIFICATE-----"),
+    # producing a bundle that OpenSSL/Python reject.
+    {
+        cat "$SYSTEM_CA_BUNDLE"
+        printf '\n'
+        for cert in "${certs[@]}"; do
+            cat "$cert"
+            printf '\n'
+        done
+    } > "$CUSTOM_CA_BUNDLE"
     chmod 0644 "$CUSTOM_CA_BUNDLE"
     export REQUESTS_CA_BUNDLE="$CUSTOM_CA_BUNDLE"
     export SSL_CERT_FILE="$CUSTOM_CA_BUNDLE"
