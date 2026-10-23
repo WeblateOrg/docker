@@ -64,8 +64,14 @@ printf 'cert-no-newline' > "$test_dir/src4/internal-a.crt"
 printf 'cert-after\n' > "$test_dir/src4/internal-b.crt"
 rm -f "$test_dir/bundle.crt"
 run_case "$test_dir/src4" > /dev/null
-check 'no trailing newline: first cert on its own line' '1' "$(grep -xc 'cert-no-newline' "$test_dir/bundle.crt"; true)"
-check 'no trailing newline: second cert on its own line' '1' "$(grep -xc 'cert-after' "$test_dir/bundle.crt"; true)"
+check 'no trailing newline: first cert on its own line' '1' "$(
+    grep -xc 'cert-no-newline' "$test_dir/bundle.crt"
+    true
+)"
+check 'no trailing newline: second cert on its own line' '1' "$(
+    grep -xc 'cert-after' "$test_dir/bundle.crt"
+    true
+)"
 check 'no trailing newline: no glued content' '0' "$(grep -c 'cert-no-newlinecert-after' "$test_dir/bundle.crt" || true)"
 
 # Case 3: empty source directory -> no-op.
