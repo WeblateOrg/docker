@@ -311,6 +311,10 @@ install_custom_ca_certificates() {
     export SSL_CERT_FILE="$CUSTOM_CA_BUNDLE"
     export CURL_CA_BUNDLE="$CUSTOM_CA_BUNDLE"
     export GIT_SSL_CAINFO="$CUSTOM_CA_BUNDLE"
+    # libpq (psql) ignores SSL_CERT_FILE; without PGSSLROOTCERT the
+    # check_postgres_version probe rejects servers signed by a custom CA
+    # when POSTGRES_SSL_MODE=verify-ca/verify-full.
+    export PGSSLROOTCERT="$CUSTOM_CA_BUNDLE"
 }
 
 prepare_runtime_files() {
