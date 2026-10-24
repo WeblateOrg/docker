@@ -1,0 +1,85 @@
+#!/bin/bash
+# Tests for install_custom_ca_certificates in the start script: the function
+# is extracted verbatim and exercised against stub directories.
+
+set -eu
+
+test_dir=$(mktemp -d)
+trap 'rm -rf "$test_dir"' EXIT HUP INT TERM
+
+# Extract the path variables and the function itself from start.
+awk '/^CUSTOM_CA_CERTS_DIR=|^SYSTEM_CA_BUNDLE=|^CUSTOM_CA_BUNDLE=/' start > "$test_dir/vars.sh"
+awk '/^install_custom_ca_certificates\(\) \{/,/^\}/' start > "$test_dir/function.sh"
+grep -q 'GIT_SSL_CAINFO' "$test_dir/function.sh"
+grep -q 'PGSSLROOTCERT' "$test_dir/function.sh"
+
+# Stub "system" bundle used as the base of the combined bundle.
+printf 'system-ca\n' > "$test_dir/system.crt"
+
+# Evaluate vars + function in a subshell per case. env -u strips inherited
+# CA variables so a proxy or custom CA configured on the host cannot leak
+# into the assertions.
+run_case() {
+    env -u REQUESTS_CA_BUNDLE -u SSL_CERT_FILE -u CURL_CA_BUNDLE -u GIT_SSL_CAINFO -u PGSSLROOTCERT bash -c "
+        set -eu
+        . '$test_dir/vars.sh'
+        . '$test_dir/function.sh'
+        CUSTOM_CA_CERTS_DIR='$1'
+        SYSTEM_CA_BUNDLE='$test_dir/system.crt'
+        CUSTOM_CA_BUNDLE='$test_dir/bundle.crt'
+        install_custom_ca_certificates
+        echo \"exports: \${REQUESTS_CA_BUNDLE:-unset} \${SSL_CERT_FILE:-unset} \${CURL_CA_BUNDLE:-unset} \${GIT_SSL_CAINFO:-unset} \${PGSSLROOTCERT:-unset}\"
+    " | tail -n 1
+}
+
+fail=0
+check() { # $1 = label, $2 = expected, $3 = actual
+    if [ "$2" = "$3" ]; then
+        echo "ok: $1"
+    else
+        echo "FAIL: $1 (expected [$2], got [$3])"
+        fail=1
+    fi
+}
+
+# Case 1: no source directory -> no-op, no exports, no bundle.
+rm -f "$test_dir/bundle.crt"
+out=$(run_case "$test_dir/no-such-dir")
+check 'no dir: no exports' 'exports: unset unset unset unset unset' "$out"
+check 'no dir: no bundle written' 'missing' "$(cat "$test_dir/bundle.crt" 2> /dev/null || echo missing)"
+
+# Case 2: two certificates -> combined bundle written, exports set.
+mkdir -p "$test_dir/src2"
+printf 'cert-a\n' > "$test_dir/src2/internal-a.crt"
+printf 'cert-b\n' > "$test_dir/src2/internal-b.crt"
+touch "$test_dir/src2/ignored.pem"
+rm -f "$test_dir/bundle.crt"
+out=$(run_case "$test_dir/src2")
+check 'two certs: exports point at bundle' "exports: $test_dir/bundle.crt $test_dir/bundle.crt $test_dir/bundle.crt $test_dir/bundle.crt $test_dir/bundle.crt" "$out"
+check 'two certs: bundle = system + custom' 'system-ca cert-a cert-b' "$(tr '\n' ' ' < "$test_dir/bundle.crt" | tr -s ' ' | sed 's/ $//')"
+check 'two certs: bundle is world-readable' '644' "$(stat -c '%a' "$test_dir/bundle.crt")"
+
+# Case 4: a certificate without a trailing newline must not glue PEM blocks.
+mkdir -p "$test_dir/src4"
+printf 'cert-no-newline' > "$test_dir/src4/internal-a.crt"
+printf 'cert-after\n' > "$test_dir/src4/internal-b.crt"
+rm -f "$test_dir/bundle.crt"
+run_case "$test_dir/src4" > /dev/null
+check 'no trailing newline: first cert on its own line' '1' "$(
+    grep -xc 'cert-no-newline' "$test_dir/bundle.crt"
+    true
+)"
+check 'no trailing newline: second cert on its own line' '1' "$(
+    grep -xc 'cert-after' "$test_dir/bundle.crt"
+    true
+)"
+check 'no trailing newline: no glued content' '0' "$(grep -c 'cert-no-newlinecert-after' "$test_dir/bundle.crt" || true)"
+
+# Case 3: empty source directory -> no-op.
+mkdir -p "$test_dir/src3"
+rm -f "$test_dir/bundle.crt"
+out=$(run_case "$test_dir/src3")
+check 'empty dir: no exports' 'exports: unset unset unset unset unset' "$out"
+check 'empty dir: no bundle written' 'missing' "$(cat "$test_dir/bundle.crt" 2> /dev/null || echo missing)"
+
+exit "$fail"
