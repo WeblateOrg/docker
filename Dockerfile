@@ -42,6 +42,7 @@ RUN \
   esac \
   && rm -rf /app/venv/lib/python*/site-packages/slapdtest \
   && uv cache prune --ci \
+  && rm /usr/local/bin/{uv,uvx} \
   && du -sh "$UV_CACHE_DIR" \
   && /app/venv/bin/python -c 'from phply.phpparse import make_parser; make_parser()' \
   && ln -s /app/venv/share/weblate/examples/ /app/
