@@ -8,7 +8,6 @@ name: Hadolint
 on:
   push:
     branches-ignore:
-    - deepsource-fix-**
     - renovate/**
     - weblate
     - dependabot/**
