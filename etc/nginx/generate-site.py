@@ -165,7 +165,8 @@ IP_PROXY_HEADER = (
 
 WEBLATE_SITE_URL = "{}://{}".format(
     "https"
-    if ENABLE_HTTPS and ENABLE_HTTPS.lower() not in {"0", "false", "no", "off"}
+    if WEBLATE_BUILTIN_SSL
+    or (ENABLE_HTTPS and ENABLE_HTTPS.lower() not in {"0", "false", "no", "off"})
     else "http",
     SITE_DOMAIN,
 )
@@ -193,6 +194,7 @@ print(
             "CLIENT_MAX_BODY_SIZE": CLIENT_MAX_BODY_SIZE,
             "WEBLATE_BUILTIN_SSL": WEBLATE_BUILTIN_SSL,
             "WEBLATE_ANUBIS_URL": WEBLATE_ANUBIS_URL,
+            "WEBLATE_SITE_DOMAIN": SITE_DOMAIN,
             "WEBLATE_SITE_URL": WEBLATE_SITE_URL,
             "GRANIAN_SOCKET": GRANIAN_SOCKET,
             "ENABLE_IPV6": ENABLE_IPV6,
