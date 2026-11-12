@@ -101,7 +101,7 @@ server {
     }
 
     location @redirectToAnubis {
-        return 307 {{ WEBLATE_SITE_URL }}/.within.website/?redir=$scheme://$host$request_uri;
+        return 307 {{ WEBLATE_SITE_URL }}/.within.website/?redir={{ WEBLATE_SITE_URL }}$request_uri;
         auth_request off;
     }
 {% endif %}
@@ -163,6 +163,6 @@ server {
     listen [::]:8080 default_server;
 {% endif %}
     server_tokens off;
-    return 301 https://$host$request_uri;
+    return 301 https://{{ WEBLATE_SITE_DOMAIN }}$request_uri;
 }
 {% endif %}

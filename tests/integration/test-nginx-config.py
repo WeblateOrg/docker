@@ -16,6 +16,8 @@ def generate_config(
     url_prefix: str = "",
     client_max_body_size: str = "100m",
     site_domain: str = "test.example.com",
+    builtin_ssl: bool = False,
+    enable_https: str = "",
 ) -> subprocess.CompletedProcess[str]:
     if LOCAL_PYTHON:
         command = [
@@ -41,10 +43,10 @@ def generate_config(
             proxy_header,
             trusted_proxy_addresses,
             client_max_body_size,
-            "",
+            "1" if builtin_ssl else "",
             anubis_url,
             site_domain,
-            "",
+            enable_https,
             "/run/granian/granian.sock",
             "",
             "1" if early_nginx else "",
@@ -62,6 +64,60 @@ class NginxConfigTest(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn(f"Invalid {variable}: expected", result.stderr)
         self.assertEqual(result.stdout, "")
+
+    def test_builtin_tls_redirect_uses_configured_authority(self) -> None:
+        for early_nginx in (False, True):
+            for domain in ("test.example.com", "test.example.com:4443"):
+                with self.subTest(early_nginx=early_nginx, domain=domain):
+                    result = generate_config(
+                        early_nginx=early_nginx,
+                        builtin_ssl=True,
+                        site_domain=domain,
+                    )
+
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    self.assertIn(
+                        f"return 301 https://{domain}$request_uri;", result.stdout
+                    )
+                    self.assertNotIn("https://$host", result.stdout)
+
+    def test_anubis_redirect_uses_configured_origin(self) -> None:
+        settings = [
+            (False, "", "http"),
+            (False, "1", "https"),
+            (False, "true", "https"),
+            (True, "", "https"),
+            (True, "false", "https"),
+            *((False, value, "http") for value in ("0", "false", "no", "off", "OFF")),
+        ]
+        for builtin_ssl, enable_https, scheme in settings:
+            for early_nginx in (False, True):
+                with self.subTest(
+                    builtin_ssl=builtin_ssl,
+                    enable_https=enable_https,
+                    early_nginx=early_nginx,
+                ):
+                    result = generate_config(
+                        anubis_url="http://anubis.example.com",
+                        site_domain="test.example.com:8443",
+                        url_prefix="/tools/weblate",
+                        builtin_ssl=builtin_ssl,
+                        enable_https=enable_https,
+                        early_nginx=early_nginx,
+                    )
+
+                    self.assertEqual(result.returncode, 0, result.stderr)
+                    origin = f"{scheme}://test.example.com:8443"
+                    redirect = result.stdout.split("location @redirectToAnubis {", 1)[
+                        1
+                    ].split("}", 1)[0]
+                    self.assertIn(
+                        f"return 307 {origin}/.within.website/?redir={origin}$request_uri;",
+                        redirect,
+                    )
+                    self.assertNotIn("$host", redirect)
+                    self.assertNotIn("$scheme", redirect)
+                    self.assertNotIn("/tools/weblate", redirect)
 
     def test_early_nginx_does_not_use_application_server(self) -> None:
         result = generate_config(
