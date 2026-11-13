@@ -17,3 +17,6 @@ echo 'Running image signing tests'
 
 echo 'Running custom CA certificate tests'
 ./tests/test-custom-ca-certificates
+
+echo 'Running Django secret tests'
+bash tests/test-django-secret
