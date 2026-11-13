@@ -233,13 +233,19 @@ ensure_django_secret() {
         fi
 
         # Repair secrets created by older container versions or copied into the volume.
-        chmod 600 "$secret_file"
+        # Mounted secrets can be read-only, with permissions managed externally.
+        if ! chmod 600 "$secret_file" 2> /dev/null; then
+            if [[ ! -s $secret_file || ! -r $secret_file || -w $secret_file ]]; then
+                echo "Failed to secure Django secret permissions: $secret_file" >&2
+                exit 1
+            fi
+        fi
     )
 }
 
 django_secret_ready() {
     [[ -s /app/data/secret && -r /app/data/secret ]] || return 1
-    [[ $(stat -c %a /app/data/secret 2> /dev/null) == "600" ]]
+    [[ ! -w /app/data/secret || $(stat -c %a /app/data/secret 2> /dev/null) == "600" ]]
 }
 
 wait_for_django_secret() {
