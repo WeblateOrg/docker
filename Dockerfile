@@ -1,4 +1,4 @@
-FROM weblate/dev:2026.46.1@sha256:2e0c982e131f2abb88c357661e81dd4a36e84978b2b67d9cb8e2f3822c8ac1de AS build
+FROM weblate/dev:2026.47.0@sha256:b8d2612723594782b9b6d512356d5b8f0673c8acb39adfddcbb463ea45e772bf AS build
 
 ARG TARGETARCH
 
