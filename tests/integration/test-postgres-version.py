@@ -31,18 +31,18 @@ class PostgresVersionTest(unittest.TestCase):
         )
 
     def test_supported_versions(self):
-        for version in ("120000", "180000", "000120000"):
+        for version in ("150000", "180000", "000150000"):
             with self.subTest(version=version):
                 result = self.check_version(version)
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertIn("CHECK_COMPLETE", result.stdout)
 
     def test_unsupported_versions(self):
-        for version in ("110000", "000110000"):
+        for version in ("110000", "140000", "000110000"):
             with self.subTest(version=version):
                 result = self.check_version(version)
                 self.assertNotEqual(result.returncode, 0)
-                self.assertIn("PostgreSQL 12 or newer is required", result.stderr)
+                self.assertIn("PostgreSQL 15 or newer is required", result.stderr)
                 self.assertNotIn("CHECK_COMPLETE", result.stdout)
 
     def test_invalid_versions_are_rejected_before_arithmetic(self):
