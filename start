@@ -639,6 +639,11 @@ run_startup_maintenance() {
 
         echo "Refreshing stats..."
         run_weblate ensure_stats
+
+        if [[ ${WEBLATE_RECOVER_GIT:-0} == 1 ]]; then
+            echo "Recovering missing repository checkouts..."
+            run_weblate recovergit --all
+        fi
     fi
 
     collect_web_static_assets

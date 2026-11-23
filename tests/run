@@ -20,3 +20,6 @@ echo 'Running custom CA certificate tests'
 
 echo 'Running Django secret tests'
 bash tests/test-django-secret
+
+echo 'Running repository recovery tests'
+bash tests/test-recover-git
