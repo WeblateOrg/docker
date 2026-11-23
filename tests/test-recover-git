@@ -1,0 +1,45 @@
+#!/bin/bash
+# Exercise the optional repository recovery in the startup maintenance.
+set -eu
+
+test_dir=$(mktemp -d)
+trap 'rm -rf "$test_dir"' EXIT HUP INT TERM
+
+awk '/^run_startup_maintenance\(\) \{/,/^\}/' start > "$test_dir/functions.sh"
+# shellcheck source=/dev/null
+. "$test_dir/functions.sh"
+
+calls="$test_dir/calls"
+run_weblate() {
+    echo "$*" >> "$calls"
+}
+collect_web_static_assets() {
+    :
+}
+export WEBLATE_ADMIN_EMAIL=admin@example.com WEBLATE_ADMIN_NAME=Admin WEBLATE_ADMIN_PASSWORD=
+
+run_maintenance() {
+    : > "$calls"
+    run_startup_maintenance > /dev/null
+}
+
+export DO_MIGRATE=1
+unset WEBLATE_RECOVER_GIT
+run_maintenance
+if grep -q '^recovergit' "$calls"; then
+    echo 'Repositories were recovered without WEBLATE_RECOVER_GIT' >&2
+    exit 1
+fi
+
+export WEBLATE_RECOVER_GIT=1
+run_maintenance
+[[ $(tail -n 1 "$calls") == 'recovergit --all' ]]
+grep -n '' "$calls" | grep -q '^1:migrate$'
+
+# Recovery needs the migrated database, so it runs only where migrations run.
+export DO_MIGRATE=0
+run_maintenance
+if grep -q '^recovergit' "$calls"; then
+    echo 'Repositories were recovered without database migration' >&2
+    exit 1
+fi
