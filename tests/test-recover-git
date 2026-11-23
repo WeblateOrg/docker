@@ -43,3 +43,19 @@ if grep -q '^recovergit' "$calls"; then
     echo 'Repositories were recovered without database migration' >&2
     exit 1
 fi
+
+# Reject invalid values before migrating, in every container.
+for DO_MIGRATE in 1 0; do
+    export DO_MIGRATE
+    for WEBLATE_RECOVER_GIT in true yes 2; do
+        export WEBLATE_RECOVER_GIT
+        if (run_maintenance 2> /dev/null); then
+            echo "Invalid WEBLATE_RECOVER_GIT '$WEBLATE_RECOVER_GIT' was accepted" >&2
+            exit 1
+        fi
+        if [[ -s $calls ]]; then
+            echo "Startup continued with invalid WEBLATE_RECOVER_GIT '$WEBLATE_RECOVER_GIT'" >&2
+            exit 1
+        fi
+    done
+done

@@ -615,6 +615,14 @@ prepare_supervisor_services() {
 }
 
 run_startup_maintenance() {
+    case ${WEBLATE_RECOVER_GIT:-0} in
+    0 | 1) ;;
+    *)
+        >&2 echo "Invalid WEBLATE_RECOVER_GIT: expected 0 or 1"
+        exit 1
+        ;;
+    esac
+
     if ((DO_MIGRATE == 1)); then
         echo "Starting database migration..."
         if ! run_weblate migrate; then
