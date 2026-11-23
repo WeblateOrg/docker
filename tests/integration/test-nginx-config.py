@@ -330,7 +330,7 @@ class NginxConfigTest(unittest.TestCase):
             "ftp://anubis:8923",
             "http://",
             "http://bad..host",
-            "http://user:password@anubis:8923",
+            "http://user:password@anubis:8923",  # kingfisher:ignore
             "http://anubis:0",
             "http://anubis:99999",
             "http://anubis:bad",
